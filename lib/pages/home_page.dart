@@ -65,7 +65,7 @@ class _HomePageState extends State<HomePage> {
           activeColor: Theme.of(context).primaryColor,
           items: [
             BottomNavigationBarItem(icon: Icon(CustomIcon.speech_bubble), title: Text('Terapeuta')),
-            BottomNavigationBarItem(icon: Icon(CustomIcon.car), title: Text('Retos')),
+            BottomNavigationBarItem(icon: Icon(CustomIcon.car2), title: Text('Retos')),
             BottomNavigationBarItem(icon: Icon(CustomIcon.line_chart2,),title: Text('Progreso')),
             BottomNavigationBarItem(icon: Icon(CustomIcon.more), title: Text('Más')),
           ]),

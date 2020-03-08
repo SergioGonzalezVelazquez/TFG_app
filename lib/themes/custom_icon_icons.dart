@@ -57,8 +57,11 @@ class CustomIcon {
   static const IconData sun = const IconData(0xe81a, fontFamily: _kFontFam);
   static const IconData eye = const IconData(0xe81b, fontFamily: _kFontFam);
   static const IconData printer = const IconData(0xe81c, fontFamily: _kFontFam);
+  static const IconData send = const IconData(0xe81d, fontFamily: _kFontFam);
+  static const IconData send2 = const IconData(0xe81e, fontFamily: _kFontFam);
   static const IconData enter = const IconData(0xe81f, fontFamily: _kFontFam);
   static const IconData exit = const IconData(0xe820, fontFamily: _kFontFam);
+  static const IconData car3 = const IconData(0xe821, fontFamily: _kFontFam);
   static const IconData license = const IconData(0xe822, fontFamily: _kFontFam);
   static const IconData music_note = const IconData(0xe823, fontFamily: _kFontFam);
   static const IconData film_play = const IconData(0xe824, fontFamily: _kFontFam);
@@ -94,6 +97,7 @@ class CustomIcon {
   static const IconData pie_chart = const IconData(0xe842, fontFamily: _kFontFam);
   static const IconData chart_bars = const IconData(0xe843, fontFamily: _kFontFam);
   static const IconData gift = const IconData(0xe844, fontFamily: _kFontFam);
+  static const IconData car2 = const IconData(0xe845, fontFamily: _kFontFam);
   static const IconData car_1 = const IconData(0xe84e, fontFamily: _kFontFam);
   static const IconData bicycle = const IconData(0xe850, fontFamily: _kFontFam);
   static const IconData wheelchair = const IconData(0xe851, fontFamily: _kFontFam);
