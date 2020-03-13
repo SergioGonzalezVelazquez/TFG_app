@@ -15,7 +15,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  bool isAuth = true; //Cambiar a false cuando se implemente la autenticación de usuarios
+  bool isAuth =
+      true; //Cambiar a false cuando se implemente la autenticación de usuarios
   PageController pageController;
   int pageIndex = 0;
 
@@ -37,7 +38,7 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-    onTap(int pageIndex) {
+  onTap(int pageIndex) {
     pageController.animateToPage(
       pageIndex,
       duration: Duration(milliseconds: 300),
@@ -64,16 +65,58 @@ class _HomePageState extends State<HomePage> {
           onTap: onTap,
           activeColor: Theme.of(context).primaryColor,
           items: [
-            BottomNavigationBarItem(icon: Icon(CustomIcon.speech_bubble), title: Text('Terapeuta')),
-            BottomNavigationBarItem(icon: Icon(CustomIcon.car2), title: Text('Retos')),
-            BottomNavigationBarItem(icon: Icon(CustomIcon.line_chart2,),title: Text('Progreso')),
-            BottomNavigationBarItem(icon: Icon(CustomIcon.more), title: Text('Más')),
+            BottomNavigationBarItem(
+                icon: Icon(CustomIcon.speech_bubble), title: Text('Terapeuta')),
+            BottomNavigationBarItem(
+                icon: Icon(CustomIcon.car2), title: Text('Retos')),
+            BottomNavigationBarItem(
+                icon: Icon(
+                  CustomIcon.line_chart2,
+                ),
+                title: Text('Progreso')),
+            BottomNavigationBarItem(
+                icon: Icon(CustomIcon.more), title: Text('Más')),
           ]),
     );
   }
 
-  Text buildUnAuthScreen() {
-    return Text('unauthScreen');
+  //Image car
+  /*
+  Widget buildUnAuthScreen() {
+    return Scaffold(
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        child: Stack(
+          children: <Widget>[
+            new Positioned(
+                child: Align(
+              alignment: FractionalOffset.bottomCenter,
+              child: Image.asset("assets/images/car.png", fit: BoxFit.fitWidth),
+            ))
+          ],
+        ),
+      ),
+    );
+  }
+  */
+
+    Widget buildUnAuthScreen() {
+    return Scaffold(
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        child: Stack(
+          children: <Widget>[
+            new Positioned(
+                child: Align(
+              alignment: FractionalOffset.bottomCenter,
+              child: Image.asset("assets/images/road.jpg", fit: BoxFit.cover),
+            ))
+          ],
+        ),
+      ),
+    );
   }
 
   @override

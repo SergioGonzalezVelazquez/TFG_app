@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_dialogflow/dialogflow_v2.dart';
 import 'package:tfg_app/pages/chat/chat_message.dart';
 import 'package:tfg_app/themes/custom_icon_icons.dart';
+import 'package:tfg_app/widgets/buttons.dart';
 
 ///
 /// References:
@@ -17,10 +20,64 @@ class ChatPage extends StatefulWidget {
 class _ChatPageState extends State<ChatPage> {
   final TextEditingController _textController = new TextEditingController();
   final List<ChatMessage> _messages = <ChatMessage>[];
+  AuthGoogle _authGoogle;
+  Dialogflow _dialogFlow;
+
+  bool _chatStarted = false;
 
   @override
   void initState() {
     super.initState();
+
+    initializeChat();
+  }
+
+  void initializeChat() async {
+    _authGoogle = await AuthGoogle(fileJson: "assets/credentials.json").build();
+    _dialogFlow =
+        Dialogflow(authGoogle: _authGoogle, language: Language.spanish);
+
+    sendMessage("hola");
+  }
+
+  Widget startChatScreen() {
+    return new Scaffold(
+      appBar: AppBar(
+        title: Text('Chat'),
+        actions: <Widget>[],
+      ),
+      body: Container(
+        child: Center(
+          child: primaryButton(context, () {
+            setState(() {
+              this._chatStarted = true;
+            });
+          }, "Empezar chat"),
+        ),
+      ),
+    );
+  }
+
+  Widget inChatScreen() {
+    return new Scaffold(
+      bottomNavigationBar: null,
+        body: Column(
+      children: <Widget>[
+        Flexible(
+            child: ListView.builder(
+                padding: EdgeInsets.all(8.0),
+                reverse: true,
+                itemBuilder: (_, int index) => _messages[index],
+                itemCount: _messages.length)),
+        Divider(
+          height: 1.0,
+        ),
+        Container(
+          decoration: BoxDecoration(color: Theme.of(context).cardColor),
+          child: _buildTextComposer(),
+        )
+      ],
+    ));
   }
 
   Widget _buildTextComposer() {
@@ -68,42 +125,44 @@ class _ChatPageState extends State<ChatPage> {
 
     Dialogflow dialogFlow =
         Dialogflow(authGoogle: authGoogle, language: Language.spanish);
-    AIResponse response = await dialogFlow.detectIntent(query);
-    ChatMessage message = new ChatMessage(
-        text: response.getMessage() ??
-            new CardDialogflow(response.getListMessage()[0]).title,
-        name: "Bot",
-        type: false);
-    setState(() {
-      _messages.insert(0, message);
+    AIResponse responses = await dialogFlow.detectIntent(query);
+    
+    //DEBUG
+    List messages = responses.getListMessage();
+    print("messages:");
+    print(messages);
+
+    //End debug
+    responses.getListMessage().forEach((msg) {
+      ChatMessage message = new ChatMessage(
+          text: msg['text']['text'][0],
+          name: "Bot",
+          type: false);
+
+      print("msg: " + msg['text']['text'][0]);
+      setState(() {
+        _messages.insert(0, message);
+      });
     });
+
+    /*
+    //Iterate over all responses
+    responses.getListMessage().forEach((msg) {
+      ChatMessage message = new ChatMessage(
+          text:  CardDialogflow(msg).title,
+          name: "Bot",
+          type: false);
+
+      print("msg: " );
+      setState(() {
+        _messages.insert(0, message);
+      });
+    });
+    */
   }
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-        // new
-        appBar: AppBar(
-          title: Text('Chat'),
-          actions: <Widget>[],
-        ),
-        body: Column(
-          children: <Widget>[
-            Flexible(
-                child: ListView.builder(
-              padding: EdgeInsets.all(8.0),
-              reverse: true,
-              itemBuilder: (_, int index) => _messages[index],
-              itemCount: _messages.length
-            )),
-            Divider(
-              height: 1.0,
-            ),
-            Container(
-              decoration: BoxDecoration(color: Theme.of(context).cardColor),
-              child: _buildTextComposer(),
-            )
-          ],
-        ));
+    return _chatStarted ? inChatScreen() : startChatScreen();
   }
 }

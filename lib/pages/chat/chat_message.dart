@@ -29,13 +29,13 @@ class ChatMessage extends StatelessWidget {
             Container(
               constraints: BoxConstraints(
                   maxWidth: MediaQuery.of(context).size.width * .6),
-              padding: const EdgeInsets.all(15.0),
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
               decoration: BoxDecoration(
                 color: Colors.grey[200],
                 borderRadius: BorderRadius.only(
-                  topRight: Radius.circular(15),
-                  bottomLeft: Radius.circular(15),
-                  bottomRight: Radius.circular(15),
+                  topRight: Radius.circular(10),
+                  bottomLeft: Radius.circular(10),
+                  bottomRight: Radius.circular(10),
                 ),
               ),
               child: Text(
@@ -65,14 +65,15 @@ class ChatMessage extends StatelessWidget {
                 Container(
                   constraints: BoxConstraints(
                       maxWidth: MediaQuery.of(context).size.width * .6),
-                  padding: const EdgeInsets.all(15.0),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                   decoration: BoxDecoration(
                     //color: Color(0xffE4DFFD),
                     color: Theme.of(context).primaryColor,
                     borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(15),
-                      bottomLeft: Radius.circular(15),
-                      topLeft: Radius.circular(15),
+                      topRight: Radius.circular(10),
+                      bottomLeft: Radius.circular(10),
+                      topLeft: Radius.circular(10),
                     ),
                   ),
                   child: Text(
