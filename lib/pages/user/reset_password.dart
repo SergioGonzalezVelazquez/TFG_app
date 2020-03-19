@@ -8,6 +8,7 @@ import 'package:tfg_app/widgets/buttons.dart';
 import 'package:tfg_app/widgets/inputs.dart';
 import 'package:tfg_app/widgets/progress.dart';
 import 'package:tfg_app/widgets/snackbar.dart';
+import 'package:tfg_app/utils/validators.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ResetPasswordPage extends StatefulWidget {
@@ -19,7 +20,13 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
   // Create controller for handle changes in email field
   TextEditingController _emailController = TextEditingController();
 
+  // Create a global key that uniquely identifies the Scaffold widget,
+  // and allows to display snackbars.
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
+  // Create a global key that uniquely identifies the Form widget
+  // and allows validation of the form.
+  final _formKey = GlobalKey<FormState>();
 
   bool _isLoading = false;
   bool _emailSent = false;
@@ -42,19 +49,21 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
    */
 
   Future<void> _sendResetPasswordEmail() async {
-    setState(() {
-      _isLoading = true;
-    });
-    await resetPassword(_emailController.text.trim()).catchError((error) {
-      print("error");
-    }).then((value) {
+    if (_formKey.currentState.validate()) {
       setState(() {
-        _emailSent = true;
+        _isLoading = true;
       });
-    });
-    setState(() {
-      _isLoading = false;
-    });
+      await resetPassword(_emailController.text.trim()).catchError((error) {
+        print("error");
+      }).then((value) {
+        setState(() {
+          _emailSent = true;
+        });
+      });
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 
   /// Open default email app
@@ -149,6 +158,16 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
     );
   }
 
+  Form _resetPwdForm() {
+    return Form(
+      key: _formKey,
+      child: customTextInput("Correo Electrónico", CustomIcon.mail,
+          controller: _emailController,
+          validator: (val) => Validator.email(val),
+          keyboardType: TextInputType.emailAddress),
+    );
+  }
+
   Widget _resetPwdPage() {
     return Padding(
       padding: EdgeInsets.symmetric(
@@ -179,9 +198,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.02,
           ),
-          customTextInput("Correo Electrónico", CustomIcon.mail,
-              controller: _emailController,
-              keyboardType: TextInputType.emailAddress),
+          _resetPwdForm(),
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.1,
           ),

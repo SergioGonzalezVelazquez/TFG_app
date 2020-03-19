@@ -147,11 +147,8 @@ String signInCredentialsErrorMsg(error) {
       authError =
           'No se pudo conectar. Compruebe su conexión a Internet e intentelo de nuevo más tarde.';
       break;
-    case 'ERROR_INVALID_CREDENTIAL':
-      authError = 'ERROR_INVALID_CREDENTIAL';
-      break;
     case 'ERROR_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL':
-      authError = 'ERROR_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIA';
+      authError = 'Esta cuenta está asociada a . Por favor, inicie sesión con ella.';
       break;
     case 'ERROR_OPERATION_NOT_ALLOWED':
       authError = 'ERROR_OPERATION_NOT_ALLOWED';
@@ -160,7 +157,7 @@ String signInCredentialsErrorMsg(error) {
       authError = 'ERROR_INVALID_ACTION_CODE';
       break;
     default:
-      authError = 'Error';
+      authError = 'No se pudo iniciar sesión. Inténtelo de nuevo más tarde';
       break;
   }
   return authError;
@@ -169,21 +166,21 @@ String signInCredentialsErrorMsg(error) {
 String signInEmailErrorMsg(error) {
   String authError;
   switch (error.code.toString().toUpperCase()) {
-    case 'NETWORK_ERROR':
+    case 'ERROR_NETWORK_REQUEST_FAILED':
       authError =
           'No se pudo conectar. Compruebe su conexión a Internet e intentelo de nuevo más tarde.';
       break;
     case 'ERROR_INVALID_EMAIL':
-      authError = 'ERROR_INVALID_EMAI';
+      authError = 'Introduce una cuenta de correo electrónico válida';
       break;
     case 'ERROR_WRONG_PASSWORD':
-      authError = 'ERROR_WRONG_PASSWORD';
+      authError = 'La contraseña que has introducido es incorrecta';
       break;
     case 'ERROR_USER_NOT_FOUND':
-      authError = 'ERROR_USER_NOT_FOUND';
+      authError = 'El correo electrónico que has introducido no coincide con ninguna cuenta';
       break;
     case 'ERROR_USER_DISABLED':
-      authError = 'ERROR_USER_DISABLED';
+      authError = 'El usuario vinculado a esa cuenta de correo ha sido desactivado';
       break;
     default:
       authError = 'Error';
@@ -195,21 +192,21 @@ String signInEmailErrorMsg(error) {
 String signUpErrorMsg(error) {
   String authError;
   switch (error.code.toString().toUpperCase()) {
-    case 'NETWORK_ERROR':
+    case 'ERROR_NETWORK_REQUEST_FAILED':
       authError =
           'No se pudo conectar. Compruebe su conexión a Internet e intentelo de nuevo más tarde.';
       break;
     case 'ERROR_WEAK_PASSWORD':
-      authError = 'ERROR_WEAK_PASSWORD';
+      authError = 'Tu contraseña debe tener al menos 6 caracteres';
       break;
     case 'ERROR_INVALID_EMAIL':
-      authError = 'ERROR_INVALID_EMAIL';
+      authError = 'Introduce una cuenta de correo electrónico válida';
       break;
     case 'ERROR_EMAIL_ALREADY_IN_USE':
-      authError = 'ERROR_EMAIL_ALREADY_IN_US';
+      authError = 'Ya hay una cuenta registrada con esa dirección de correo';
       break;
     default:
-      authError = 'Error';
+      authError = 'No se pudo completar el registro. Inténtalo de nuevo más tarde.';
       break;
   }
   return authError;

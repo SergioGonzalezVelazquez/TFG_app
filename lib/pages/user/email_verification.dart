@@ -1,10 +1,8 @@
 import 'dart:async';
 import 'dart:io';
-
 import 'package:android_intent/android_intent.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:tfg_app/models/user.dart';
 import 'package:tfg_app/pages/home_page.dart';
 import 'package:tfg_app/pages/user/login_page.dart';
 import 'package:tfg_app/services/auth.dart';

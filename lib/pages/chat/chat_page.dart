@@ -45,6 +45,7 @@ class _ChatPageState extends State<ChatPage> {
         actions: <Widget>[],
       ),
       body: Container(
+        padding: const EdgeInsets.only(top: 12.0, left: 15, right: 15),
         child: Center(
           child: primaryButton(context, () {
             setState(() {
@@ -58,24 +59,24 @@ class _ChatPageState extends State<ChatPage> {
 
   Widget inChatScreen() {
     return new Scaffold(
-      bottomNavigationBar: null,
+        bottomNavigationBar: null,
         body: Column(
-      children: <Widget>[
-        Flexible(
-            child: ListView.builder(
-                padding: EdgeInsets.all(8.0),
-                reverse: true,
-                itemBuilder: (_, int index) => _messages[index],
-                itemCount: _messages.length)),
-        Divider(
-          height: 1.0,
-        ),
-        Container(
-          decoration: BoxDecoration(color: Theme.of(context).cardColor),
-          child: _buildTextComposer(),
-        )
-      ],
-    ));
+          children: <Widget>[
+            Flexible(
+                child: ListView.builder(
+                    padding: EdgeInsets.all(8.0),
+                    reverse: true,
+                    itemBuilder: (_, int index) => _messages[index],
+                    itemCount: _messages.length)),
+            Divider(
+              height: 1.0,
+            ),
+            Container(
+              decoration: BoxDecoration(color: Theme.of(context).cardColor),
+              child: _buildTextComposer(),
+            )
+          ],
+        ));
   }
 
   Widget _buildTextComposer() {
@@ -124,7 +125,7 @@ class _ChatPageState extends State<ChatPage> {
     Dialogflow dialogFlow =
         Dialogflow(authGoogle: authGoogle, language: Language.spanish);
     AIResponse responses = await dialogFlow.detectIntent(query);
-    
+
     //DEBUG
     List messages = responses.getListMessage();
     print("messages:");
@@ -133,9 +134,7 @@ class _ChatPageState extends State<ChatPage> {
     //End debug
     responses.getListMessage().forEach((msg) {
       ChatMessage message = new ChatMessage(
-          text: msg['text']['text'][0],
-          name: "Bot",
-          type: false);
+          text: msg['text']['text'][0], name: "Bot", type: false);
 
       print("msg: " + msg['text']['text'][0]);
       setState(() {
