@@ -9,9 +9,9 @@ abstract class CustomTheme {
 
   //static const Color primaryColorDark = Color(0xff16164A);
   static const Color primaryColorDark = Color(0xff433D55);
-  
+
   //static const Color primaryColorLight = Color(0xffBCB1FF);
-  static const Color primaryColorLight = Color(0xffD3D2D5);
+  static const Color primaryColorLight = Color(0xff998CCA);
   static const Color backgroundColor = Colors.white; //Color(0xffF5F5F6);
 
   // Define the default font family
@@ -22,30 +22,40 @@ abstract class CustomTheme {
 
   static ThemeData buildPurpleTheme() {
     final ThemeData base = ThemeData.light();
-    final TextTheme textBase = base.textTheme;
+    final TextTheme textBase = base.textTheme.apply(fontFamily: fontFamily);
+
     return base.copyWith(
-        primaryColor: primaryColor,
-        primaryColorDark: primaryColorDark,
-        primaryColorLight: primaryColorLight,
-        accentColor: primaryColorLight,
-        scaffoldBackgroundColor: backgroundColor,
-        textTheme: textBase.apply(fontFamily: fontFamily),
-        buttonTheme: ButtonThemeData(
-          buttonColor: primaryColor,
-          shape: RoundedRectangleBorder(),
-          textTheme: ButtonTextTheme.primary,
+      // Define the default brightness and colors.
+      primaryColor: primaryColor,
+      primaryColorDark: primaryColorDark,
+      primaryColorLight: primaryColorLight,
+      accentColor: primaryColorLight,
+      scaffoldBackgroundColor: backgroundColor,
+
+      // Define the default font family
+      textTheme: textBase.copyWith(
+        bodyText2: textBase.bodyText2.copyWith(color: Colors.black54),
+      ),
+      buttonTheme: ButtonThemeData(
+        buttonColor: primaryColor,
+        shape: RoundedRectangleBorder(),
+        textTheme: ButtonTextTheme.primary,
+      ),
+      cursorColor: primaryColorLight,
+      appBarTheme: AppBarTheme(
+        elevation: 2.0,
+        color: Colors.white,
+        iconTheme: IconThemeData(
+          color: primaryColor,
         ),
-        appBarTheme: AppBarTheme(
-            elevation: 2.0,
-            color: Colors.white,
-            iconTheme: IconThemeData(
+        textTheme: TextTheme(
+          headline6: TextStyle(
               color: primaryColor,
-            ),
-            textTheme: TextTheme(
-                title: TextStyle(
-                    color: primaryColor,
-                    fontFamily: fontFamily,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600))));
+              fontFamily: fontFamily,
+              fontSize: 20,
+              fontWeight: FontWeight.w600),
+        ),
+      ),
+    );
   }
 }

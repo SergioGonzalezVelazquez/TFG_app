@@ -9,7 +9,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'TFG App',
+      title: 'Stop Miedo',
       debugShowCheckedModeBanner: false,
       theme: CustomTheme.buildPurpleTheme(),
       home: HomePage(),

@@ -985,6 +985,162 @@
       "search": [
         "car2"
       ]
+    },
+    {
+      "uid": "91bac16b22827347e9ee20477f0b44d2",
+      "css": "mail",
+      "code": 59462,
+      "src": "linecons"
+    },
+    {
+      "uid": "d89eaeb9064e2e1eb3a767f77695edb6",
+      "css": "file-add",
+      "code": 59463,
+      "src": "linearicons"
+    },
+    {
+      "uid": "9cd11daa6d617c47f9fcc902821f4cde",
+      "css": "file-empty",
+      "code": 59464,
+      "src": "linearicons"
+    },
+    {
+      "uid": "5c2bfb9cd1b66a0ed06c6ff1c3eea154",
+      "css": "circle-minus",
+      "code": 59522,
+      "src": "linearicons"
+    },
+    {
+      "uid": "de5a599a2bb4574c3d16968e89f34698",
+      "css": "arrow-up-circle",
+      "code": 59523,
+      "src": "linearicons"
+    },
+    {
+      "uid": "ae2e83ee57d994b6ea33441c5d79635c",
+      "css": "arrow-down-circle",
+      "code": 59524,
+      "src": "linearicons"
+    },
+    {
+      "uid": "1365d7e7904a649dd1b59732cf3191ff",
+      "css": "arrow-left-circle",
+      "code": 59525,
+      "src": "linearicons"
+    },
+    {
+      "uid": "c012f366f07d0681ef46efad65523193",
+      "css": "arrow-right-circle",
+      "code": 59526,
+      "src": "linearicons"
+    },
+    {
+      "uid": "551703bbc76913fea167eb7b4c25004e",
+      "css": "chevron-up-circle",
+      "code": 59527,
+      "src": "linearicons"
+    },
+    {
+      "uid": "be029f2f0e18c810b707e12e6343220c",
+      "css": "chevron-down-circle",
+      "code": 59528,
+      "src": "linearicons"
+    },
+    {
+      "uid": "db4fe940d8277930501246c4c84943ec",
+      "css": "chevron-left-circle",
+      "code": 59529,
+      "src": "linearicons"
+    },
+    {
+      "uid": "a78377e19e6042f1ccaddbac81247ac9",
+      "css": "chevron-right-circle",
+      "code": 59530,
+      "src": "linearicons"
+    },
+    {
+      "uid": "8c532412fa1f2e568c495ce22d84d8e2",
+      "css": "arrow-up",
+      "code": 59511,
+      "src": "linearicons"
+    },
+    {
+      "uid": "a015cf6d6248d8a7fedf0655ae0f8750",
+      "css": "indent-decrease",
+      "code": 59550,
+      "src": "linearicons"
+    },
+    {
+      "uid": "814cfaca1407bf45548558e1e2815bdf",
+      "css": "menu",
+      "code": 59505,
+      "src": "linearicons"
+    },
+    {
+      "uid": "cdf7270e5dcec27c452fb33f334f8284",
+      "css": "list",
+      "code": 59506,
+      "src": "linearicons"
+    },
+    {
+      "uid": "08c370bc355b99e54b82191ddf59a2e5",
+      "css": "pilcrow",
+      "code": 59551,
+      "src": "linearicons"
+    },
+    {
+      "uid": "5a100b8e4b7f3722cfa440175c989ba4",
+      "css": "bus",
+      "code": 59469,
+      "src": "linearicons"
+    },
+    {
+      "uid": "1c627d5f23a677bf6affb5aee01e8a33",
+      "css": "cloud-download",
+      "code": 59465,
+      "src": "linearicons"
+    },
+    {
+      "uid": "6472836961a5e9093185997d8995e93e",
+      "css": "cloud",
+      "code": 59466,
+      "src": "linearicons"
+    },
+    {
+      "uid": "c2ddf03240cd0a28220e1401f8e6657f",
+      "css": "inbox",
+      "code": 59467,
+      "src": "linearicons"
+    },
+    {
+      "uid": "bb950cbe6d40a3542aef3b1bd9c14af1",
+      "css": "moon",
+      "code": 59468,
+      "src": "linearicons"
+    },
+    {
+      "uid": "57a8b652395d8f71d086bdad0fb9b09b",
+      "css": "cloud-upload",
+      "code": 59471,
+      "src": "linearicons"
+    },
+    {
+      "uid": "0072169facf2aa740670fdbfd127bd0b",
+      "css": "cloud-check",
+      "code": 59555,
+      "src": "linearicons"
+    },
+    {
+      "uid": "c0f9d2c29bd624cd93d16f0aa12aacfa",
+      "css": "graduation-hat",
+      "code": 59562,
+      "src": "linearicons"
+    },
+    {
+      "uid": "fecd351cdf73640155cbe626a28943b9",
+      "css": "briefcase",
+      "code": 59563,
+      "src": "linearicons"
     }
   ]
 }

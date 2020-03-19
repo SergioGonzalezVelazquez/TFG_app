@@ -4,31 +4,44 @@ import 'package:tfg_app/pages/chat/chat_page.dart';
 import 'package:tfg_app/pages/exercises/exercises.dart';
 import 'package:tfg_app/pages/more/more_page.dart';
 import 'package:tfg_app/pages/progress/progress.dart';
+import 'package:tfg_app/pages/user/login_page.dart';
+import 'package:tfg_app/widgets/progress.dart';
+import 'package:tfg_app/services/auth.dart';
 import 'package:tfg_app/themes/custom_icon_icons.dart';
 
 /// This widget is the home page of the application.
 class HomePage extends StatefulWidget {
-  HomePage({Key key}) : super(key: key);
+  bool auth;
+
+  HomePage({bool isauth = false}) {
+    this.auth = isauth;
+  }
 
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  bool isAuth =
-      true; //Cambiar a false cuando se implemente la autenticación de usuarios
-  PageController pageController;
+  bool _isAuth = false;
+  bool _isCheckingAuth = true;
+  PageController _pageController;
   int pageIndex = 0;
+
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
-    pageController = PageController();
+    _pageController = PageController();
+    _isAuth = !widget.auth ? isAuth() : true;
+    _isCheckingAuth = false;
+
+    if (_isAuth) print(user.toString());
   }
 
   @override
   void dispose() {
-    pageController.dispose();
+    _pageController.dispose();
     super.dispose();
   }
 
@@ -39,7 +52,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   onTap(int pageIndex) {
-    pageController.animateToPage(
+    _pageController.animateToPage(
       pageIndex,
       duration: Duration(milliseconds: 300),
       curve: Curves.easeInOut,
@@ -48,6 +61,7 @@ class _HomePageState extends State<HomePage> {
 
   Scaffold buildAuthScreen() {
     return Scaffold(
+      key: _scaffoldKey,
       body: PageView(
         children: <Widget>[
           ChatPage(),
@@ -55,7 +69,7 @@ class _HomePageState extends State<HomePage> {
           ProgressPage(),
           MorePage(),
         ],
-        controller: pageController,
+        controller: _pageController,
         onPageChanged: onPageChanged,
         physics: NeverScrollableScrollPhysics(),
       ),
@@ -80,47 +94,10 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  //Image car
-  /*
-  Widget buildUnAuthScreen() {
-    return Scaffold(
-      body: Container(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        child: Stack(
-          children: <Widget>[
-            new Positioned(
-                child: Align(
-              alignment: FractionalOffset.bottomCenter,
-              child: Image.asset("assets/images/car.png", fit: BoxFit.fitWidth),
-            ))
-          ],
-        ),
-      ),
-    );
-  }
-  */
-
-    Widget buildUnAuthScreen() {
-    return Scaffold(
-      body: Container(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        child: Stack(
-          children: <Widget>[
-            new Positioned(
-                child: Align(
-              alignment: FractionalOffset.bottomCenter,
-              child: Image.asset("assets/images/road.jpg", fit: BoxFit.cover),
-            ))
-          ],
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    return isAuth ? buildAuthScreen() : buildUnAuthScreen();
+    return _isCheckingAuth
+        ? circularProgress(context)
+        : (_isAuth ? buildAuthScreen() : LoginPage());
   }
 }
