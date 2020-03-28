@@ -27,10 +27,10 @@ class _ChatPageState extends State<ChatPage> {
   void initState() {
     super.initState();
 
-    initializeChat();
+    //initializeChat();
   }
 
-  void initializeChat() async {
+  Future<void> initializeChat() async {
     _authGoogle = await AuthGoogle(fileJson: "assets/credentials.json").build();
     _dialogFlow =
         Dialogflow(authGoogle: _authGoogle, language: Language.spanish);
@@ -47,7 +47,8 @@ class _ChatPageState extends State<ChatPage> {
       body: Container(
         padding: const EdgeInsets.only(top: 12.0, left: 15, right: 15),
         child: Center(
-          child: primaryButton(context, () {
+          child: primaryButton(context, () async {
+            await initializeChat();
             setState(() {
               this._chatStarted = true;
             });

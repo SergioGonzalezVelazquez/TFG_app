@@ -55,7 +55,7 @@ Future<User> signInWithFacebook() async {
 
   await firebaseAuth.signInWithCredential(credential);
 
-    final FirebaseUser currentUser = await firebaseAuth.currentUser();
+  final FirebaseUser currentUser = await firebaseAuth.currentUser();
   assert(currentUser.email != null);
   assert(!currentUser.isAnonymous);
   assert(await currentUser.getIdToken() != null);
@@ -120,6 +120,18 @@ Future<User> signInWithEmail(String email, String password) async {
   return user;
 }
 
+Future<void> updateProfile({String name, String photo}) async {
+  final FirebaseUser currentUser = await firebaseAuth.currentUser();
+
+  Map<String, dynamic> updatedData = {};
+  if (name != null) updatedData['name'] = name;
+
+  usersRef.document(currentUser.uid).updateData(updatedData);
+
+  DocumentSnapshot doc = await usersRef.document(currentUser.uid).get();
+  user = User.fromDocument(doc);
+}
+
 Future<void> sendEmailVerification() async {
   FirebaseUser user = await firebaseAuth.currentUser();
   user.sendEmailVerification();
@@ -148,7 +160,8 @@ String signInCredentialsErrorMsg(error) {
           'No se pudo conectar. Compruebe su conexión a Internet e intentelo de nuevo más tarde.';
       break;
     case 'ERROR_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL':
-      authError = 'Esta cuenta está asociada a . Por favor, inicie sesión con ella.';
+      authError =
+          'Esta cuenta está asociada a . Por favor, inicie sesión con ella.';
       break;
     case 'ERROR_OPERATION_NOT_ALLOWED':
       authError = 'ERROR_OPERATION_NOT_ALLOWED';
@@ -177,10 +190,12 @@ String signInEmailErrorMsg(error) {
       authError = 'La contraseña que has introducido es incorrecta';
       break;
     case 'ERROR_USER_NOT_FOUND':
-      authError = 'El correo electrónico que has introducido no coincide con ninguna cuenta';
+      authError =
+          'El correo electrónico que has introducido no coincide con ninguna cuenta';
       break;
     case 'ERROR_USER_DISABLED':
-      authError = 'El usuario vinculado a esa cuenta de correo ha sido desactivado';
+      authError =
+          'El usuario vinculado a esa cuenta de correo ha sido desactivado';
       break;
     default:
       authError = 'Error';
@@ -206,7 +221,8 @@ String signUpErrorMsg(error) {
       authError = 'Ya hay una cuenta registrada con esa dirección de correo';
       break;
     default:
-      authError = 'No se pudo completar el registro. Inténtalo de nuevo más tarde.';
+      authError =
+          'No se pudo completar el registro. Inténtalo de nuevo más tarde.';
       break;
   }
   return authError;

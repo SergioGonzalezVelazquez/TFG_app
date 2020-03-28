@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:tfg_app/pages/user/login_page.dart';
-import 'package:tfg_app/pages/user/profile.dart';
 import 'package:tfg_app/pages/user/udpate_password.dart';
 import 'package:tfg_app/widgets/buttons.dart';
 import 'package:tfg_app/services/auth.dart';
 import 'package:tfg_app/widgets/progress.dart';
+import 'package:tfg_app/pages/user/profile.dart';
 
 class MorePage extends StatefulWidget {
   ///Creates a StatelessElement to manage this widget's location in the tree
