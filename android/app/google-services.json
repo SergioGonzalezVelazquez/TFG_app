@@ -1,42 +1,34 @@
 {
   "project_info": {
-    "project_number": "456100354699",
-    "firebase_url": "https://tfg-app-bcf19.firebaseio.com",
-    "project_id": "tfg-app-bcf19",
-    "storage_bucket": "tfg-app-bcf19.appspot.com"
+    "project_number": "188310375168",
+    "firebase_url": "https://stopmiedo-ikiqvp.firebaseio.com",
+    "project_id": "stopmiedo-ikiqvp",
+    "storage_bucket": "stopmiedo-ikiqvp.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:456100354699:android:32830762620ff9ef4bd28e",
+        "mobilesdk_app_id": "1:188310375168:android:0a0eda4c44fd64bf3c41e5",
         "android_client_info": {
-          "package_name": "com.example.tfg_app"
+          "package_name": "com.stopmiedo.android.app"
         }
       },
       "oauth_client": [
         {
-          "client_id": "456100354699-pesmfoahu8cc2u5djv86o3tp26ige5sg.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.tfg_app",
-            "certificate_hash": "c1426e44ac95c22b42ecd0d21c245b9f87f7b7ed"
-          }
-        },
-        {
-          "client_id": "456100354699-e91jk02plkfi1vv2ll6knlcmnpkngdr2.apps.googleusercontent.com",
+          "client_id": "188310375168-8v5fk62i1re5ca6to7bg1pb0dajt9udv.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBzE3t4f5twtmdcqzleOmlOnGRp9LOdjAg"
+          "current_key": "AIzaSyB6crdfNFfcNMOJPS911WiwXOX8AqiQrOQ"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "456100354699-e91jk02plkfi1vv2ll6knlcmnpkngdr2.apps.googleusercontent.com",
+              "client_id": "188310375168-8v5fk62i1re5ca6to7bg1pb0dajt9udv.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

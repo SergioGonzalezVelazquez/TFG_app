@@ -28,7 +28,7 @@ class ChatMessage extends StatelessWidget {
             ),
             Container(
               constraints: BoxConstraints(
-                  maxWidth: MediaQuery.of(context).size.width * .6),
+                  maxWidth: MediaQuery.of(context).size.width * .7),
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
               decoration: BoxDecoration(
                 color: Colors.grey[200],
