@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "188310375168",
+    "firebase_url": "https://stopmiedo-ikiqvp.firebaseio.com",
+    "project_id": "stopmiedo-ikiqvp",
+    "storage_bucket": "stopmiedo-ikiqvp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:188310375168:android:0a0eda4c44fd64bf3c41e5",
+        "android_client_info": {
+          "package_name": "com.stopmiedo.android.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "188310375168-8v5fk62i1re5ca6to7bg1pb0dajt9udv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB6crdfNFfcNMOJPS911WiwXOX8AqiQrOQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "188310375168-8v5fk62i1re5ca6to7bg1pb0dajt9udv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

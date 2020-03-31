@@ -1,0 +1,122 @@
+name: tfg_app
+description: A tool to help patients suffering from amaxophobia
+
+# The following defines the version and build number for your application.
+# A version number is three numbers separated by dots, like 1.2.43
+# followed by an optional build number separated by a +.
+# Both the version and the builder number may be overridden in flutter
+# build by specifying --build-name and --build-number, respectively.
+# In Android, build-name is used as versionName while build-number used as versionCode.
+# Read more about Android versioning at https://developer.android.com/studio/publish/versioning
+# In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
+# Read more about iOS versioning at
+# https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.1.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # Use with the CupertinoIcons class for iOS style icons.
+  cupertino_icons: ^0.1.2
+
+  # A Flutter plugin to use the Cloud Firestore API.
+  cloud_firestore: ^0.13.4+2
+
+  # A Flutter plugin for Google Sign In
+  google_sign_in: ^4.1.4
+
+  # A Flutter plugin for using the native Facebook Login SDKs on Android and iOS.
+  flutter_facebook_login: ^3.0.0
+
+  # A Flutter plugin to use the Firebase Authentication API.
+  firebase_auth: ^0.15.5+2
+
+  # A Flutter plugin to use the Firebase Realtime Database API.
+  firebase_database: ^3.1.3
+
+  # Integrate dialogflow and support dialogflow v2
+  flutter_dialogflow: ^0.1.3
+
+  # A Flutter plugin for launching a URL in the 
+  # mobile platform. Supports iOS and Android.
+  url_launcher: ^5.4.2
+
+  # This plugin allows Flutter apps to launch arbitrary intents when the 
+  # platform is Android. 
+  android_intent: ^0.3.6+1
+
+  # String validation and sanitization for Dart
+  validators: ^2.0.0+1
+
+  # Display progress widgets based on percentage
+  percent_indicator: ^2.1.1
+
+  # A basic password strength estimator for Dart
+  password_strength: ^0.1.2
+
+  # A flutter library to show images from the internet 
+  # and keep them in the cache directory
+  cached_network_image: ^2.0.0
+
+  # A Flutter plugin for iOS and Android for picking images 
+  # from the image library, and taking new pictures with the camera.
+  image_picker: ^0.6.4
+
+  # Command-line tool which simplifies the task 
+  # of updating your Flutter app's launcher icon
+  flutter_launcher_icons: ^0.7.4
+
+flutter_icons:
+  image_path: "assets/icon/launcher_icon.png" 
+  android: true
+  ios: true
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+
+# For information on the generic Dart part of this file, see the
+# following page: https://dart.dev/tools/pub/pubspec
+
+# The following section is specific to Flutter.
+flutter:
+
+  # The following line ensures that the Material Icons font is
+  # included with your application, so that you can use the icons in
+  # the material Icons class.
+  uses-material-design: true
+
+  # Assets section
+  assets:
+    - assets/credentials.json
+    - assets/images/  
+
+  # Fonts section 
+  fonts:
+    - family: CustomIcon
+      fonts:
+        - asset: assets/fonts/CustomIcon.ttf
+        
+    - family: Nunito
+      fonts:
+        - asset: assets/fonts/NunitoRegular.ttf
+        - asset: assets/fonts/NunitoBold.ttf
+          weight: 700
+        - asset: assets/fonts/NunitoLight.ttf
+          weight: 300
+
+
+  #   - family: Trajan Pro
+  #     fonts:
+  #       - asset: fonts/TrajanPro.ttf
+  #       - asset: fonts/TrajanPro_Bold.ttf
+  #         weight: 700
+  #
+  # For details regarding fonts from package dependencies,
+  # see https://flutter.dev/custom-fonts/#from-packages
