@@ -1,0 +1,39 @@
+{
+  "id": "0accefcd-da84-496d-8943-2b2fed69e583",
+  "name": "identificar_situaciones.inicio_marcha",
+  "auto": true,
+  "contexts": [
+    "identificar_situaciones_ansiogenas"
+  ],
+  "responses": [
+    {
+      "resetContexts": false,
+      "affectedContexts": [
+        {
+          "name": "identificar_situaciones_ansiogenas",
+          "parameters": {},
+          "lifespan": 5
+        }
+      ],
+      "parameters": [],
+      "messages": [
+        {
+          "type": 0,
+          "lang": "es",
+          "condition": "",
+          "speech": "Estás en una situación de inicio de marcha y tráfico en situaciones conocidas"
+        }
+      ],
+      "defaultResponsePlatforms": {},
+      "speech": []
+    }
+  ],
+  "priority": 500000,
+  "webhookUsed": true,
+  "webhookForSlotFilling": false,
+  "fallbackIntent": false,
+  "events": [],
+  "conditionalResponses": [],
+  "condition": "",
+  "conditionalFollowupEvents": []
+}

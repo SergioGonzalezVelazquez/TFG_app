@@ -3,17 +3,19 @@
 //
 // Start writing Firebase Functions
 // https://firebase.google.com/docs/functions/typescript
-import * as functions from 'firebase-functions';
-import { handleIdentifyingSituations } from './situations';
-import { writeToDB } from './utils/db';
 
+// Cloud Functions for Firebase SDK to create Cloud Functions and setup triggers.
+import * as functions from 'firebase-functions';
+// Firebase Admin SDK to access the Firebase Realtime Database.
 const admin = require('firebase-admin');
+admin.initializeApp(functions.config().firebase);
 const { WebhookClient } = require('dialogflow-fulfillment');
 
-process.env.DEBUG = 'dialogflow:debug'; // enables lib debugging statements
+import { handleIdentifyingSituations } from './situations';
+import { readFromDB } from './utils/db_manager';
+import { writeUserMessage } from './handlers/handle.message';
 
-admin.initializeApp(functions.config().firebase);
-const db = admin.firestore();
+process.env.DEBUG = 'dialogflow:debug'; // enables lib debugging statements
 
 export const dialogflowFulfillment = functions.https.onRequest(async (request, response) => {
     // class that handles the communication with Dialogflow's webhook fulfillment 
@@ -21,7 +23,17 @@ export const dialogflowFulfillment = functions.https.onRequest(async (request, r
     console.log('Dialogflow Request headers: ' + JSON.stringify(request.headers));
     console.log('Dialogflow Request body: ' + JSON.stringify(request.body));
 
-    // Get current contexts as a list of strings
+    // Using pop() to get to the last item of the splitted string
+    const session: string = request.body.session.split("/").pop();
+    console.log("session: " + session);
+
+    const userId: string = (await readFromDB("dialogflow_sessions", session)).data()['user_id'];
+    console.log("userId: " + userId)
+
+    await writeUserMessage(session, request.body.queryResult.queryText);
+
+
+    /* Get current contexts as a list of strings
     const contexts: string[] = agent.contexts.map(context => context.name);
 
     if (agent.intent === 'identificar_situaciones.comienzo') {
@@ -38,5 +50,5 @@ export const dialogflowFulfillment = functions.https.onRequest(async (request, r
     if (contexts.includes('identificar_situaciones_ansiogenas')) {
         await handleIdentifyingSituations(agent, contexts);
     }
-
+    */
 });

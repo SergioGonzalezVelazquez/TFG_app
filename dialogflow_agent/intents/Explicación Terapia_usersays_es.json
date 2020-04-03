@@ -1,0 +1,119 @@
+[
+  {
+    "id": "13b005d9-0da3-4080-9138-b6136867fe8c",
+    "data": [
+      {
+        "text": "Quiero saber más sobre la terapia",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "ee066017-97e6-4bd9-b395-9823c9e2d91f",
+    "data": [
+      {
+        "text": "En qué consiste la terapia",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "9201d912-5093-49bc-9bdf-9e3102d7beeb",
+    "data": [
+      {
+        "text": "Desensibilización sistemática",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "5475da6b-bbdc-4c05-993d-69fe2d6468c4",
+    "data": [
+      {
+        "text": "Qué ",
+        "userDefined": false
+      },
+      {
+        "text": "es",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      },
+      {
+        "text": " la desensibilización sistemática",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "0c361d5f-0096-4a72-b5c8-2ef70ac0d835",
+    "data": [
+      {
+        "text": "Técnica de exposición",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "6f0ede1b-fc15-4900-bbf3-d2bdfc3963fe",
+    "data": [
+      {
+        "text": "Cómo funciona la terapia",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "8bd98599-6725-42d5-85cf-1010fdaf6809",
+    "data": [
+      {
+        "text": "Cómo funciona la desensibilización sistemáticamiedo",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "33e379ba-871f-415f-bec3-fdfcb2a3856b",
+    "data": [
+      {
+        "text": "Tratamiento del miedo",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "da45af23-c466-4039-97d5-88c500fda4db",
+    "data": [
+      {
+        "text": "Cómo será el tratamiento",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  }
+]

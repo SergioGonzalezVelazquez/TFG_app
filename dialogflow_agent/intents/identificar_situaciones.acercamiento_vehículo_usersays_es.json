@@ -1,0 +1,133 @@
+[
+  {
+    "id": "54ddabe8-6f26-473f-b914-2eb6abd56a2d",
+    "data": [
+      {
+        "text": "ansiedad al abrir el coche",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "9f4cc541-fc7d-4935-a09e-c63e4e260910",
+    "data": [
+      {
+        "text": "ansiedad al ponerme el cinturón",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "7c1a8e8e-3697-4ba4-a52b-e918f55f0ccf",
+    "data": [
+      {
+        "text": "fobia a estar sentado en el coche",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "d9d182c8-8155-4d65-a433-409fce2474fa",
+    "data": [
+      {
+        "text": "no puedo sentarme en el coche",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "8a5031d0-d380-4f83-8609-70fad437bdd2",
+    "data": [
+      {
+        "text": "miedo a tocar el ",
+        "userDefined": false
+      },
+      {
+        "text": "volante",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "39d40a2c-1b1e-4fe6-a645-878e43e128d1",
+    "data": [
+      {
+        "text": "ansiedad al sentarme en el coche",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "fd4ab7e3-a69f-46ce-9ab2-3b00950bd0ed",
+    "data": [
+      {
+        "text": "ansiedad al subirme al coche",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "8a2e79a7-e131-407f-ae99-a598b8b1ad68",
+    "data": [
+      {
+        "text": "me da miedo sentarme en el vehículo",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 1,
+    "updated": 0
+  },
+  {
+    "id": "e4e7ce10-ae59-4745-8382-7914e2281b3f",
+    "data": [
+      {
+        "text": "no soy ",
+        "userDefined": false
+      },
+      {
+        "text": "capaz",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      },
+      {
+        "text": " ",
+        "userDefined": false
+      },
+      {
+        "text": "a",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      },
+      {
+        "text": " meterme en el coche",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  }
+]

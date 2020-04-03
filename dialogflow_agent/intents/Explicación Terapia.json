@@ -1,0 +1,37 @@
+{
+  "id": "6c4fadfc-cbcb-4c68-a740-3c49cb17e9af",
+  "name": "Explicación Terapia",
+  "auto": true,
+  "contexts": [],
+  "responses": [
+    {
+      "resetContexts": false,
+      "affectedContexts": [],
+      "parameters": [],
+      "messages": [
+        {
+          "type": 0,
+          "lang": "es",
+          "condition": "",
+          "speech": "Para ayudarte a superar el miedo a conducir vamos a aplicar una técnica de exposición conocida cómo Desensibilización Sistemática."
+        },
+        {
+          "type": 0,
+          "lang": "es",
+          "condition": "",
+          "speech": "La aplicación de la DS requiere elaborar una jerarquía de situaciones ansiógenas y exponerse de manera gradual a esas situaciones temidas."
+        }
+      ],
+      "defaultResponsePlatforms": {},
+      "speech": []
+    }
+  ],
+  "priority": 500000,
+  "webhookUsed": false,
+  "webhookForSlotFilling": false,
+  "fallbackIntent": false,
+  "events": [],
+  "conditionalResponses": [],
+  "condition": "",
+  "conditionalFollowupEvents": []
+}

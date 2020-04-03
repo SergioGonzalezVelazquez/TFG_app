@@ -1,0 +1,44 @@
+{
+  "id": "6bc8e49f-c3fb-4a46-a4e2-aef9906d6595",
+  "name": "identificar_situaciones.acercamiento_vehículo",
+  "auto": true,
+  "contexts": [
+    "identificar_situaciones_ansiogenas"
+  ],
+  "responses": [
+    {
+      "resetContexts": false,
+      "affectedContexts": [
+        {
+          "name": "identificar_situaciones_ansiogenas",
+          "parameters": {},
+          "lifespan": 5
+        },
+        {
+          "name": "acercamiento_vehiculo",
+          "parameters": {},
+          "lifespan": 5
+        }
+      ],
+      "parameters": [],
+      "messages": [
+        {
+          "type": 0,
+          "lang": "es",
+          "condition": "",
+          "speech": "Entiendo que te producen ansiedad situaciones de acercamiento al vehículo."
+        }
+      ],
+      "defaultResponsePlatforms": {},
+      "speech": []
+    }
+  ],
+  "priority": 500000,
+  "webhookUsed": true,
+  "webhookForSlotFilling": false,
+  "fallbackIntent": false,
+  "events": [],
+  "conditionalResponses": [],
+  "condition": "",
+  "conditionalFollowupEvents": []
+}

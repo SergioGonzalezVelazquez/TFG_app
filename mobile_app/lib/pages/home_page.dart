@@ -4,6 +4,7 @@ import 'package:tfg_app/pages/chat/chat_page.dart';
 import 'package:tfg_app/pages/exercises/exercises.dart';
 import 'package:tfg_app/pages/more/more_page.dart';
 import 'package:tfg_app/pages/progress/progress.dart';
+import 'package:tfg_app/pages/therapist/therapist.dart';
 import 'package:tfg_app/pages/user/login_page.dart';
 import 'package:tfg_app/widgets/progress.dart';
 import 'package:tfg_app/services/auth.dart';
@@ -64,7 +65,7 @@ class _HomePageState extends State<HomePage> {
       key: _scaffoldKey,
       body: PageView(
         children: <Widget>[
-          ChatPage(),
+          TherapistPage(),
           ExercisePage(),
           ProgressPage(),
           MorePage(),

@@ -1,0 +1,39 @@
+{
+  "id": "cdce11ac-6d29-4588-a5c2-9dca2f85642a",
+  "name": "identificar_situaciones.circulacion",
+  "auto": true,
+  "contexts": [
+    "identificar_situaciones_ansiogenas"
+  ],
+  "responses": [
+    {
+      "resetContexts": false,
+      "affectedContexts": [
+        {
+          "name": "identificar_situaciones_ansiogenas",
+          "parameters": {},
+          "lifespan": 5
+        }
+      ],
+      "parameters": [],
+      "messages": [
+        {
+          "type": 0,
+          "lang": "es",
+          "condition": "",
+          "speech": "Entiendo que tu principal problema está relacionado con situaciones de conducción"
+        }
+      ],
+      "defaultResponsePlatforms": {},
+      "speech": []
+    }
+  ],
+  "priority": 500000,
+  "webhookUsed": true,
+  "webhookForSlotFilling": false,
+  "fallbackIntent": false,
+  "events": [],
+  "conditionalResponses": [],
+  "condition": "",
+  "conditionalFollowupEvents": []
+}

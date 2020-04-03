@@ -1,0 +1,9 @@
+{
+  "id": "dd3ff087-a965-4ad2-aa0f-f679588cd8ab",
+  "name": "tipo_via",
+  "isOverridable": true,
+  "isEnum": false,
+  "isRegexp": false,
+  "automatedExpansion": false,
+  "allowFuzzyExtraction": true
+}

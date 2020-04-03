@@ -1,0 +1,66 @@
+{
+  "id": "db38499f-e5ef-4ddc-9018-6a408b7c5166",
+  "name": "Intent_First_Session",
+  "auto": true,
+  "contexts": [],
+  "responses": [
+    {
+      "resetContexts": false,
+      "affectedContexts": [],
+      "parameters": [
+        {
+          "id": "d65017e5-76c0-46da-8b81-bae559370b72",
+          "required": false,
+          "dataType": "",
+          "name": "username",
+          "value": "#FIRST_SESSION.username",
+          "promptMessages": [],
+          "noMatchPromptMessages": [],
+          "noInputPromptMessages": [],
+          "outputDialogContexts": [],
+          "isList": false
+        }
+      ],
+      "messages": [
+        {
+          "type": 0,
+          "lang": "es",
+          "condition": "",
+          "speech": [
+            "¡Hola $username!",
+            "¡Buenos días $username! Bienvenido a STOPMiedo."
+          ]
+        },
+        {
+          "type": 0,
+          "lang": "es",
+          "condition": "",
+          "speech": [
+            "Puedo ayudarte a superar la ansiedad al volante. Para ello, vamos a seguir un programa sistemático y estructurado que requiere un esfuerzo continuo.",
+            "Cómo muchos otros miedos, la ansiedad al volante puede tratarse mediante la exposición a situaciones que le producen miedo o ansiedad. Dicho método de exposición es lo que se conoce cómo desensibilización sistemática."
+          ]
+        },
+        {
+          "type": 0,
+          "lang": "es",
+          "condition": "",
+          "speech": "¿Por dónde empezamos? Puedo explicarte más en detalle la técnica que vamos a seguir, hablar sobre la amaxofobia o, si estás preparado, empezar con la terapia."
+        }
+      ],
+      "defaultResponsePlatforms": {},
+      "speech": []
+    }
+  ],
+  "priority": 500000,
+  "webhookUsed": false,
+  "webhookForSlotFilling": false,
+  "fallbackIntent": false,
+  "events": [
+    {
+      "name": "FIRST_SESSION"
+    }
+  ],
+  "conditionalResponses": [],
+  "condition": "",
+  "conditionalFollowupEvents": []
+}

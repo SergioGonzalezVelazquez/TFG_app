@@ -1,0 +1,58 @@
+{
+  "id": "5b0b34cb-d25e-46a6-a637-16647b29e086",
+  "name": "identificar_situaciones.adelantamiento",
+  "auto": true,
+  "contexts": [
+    "identificar_situaciones_ansiogenas"
+  ],
+  "responses": [
+    {
+      "resetContexts": false,
+      "affectedContexts": [
+        {
+          "name": "identificar_situaciones_ansiogenas",
+          "parameters": {},
+          "lifespan": 5
+        }
+      ],
+      "parameters": [
+        {
+          "id": "372482c4-b6ad-45d3-b33c-e917cb9424ae",
+          "required": true,
+          "dataType": "@tipo_vehiculo",
+          "name": "tipo_vehiculo",
+          "value": "$tipo_vehiculo",
+          "prompts": [
+            {
+              "lang": "es",
+              "value": "Adelantar,  ¿a qué tipos de vehículos le produce una mayor ansiedad? ¿Vehículos cortos cómo turismos o coches, vehículos largos cómo camiones o autobuses?"
+            }
+          ],
+          "promptMessages": [],
+          "noMatchPromptMessages": [],
+          "noInputPromptMessages": [],
+          "outputDialogContexts": [],
+          "isList": false
+        }
+      ],
+      "messages": [
+        {
+          "type": 0,
+          "lang": "es",
+          "condition": "",
+          "speech": "Entiendo que tu problema está relacionado con situaciones de adelantamiento a $tipo_vehiculo"
+        }
+      ],
+      "defaultResponsePlatforms": {},
+      "speech": []
+    }
+  ],
+  "priority": 500000,
+  "webhookUsed": true,
+  "webhookForSlotFilling": false,
+  "fallbackIntent": false,
+  "events": [],
+  "conditionalResponses": [],
+  "condition": "",
+  "conditionalFollowupEvents": []
+}

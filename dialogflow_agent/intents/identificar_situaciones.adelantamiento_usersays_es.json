@@ -1,0 +1,95 @@
+[
+  {
+    "id": "fe1c63d9-4d32-459a-8918-b995ba9ee310",
+    "data": [
+      {
+        "text": "no me atrevo a adelantar",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "b2460055-9c35-4c8e-b455-b76ee8a71694",
+    "data": [
+      {
+        "text": "me produce ansiedad circular por vías con adelantamiento",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "4c7ddfa9-35d6-4e4f-86b7-7200ddf3cf6f",
+    "data": [
+      {
+        "text": "no puedo adelantar",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "1390e53c-9d9e-4c6a-9ee1-6b3cc4bfaac2",
+    "data": [
+      {
+        "text": "rebasar",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "af8d348b-ffd3-4b6d-80ff-5f1931ed5219",
+    "data": [
+      {
+        "text": "me da miedo adelantar",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "8510f98b-0141-4cb6-9b2d-6f00dfb7b581",
+    "data": [
+      {
+        "text": "no soy capaz de realizar ",
+        "userDefined": false
+      },
+      {
+        "text": "un",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      },
+      {
+        "text": " adelantamiento",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "f0c08adb-d20c-4ce4-93ec-35688de20a01",
+    "data": [
+      {
+        "text": "me produce ansiedad adelantar",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  }
+]

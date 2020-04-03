@@ -1,0 +1,26 @@
+[
+  {
+    "value": "vehículos cortos",
+    "synonyms": [
+      "vehículo corto",
+      "coche",
+      "turismo",
+      "automóvil",
+      "carro",
+      "auto",
+      "familiar",
+      "deportivo",
+      "descapotable"
+    ]
+  },
+  {
+    "value": "vehículos largos",
+    "synonyms": [
+      "vehículo largo",
+      "autobús",
+      "camión",
+      "furgón",
+      "furgoneta"
+    ]
+  }
+]
