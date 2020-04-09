@@ -29,12 +29,16 @@ export const dialogflowFulfillment = functions.https.onRequest(async (request, r
     const session: string = agent.session.split("/").pop();
     const userId: string = (await readFromDB("dialogflow_sessions", session)).data()['user_id'];
 
-    console.log(`agent properties. query: ${agent.query}; session: ${agent.session}; intent: ${agent.intent}; action: ${agent.action}; parameters: ${JSON.stringify(agent.parameters)}`);
+    // Get current contexts as a list of strings
+    const contexts: string[] = agent.contexts.map(context => context.name);
+    console.log(contexts)
+
+    //console.log(`agent properties. query: ${agent.query}; session: ${agent.session}; intent: ${agent.intent}; action: ${agent.action}; parameters: ${JSON.stringify(agent.parameters)}`);
 
     await writeUserMessage(session, agent.query);
 
-
-    async function handleRequest(agent) {
+    // Handles the incoming Dialogflow request using a handler
+    async function intentHandler(agent) {
         if (agent.intent === 'identificar_situaciones.global') {
             // El agente habrá reconocido una serie de categorías ansiógenas
             // a las cuales podemos acceder mediante el parámetro "situacion_ansiogena".
@@ -56,22 +60,16 @@ export const dialogflowFulfillment = functions.https.onRequest(async (request, r
             const currentSituation = await handleGlobalSituations(session, situations);
             console.log("currentSituation: " + currentSituation);
 
-            addOriginalResponse();
             agent.add(`Vamos a empezar explorando más en detalle posibles situaciones ansiógenas relacionadas con ${currentSituation}`);
+            console.log(`Vamos a empezar explorando más en detalle posibles situaciones ansiógenas relacionadas con ${currentSituation}`);
+
         }
-        else {
-            console.log(agent.consoleMessages);
-            addOriginalResponse();
-        }
+
     }
-
-    function addOriginalResponse() {
-        agent.consoleMessages.forEach((message) => agent.add(message));
+    
+    if (agent.intent === 'identificar_situaciones.global') {
+        agent.handleRequest(intentHandler);
     }
-
-
-    agent.handleRequest(handleRequest);
-
 
 
 });

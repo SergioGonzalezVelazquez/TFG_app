@@ -1,5 +1,10 @@
 const admin = require('firebase-admin');
 
+// Events messages will not be write
+const events = [
+    "FIRST_SESSION"
+];
+
 // As an admin, the app has access to read and write all data, 
 // regardless of Security Rules
 const db = admin.firestore();
@@ -22,7 +27,7 @@ export async function writeUserMessage(session: string, queryText: string) {
         t.set(collectionRef, message);
         return Promise.resolve('Write complete');
     }).then(doc => {
-        console.log("mensaje guardado!!")
+        //console.log("mensaje guardado!!")
     }).catch(err => {
         console.log(`Error writing message to Firestore: ${err}`);
     });
