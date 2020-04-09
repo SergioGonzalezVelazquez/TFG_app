@@ -61,6 +61,14 @@ dependencies:
   # A basic password strength estimator for Dart
   password_strength: ^0.1.2
 
+  # Provides internationalization and localization facilities, 
+  # including message translation, plurals and genders, date/number 
+  # formatting and parsing, and bidirectional text.
+  intl: ^0.16.1
+
+  # Animation library for Flutter 
+  animator: ^1.0.0+5
+
   # A flutter library to show images from the internet 
   # and keep them in the cache directory
   cached_network_image: ^2.0.0

@@ -1,15 +1,16 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:animator/animator.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dialogflow/dialogflow_v2.dart';
+import 'package:tfg_app/models/message.dart';
 import 'package:tfg_app/pages/chat/chat_message.dart';
 import 'package:tfg_app/services/auth.dart';
 import 'package:tfg_app/services/dialogflow.dart';
 import 'package:tfg_app/themes/custom_icon_icons.dart';
-import 'package:tfg_app/widgets/buttons.dart';
 import 'package:uuid/uuid.dart';
-
 ///
 /// References:
 /// https://pub.dev/packages/flutter_dialogflow#-readme-tab-
@@ -31,6 +32,8 @@ class _ChatPageState extends State<ChatPage> {
   AuthGoogle _authGoogle;
   Dialogflow _dialogFlow;
 
+  bool _showBotWritingAnimation = true;
+
   @override
   void initState() {
     super.initState();
@@ -44,6 +47,9 @@ class _ChatPageState extends State<ChatPage> {
 
   ///
   Future<void> _initializeChat() async {
+    setState(() {
+      _showBotWritingAnimation = true;
+    });
     String sessionId = Uuid().v4();
     _authGoogle = await AuthGoogle(
             fileJson: "assets/credentials.json", sessionId: sessionId)
@@ -75,11 +81,19 @@ class _ChatPageState extends State<ChatPage> {
   ///
   void _handleSubmitted(String text) {
     _textController.clear();
-    ChatMessage message =
-        new ChatMessage(text: text, name: "Client", type: true);
-    setState(() {
-      _messages.insert(0, message);
-    });
+    ChatMessage message = new ChatMessage(
+        message: Message(
+          source: MessageSource.user,
+          text: text,
+          timestamp: Timestamp.now(),
+        ),
+        showInfo: _messages.isEmpty ||
+            _messages[0].message.source != MessageSource.user);
+    setState(
+      () {
+        _messages.insert(0, message);
+      },
+    );
 
     _sendMessage(text);
   }
@@ -108,32 +122,48 @@ class _ChatPageState extends State<ChatPage> {
   ///
   Future<void> _sendMessage(String query) async {
     _textController.clear();
+    setState(() {
+      _showBotWritingAnimation = true;
+    });
     AIResponse responses = await _dialogFlow.detectIntent(query);
     _handleAgentResponse(responses);
   }
 
-  void _handleAgentResponse(AIResponse responses) {
-    //DEBUG
+  void _handleAgentResponse(AIResponse responses) async {
     List messages = responses.getListMessage();
     print("messages:");
     print(messages);
 
-    //End debug
-    responses.getListMessage().forEach((msg) {
-      ChatMessage message = new ChatMessage(
-          text: msg['text']['text'][0], name: "Bot", type: false);
-
-      print("msg: " + msg['text']['text'][0]);
+    for (int i = 0; i < messages.length; i++) {
       setState(() {
-        _messages.insert(0, message);
+        _showBotWritingAnimation = true;
       });
-    });
+      await new Future.delayed(const Duration(milliseconds: 900));
+      ChatMessage message = new ChatMessage(
+        message: Message(
+          source: MessageSource.bot,
+          text: messages[i]['text']['text'][0],
+          timestamp: Timestamp.now(),
+        ),
+        showInfo: _messages.isEmpty ||
+            _messages[0].message.source != MessageSource.bot,
+      );
+
+      print("msg: " + messages[i]['text']['text'][0]);
+      setState(
+        () {
+          _showBotWritingAnimation = false;
+          _messages.insert(0, message);
+        },
+      );
+    }
   }
 
   /**
    * Widgets (ui components) used in this screen 
    */
-  Widget _buildTextComposer() {
+
+  Widget _textComposer() {
     return IconTheme(
       data: IconThemeData(color: Theme.of(context).primaryColor),
       child: new Container(
@@ -143,16 +173,107 @@ class _ChatPageState extends State<ChatPage> {
             Flexible(
               child: TextField(
                 controller: _textController,
+                textInputAction: TextInputAction.send,
+                // Force Flutter to rebuild this widget when user writes.
+                // This will change the iconButon to send message icon.
+                onChanged: (val) {
+                  setState(() {});
+                },
                 onSubmitted: _handleSubmitted,
                 decoration:
                     InputDecoration.collapsed(hintText: "Escribe un mensaje"),
               ),
             ),
+            _textController.text.isEmpty
+                ? Material(
+                    borderRadius: BorderRadius.circular(4),
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(4),
+                      splashColor: Colors.red,
+
+                      radius: 25,
+                      onTap: () => print("record"),
+                      child: Container(
+                        child: Icon(
+                          CustomIcon.microfono,
+                          color: Theme.of(context).primaryColor,
+                          size: 24,
+                        ),
+                      ),
+                    ),
+                  )
+                : IconButton(
+                    icon: Icon(CustomIcon.send3),
+                    onPressed: () => _handleSubmitted(_textController.text),
+                  ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _botWritingAnimation() {
+    return Visibility(
+      visible: _showBotWritingAnimation,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
             Container(
-              margin: EdgeInsets.symmetric(horizontal: 4.0),
-              child: IconButton(
-                  icon: Icon(CustomIcon.send2),
-                  onPressed: () => _handleSubmitted(_textController.text)),
+              margin: const EdgeInsets.only(right: 16.0),
+              child: Center(
+                child: new CircleAvatar(
+                  backgroundImage: ExactAssetImage("assets/images/doctor.png"),
+                  backgroundColor: Colors.transparent,
+                ),
+              ),
+            ),
+            Row(
+              children: <Widget>[
+                Animator(
+                  duration: Duration(milliseconds: 1000),
+                  cycles: 0,
+                  builder: (anim) => Container(
+                    width: 10 * anim.value,
+                    height: 10 * anim.value,
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).primaryColorLight,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 5,
+                ),
+                Animator(
+                  duration: Duration(milliseconds: 1100),
+                  cycles: 0,
+                  builder: (anim) => Container(
+                    width: 10 * anim.value,
+                    height: 10 * anim.value,
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).primaryColor,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 5,
+                ),
+                Animator(
+                  duration: Duration(milliseconds: 1200),
+                  cycles: 0,
+                  builder: (anim) => Container(
+                    width: 10 * anim.value,
+                    height: 10 * anim.value,
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).primaryColorDark,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                ),
+              ],
             )
           ],
         ),
@@ -167,17 +288,19 @@ class _ChatPageState extends State<ChatPage> {
           child: Column(
             children: <Widget>[
               Flexible(
-                  child: ListView.builder(
-                      padding: EdgeInsets.all(8.0),
-                      reverse: true,
-                      itemBuilder: (_, int index) => _messages[index],
-                      itemCount: _messages.length)),
+                child: ListView.builder(
+                    padding: EdgeInsets.all(8.0),
+                    reverse: true,
+                    itemBuilder: (_, int index) => _messages[index],
+                    itemCount: _messages.length),
+              ),
+              _botWritingAnimation(),
               Divider(
                 height: 1.0,
               ),
               Container(
                 decoration: BoxDecoration(color: Theme.of(context).cardColor),
-                child: _buildTextComposer(),
+                child: _textComposer(),
               )
             ],
           ),

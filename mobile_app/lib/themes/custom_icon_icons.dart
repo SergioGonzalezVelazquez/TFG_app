@@ -206,6 +206,8 @@ class CustomIcon {
   static const IconData briefcase = IconData(0xe8ab, fontFamily: _kFontFam);
   static const IconData esconder = IconData(0xe8ac, fontFamily: _kFontFam);
   static const IconData ojo = IconData(0xe8ad, fontFamily: _kFontFam);
+  static const IconData microfono = IconData(0xe8ae, fontFamily: _kFontFam);
+  static const IconData send3 = IconData(0xe8af, fontFamily: _kFontFam);
   static const IconData twitter = IconData(0xf099, fontFamily: _kFontFam);
   static const IconData facebook = IconData(0xf09a, fontFamily: _kFontFam);
   static const IconData linkedin = IconData(0xf0e1, fontFamily: _kFontFam);
