@@ -1,0 +1,328 @@
+{
+    "pretest_questionnaire": {
+        "pretest_personal": {
+            "name": "Información personal",
+            "index": 1,
+            "questions": {
+                "personal_1": {
+                    "linkId": 1,
+                    "text": "Selecciona tu género",
+                    "type": "choice",
+                    "mandatory": true,
+                    "answerValueSet": [
+                        {
+                            "text": "Masculino",
+                            "value": "masculino"
+                        },
+                        {
+                            "text": "Femenino",
+                            "value": "femenino"
+                        },
+                        {
+                            "text": "Otro",
+                            "value": "otro"
+                        },
+                        {
+                            "text": "Prefiero no decirlo",
+                            "value": "sin_decir"
+                        }
+                    ]
+                },
+                "personal_2": {
+                    "linkId": 2,
+                    "text": "¿Cuál es tu grupo de edad?",
+                    "type": "choice",
+                    "mandatory": true,
+                    "answerValueSet": [
+                        {
+                            "text": "De 18 a 20 años",
+                            "value": "18_20"
+                        },
+                        {
+                            "text": "De 21 a 29 años",
+                            "value": "21_29"
+                        },
+                        {
+                            "text": "De 30 a 39 años",
+                            "value": "30_39"
+                        },
+                        {
+                            "text": "De 40 a 49 años",
+                            "value": "40_49"
+                        },
+                        {
+                            "text": "De 50 a 59 años",
+                            "value": "50_59"
+                        },
+                        {
+                            "text": "Más de 60 años",
+                            "value": "60+"
+                        }
+                    ]
+                },
+                "personal_3": {},
+                "personal_4": {},
+                "personal_5": {},
+                "personal_6": {},
+                "personal_7": {},
+                "personal_8": {}
+            }
+        },
+        "pretest_conductor": {
+            "name": "Descripción cómo conductor",
+            "index": 2,
+            "questions": {
+                "conductor_1": {
+                    "linkId": 3,
+                    "text": "¿Desde hace cuánto tiempo tienes el permiso de conducir?",
+                    "type": "choice",
+                    "mandatory": true,
+                    "answerValueSet": [
+                        {
+                            "text": "Menos de un año",
+                            "value": "<1"
+                        },
+                        {
+                            "text": "Entre 1 y 5 años",
+                            "value": "1_5"
+                        },
+                        {
+                            "text": "Entre 6 y 10 años",
+                            "value": "6_10"
+                        },
+                        {
+                            "text": "Más de 10 años",
+                            "value": ">10"
+                        }
+                    ]
+                },
+                "conductor_2": {
+                    "linkId": 4,
+                    "text": "¿Conduces actualmente?",
+                    "type": "boolean",
+                    "mandatory": true
+                },
+                "conductor_3": {
+                    "linkId": 5,
+                    "text": "¿Cuánto tiempo hace que no conduces?",
+                    "type": "choice",
+                    "mandatory": true,
+                    "enableWhen": [
+                        {
+                            "linkId": 4,
+                            "operator": "equals",
+                            "value": false
+                        }
+                    ],
+                    "answerValueSet": [
+                        {
+                            "text": "Menos de un año",
+                            "value": "<1"
+                        },
+                        {
+                            "text": "Entre 1 y 5 años",
+                            "value": "1_5"
+                        },
+                        {
+                            "text": "Entre 6 y 10 años",
+                            "value": "6_10"
+                        },
+                        {
+                            "text": "Más de 10 años",
+                            "value": ">10"
+                        }
+                    ]
+                },
+                "conductor_4": {
+                    "linkId": 6,
+                    "text": "¿Por qué dejaste de conducir?",
+                    "type": "multiple_choice",
+                    "mandatory": false,
+                    "enableWhen": [
+                        {
+                            "linkId": 4,
+                            "operator": "equals",
+                            "value": false
+                        }
+                    ],
+                    "answerValueSet": [
+                        {
+                            "text": "No necesitaba el coche",
+                            "value": "no_necesidad"
+                        },
+                        {
+                            "text": "No tenía coche",
+                            "value": "no_coche"
+                        },
+                        {
+                            "text": "Tendencia a conducir de otras personas de mi entorno",
+                            "value": "conducen_otros"
+                        },
+                        {
+                            "text": "Miedo, pánico o angustia",
+                            "value": "miedo"
+                        },
+                        {
+                            "text": "Otros",
+                            "value": "otro"
+                        }
+                    ]
+                },
+                "conductor_5": {
+                    "linkId": 7,
+                    "text": "¿Dejar de conducir fue un proceso paulatino o repentino",
+                    "type": "choice",
+                    "mandatory": false,
+                    "enableWhen": [
+                        {
+                            "linkId": 4,
+                            "operator": "equals",
+                            "value": false
+                        }
+                    ],
+                    "answerValueSet": [
+                        {
+                            "text": "Paulatino",
+                            "value": "paulatino"
+                        },
+                        {
+                            "text": "Repentino",
+                            "value": "repentino"
+                        }
+                    ]
+                }
+            }
+        },
+        "pretest_miedo": {
+            "name": "Sobre su miedo a conducir",
+            "index": 3,
+            "questions": {
+                "pretest_miedo_1": {
+                    "linkId": 8,
+                    "text": "Según tu opinión, ¿a consecuencia de qué se ha generado tu miedo a conducir?",
+                    "type": "multiple_choice",
+                    "mandatory": false,
+                    "answerValueSet": [
+                        {
+                            "text": "Haber estado implicado cómo conductor/a en un accidente de tráfico",
+                            "value": "conductor_accidente"
+                        },
+                        {
+                            "text": "Haber estado implicado cómo pasajero/a en un accidente de tráfico",
+                            "value": "pasajero_accidente"
+                        },
+                        {
+                            "text": "Tener algún familiar que ha estado implicado en un accidente de tráfico",
+                            "value": "familiar_accidente"
+                        },
+                        {
+                            "text": "Haber presenciado un accidente",
+                            "value": "presenciar_accidente"
+                        },
+                        {
+                            "text": "Retirada de puntos o del carnet",
+                            "value": "puntos"
+                        },
+                        {
+                            "text": "La forma de conducir de los demás conductores",
+                            "value": "otros_conductores"
+                        },
+                        {
+                            "text": "Disminución de las capacidades o habilidades físicas",
+                            "value": "capacidad"
+                        },
+                        {
+                            "text": "Haber sentido peligro de desmayarse o vértigos",
+                            "value": "vertigo"
+                        },
+                        {
+                            "text": "No haber desarrollado suficiente pericia al volante",
+                            "value": "pericia"
+                        },
+                        {
+                            "text": "Haber sufrido un ataque de pánico",
+                            "value": "panico"
+                        },
+                        {
+                            "text": "Otro",
+                            "value": "otros"
+                        }
+                    ]
+                },
+                "pretest_miedo_2": {
+                    "linkId": 9,
+                    "text": "¿Qué medidas has adoptado ante el miedo a conducir?",
+                    "type": "multiple_choice",
+                    "mandatory": false,
+                    "answerValueSet": [
+                        {
+                            "text": "Conducir sólo por un tipo de vía",
+                            "value": "un_tipo_via"
+                        },
+                        {
+                            "text": "Conducir dependiendo de la fluidez de la vía",
+                            "value": "fluidez_via"
+                        },
+                        {
+                            "text": "Conducir solamente en una situación espacio-temporal (día, noche, entre semana, ...)",
+                            "value": "espacio_temporal"
+                        },
+                        {
+                            "text": "Conducir dependiendo de los ocupantes",
+                            "value": "ocupantes"
+                        },
+                        {
+                            "text": "Conducir un tipo de vehículo o cambiar de vehículo",
+                            "value": "tipo_vehivulo"
+                        },
+                        {
+                            "text": "Uitlizar más el transporte público",
+                            "value": "transporte_publico"
+                        },
+                        {
+                            "text": "Buscar otras altenartivas",
+                            "value": "otras_alternativas"
+                        },
+                        {
+                            "text": "Otro",
+                            "value": "otros"
+                        }
+                    ]
+                },
+                "pretest_miedo_3": {
+                    "linkId": 10,
+                    "text": "¿Has solicitado ayuda profesional anteriormente?",
+                    "type": "boolean",
+                    "mandatory": false
+                },
+                "pretest_miedo_4": {
+                    "linkId": 11,
+                    "text": "¿De qué tipo es la ayuda profesional que ha solicitado?",
+                    "type": "multiple_choice",
+                    "mandatory": false,
+                    "enableWhen": [
+                        {
+                            "linkId": 10,
+                            "operator": "equals",
+                            "value": true
+                        }
+                    ],
+                    "answerValueSet": [
+                        {
+                            "text": "Psicólogo",
+                            "value": "psicologo"
+                        },
+                        {
+                            "text": "Autoescuela",
+                            "value": "autoescuela"
+                        },
+                        {
+                            "text": "Otros",
+                            "value": "otros"
+                        }
+                    ]
+                }
+            }
+        }
+    }
+}

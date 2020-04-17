@@ -1,0 +1,15 @@
+{
+  "name": "stop_miedo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "import:pretest": "node index.js ./data/signup_questionnaire.json"
+  },
+  "author": "Sergio González Velázquez",
+  "license": "ISC",
+  "dependencies": {
+    "firebase": "^7.14.0",
+    "firebase-admin": "^8.10.0"
+  }
+}

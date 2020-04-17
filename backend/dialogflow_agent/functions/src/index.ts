@@ -21,6 +21,7 @@ export const dialogflowFulfillment = functions.https.onRequest(async (request, r
     // Create an instance of the class that handles the communication 
     // with Dialogflow's webhook fulfillment 
     const agent = new WebhookClient({ request, response });
+    console.log(agent.contexts)
 
     console.log('Dialogflow Request headers: ' + JSON.stringify(request.headers));
     console.log('Dialogflow Request body: ' + JSON.stringify(request.body));
@@ -31,7 +32,7 @@ export const dialogflowFulfillment = functions.https.onRequest(async (request, r
 
     console.log(`agent properties. query: ${agent.query}; session: ${agent.session}; intent: ${agent.intent}; action: ${agent.action}; parameters: ${JSON.stringify(agent.parameters)}`);
 
-    await writeUserMessage(session, agent.query);
+    //await writeUserMessage(session, agent.query);
 
 
     async function handleRequest(agent) {
@@ -58,6 +59,8 @@ export const dialogflowFulfillment = functions.https.onRequest(async (request, r
 
             addOriginalResponse();
             agent.add(`Vamos a empezar explorando más en detalle posibles situaciones ansiógenas relacionadas con ${currentSituation}`);
+            let context = {'name': `identificar_situaciones_${currentSituation}`, 'lifespan': 3};
+            agent.context.set(context);
         }
         else {
             console.log(agent.consoleMessages);
