@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:tfg_app/pages/chat/chat_page.dart';
 import 'package:tfg_app/pages/exercises/exercises.dart';
 import 'package:tfg_app/pages/more/more_page.dart';
 import 'package:tfg_app/pages/progress/progress.dart';
+import 'package:tfg_app/pages/questionnaire/signup_questionnaire_page.dart';
 import 'package:tfg_app/pages/therapist/therapist.dart';
 import 'package:tfg_app/pages/user/login_page.dart';
 import 'package:tfg_app/widgets/progress.dart';
@@ -60,7 +60,10 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Scaffold buildAuthScreen() {
+  Widget buildAuthScreen() {
+    if (true) {
+      return SignUpQuestionnairePage();
+    }
     return Scaffold(
       key: _scaffoldKey,
       body: PageView(
