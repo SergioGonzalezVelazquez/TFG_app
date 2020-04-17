@@ -1,26 +1,22 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Message {
-  final String id;
-  final String text;
-  final Timestamp timestamp;
-  final MessageSource source;
+// A 'UserMessage' contains basic details of a message
+//sent by the user to the agent.
+class UserMessage {
+  // instance attributes
+  String id;
+  Timestamp timestamp;
+  String text;
 
-  Message({this.id, this.text, this.source, this.timestamp});
-
-  factory Message.fromDocument(DocumentSnapshot doc) {
-    return Message(
-      id: doc['id'],
-      text: doc['text'],
-      source: MessageSource.values
-          .firstWhere((e) => e.toString() == 'MessageSource.' + doc['source']),
-      timestamp: doc['timestamp'],
-    );
+  // default constructor
+  UserMessage(this.text, {this.id, this.timestamp}) {
+    if (this.timestamp == null) this.timestamp = Timestamp.now();
   }
 
+  // return 'String' value format of the 'UserMessage' object
   @override
   String toString() {
-    return 'text: $text, source: ${source.toString()}, startAt: ${timestamp.toDate().toIso8601String()}';
+    return 'user message with text: $text, timestamp: ${timestamp.toDate().toIso8601String()}';
   }
 }
 
