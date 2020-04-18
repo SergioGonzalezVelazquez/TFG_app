@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:tfg_app/models/questionnaire_group.dart';
 import 'package:tfg_app/models/questionnaire_item.dart';
 import 'package:tfg_app/pages/questionnaire/questionnaire_initial_page.dart';
+import 'package:tfg_app/pages/questionnaire/pretest/signup_questionnaire_completed_page.dart';
 import 'package:tfg_app/pages/questionnaire/questionnaire_components.dart';
-import 'package:tfg_app/services/questionnaire_service.dart';
+import 'package:tfg_app/services/firestore.dart';
 import 'package:tfg_app/widgets/progress.dart';
 import 'package:tfg_app/utils/questionnaire_utils.dart';
 
@@ -91,8 +92,7 @@ class _SignUpQuestionnairePageState extends State<SignUpQuestionnairePage>
   }
 
   void _continue() {
-    sendSignUpResponse(_currentQuestionnaireItem,
-        create: _currentQuestionnaireItem.linkId == 1);
+    addSignUpResponse(_currentQuestionnaireItem);
     int index = getNextEnableQuestion(
         _questionnaireItems, _currentQuestionnaireItem.linkId - 1);
     // Not all questions have been completed
@@ -102,6 +102,13 @@ class _SignUpQuestionnairePageState extends State<SignUpQuestionnairePage>
         _currentQuestionnaireItem = _questionnaireItems[index - 1];
         _currentGroupIndex = groupIndex - 1;
       });
+    }
+    // End of questionnaire
+    else {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => SignUpQuestionnaireCompleted()),
+      );
     }
   }
 
@@ -248,19 +255,23 @@ class _SignUpQuestionnairePageState extends State<SignUpQuestionnairePage>
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisSize: MainAxisSize.max,
       children: <Widget>[
-        Spacer(),
+        SizedBox(
+          height: MediaQuery.of(context).size.height * 0.1,
+        ),
         Text(
           "¡Bienvenido a STOPMiedo!",
           textAlign: TextAlign.justify,
           style: Theme.of(context).textTheme.headline5,
         ),
-        Spacer(),
+        SizedBox(
+          height: MediaQuery.of(context).size.height * 0.07,
+        ),
         Image.asset(
           'assets/images/4824.jpg',
           width: MediaQuery.of(context).size.width,
         ),
         SizedBox(
-          height: MediaQuery.of(context).size.height * 0.1,
+          height: MediaQuery.of(context).size.height * 0.07,
         ),
         Text(
           "Cuéntanos un poco más sobre ti",
@@ -281,7 +292,6 @@ class _SignUpQuestionnairePageState extends State<SignUpQuestionnairePage>
           "Tardarás menos de 10 minutos en responder a todas las preguntas",
           textAlign: TextAlign.justify,
         ),
-        Spacer(),
       ],
     );
   }
@@ -316,6 +326,7 @@ class _SignUpQuestionnairePageState extends State<SignUpQuestionnairePage>
                           screenWidth: width,
                           screenHeigth: height,
                           onStartAnimation: () {
+                            createSignUpResponse();
                             _startAnimation();
                           },
                         ),

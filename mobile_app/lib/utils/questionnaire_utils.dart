@@ -1,11 +1,18 @@
 import 'package:tfg_app/models/questionnaire_item.dart';
+import 'package:tfg_app/services/firestore.dart';
 
 // Calculate next enable question in a list of questions,
 // based on its enableWhen clauses and it current answer.
 // Returns -1 if there are not more active questions
 int getNextEnableQuestion(List<QuestionnaireItem> items, int currentIndex) {
   for (int i = currentIndex + 1; i < items.length; i++) {
-    if (evaluteItemEnableWhen(items[i], items)) return items[i].linkId;
+    if (evaluteItemEnableWhen(items[i], items))
+      return items[i].linkId;
+      
+    else if (items[i].answerValue != null) {
+      items[i].answerValue = null;
+      deleteSignUpResponse(items[i]);
+    }
   }
 
   return -1;
@@ -34,7 +41,6 @@ bool evaluteItemEnableWhen(
     QuestionnaireItem itemToCompare = items[clause.linkId - 1];
     if (itemToCompare == null ||
         !evalueEnableWhenClause(clause, itemToCompare.answerValue)) {
-      item.answerValue = null;
       return false;
     }
   }
@@ -45,7 +51,6 @@ bool evaluteItemEnableWhen(
       QuestionnaireItem itemToCompare = items[clause.linkId - 1];
       if (itemToCompare == null ||
           !evalueEnableWhenClause(clause, itemToCompare.answerValue)) {
-        item.answerValue = null;
         return false;
       }
     }

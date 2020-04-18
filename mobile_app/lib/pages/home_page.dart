@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:tfg_app/pages/exercises/exercises.dart';
 import 'package:tfg_app/pages/more/more_page.dart';
 import 'package:tfg_app/pages/progress/progress.dart';
-import 'package:tfg_app/pages/questionnaire/signup_questionnaire_page.dart';
+import 'package:tfg_app/pages/questionnaire/pretest/signup_questionnaire_page.dart';
 import 'package:tfg_app/pages/therapist/therapist.dart';
 import 'package:tfg_app/pages/user/login_page.dart';
+import 'package:tfg_app/services/firestore.dart';
 import 'package:tfg_app/widgets/progress.dart';
 import 'package:tfg_app/services/auth.dart';
 import 'package:tfg_app/themes/custom_icon_icons.dart';
@@ -24,7 +25,9 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   bool _isAuth = false;
+  bool _patientExists = false;
   bool _isCheckingAuth = true;
+  bool _isCheckingPatientExists = true;
   PageController _pageController;
   int pageIndex = 0;
 
@@ -32,12 +35,13 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
+    print("home page init state");
     super.initState();
     _pageController = PageController();
     _isAuth = !widget.auth ? isAuth() : true;
     _isCheckingAuth = false;
-
     if (_isAuth) print(user.toString());
+    if (_isAuth) _checkPatient();
   }
 
   @override
@@ -46,13 +50,21 @@ class _HomePageState extends State<HomePage> {
     super.dispose();
   }
 
-  onPageChanged(int pageIndex) {
+  Future<void> _checkPatient() async {
+    bool exist = await patientExists();
+    setState(() {
+      _patientExists = exist;
+      _isCheckingPatientExists = false;
+    });
+  }
+
+  void onPageChanged(int pageIndex) {
     setState(() {
       this.pageIndex = pageIndex;
     });
   }
 
-  onTap(int pageIndex) {
+  void onTap(int pageIndex) {
     _pageController.animateToPage(
       pageIndex,
       duration: Duration(milliseconds: 300),
@@ -61,23 +73,25 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget buildAuthScreen() {
-    if (true) {
+    if (_isCheckingPatientExists)
+      return Scaffold(key: _scaffoldKey, body: circularProgress(context));
+    else if (!_patientExists)
       return SignUpQuestionnairePage();
-    }
-    return Scaffold(
-      key: _scaffoldKey,
-      body: PageView(
-        children: <Widget>[
-          TherapistPage(),
-          ExercisePage(),
-          ProgressPage(),
-          MorePage(),
-        ],
-        controller: _pageController,
-        onPageChanged: onPageChanged,
-        physics: NeverScrollableScrollPhysics(),
-      ),
-      bottomNavigationBar: CupertinoTabBar(
+    else {
+      return Scaffold(
+        key: _scaffoldKey,
+        body: PageView(
+          children: <Widget>[
+            TherapistPage(),
+            ExercisePage(),
+            ProgressPage(),
+            MorePage(),
+          ],
+          controller: _pageController,
+          onPageChanged: onPageChanged,
+          physics: NeverScrollableScrollPhysics(),
+        ),
+        bottomNavigationBar: CupertinoTabBar(
           currentIndex: pageIndex,
           backgroundColor: Colors.white,
           onTap: onTap,
@@ -94,8 +108,10 @@ class _HomePageState extends State<HomePage> {
                 title: Text('Progreso')),
             BottomNavigationBarItem(
                 icon: Icon(CustomIcon.more), title: Text('Más')),
-          ]),
-    );
+          ],
+        ),
+      );
+    }
   }
 
   @override
