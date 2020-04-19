@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:tfg_app/demo_driving.dart';
 import 'package:tfg_app/pages/exercises/exercises.dart';
 import 'package:tfg_app/pages/more/more_page.dart';
 import 'package:tfg_app/pages/progress/progress.dart';
@@ -116,8 +117,11 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    /*
     return _isCheckingAuth
         ? circularProgress(context)
         : (_isAuth ? buildAuthScreen() : LoginPage());
+  */
+  return DemoDrivingPage();
   }
 }
