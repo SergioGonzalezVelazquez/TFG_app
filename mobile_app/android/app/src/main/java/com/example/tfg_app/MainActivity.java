@@ -1,17 +1,23 @@
 package com.example.tfg_app;
 
+import android.Manifest;
+import android.annotation.TargetApi;
 import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,8 +27,17 @@ import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugins.GeneratedPluginRegistrant;
 
+import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 public class MainActivity extends FlutterActivity {
+  //List of permissions
+  private ArrayList permissionsToRequest;
+  private ArrayList permissionsRejected = new ArrayList();
+  private ArrayList permissions = new ArrayList();
+  // integer for permissions results request
+  private final static int ALL_PERMISSIONS_RESULT = 101;
+
   private final String TAG = "MainActivity";
 
   // Event Channel used to stream  driving event data to the Dart side
@@ -74,7 +89,39 @@ public class MainActivity extends FlutterActivity {
       @Override
       public void onCancel(Object listener) { }
     });
+
+    // we add permissions we need to request location of the users
+    permissions.add(Manifest.permission.ACCESS_FINE_LOCATION);
+    permissions.add(Manifest.permission.ACCESS_COARSE_LOCATION);
+
+    permissionsToRequest = permissionsToRequest(permissions);
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+      if (permissionsToRequest.size() > 0) {
+        requestPermissions((String[]) permissionsToRequest
+                .toArray(new String[permissionsToRequest.size()]), ALL_PERMISSIONS_RESULT);
+      }
+    }
   }
+
+  private ArrayList<String> permissionsToRequest(ArrayList<String> wantedPermissions) {
+    ArrayList<String> result = new ArrayList<>();
+    for (String perm : wantedPermissions) {
+      if (!hasPermission(perm)) {
+        result.add(perm);
+      }
+    }
+    return result;
+  }
+
+  private boolean hasPermission(String permission) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+      return checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    return true;
+  }
+
 
   private void startAutoDriveDetectionService() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)

@@ -8,4 +8,20 @@ public class Constants {
 
     // Activity recognition API confidence level must be greater or equal than 75
     static final int CONFIDENCE_THRESHOLD = 75;
+
+    //Radius (meters) around the latest location
+    static final int GEOFENCE_RADIUS = 200;
+
+    // String that uniquely identifies the geo-fence
+    static final String GEOFENCE_NAME = "geo-fence-identifier";
+
+    static final double BACKINDRIVE_SPEED_THRESHOLD = 3.57;
+    static final long POTENTIALSTOP_TIME_THRESHOLD = 1000 * 60 * 5;
+
+    static final double POTENTIALSTOP_SPEED_THRESHOLD = 6.7;
+    static final long POTENTIALSTART_TIME_THRESHOLD = 1000 * 60;
+
+    // Desired interval between any two active location updates in milliseconds.
+    static final long GPS_INTERVAL = 1000;
+
 }
