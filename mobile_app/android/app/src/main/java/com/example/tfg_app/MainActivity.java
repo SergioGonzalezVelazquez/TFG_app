@@ -143,42 +143,11 @@ public class MainActivity extends FlutterActivity {
     public void onReceive(Context context, Intent intent) {
       // Get extra data included in the Intent
       // activity default value is UNKNOWN
-      int activity = intent.getIntExtra("activity", 4);
-      int confidence = intent.getIntExtra("confidence", 0);
+      String msg = intent.getStringExtra("msg");
 
-      Log.d(TAG, "Got message: " + activity + ", confidence: " + confidence);
-      String activityText = "";
+      Log.d(TAG, "Got message: " + msg);
 
-      switch (activity) {
-        case 0:
-          activityText = "conduciendo";
-          break;
-        case 1:
-          activityText = "en bici";
-          break;
-        case 2:
-          activityText = "de pie";
-          break;
-        case 3:
-          activityText = "quieto";
-          break;
-        case 4:
-          activityText = "en estado desconocido";
-          break;
-        case 5:
-          activityText = " ¿inclinación?";
-          break;
-        case 7:
-          activityText = "andando";
-          break;
-        case 8:
-          activityText = "corriendo";
-          break;
-        default:
-          // code block
-      }
-
-      drivingEventSink.success("Estás " + activityText + ", probabilidad: " + confidence);
+      drivingEventSink.success(msg);
     }
   };
 

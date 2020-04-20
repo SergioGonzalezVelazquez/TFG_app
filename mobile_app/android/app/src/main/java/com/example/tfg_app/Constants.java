@@ -24,4 +24,11 @@ public class Constants {
     // Desired interval between any two active location updates in milliseconds.
     static final long GPS_INTERVAL = 1000;
 
+    static final long INITIAL_DELAY = 1000 * 30;
+    static final long FIXED_DELAY = 1000 * 30;
+
+    // Accelerometer and gyroscope sensors will collects data at frequency of 50Hz,
+    // that is, a 20.000 microseconds interval.
+    static final int ACCELEROMETER_INTERVAL = 20000;
+    static final int  GYROSCOPE_INTERVAL = 20000;
 }

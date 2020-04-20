@@ -145,28 +145,63 @@ public class AutoDriveDetectionService extends Service {
         Log.d(TAG,"handleActivityRecognitionInput() Result.length: " + result.getProbableActivities().size());
         for (DetectedActivity activity : result.getProbableActivities()) {
             Log.d(TAG, "Detected activity: " + activity.getType() + ", " + activity.getConfidence());
-            sendMessage(activity.getType(), activity.getConfidence());
-
             // If the type of detected activity is WALKING or ON_FOOT
             // and has a confidence of 75 or above, and also if we are in
             // active drive, then we call the handleWalkingActivityDuringDrive() method
             // of the GPSHelper class for further processing
             if(DetectedActivity.WALKING == activity.getType()
                     || DetectedActivity.ON_FOOT == activity.getType()) {
+                sendMessage("DetectedActivity.WALKING or ON_FOOT");
                 //CONFIDENCE THRESHOLD is 75
                 if(activity.getConfidence() > Constants.CONFIDENCE_THRESHOLD && isDriveInProgress) {
                     mGPSHelper.handleWalkingActivityDuringDrive();
+                    sendMessage("CONFIDENCE THRESHOLD is >= 75 and isDriveInProgress");
                 }
             }
             // If the type of detected activity is IN_VEHICLE and has a confidence of 75
             // or above, then we consider it a trigger for the potential start drive event and
             // check for other conditions.
-            if(DetectedActivity.IN_VEHICLE == activity.getType()) {
+            else if(DetectedActivity.IN_VEHICLE == activity.getType()) {
+                sendMessage("DetectedActivity.IN_VEHICLE");
                 if(activity.getConfidence() > Constants.CONFIDENCE_THRESHOLD &&
                         !isDriveCheckInProgress && !isDriveInProgress) {
+                    sendMessage("!isDriveCheckInProgress && !isDriveInProgress");
                     mGeofenceHelper.removeLastGeoFence();
                     mGPSHelper.handlePotentialStartDriveTrigger();
                 }
+            }
+            else if (activity.getConfidence() > Constants.CONFIDENCE_THRESHOLD) {
+                String activityText = "";
+                switch (activity.getType()) {
+                    case 0:
+                        activityText = "IN_VEHICLE";
+                        break;
+                    case 1:
+                        activityText = "ON_BICYCLE";
+                        break;
+                    case 2:
+                        activityText = "ON_FOOT";
+                        break;
+                    case 3:
+                        activityText = "STILL";
+                        break;
+                    case 4:
+                        activityText = "UNKNOWN";
+                        break;
+                    case 5:
+                        activityText = "TILTING";
+                        break;
+                    case 7:
+                        activityText = "WALKING";
+                        break;
+                    case 8:
+                        activityText = "RUNNING";
+                        break;
+                    default:
+                        // code block
+                }
+
+                sendMessage("Detected probably Activity : " + activityText);
             }
         }
     }
@@ -175,6 +210,7 @@ public class AutoDriveDetectionService extends Service {
         mGeofenceHelper.createNewGeoFence(location);
     }
     public void onStartDrivingEvent(Location location) {
+        sendMessage("onStartDrivingEvent :" + location.toString() );
         /*
         Intent intent = new Intent(this, EventDetectionService.class);
         intent.putExtra("isDriveStarted", true);
@@ -182,6 +218,7 @@ public class AutoDriveDetectionService extends Service {
          */
     }
     public void onStopDrivingEvent(Location location) {
+        sendMessage("onStopDrivingEvent :" + location.toString() );
         mGeofenceHelper.createNewGeoFence(location);
         /*
         Intent intent = new Intent(this, EventDetectionService.class);
@@ -191,6 +228,7 @@ public class AutoDriveDetectionService extends Service {
     }
 
     public void onParkingDetected(Location location) {
+        sendMessage("onParkingDetected :" + location.toString() );
         /*
         ArrayList<EventData> parkingList = new ArrayList<EventData>();
         EventData eventData = new EventData();
@@ -212,12 +250,10 @@ public class AutoDriveDetectionService extends Service {
     // Allows communication between this service and MainActivity
     // Send an Intent with an action named "driving-event-detection". The Intent sent should
     // be received by the MainActivity.
-    private void sendMessage(int activity, int confidence) {
+    private void sendMessage(String msg) {
         Log.d(TAG, "Broadcasting message");
         Intent intent = new Intent("driving-event-detection");
-        intent.putExtra("activity", activity);
-        intent.putExtra("confidence", confidence);
-
+        intent.putExtra("msg", msg);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 
@@ -394,6 +430,8 @@ public class AutoDriveDetectionService extends Service {
         public void stopLocationUpdates(){
             if(mFusedLocationClient != null){
                 mFusedLocationClient.removeLocationUpdates(mLocationCallback);
+
+                //REVISAR CÓMO DESCONECTAR
                 mFusedLocationClient = null;
             }
         }

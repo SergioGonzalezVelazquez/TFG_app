@@ -8,7 +8,7 @@ import android.util.Log;
 import io.flutter.app.FlutterApplication;
 
 public class STOPMiedo extends FlutterApplication {
-    /*
+
     @Override
     public void onCreate() {
         Log.d("driving","onCreate() STOPMiedo.java");
@@ -21,5 +21,5 @@ public class STOPMiedo extends FlutterApplication {
             manager.createNotificationChannel(channel);
         }
     }
-    */
+
 }
