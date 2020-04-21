@@ -21,7 +21,7 @@ Widget primaryButton(BuildContext context, Function onPressed, String text,
         text,
         style: TextStyle(
             color: !light ? Colors.white : primaryColor,
-            fontSize: fontSize ?? 14,
+            //fontSize: fontSize ?? 14,
             fontWeight: FontWeight.w800),
       ),
     ),

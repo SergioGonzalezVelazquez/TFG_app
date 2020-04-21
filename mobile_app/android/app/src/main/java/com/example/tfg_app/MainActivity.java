@@ -76,6 +76,9 @@ public class MainActivity extends FlutterActivity {
         } else if (call.method.equals("isDrivingDetectionServiceRunning")) {
           boolean isRunning = isServiceRunning(AutoDriveDetectionService.class);
           result.success(isRunning);
+        } else if (call.method.equals("isEventDetectionServiceRunning")) {
+          boolean isRunning = isServiceRunning(EventDetectionService.class);
+          result.success(isRunning);
         }
       }
     });

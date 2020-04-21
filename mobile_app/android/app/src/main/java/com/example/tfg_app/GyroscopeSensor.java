@@ -48,4 +48,9 @@ public class GyroscopeSensor implements SensorEventListener {
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int i) {}
+
+    public ArrayList<SensorEvent> getGyroscopeList()
+    {
+        return mGyroscopeList;
+    }
 }

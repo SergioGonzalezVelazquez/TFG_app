@@ -9,6 +9,7 @@
     <!-- Required for 29+. -->
     <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <uses-permission android:name="android.permission.INTERNET"/>
 
@@ -19,6 +20,7 @@
          FlutterApplication and put your custom class here. -->
     <application android:name=".STOPMiedo" android:label="STOP Miedo" android:icon="@mipmap/ic_launcher">
         <service android:name=".AutoDriveDetectionService" android:exported="true" android:enabled="true"/>
+        <service android:name=".EventDetectionService" android:exported="true" android:enabled="true"/>
         <activity android:name=".MainActivity" android:launchMode="singleTop" android:theme="@style/LaunchTheme" android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode" android:hardwareAccelerated="true" android:windowSoftInputMode="adjustResize">
             <!-- This keeps the window background of the activity showing
                  until Flutter renders its first frame. It can be removed if

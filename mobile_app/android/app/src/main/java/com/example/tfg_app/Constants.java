@@ -31,4 +31,32 @@ public class Constants {
     // that is, a 20.000 microseconds interval.
     static final int ACCELEROMETER_INTERVAL = 20000;
     static final int  GYROSCOPE_INTERVAL = 20000;
+
+    static final double PHONE_DISTRACTION_PEAK = 2.5;
+
+    static final long POTENTIAL_OVERLAPPING_INTERVAL = 1000 * 3;
+    static final long ONE_AND_HALF_SECOND = 1500;
+
+    // We consider phone distractions at speed greater than 20mph (8.9408 m/s or 32,18 km/h)
+    static final double PHONE_DISTRACTION_SPEEDLIMT = 8.9408;
+
+    // We consider a hard turn if the average angle change for 4 seconds is greater than 22.5
+    static final double HARD_TURN_PEAK = 22.5;
+
+    // If the acceleration is greater than 8 mph per second (3.57 m/s^2), then we
+    // consider it as a hard acceleration event
+    static final double HARD_ACCELERATION_PEAK = 3.57632;
+
+    // If the acceleration is negative and between -8 mph per second and -17 mph per second,
+    // then we consider it a hard braking event
+    static final double HARD_BREAKING_HIGHER_PEAK = 3.57632;
+    static final double HARD_BREAKING_LOWER_PEAK  = 7.59968;
+
+    // Whenever the speed crosses the 80 mph (128,748 km/h or 35,7632 m/s) threshold,
+    // we consider it a high-speed event.
+    static final double HIGH_SPEED_PEAK = 35.7632;
+
+
+
+
 }

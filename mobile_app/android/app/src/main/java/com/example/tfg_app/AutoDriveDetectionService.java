@@ -43,12 +43,17 @@ import java.util.Date;
  * GeofenceHelper classes, and will send data streams to MainActivity class.
  */
 public class AutoDriveDetectionService extends Service {
-    public static final String CHANNEL_ID = "ForegroundServiceChannel";
+    private final String CHANNEL_ID = "DrivingDetectionService";
     private final String TAG = "DrivingDetectionService";
 
+    //debug
+    private boolean _created = false;
+
+    private Intent intentEventDetectionService;
     private GeofenceHelper mGeofenceHelper;
     private ActivityRecognitionHelper mActivityRecognitionHelper;
     private GPSHelper mGPSHelper;
+    private LocationDBHelper mLocationDBHelper;
 
     // flags used to avoid calling the handlePotentialStartDriveTrigger()
     // method again when the potential drive start event condition
@@ -73,12 +78,12 @@ public class AutoDriveDetectionService extends Service {
         // A Foreground service must provide a notification for the status bar.
         Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setContentTitle("STOPMiedo")
-                .setContentText("Driving event detection service is active")
+                .setContentText("Auto drive detection service is active")
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentIntent(pendingIntent)
                 .build();
         startForeground(101, notification);
-
+        mLocationDBHelper = new LocationDBHelper(getApplicationContext());
         mGPSHelper = new GPSHelper();
         mGeofenceHelper = new GeofenceHelper();
         mActivityRecognitionHelper = new ActivityRecognitionHelper();
@@ -86,7 +91,7 @@ public class AutoDriveDetectionService extends Service {
         mActivityRecognitionHelper.startActivityUpdates();
     }
 
-    private void createNotificationChannel() {
+    public void createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel serviceChannel = new NotificationChannel(
                     CHANNEL_ID,
@@ -96,6 +101,16 @@ public class AutoDriveDetectionService extends Service {
 
             NotificationManager manager = getSystemService(NotificationManager.class);
             manager.createNotificationChannel(serviceChannel);
+        }
+    }
+
+    // The system invokes this method when the service is no longer used and is being destroyed.
+    @Override
+    public void onDestroy() {
+        Log.d(TAG,"onDestroy() service");
+        super.onDestroy();
+        if(intentEventDetectionService != null) {
+            stopService(intentEventDetectionService);
         }
     }
 
@@ -151,21 +166,22 @@ public class AutoDriveDetectionService extends Service {
             // of the GPSHelper class for further processing
             if(DetectedActivity.WALKING == activity.getType()
                     || DetectedActivity.ON_FOOT == activity.getType()) {
-                sendMessage("DetectedActivity.WALKING or ON_FOOT");
                 //CONFIDENCE THRESHOLD is 75
                 if(activity.getConfidence() > Constants.CONFIDENCE_THRESHOLD && isDriveInProgress) {
                     mGPSHelper.handleWalkingActivityDuringDrive();
-                    sendMessage("CONFIDENCE THRESHOLD is >= 75 and isDriveInProgress");
+                    sendMessage("DetectedActivity.WALKING or ON_FOOT, CONFIDENCE THRESHOLD is >= 75 and isDriveInProgress");
+                }else {
+                    sendMessage("DetectedActivity.WALKING or ON_FOOT with confidence of " + activity.getConfidence());
                 }
             }
             // If the type of detected activity is IN_VEHICLE and has a confidence of 75
             // or above, then we consider it a trigger for the potential start drive event and
             // check for other conditions.
             else if(DetectedActivity.IN_VEHICLE == activity.getType()) {
-                sendMessage("DetectedActivity.IN_VEHICLE");
+                sendMessage("DetectedActivity.IN_VEHICLE with confidence of " + activity.getConfidence());
                 if(activity.getConfidence() > Constants.CONFIDENCE_THRESHOLD &&
                         !isDriveCheckInProgress && !isDriveInProgress) {
-                    sendMessage("!isDriveCheckInProgress && !isDriveInProgress");
+                    sendMessage("DetectedActivity.IN_VEHICLE !isDriveCheckInProgress && !isDriveInProgress");
                     mGeofenceHelper.removeLastGeoFence();
                     mGPSHelper.handlePotentialStartDriveTrigger();
                 }
@@ -201,7 +217,18 @@ public class AutoDriveDetectionService extends Service {
                         // code block
                 }
 
-                sendMessage("Detected probably Activity : " + activityText);
+                sendMessage("Detected Activity : " + activityText + "conf: " + activity.getConfidence());
+                /*
+                Location locationPrueba = new Location("providername");
+                locationPrueba.setLatitude(38.920285);
+                locationPrueba.setLongitude(-3.6521948);
+
+                if(!_created){
+                    sendMessage("Forzando el comiendo de conducción : ");
+                    _created = true;
+                    onStartDrivingEvent(locationPrueba);
+                }
+                */
             }
         }
     }
@@ -209,38 +236,41 @@ public class AutoDriveDetectionService extends Service {
     public void onNewLocationFoundForGeoFence(Location location) {
         mGeofenceHelper.createNewGeoFence(location);
     }
+
     public void onStartDrivingEvent(Location location) {
         sendMessage("onStartDrivingEvent :" + location.toString() );
-        /*
-        Intent intent = new Intent(this, EventDetectionService.class);
-        intent.putExtra("isDriveStarted", true);
-        startService(intent);
-         */
+        intentEventDetectionService = new Intent(this, EventDetectionService.class);
+        intentEventDetectionService.putExtra("isDriveStarted", true);
+        Log.d(TAG,"lanzando intent a EventDetectionService con isDrivedStarted: true");
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+            startForegroundService(intentEventDetectionService);
+        else startService(intentEventDetectionService);
     }
+
     public void onStopDrivingEvent(Location location) {
         sendMessage("onStopDrivingEvent :" + location.toString() );
         mGeofenceHelper.createNewGeoFence(location);
-        /*
-        Intent intent = new Intent(this, EventDetectionService.class);
-        intent.putExtra("isDriveStarted", false);
-        startService(intent);
-         */
+        intentEventDetectionService = new Intent(this, EventDetectionService.class);
+        intentEventDetectionService.putExtra("isDriveStarted", false);
+        Log.d(TAG,"lanzando intent a EventDetectionService con isDrivedStarted: false");
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+            startForegroundService(intentEventDetectionService);
+        else startService(intentEventDetectionService);
     }
 
     public void onParkingDetected(Location location) {
         sendMessage("onParkingDetected :" + location.toString() );
-        /*
         ArrayList<EventData> parkingList = new ArrayList<EventData>();
         EventData eventData = new EventData();
-        eventData.eventType = Constants.PARKING_EVENT;
+        eventData.eventType = DrivingEventType.PARKING.ordinal();
         eventData.eventTime = location.getTime();
         eventData.latitude = location.getLatitude();
         eventData.longitude = location.getLongitude();
         parkingList.add(eventData);
-        mLocationDBHelper.updateEventDetails(parkingList);
+        //mLocationDBHelper.updateEventDetails(parkingList);
         parkingList.clear();
-
-         */
     }
 
     public void onStartDriveFailed(Location location) {
@@ -371,6 +401,7 @@ public class AutoDriveDetectionService extends Service {
         // After getting regular location updates in the onLocationChanged method, we
         // check the drive start confirmation condition.
         public void handlePotentialStartDriveTrigger() {
+            sendMessage("handlePotentialStartDriveTrigger");
             isDriveCheckInProgress = true;
             startLocationUpdates();
         }

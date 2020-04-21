@@ -15,6 +15,7 @@ class DemoDrivingPage extends StatefulWidget {
 class _DemoDrivingPageState extends State<DemoDrivingPage> {
   StreamController _activityStreamController = StreamController();
   StreamSubscription _activityUpdateStreamSubscription;
+  Duration oneSec = const Duration(seconds: 1);
 
   static const MethodChannel _methodChannel =
       const MethodChannel('driving_detection/methodChannel');
@@ -22,10 +23,21 @@ class _DemoDrivingPageState extends State<DemoDrivingPage> {
   static const EventChannel _eventChannel =
       const EventChannel('driving_detection/activityUpdates');
   List messages = [];
-  bool enabled = false;
+  bool enabledAutoDetectionService = false;
+  bool enabledEventDetectionService = false;
+  Timer timer;
+
   @override
   void initState() {
     super.initState();
+
+    timer = Timer.periodic(Duration(seconds: 60), (Timer t) => _isRunning());
+  }
+
+  @override
+  void dispose() {
+    timer?.cancel();
+    super.dispose();
   }
 
   Future<void> _startBackground() async {
@@ -40,18 +52,20 @@ class _DemoDrivingPageState extends State<DemoDrivingPage> {
     }
 
     setState(() {
-      enabled = true;
+      enabledAutoDetectionService = true;
     });
   }
 
   Future<void> _isRunning() async {
     print("is Running?");
     if (Platform.isAndroid) {
-      bool data =
+      bool autoDrive =
           await _methodChannel.invokeMethod('isDrivingDetectionServiceRunning');
-      print(data);
+      bool eventService =
+          await _methodChannel.invokeMethod('isEventDetectionServiceRunning');
       setState(() {
-        enabled = data;
+        enabledAutoDetectionService = autoDrive;
+        enabledEventDetectionService = eventService;
       });
     }
   }
@@ -67,7 +81,7 @@ class _DemoDrivingPageState extends State<DemoDrivingPage> {
       print(data);
     }
     setState(() {
-      enabled = false;
+      enabledAutoDetectionService = false;
     });
   }
 
@@ -75,7 +89,12 @@ class _DemoDrivingPageState extends State<DemoDrivingPage> {
     print("Flutter: onActivityUpdateReceived");
     DateTime date = DateTime.now();
     setState(() {
-      messages.insert(0, Text(date.toString() + " :" + activity));
+      messages.insert(
+          0,
+          Text(
+            date.toString() + " :" + activity,
+            style: TextStyle(fontSize: 10),
+          ));
     });
   }
 
@@ -97,35 +116,59 @@ class _DemoDrivingPageState extends State<DemoDrivingPage> {
                       itemCount: messages.length),
                 ),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Container(
                       width: MediaQuery.of(context).size.width * 0.35,
                       child: primaryButton(
                           context,
-                          enabled ? null : _startBackground,
-                          "Start background"),
+                          enabledAutoDetectionService ? null : _startBackground,
+                          "Start"),
                     ),
                     Container(
                       width: MediaQuery.of(context).size.width * 0.35,
-                      child: primaryButton(context,
-                          !enabled ? null : _stopBackground, "Stop background"),
+                      child: primaryButton(
+                          context,
+                          !enabledAutoDetectionService ? null : _stopBackground,
+                          "Stop"),
                     ),
                   ],
                 ),
                 Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Container(
-                        width: MediaQuery.of(context).size.width * 0.5,
-                        child: primaryButton(
-                            context,
-                            _isRunning,
-                            "Check service is running"),
+                        width: MediaQuery.of(context).size.width * 0.35,
+                        child:
+                            primaryButton(context, _isRunning, "Check status"),
                       ),
-                      Text(enabled.toString())
+                      Column(
+                        children: <Widget>[
+                          Text(
+                            "AutoDriveService: " +
+                                (enabledAutoDetectionService
+                                    ? 'running'
+                                    : 'stopped'),
+                            style: TextStyle(
+                                fontSize: 11,
+                                color: enabledAutoDetectionService
+                                    ? Colors.green
+                                    : Colors.red),
+                          ),
+                          Text(
+                            "EventDetectionService: " +
+                                (enabledEventDetectionService
+                                    ? 'running'
+                                    : 'stopped'),
+                            style: TextStyle(
+                                fontSize: 11,
+                                color: enabledEventDetectionService
+                                    ? Colors.green
+                                    : Colors.red),
+                          ),
+                        ],
+                      )
                     ]),
-                
               ],
             ),
           ),

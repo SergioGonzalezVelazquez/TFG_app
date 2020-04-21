@@ -17,4 +17,8 @@ public class LocationData {
     public int eventType;
     public boolean isFused;
     public boolean isDuplicate;
+    public long time;
+
+    // NO VIENE EN EL LIBRO
+    public double acceleration;
 }
