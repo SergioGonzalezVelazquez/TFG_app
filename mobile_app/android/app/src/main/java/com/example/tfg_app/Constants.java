@@ -36,6 +36,8 @@ public class Constants {
 
     static final long POTENTIAL_OVERLAPPING_INTERVAL = 1000 * 3;
     static final long ONE_AND_HALF_SECOND = 1500;
+    static final long ONE_SECOND = 1000;
+    static final long TWO_SECONDS = 1000 * 2;
 
     // We consider phone distractions at speed greater than 20mph (8.9408 m/s or 32,18 km/h)
     static final double PHONE_DISTRACTION_SPEEDLIMT = 8.9408;
@@ -55,6 +57,9 @@ public class Constants {
     // Whenever the speed crosses the 80 mph (128,748 km/h or 35,7632 m/s) threshold,
     // we consider it a high-speed event.
     static final double HIGH_SPEED_PEAK = 35.7632;
+
+    static final int ACCELEROMETER_PEAK = 20;
+    static final double FALLING_PEAK = 0.5;
 
 
 

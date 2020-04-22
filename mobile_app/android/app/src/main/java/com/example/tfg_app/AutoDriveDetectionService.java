@@ -7,9 +7,11 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Build;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
@@ -29,10 +31,13 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
-import com.tekartik.sqflite.Constant;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -47,7 +52,8 @@ public class AutoDriveDetectionService extends Service {
     private final String TAG = "DrivingDetectionService";
 
     //debug
-    private boolean _created = false;
+    private int intervalDebugger = 0;
+    SharedPreferences mPreferences;
 
     private Intent intentEventDetectionService;
     private GeofenceHelper mGeofenceHelper;
@@ -70,6 +76,7 @@ public class AutoDriveDetectionService extends Service {
     public void onCreate() {
         super.onCreate();
         Log.d(TAG,"onCreate() service");
+        sendMessage("AutoDriveDetectionService started");
         createNotificationChannel();
         Intent notificationIntent = new Intent(this, MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this,
@@ -107,6 +114,7 @@ public class AutoDriveDetectionService extends Service {
     // The system invokes this method when the service is no longer used and is being destroyed.
     @Override
     public void onDestroy() {
+        sendMessage("AutoDriveDetectionService stopped");
         Log.d(TAG,"onDestroy() service");
         super.onDestroy();
         if(intentEventDetectionService != null) {
@@ -218,17 +226,25 @@ public class AutoDriveDetectionService extends Service {
                 }
 
                 sendMessage("Detected Activity : " + activityText + "conf: " + activity.getConfidence());
-                /*
-                Location locationPrueba = new Location("providername");
-                locationPrueba.setLatitude(38.920285);
-                locationPrueba.setLongitude(-3.6521948);
 
-                if(!_created){
+                /*
+                if(intervalDebugger == 0){
+                    Location locationPrueba = new Location("start");
+                    locationPrueba.setLatitude(38.920285);
+                    locationPrueba.setLongitude(-3.6521948);
+
                     sendMessage("Forzando el comiendo de conducción : ");
-                    _created = true;
                     onStartDrivingEvent(locationPrueba);
+                } else if (intervalDebugger == 5){
+                    Location locationPrueba = new Location("stop");
+                    locationPrueba.setLatitude(38.890900);
+                    locationPrueba.setLongitude(-3.706420);
+
+                    sendMessage("Forzando el detección de conducción : ");
+                    onStopDrivingEvent(locationPrueba);
                 }
-                */
+                intervalDebugger++;
+                 */
             }
         }
     }
@@ -269,7 +285,7 @@ public class AutoDriveDetectionService extends Service {
         eventData.latitude = location.getLatitude();
         eventData.longitude = location.getLongitude();
         parkingList.add(eventData);
-        //mLocationDBHelper.updateEventDetails(parkingList);
+        mLocationDBHelper.updateEventDetails(parkingList);
         parkingList.clear();
     }
 
@@ -281,12 +297,39 @@ public class AutoDriveDetectionService extends Service {
     // Send an Intent with an action named "driving-event-detection". The Intent sent should
     // be received by the MainActivity.
     private void sendMessage(String msg) {
+        Log.d(TAG,"SEND MESSAGE");
+        // add timestamp to logger msg
+        String DATE_FORMAT_NOW = "dd-MM HH:mm:ss";
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT_NOW);
+        sdf.format(cal.getTime());
+        msg = "[" + sdf.format(cal.getTime()) + "] : " + msg;
+
+        // USING FLUTTER SHARED PREFERENCES FOR SAVING LOGGER MESSAGES
+        if(mPreferences == null){
+            mPreferences = getSharedPreferences("AndroidLogger", Context.MODE_PRIVATE);
+        }
+        SharedPreferences.Editor editor = mPreferences.edit();
+        Gson gson = new Gson();
+        ArrayList<String> loggers;
+        if(mPreferences.contains("logger")){
+            String json = mPreferences.getString("logger", null);
+            Type type = new TypeToken<ArrayList<String>>() {}.getType();
+            loggers = gson.fromJson(json, type);
+        } else {
+            loggers = new ArrayList<>();
+        }
+        loggers.add(msg);
+        String newJson = gson.toJson(loggers);
+        editor.putString("logger", newJson);
+        editor.apply();
+        // END OF SHARED PREFERENCES
+
         Log.d(TAG, "Broadcasting message");
         Intent intent = new Intent("driving-event-detection");
         intent.putExtra("msg", msg);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
-
 
     @Nullable
     @Override

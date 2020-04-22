@@ -7,6 +7,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -79,6 +80,18 @@ public class MainActivity extends FlutterActivity {
         } else if (call.method.equals("isEventDetectionServiceRunning")) {
           boolean isRunning = isServiceRunning(EventDetectionService.class);
           result.success(isRunning);
+        }
+        // ONLY FOR TESTING PURPOSE
+        else if (call.method.equals("getLogger")) {
+          Log.d("MAIN ACTIVITY SHARED", "RESUME");
+          SharedPreferences mPreferences = getSharedPreferences("AndroidLogger", Context.MODE_PRIVATE);
+          Map<String, ?> prefsMap = mPreferences.getAll();
+          for (Map.Entry<String, ?> entry: prefsMap.entrySet()) {
+            Log.d("MAIN ACTIVITY SHARED", entry.getKey() + ":" +
+                    entry.getValue().toString());
+          }
+          String logger =  mPreferences.getString("logger", null);
+          result.success(logger);
         }
       }
     });

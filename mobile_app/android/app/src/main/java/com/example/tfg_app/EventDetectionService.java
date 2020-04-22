@@ -5,7 +5,9 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.hardware.SensorEvent;
 import android.location.Location;
 import android.os.Build;
@@ -19,7 +21,13 @@ import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -34,6 +42,9 @@ import java.util.concurrent.TimeUnit;
 public class EventDetectionService extends Service {
     private final String CHANNEL_ID = "EventDetectionService";
     private final String TAG = "EventDetectionService";
+
+    //debug
+    SharedPreferences mPreferences;
 
     LocationDBHelper mLocationDBHelper;
     HandlerThread mHandlerThread;
@@ -50,6 +61,7 @@ public class EventDetectionService extends Service {
     @Override
     public void onCreate(){
         Log.d(TAG,"onCreate()");
+        sendMessage("EventDetectionService onCreate");
         createNotificationChannel();
         super.onCreate();
 
@@ -104,10 +116,10 @@ public class EventDetectionService extends Service {
         Log.d(TAG,"onStartCommand()");
         if(intent!=null && intent.getBooleanExtra
                 ("isDriveStarted", false)) {
-            sendMessage("EventDetectionService: startEventProcessing");
+            sendMessage("EventDetectionService startEventProcessing");
             startEventProcessing();
         } else {
-            sendMessage("EventDetectionService: stopEventProcessing");
+            sendMessage("EventDetectionService stopEventProcessing");
             stopEventProcessing();
         }
         return Service.START_STICKY;
@@ -117,6 +129,7 @@ public class EventDetectionService extends Service {
     @Override
     public void onDestroy() {
         Log.d(TAG,"onDestroy() service");
+        sendMessage("EventDetectionService onDestroy");
         super.onDestroy();
         stopEventProcessing();
     }
@@ -125,12 +138,43 @@ public class EventDetectionService extends Service {
     // Allows communication between this service and MainActivity
     // Send an Intent with an action named "driving-event-detection". The Intent sent should
     // be received by the MainActivity.
+    // Allows communication between this service and MainActivity
+    // Send an Intent with an action named "driving-event-detection". The Intent sent should
+    // be received by the MainActivity.
     private void sendMessage(String msg) {
+        Log.d(TAG,"SEND MESSAGE");
+        // add timestamp to logger msg
+        String DATE_FORMAT_NOW = "dd-MM HH:mm:ss";
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT_NOW);
+        sdf.format(cal.getTime());
+        msg = "[" + sdf.format(cal.getTime()) + "] : " + msg;
+
+        // USING FLUTTER SHARED PREFERENCES FOR SAVING LOGGER MESSAGES
+        if(mPreferences == null){
+            mPreferences = getSharedPreferences("AndroidLogger", Context.MODE_PRIVATE);
+        }
+        SharedPreferences.Editor editor = mPreferences.edit();
+        Gson gson = new Gson();
+        ArrayList<String> loggers;
+        if(mPreferences.contains("logger")){
+            String json = mPreferences.getString("logger", null);
+            Type type = new TypeToken<ArrayList<String>>() {}.getType();
+            loggers = gson.fromJson(json, type);
+        } else {
+            loggers = new ArrayList<>();
+        }
+        loggers.add(msg);
+        String newJson = gson.toJson(loggers);
+        editor.putString("logger", newJson);
+        editor.apply();
+        // END OF SHARED PREFERENCES
+
+        Log.d(TAG, "Broadcasting message");
         Intent intent = new Intent("driving-event-detection");
         intent.putExtra("msg", msg);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
-
 
 
     /**
@@ -162,7 +206,7 @@ public class EventDetectionService extends Service {
      */
     public void stopEventProcessing(){
         GyroscopeSensor.getInstance().unregister();
-        //  GPSSensor.getInstance().unregister();
+        GPSSensor.getInstance().unregister();
         AccelerometerSensor.getInstance().unregister();
         mEventProcessorFutureRef.cancel(false);
     }
@@ -203,6 +247,7 @@ public class EventDetectionService extends Service {
 
         @Override
         public void run() {
+            sendMessage("EventProcessorThread run");
             transferData();
             detectPhoneDistraction();
             detectHardTurns();
@@ -220,6 +265,7 @@ public class EventDetectionService extends Service {
          * next time.
          */
         private void transferData(){
+            sendMessage("EventProcessorThread transferData");
             //Transferring all the data from the main collection array and cleaning
             // after that, so that adding new values to the arrays doesn't get blocked
             mGPSRawList.addAll(GPSSensor.getInstance().getGPSList());
@@ -242,6 +288,7 @@ public class EventDetectionService extends Service {
          *     (32,18 km/h) or less
          */
         private void detectPhoneDistraction(){
+            sendMessage("EventProcessorThread detectPhoneDistraction");
             // Calculating the magnitude (Length of vector) and checking if its greater than 2.5 threshold
             // Magnitude is sqrt(x*x + y*y + Z*z)
             int sizeGyroscopeRawList = mGyroscopeRawList.size();
@@ -313,6 +360,7 @@ public class EventDetectionService extends Service {
          * than 90 degrees, and the time of completion of the turn as 4 seconds or less.
          */
         private void detectHardTurns(){
+            sendMessage("EventProcessorThread detectHardTurns");
             // A turn has two important properties: the angle of the turn and the time to
             // complete the turn.
             float fourthAngle, thirdAngle, secondAngle, firstAngle, averageTurnAngle = 0;
@@ -419,6 +467,7 @@ public class EventDetectionService extends Service {
          * points
          */
         private void eventDetectionUsingGPS(){
+            sendMessage("EventProcessorThread eventDetectionUsingGPS");
             //Processing the GPS data for Hard Braking, Fast Acceleration and High Speed
             int sizeGPSRawList = mGPSRawList.size();
             float acceleration = 0;
@@ -478,16 +527,132 @@ public class EventDetectionService extends Service {
         }
 
 
-
+        /**
+         *  We process the accelerometer sensor
+         * data to measure any jerks or forces that acted on the phone during hard braking,
+         * hard acceleration, or in the event of a severe crash. We calculate the magnitude,
+         * that is Sqrt(x*x+y*y+z*z), inside the for loop over the
+         * entire mAccelerometerRawList.
+         * If the magnitude crosses the threshold of 20,
+         * then we take it that this accelerometer event would have resulted either from
+         * hard braking or hard acceleration, and we take this accelerometer sensor data,
+         * assign it to a new SensorData object, and then add this object
+         * to mAccelerometerPotentialList.
+         */
         private void eventDetectionUsingAccelerometer(){
+            sendMessage("EventProcessorThread eventDetectionUsingAccelerometer");
+            // Processing the Raw Accelerometer data for Hard Braking,
+            // Severe Crash, Fast Acceleration
+            int sizeAccelerometerRawList = mAccelerometerRawList.size();
+            for (int i = 0; i < sizeAccelerometerRawList; i++) {
+                //ACCELEROMETER_PEAK is 20
+                magnitude = Math.sqrt(Math.pow(mAccelerometerRawList
+                        .get(i).values[0], 2) + Math.pow(mAccelerometerRawList
+                        .get(i).values[1], 2) + Math.pow(mAccelerometerRawList
+                        .get(i).values[2], 2));
 
+                if(magnitude > Constants.ACCELEROMETER_PEAK) {
+                    //Potential Candidate for Fast Acceleration or Hard Braking
+                    mAccelerometerData = new SensorData();
+                    mAccelerometerData.mSensorEvent =
+                            mAccelerometerRawList.get(i);
+                    mAccelerometerData.magnitude = magnitude;
+                    mAccelerometerData.time = (mAccelerometerRawList.get(i)
+                            .timestamp/1000000L) + timeOffsetValue;
+                    mAccelerometerPotentialList.add(mAccelerometerData);
+                }
+
+                //FALLING_PEAK is 0.5
+                else if(magnitude < Constants.FALLING_PEAK) {
+                    //Potential Candidate for Severe Crash
+                    mAccelerometerData = new SensorData();
+                    mAccelerometerData.mSensorEvent =
+                            mAccelerometerRawList.get(i);
+                    mAccelerometerData.magnitude = magnitude;
+                    mAccelerometerData.time = (mAccelerometerRawList.get(i)
+                            .timestamp/1000000L) + timeOffsetValue;
+                    mCrashPotentialList.add(mAccelerometerData);
+                }
+            }
+
+            //Removing the Accelerometer Potential Overlapping Data,
+            // which are close enough (within 1 second interval)
+            int sizeAccePotentialList = mAccelerometerPotentialList.size();
+            for (int i = 0; i < sizeAccePotentialList; i++) {
+                for (int j = i+1; j < sizeAccePotentialList; j++) {
+                    if(mAccelerometerPotentialList.get(j).time -
+                            mAccelerometerPotentialList.get(i).time <
+                            Constants.ONE_SECOND) {
+                        mAccelerometerPotentialList.get(j).isDuplicate = true;
+                    }
+                }
+            }
+
+            //Removing the Crash (or Falling Phone) Potential Overlapping Data,
+            // which are close enough (within 1 second interval)
+            int sizeCrashPotentialList = mCrashPotentialList.size();
+            for (int i = 0; i < sizeCrashPotentialList; i++) {
+                for (int j = i+1; j < sizeCrashPotentialList; j++) {
+                    if(mCrashPotentialList.get(j).time -
+                        mCrashPotentialList.get(i).time <
+                        Constants.ONE_SECOND) {
+                            mCrashPotentialList.get(j).isDuplicate = true;
+                    }
+                }
+            }
         }
 
         /**
+         * In this method, we combine the data to
+         * check for any overlapping of reported events. If we find any overlaps, then we
+         * fuse the event data together and consider it as a high confidence fused event. We
+         * do this by finding the time difference between the reported potential
+         * accelerometer events and the potential GPS events inside two nested for loops.
          *
+         * If the time difference is less than two seconds, we merge the data and create a
+         * new EventData object with eventType the same as the GPS eventType, and
+         * add that object to mEventList. We also tag (isFused = true) the potential GPS
+         * event data, which has been merged and added to mEventList. We execute for
+         * loops only for non-duplicate events.
          */
         private void fusingGPSAccelerometerEvents(){
-
+            sendMessage("EventProcessorThread fusingGPSAccelerometerEvents");
+            // Sensor fusion, combining the values from GPS and
+            // Accelerometer data, to check the overlap of reported values.
+            int sizeGPSPotentialList = mGPSPotentialList.size();
+            int sizeAccePotentialList = mAccelerometerPotentialList.size();
+            if(sizeGPSPotentialList>0 && sizeAccePotentialList>0) {
+                for (int i = 0; i < sizeGPSPotentialList; i++) {
+                    if(!mGPSPotentialList.get(i).isDuplicate) {
+                        for (int j = 0; j < sizeAccePotentialList; j++) {
+                            if(!mAccelerometerPotentialList.get(j).isDuplicate) {
+                                long timeDifference =
+                                        Math.abs(mGPSPotentialList.get(i).time -
+                                                mAccelerometerPotentialList.get(j).time);
+                                //If the reported acceleration value is within 2
+                                // seconds of the GPS reported value, then they
+                                if(timeDifference < Constants.TWO_SECONDS) {
+                                    mGPSPotentialList.get(i).isFused = true;
+                                    mEventData = new EventData();
+                                    if(mGPSPotentialList.get(i).eventType == DrivingEventType.HARD_ACCELERATION.ordinal()) {
+                                        mEventData.eventType = DrivingEventType.HARD_ACCELERATION.ordinal();
+                                    }
+                                    else {
+                                        mEventData.eventType = DrivingEventType.HARD_BRAKING.ordinal();
+                                    }
+                                    mEventData.isFused = true;
+                                    mEventData.acceleration = mGPSPotentialList.get(i).acceleration;
+                                    mEventData.speed = mGPSPotentialList.get(i).mLocation.getSpeed();
+                                    mEventData.eventTime = mGPSPotentialList.get(i).mLocation.getTime();
+                                    mEventData.latitude = mGPSPotentialList.get(i).mLocation.getLatitude();
+                                    mEventData.longitude = mGPSPotentialList.get(i).mLocation.getLongitude();
+                                    mEventList.add(mEventData);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         /**
@@ -499,6 +664,7 @@ public class EventDetectionService extends Service {
          * to mEventList.
          */
         private void processNonFusedGPSEvents(){
+            sendMessage("EventProcessorThread processNonFusedGPSEvents");
             //Adding GPS events to mEventList, which are not fused with accelerometer data
             int sizeGPSPotentialList = mGPSPotentialList.size();
             for (int i = 0; i < sizeGPSPotentialList; i++)
@@ -528,9 +694,10 @@ public class EventDetectionService extends Service {
          */
         private void saveSensorEventInDB()
         {
+            sendMessage("EventProcessorThread saveSensorEventInDB");
             //Updating the database with Event List and Location Trail
-            // mLocationDBHelper.updateEventDetails(mEventList);
-            // mLocationDBHelper.updateDrivingRoute(mGPSRawList);
+            mLocationDBHelper.updateEventDetails(mEventList);
+            mLocationDBHelper.updateDrivingRoute(mGPSRawList);
         }
 
         /**
@@ -539,6 +706,7 @@ public class EventDetectionService extends Service {
          */
         private void clearData()
         {
+            sendMessage("clearData");
             //Clear all the data from Arrays
             mGPSRawList.clear();
             mAccelerometerRawList.clear();

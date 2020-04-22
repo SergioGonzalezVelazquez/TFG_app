@@ -128,11 +128,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    /*
     return _isCheckingAuth
         ? circularProgress(context)
-        : (_isAuth ? buildAuthScreen() : LoginPage());
-  */
-  return DemoDrivingPage();
+        : (_isAuth ? DemoDrivingPage() : LoginPage());
   }
 }

@@ -1,9 +1,10 @@
 import 'dart:io';
 import 'dart:async';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tfg_app/widgets/buttons.dart';
+import 'dart:convert';
 
 class DemoDrivingPage extends StatefulWidget {
   DemoDrivingPage({Key key}) : super(key: key);
@@ -30,7 +31,9 @@ class _DemoDrivingPageState extends State<DemoDrivingPage> {
   @override
   void initState() {
     super.initState();
-
+    _activityUpdateStreamSubscription = _eventChannel
+        .receiveBroadcastStream()
+        .listen(_onActivityUpdateReceived);
     timer = Timer.periodic(Duration(seconds: 60), (Timer t) => _isRunning());
   }
 
@@ -41,13 +44,8 @@ class _DemoDrivingPageState extends State<DemoDrivingPage> {
   }
 
   Future<void> _startBackground() async {
-    if (_activityUpdateStreamSubscription != null) return;
-
     if (Platform.isAndroid) {
-      _activityUpdateStreamSubscription = _eventChannel
-          .receiveBroadcastStream()
-          .listen(_onActivityUpdateReceived);
-
+      if (_activityUpdateStreamSubscription == null) {}
       _methodChannel.invokeMethod('startDrivingDetectionService');
     }
 
@@ -70,14 +68,39 @@ class _DemoDrivingPageState extends State<DemoDrivingPage> {
     }
   }
 
+  Future<void> _cleanLogger() async {
+    print("clear logger");
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.remove("logger");
+    setState(() {
+      messages = [];
+    });
+  }
+
+  Future<void> _reloadLogger() async {
+    print("_reloadLogger");
+    String logger = await _methodChannel.invokeMethod('getLogger');
+
+    var decoded = json.decode(logger);
+    List newMsgs = [];
+
+    decoded.forEach((msg) {
+      print(msg);
+      newMsgs.insert(0, Text(
+        msg,
+        style: TextStyle(fontSize: 10),
+      ));
+    });
+
+    setState(() {
+      messages = newMsgs;
+    });
+  }
+
   Future<void> _stopBackground() async {
     if (Platform.isAndroid) {
       String data =
           await _methodChannel.invokeMethod('stopDrivingDetectionService');
-      if (_activityUpdateStreamSubscription != null) {
-        _activityUpdateStreamSubscription.cancel();
-        _activityUpdateStreamSubscription = null;
-      }
       print(data);
     }
     setState(() {
@@ -87,14 +110,14 @@ class _DemoDrivingPageState extends State<DemoDrivingPage> {
 
   void _onActivityUpdateReceived(dynamic activity) {
     print("Flutter: onActivityUpdateReceived");
-    DateTime date = DateTime.now();
     setState(() {
       messages.insert(
-          0,
-          Text(
-            date.toString() + " :" + activity,
-            style: TextStyle(fontSize: 10),
-          ));
+        0,
+        Text(
+          activity,
+          style: TextStyle(fontSize: 10),
+        ),
+      );
     });
   }
 
@@ -116,59 +139,75 @@ class _DemoDrivingPageState extends State<DemoDrivingPage> {
                       itemCount: messages.length),
                 ),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Container(
-                      width: MediaQuery.of(context).size.width * 0.35,
+                      width: MediaQuery.of(context).size.width * 0.2,
                       child: primaryButton(
                           context,
                           enabledAutoDetectionService ? null : _startBackground,
                           "Start"),
                     ),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.025,
+                    ),
                     Container(
-                      width: MediaQuery.of(context).size.width * 0.35,
+                      width: MediaQuery.of(context).size.width * 0.2,
                       child: primaryButton(
                           context,
                           !enabledAutoDetectionService ? null : _stopBackground,
                           "Stop"),
                     ),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.025,
+                    ),
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.2,
+                      child: primaryButton(context, _reloadLogger, "Refresh"),
+                    ),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.025,
+                    ),
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.2,
+                      child: primaryButton(context, _cleanLogger, "Clean"),
+                    ),
                   ],
                 ),
                 Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Container(
-                        width: MediaQuery.of(context).size.width * 0.35,
-                        child:
-                            primaryButton(context, _isRunning, "Check status"),
-                      ),
-                      Column(
-                        children: <Widget>[
-                          Text(
-                            "AutoDriveService: " +
-                                (enabledAutoDetectionService
-                                    ? 'running'
-                                    : 'stopped'),
-                            style: TextStyle(
-                                fontSize: 11,
-                                color: enabledAutoDetectionService
-                                    ? Colors.green
-                                    : Colors.red),
-                          ),
-                          Text(
-                            "EventDetectionService: " +
-                                (enabledEventDetectionService
-                                    ? 'running'
-                                    : 'stopped'),
-                            style: TextStyle(
-                                fontSize: 11,
-                                color: enabledEventDetectionService
-                                    ? Colors.green
-                                    : Colors.red),
-                          ),
-                        ],
-                      )
-                    ]),
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.35,
+                      child: primaryButton(context, _isRunning, "Check status"),
+                    ),
+                    Column(
+                      children: <Widget>[
+                        Text(
+                          "AutoDriveService: " +
+                              (enabledAutoDetectionService
+                                  ? 'running'
+                                  : 'stopped'),
+                          style: TextStyle(
+                              fontSize: 11,
+                              color: enabledAutoDetectionService
+                                  ? Colors.green
+                                  : Colors.red),
+                        ),
+                        Text(
+                          "EventDetectionService: " +
+                              (enabledEventDetectionService
+                                  ? 'running'
+                                  : 'stopped'),
+                          style: TextStyle(
+                              fontSize: 11,
+                              color: enabledEventDetectionService
+                                  ? Colors.green
+                                  : Colors.red),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ],
             ),
           ),

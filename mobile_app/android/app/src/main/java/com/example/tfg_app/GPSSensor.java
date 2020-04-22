@@ -30,16 +30,14 @@ public class GPSSensor implements LocationListener {
     private FusedLocationProviderClient mFusedLocationClient;
     private LocationCallback mLocationCallback;
 
-    public static GPSSensor getInstance()
-    {
+    public static GPSSensor getInstance() {
         if (gpsSensor == null) {
             gpsSensor = new GPSSensor();
         }
         return gpsSensor;
     }
 
-    public void register(Handler mHandler, Context context)
-    {
+    public void register(Handler mHandler, Context context) {
         mLocationRequest = LocationRequest.create();
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         mLocationRequest.setInterval(Constants.GPS_INTERVAL);
@@ -57,6 +55,14 @@ public class GPSSensor implements LocationListener {
 
         mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, null);
     }
+
+    public void unregister() {
+        //REVISAR CÓMO DESCONECTAR
+        if(mFusedLocationClient != null){
+            mFusedLocationClient.removeLocationUpdates(mLocationCallback);
+        }
+    }
+
 
     public ArrayList<Location> getGPSList()
     {
