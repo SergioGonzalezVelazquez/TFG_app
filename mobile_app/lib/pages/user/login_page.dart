@@ -92,7 +92,7 @@ class _LoginPageState extends State<LoginPage> {
     await signInWithFacebook()
         .catchError((error) => onSignInSocialError(context, error));
 
-    if (isAuth()) {
+    if (await isAuth()) {
       Route route = new MaterialPageRoute(
           builder: (context) => new HomePage(
                 isauth: true,
@@ -114,7 +114,7 @@ class _LoginPageState extends State<LoginPage> {
     await signInWithGoogle()
         .catchError((error) => onSignInSocialError(context, error));
 
-    if (isAuth()) {
+    if (await isAuth()) {
       Route route = new MaterialPageRoute(
           builder: (context) => new HomePage(
                 isauth: true,
@@ -137,7 +137,7 @@ class _LoginPageState extends State<LoginPage> {
       await signInWithEmail(_emailController.text.trim(), _passController.text)
           .catchError((error) => onSignInEmailError(context, error));
 
-      if (isAuth()) {
+      if (await isAuth()) {
         print("isAuth");
         if (await isEmailVerified()) {
           Route route = new MaterialPageRoute(

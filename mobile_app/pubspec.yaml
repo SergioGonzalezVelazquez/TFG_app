@@ -71,6 +71,9 @@ dependencies:
   # Animation library for Flutter 
   animator: ^1.0.0+5
 
+  # Wraps NSUserDefaults (on iOS) and SharedPreferences (on Android), providing a persistent store for simple data. 
+  shared_preferences: ^0.5.7
+
   # A flutter library to show images from the internet 
   # and keep them in the cache directory
   cached_network_image: ^2.0.0

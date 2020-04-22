@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:tfg_app/models/user.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // Provides an instance of this class corresponding to the default app.
 final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
@@ -14,8 +15,25 @@ final usersRef = Firestore.instance.collection('users');
 // Initializes global sign-in configuration settings.
 final GoogleSignIn googleSignIn = GoogleSignIn();
 
-bool isAuth() {
+Future<bool> isAuth() async {
+  if (user == null) await getUser();
   return user != null;
+}
+
+Future<FirebaseUser> getUser() async {
+  FirebaseUser currentUser = await firebaseAuth.currentUser();
+  if (currentUser != null) {
+    DocumentSnapshot doc = await usersRef.document(currentUser.uid).get();
+    user = User.fromDocument(doc);
+  }
+
+  // Read user id from shared preferences
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String id = await prefs.getString('userId');
+  print("id leido de las shared preferences");
+  print(id);
+
+  return currentUser;
 }
 
 /// Use the Google sign in data to authenticate a
@@ -82,6 +100,11 @@ Future<User> createUserDocument() async {
   }
   doc = await usersRef.document(currentUser.uid).get();
   user = User.fromDocument(doc);
+
+  // Save user id in shared preferences
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.setString('userId', user.id);
+
   return user;
 }
 
@@ -154,6 +177,10 @@ Future<void> resetPassword(String email) async {
 Future<void> signOut() async {
   await firebaseAuth.signOut();
   user = null;
+
+  // Delete user id in shared preferences
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  prefs.remove('userId');
 }
 
 String signInCredentialsErrorMsg(error) {

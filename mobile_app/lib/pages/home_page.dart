@@ -11,6 +11,8 @@ import 'package:tfg_app/widgets/progress.dart';
 import 'package:tfg_app/services/auth.dart';
 import 'package:tfg_app/themes/custom_icon_icons.dart';
 
+import '../services/auth.dart';
+
 /// This widget is the home page of the application.
 class HomePage extends StatefulWidget {
   bool auth;
@@ -35,19 +37,28 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    print("home page init state");
     super.initState();
     _pageController = PageController();
-    _isAuth = !widget.auth ? isAuth() : true;
-    _isCheckingAuth = false;
-    if (_isAuth) print(user.toString());
-    if (_isAuth) _checkPatient();
+    checkAuth();
   }
 
   @override
   void dispose() {
     _pageController.dispose();
     super.dispose();
+  }
+
+  checkAuth() async {
+    bool auth = !widget.auth ? await isAuth() : true;
+    setState(() {
+      _isAuth = auth;
+      _isCheckingAuth = false;
+    });
+
+    if (_isAuth) {
+      print(user.toString());
+      await _checkPatient();
+    }
   }
 
   Future<void> _checkPatient() async {
