@@ -1,0 +1,27 @@
+{
+    "pretest_miedo_3": true,
+    "conductor_4": [
+        "no_necesidad",
+        "miedo"
+    ],
+    "pretest_miedo_1": [
+        "presenciar_accidente",
+        "pasajero_accidente",
+        "capacidad"
+    ],
+    "personal_2": "18_20",
+    "conductor_3": "1_5",
+    "personal_1": "masculino",
+    "conductor_2": false,
+    "conductor_1": "1_5",
+    "pretest_miedo_2": [
+        "tipo_vehivulo",
+        "espacio_temporal",
+        "un_tipo_via"
+    ],
+    "pretest_miedo_4": [
+        "psicologo",
+        "otros"
+    ],
+    "conductor_5": "paulatino"
+}
