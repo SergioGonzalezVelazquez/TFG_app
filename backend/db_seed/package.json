@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "import:pretest": "node index.js ./data/signup_questionnaire.json"
+    "import:pretest": "node index.js ../data/signup_questionnaire.json"
   },
   "author": "Sergio González Velázquez",
   "license": "ISC",
@@ -13,3 +13,4 @@
     "firebase-admin": "^8.10.0"
   }
 }
+ 

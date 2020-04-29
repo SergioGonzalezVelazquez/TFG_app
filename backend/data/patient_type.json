@@ -1,0 +1,75 @@
+{
+    "1": {
+        "description": "Paciente que lleva un periodo largo sin conducir (>6 años) y necesita volver a hacerlo en un periodo corto de tiempo (por necesidad)",
+        "conditions": {
+            "and": [
+                {
+                    "===": [
+                        {
+                            "var": [
+                                "conductor_2"
+                            ]
+                        },
+                        false
+                    ]
+                },
+                {
+                    "in": [
+                        {
+                            "var": [
+                                "conductor_3"
+                            ]
+                        },
+                        [
+                            "6_10",
+                            ">10"
+                        ]
+                    ]
+                }
+            ]
+        }
+    },
+    "2": {
+        "description": "Paciente que lleva un periodo largo sin conducir (>10 años). No necesita volver a hacerlo en un periodo corto de tiempo, pero quiere resolver su problema",
+        "conditions": {
+            "and": [
+                {
+                    "===": [
+                        {
+                            "var": [
+                                "conductor_2"
+                            ]
+                        },
+                        false
+                    ]
+                },
+                {
+                    "in": [
+                        {
+                            "var": [
+                                "conductor_3"
+                            ]
+                        },
+                        [
+                            "6_10",
+                            ">10"
+                        ]
+                    ]
+                }
+            ]
+        }
+    },
+    "3": {
+        "description": "Paciente que conduce pero sufre ansiedad en ciertas situaciones",
+        "conditions": {
+            "===": [
+                {
+                    "var": [
+                        "conductor_2"
+                    ]
+                },
+                true
+            ]
+        }
+    }
+}
