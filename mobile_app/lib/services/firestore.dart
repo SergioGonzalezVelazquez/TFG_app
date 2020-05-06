@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:tfg_app/models/driving_activity.dart';
+import 'package:tfg_app/models/driving_event.dart';
 import 'package:tfg_app/models/questionnaire_group.dart';
 import 'package:tfg_app/models/questionnaire_item.dart';
+import 'dart:async';
 import 'package:tfg_app/services/auth.dart';
 
 final signUpQuestionnaireRef =
@@ -8,6 +11,11 @@ final signUpQuestionnaireRef =
 final signUpQuestionnaireResponseRef =
     Firestore.instance.collection('pretest_questionnaire_response');
 final patientRef = Firestore.instance.collection('patient');
+
+final drivingActivityRef = Firestore.instance.collection('driving_activity');
+final drivingEventRef =
+    Firestore.instance.collection('driving_event_details');
+final drivingRoutesRef = Firestore.instance.collection('driving_routes');
 
 /// Get pretest questions
 Future<List<QuestionnaireItemGroup>> getSignupQuestionnaire() async {
@@ -28,7 +36,6 @@ Future<List<QuestionnaireItemGroup>> getSignupQuestionnaire() async {
         .map((item) => QuestionnaireItem.fromDocument(item))
         .toList();
   }
-
   return questionGroups;
 }
 
@@ -70,7 +77,38 @@ Future<bool> patientExists() async {
 /// firebase functions calculate the type of patient based on pretest
 /// questionnaire answers
 Future<void> createPatient() async {
-  await patientRef
+  await patientRef.document(user.id).setData({"created_at": DateTime.now()});
+}
+
+Future<List<DrivingActivity>> getDrivingActivities() async {
+  QuerySnapshot activitiesDocs = await drivingActivityRef
+      // .document("OXdhwafP8zc96dtKRtk3mcaoUFx1")
       .document(user.id)
-      .setData({"created_at": DateTime.now()});
+      .collection('user_driving_activity')
+      .getDocuments();
+
+  return activitiesDocs.documents
+      .map((doc) => DrivingActivity.fromDocument(doc))
+      .toList();
+}
+
+Future<List<dynamic>> getDrivingRoutes(String driveId) async {
+  DocumentSnapshot doc = await drivingRoutesRef.document(driveId).get();
+  List<dynamic> list = [];
+  if (doc.exists) {
+    return doc.data['route'];
+  }
+  return list;
+}
+
+Future<List<DrivingEvent>> getDrivingEvents(String driveId) async {
+  DocumentSnapshot doc = await drivingEventRef.document(driveId).get();
+  List<DrivingEvent> list = [];
+  if (doc.exists) {
+    doc.data['events'].forEach((event) {
+      print(event);
+      list.add(DrivingEvent.fromMap(event));
+    });
+  }
+  return list;
 }

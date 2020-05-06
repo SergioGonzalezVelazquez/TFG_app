@@ -2,8 +2,6 @@ import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
 import * as jsonLogic from 'json-logic-js';
 
-admin.initializeApp();
-
 import * as patientTypes from '../../data/patient_type.json';
 
 const patientRef = 'patient/{userId}';

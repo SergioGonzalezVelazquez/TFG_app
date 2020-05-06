@@ -35,6 +35,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -76,7 +77,7 @@ public class AutoDriveDetectionService extends Service {
     public void onCreate() {
         super.onCreate();
         Log.d(TAG,"onCreate() service");
-        sendMessage("AutoDriveDetectionService started");
+        sendMessage("AutoDriveDetectionService started " + "28/04 v1");
         createNotificationChannel();
         Intent notificationIntent = new Intent(this, MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this,
@@ -117,6 +118,9 @@ public class AutoDriveDetectionService extends Service {
         sendMessage("AutoDriveDetectionService stopped");
         Log.d(TAG,"onDestroy() service");
         super.onDestroy();
+        mActivityRecognitionHelper.stopActivityUpdates();
+        mGPSHelper.stopLocationUpdates();
+
         if(intentEventDetectionService != null) {
             stopService(intentEventDetectionService);
         }
@@ -125,8 +129,6 @@ public class AutoDriveDetectionService extends Service {
     /**
      * We will receive the input of the Activity recognition and Geo-fence APIs inside
      * onStartCommand() from the service.
-     * @return START_STICKY constant. Service explicitly started and stopped to run for
-     *      arbitrary periods of time, such as a service performing background music playback.
      */
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -140,7 +142,15 @@ public class AutoDriveDetectionService extends Service {
          if(ActivityRecognitionResult.hasResult(intent)) {
             String date = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss").format(new Date());
             Log.d(TAG,"onStartCommand() receive the input of the Activity recognition and Geo-fence APIs ");
-            handleActivityRecognitionInput(ActivityRecognitionResult.extractResult(intent));
+
+            if(intervalDebugger == 0){
+                 handleActivityRecognitionInput(ActivityRecognitionResult.extractResult(intent), true);
+             }
+             else {
+                 handleActivityRecognitionInput(ActivityRecognitionResult.extractResult(intent), false);
+             }
+             intervalDebugger++;
+
         } else {
             String date = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss").format(new Date());
             Log.d(TAG,date + ": ActivityRecognitionResult.hasNOTResult(intent)");
@@ -157,6 +167,7 @@ public class AutoDriveDetectionService extends Service {
             Log.d(TAG,"geofencingEvent.getGeofenceTransition() == Geofence.GEOFENCE_TRANSITION_EXIT");
             mGeofenceHelper.removeLastGeoFence();
             if(!isDriveCheckInProgress && !isDriveInProgress) {
+                sendMessage("handleGeofenceInput handlePotentialStartDriveTrigger");
                 mGPSHelper.handlePotentialStartDriveTrigger();
             }
         }
@@ -164,8 +175,14 @@ public class AutoDriveDetectionService extends Service {
 
     // Get the list of the probable activities associated with the current state of the
     // device. Each activity is associated with a confidence level (between 0-100)
-    public void handleActivityRecognitionInput (ActivityRecognitionResult result) {
+    public void handleActivityRecognitionInput (ActivityRecognitionResult result, boolean simulateDriving) {
         Log.d(TAG,"handleActivityRecognitionInput() Result.length: " + result.getProbableActivities().size());
+        if(simulateDriving) {
+            mGeofenceHelper.removeLastGeoFence();
+            mGPSHelper.handlePotentialStartDriveTrigger();
+            sendMessage("simulado posible comienzo de conducción");
+            return ;
+        }
         for (DetectedActivity activity : result.getProbableActivities()) {
             Log.d(TAG, "Detected activity: " + activity.getType() + ", " + activity.getConfidence());
             // If the type of detected activity is WALKING or ON_FOOT
@@ -189,7 +206,7 @@ public class AutoDriveDetectionService extends Service {
                 sendMessage("DetectedActivity.IN_VEHICLE with confidence of " + activity.getConfidence());
                 if(activity.getConfidence() > Constants.CONFIDENCE_THRESHOLD &&
                         !isDriveCheckInProgress && !isDriveInProgress) {
-                    sendMessage("DetectedActivity.IN_VEHICLE !isDriveCheckInProgress && !isDriveInProgress");
+                    sendMessage("DetectedActivity.IN_VEHICLE handlePotentialStartDriveTrigger");
                     mGeofenceHelper.removeLastGeoFence();
                     mGPSHelper.handlePotentialStartDriveTrigger();
                 }
@@ -259,6 +276,8 @@ public class AutoDriveDetectionService extends Service {
         intentEventDetectionService.putExtra("isDriveStarted", true);
         Log.d(TAG,"lanzando intent a EventDetectionService con isDrivedStarted: true");
 
+        mLocationDBHelper.generateDriveID(location);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
             startForegroundService(intentEventDetectionService);
         else startService(intentEventDetectionService);
@@ -271,6 +290,8 @@ public class AutoDriveDetectionService extends Service {
         intentEventDetectionService.putExtra("isDriveStarted", false);
         Log.d(TAG,"lanzando intent a EventDetectionService con isDrivedStarted: false");
 
+        mLocationDBHelper.closeDrivingActivity(location);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
             startForegroundService(intentEventDetectionService);
         else startService(intentEventDetectionService);
@@ -280,7 +301,7 @@ public class AutoDriveDetectionService extends Service {
         sendMessage("onParkingDetected :" + location.toString() );
         ArrayList<EventData> parkingList = new ArrayList<EventData>();
         EventData eventData = new EventData();
-        eventData.eventType = DrivingEventType.PARKING.ordinal();
+        eventData.eventType = DrivingEventType.PARKING;
         eventData.eventTime = location.getTime();
         eventData.latitude = location.getLatitude();
         eventData.longitude = location.getLongitude();
@@ -297,7 +318,6 @@ public class AutoDriveDetectionService extends Service {
     // Send an Intent with an action named "driving-event-detection". The Intent sent should
     // be received by the MainActivity.
     private void sendMessage(String msg) {
-        Log.d(TAG,"SEND MESSAGE");
         // add timestamp to logger msg
         String DATE_FORMAT_NOW = "dd-MM HH:mm:ss";
         Calendar cal = Calendar.getInstance();
@@ -325,7 +345,6 @@ public class AutoDriveDetectionService extends Service {
         editor.apply();
         // END OF SHARED PREFERENCES
 
-        Log.d(TAG, "Broadcasting message");
         Intent intent = new Intent("driving-event-detection");
         intent.putExtra("msg", msg);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
@@ -340,16 +359,25 @@ public class AutoDriveDetectionService extends Service {
     // inner class inside the AutoDriveDetectionService class
     // It is used to request activities updates ti the Activity recognition API.
     public class ActivityRecognitionHelper {
+        private ActivityRecognitionClient mActivityRecognitionClient;
+        private PendingIntent mActivityRecognitionPendingIntent;
+
         public void startActivityUpdates() {
             Log.d(TAG,"startActivityUpdates() ActivityRecognitionHelper");
             Intent intent = new Intent(getApplicationContext(), AutoDriveDetectionService.class);
-            PendingIntent pendingIntent = PendingIntent.getService(getApplicationContext(),0,intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            mActivityRecognitionPendingIntent = PendingIntent.getService(getApplicationContext(),0,intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-            //ACTIVITY_RECOGNITION_REQUEST_INTERVAL is 60 seconds
-            ActivityRecognitionClient mActivityRecognitionClient = new ActivityRecognitionClient(getApplicationContext());
+            //ACTIVITY_RECOGNITION_REQUEST_INTERVAL is 60 seconds (60 * 1000 milliseconds)
+            mActivityRecognitionClient = new ActivityRecognitionClient(getApplicationContext());
             mActivityRecognitionClient.requestActivityUpdates(
                     Constants.ACTIVITY_RECOGNITION_REQUEST_INTERVAL,
-                    pendingIntent);
+                    mActivityRecognitionPendingIntent);
+        }
+
+        public void stopActivityUpdates(){
+            if(mActivityRecognitionClient != null){
+                mActivityRecognitionClient.removeActivityUpdates(mActivityRecognitionPendingIntent);
+            }
         }
     }
 
@@ -369,6 +397,7 @@ public class AutoDriveDetectionService extends Service {
         // create a new geofence for a given location
         public void createNewGeoFence(Location location) {
             Log.d(TAG,"createNewGeoFence");
+            sendMessage("GeofenceHelper: createNewGeoFence");
             this.createNewGeoFence = true;
             this.mLocation = location;
             connectToGeofenceService();
@@ -377,6 +406,7 @@ public class AutoDriveDetectionService extends Service {
         // remove the last geofence created
         public void removeLastGeoFence() {
             Log.d(TAG,"removeLastGeoFence");
+            sendMessage("GeofenceHelper: createNewGeoFence");
             this.createNewGeoFence = false;
             connectToGeofenceService();
         }
@@ -417,6 +447,7 @@ public class AutoDriveDetectionService extends Service {
                 mGeofencingClient.removeGeofences(mGeofencedIDList);
                 mGeofencedIDList.clear();
             }
+            // DUDA. En el libro hace un disconnect aquí.
         }
     }
 
@@ -457,7 +488,9 @@ public class AutoDriveDetectionService extends Service {
         }
 
         public void startLocationUpdates(){
+            sendMessage("GPSHelper startLocationUpdates");
             if(mFusedLocationClient == null) {
+                sendMessage("GPSHelper mFusedLocationClient == null");
                 Log.d(TAG,"startLocationUpdates: ");
                 mLocationRequest = LocationRequest.create();
                 // The accuracy of the location is the most important to us. It uses GPS as its
@@ -475,7 +508,7 @@ public class AutoDriveDetectionService extends Service {
                 // angle and altitude.
                 mLocationCallback = new LocationCallback() {
                     public void onLocationResult(LocationResult locationResult) {
-                        Log.d(TAG,"LocationCallback: " + locationResult.toString());
+                        sendMessage("GPSHelper mLocationCallback received");
                         if (locationResult != null) {
                             Location location = locationResult.getLocations().get(0);
                             if(isDriveInProgress){
@@ -483,6 +516,7 @@ public class AutoDriveDetectionService extends Service {
                             }
                             else {
                                 if(getSingleLocation) {
+                                    sendMessage("GPSHelper getSingleLocation lat- " + location.getLatitude() +" long- " + location.getLongitude());
                                     onNewLocationFoundForGeoFence(location);
                                     stopLocationUpdates();
                                     getSingleLocation = false;
@@ -502,6 +536,7 @@ public class AutoDriveDetectionService extends Service {
         }
 
         public void stopLocationUpdates(){
+            sendMessage("GPSHelper stopLocationUpdates");
             if(mFusedLocationClient != null){
                 mFusedLocationClient.removeLocationUpdates(mLocationCallback);
 
@@ -552,15 +587,18 @@ public class AutoDriveDetectionService extends Service {
         // we assume that it was a false positive event and call the confirmStartDriveFailed()
         // method.¡
         public void checkForPotentialStartEvent(Location location) {
+            sendMessage("GPSHelper checkForPotentialStartEvent");
             mPotentialStartList.add(location);
             //POTENTIALSTOP_SPEED_THRESHOLD is 6.7 meters per second or 15 miles per hour
             if (location.getSpeed() >
                     Constants.POTENTIALSTOP_SPEED_THRESHOLD) {
+                sendMessage("GPSHelper confirmStartDrivingEvent because speed is " + location.getSpeed() + "m/s");
                 confirmStartDrivingEvent();
                 //POTENTIALSTART_TIME_THRESHOLD is 60 seconds
             } else if (location.getTime() -
                     mPotentialStartList.get(0).getTime() >
                     Constants.POTENTIALSTART_TIME_THRESHOLD) {
+                sendMessage("GPSHelper confirmStartDriveFailed");
                 confirmStartDriveFailed(location);
             }
         }

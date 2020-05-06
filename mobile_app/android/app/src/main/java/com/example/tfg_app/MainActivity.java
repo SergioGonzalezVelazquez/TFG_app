@@ -160,9 +160,6 @@ public class MainActivity extends FlutterActivity {
       // Get extra data included in the Intent
       // activity default value is UNKNOWN
       String msg = intent.getStringExtra("msg");
-
-      Log.d(TAG, "Got message: " + msg);
-
       drivingEventSink.success(msg);
     }
   };

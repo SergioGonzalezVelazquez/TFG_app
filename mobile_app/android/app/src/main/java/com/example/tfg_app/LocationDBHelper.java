@@ -7,14 +7,19 @@ import android.content.SharedPreferences;
 import android.location.Location;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -32,8 +37,11 @@ public class LocationDBHelper {
     private final String FLUTTER_SHARED_PREFERENCES = "FlutterSharedPreferences";
     private final String DRIVING_EVENTS_SHARED_PREFERENCES = "DrivingEventsPreferences";
     private static final String COLLECTION_DRIVING_ACTIVITY = "driving_activity";
+    private static final String COLLECTION_USER_DRIVING_ACTIVITY = "user_driving_activity";
     private static final String COLLECTION_DRIVING_ROUTE = "driving_routes";
     private static final String COLLECTION_EVENT_DETAILS = "driving_event_details";
+    private static final String DRIVING_ROUTE_DOCUMENT = "route";
+    private static final String DRIVING_EVENTS_DOCUMENT = "events";
     private static final String DRIVE_ID = "driveId";
 
     private  SharedPreferences mPreferences;
@@ -62,7 +70,7 @@ public class LocationDBHelper {
      * with the current auth user (read from SharedPreferences)
      * @return unique drive ID as string
      */
-    public String generateDriveID() {
+    public String generateDriveID(Location location) {
         Log.d(TAG,"generateDriveID() start");
         String driveId = "drive_" + String.valueOf(System.currentTimeMillis());
 
@@ -73,10 +81,29 @@ public class LocationDBHelper {
         Log.d(TAG,"generateDriveID() read user id: " + userId);
         // Create a Map to store the data we want to set
         Map<String, Object> docData = new HashMap<>();
-        docData.put("userId", userId);
-        docData.put("start_at", FieldValue.serverTimestamp());
-        mFirestore.collection(COLLECTION_DRIVING_ACTIVITY).document(driveId).set(docData);
+        //docData.put("userId", userId);
+        docData.put("start_location", new GeoPoint(location.getLatitude(), location.getLongitude()));
+        docData.put("start_time", FieldValue.serverTimestamp());
+        mFirestore.collection(COLLECTION_DRIVING_ACTIVITY)
+                .document(userId)
+                .collection(COLLECTION_USER_DRIVING_ACTIVITY)
+                .document(driveId)
+                .set(docData);
+
         sendMessage("mFirestore writes on " + COLLECTION_DRIVING_ACTIVITY + "- userId: " + userId);
+
+        // Initialize route document
+        Map<String, Object> initRoute = new HashMap<>();
+        initRoute.put(DRIVING_ROUTE_DOCUMENT, new ArrayList<>());
+        mFirestore.collection(COLLECTION_DRIVING_ROUTE)
+                .document(driveId).set(initRoute);
+        sendMessage("mFirestore writes on " + COLLECTION_DRIVING_ROUTE + "- driveId: " + driveId);
+
+        // Initialize details document
+        Map<String, Object> initEvents = new HashMap<>();
+        initEvents.put(DRIVING_EVENTS_DOCUMENT, new ArrayList<>());
+        mFirestore.collection(COLLECTION_EVENT_DETAILS)
+                .document(driveId).set(initEvents);
 
         SharedPreferences mPreferences =
                 mContext.getSharedPreferences(DRIVING_EVENTS_SHARED_PREFERENCES, Context.MODE_PRIVATE);
@@ -85,6 +112,29 @@ public class LocationDBHelper {
         mEditor.apply();
         Log.d(TAG,"db generateDriveID() result:" + driveId);
         return driveId;
+    }
+
+    public void closeDrivingActivity(Location location){
+        String driveId = getCurrentDriveID();
+
+        // Get current auth user id from SharedPreferences
+        SharedPreferences mPreferencesFlutter =
+                mContext.getSharedPreferences(FLUTTER_SHARED_PREFERENCES, Context.MODE_PRIVATE);
+        String userId = mPreferencesFlutter.getString("flutter."+"userId", null);
+
+        // Create a Map to store the data we want to set
+        Map<String, Object> docData = new HashMap<>();
+        //docData.put("userId", userId);
+
+        // Computes the approximate driving distance in meters
+        docData.put("end_location", new GeoPoint(location.getLatitude(), location.getLongitude()));
+        docData.put("end_time", FieldValue.serverTimestamp());
+
+        mFirestore.collection(COLLECTION_DRIVING_ACTIVITY)
+                .document(userId)
+                .collection(COLLECTION_USER_DRIVING_ACTIVITY)
+                .document(driveId)
+                .update(docData);
     }
 
     /**
@@ -104,19 +154,47 @@ public class LocationDBHelper {
      * This is called once every 30 seconds by the EventProcessorThread class to update the driving
      * route
      */
+    /* Método antiguo: cada posición es un documento. En el método nuevo, todas las posiciones forman
+    parte de un array perteneciente a un mismo documento.
     public void updateDrivingRoute(ArrayList<Location> mLocationDataList){
         sendMessage("db updateDrivingRoute with " + mLocationDataList.size() + " locations");
         String driveId = getCurrentDriveID();
         for(int i=0; i < mLocationDataList.size(); i++){
             Location mLocationData = mLocationDataList.get(i);
             Map<String, Object> docData = new HashMap<>();
-            docData.put(DRIVE_ID, driveId);
             docData.put("time", mLocationData.getTime());
-            docData.put("latitude", mLocationData.getLatitude());
-            docData.put("longitude", mLocationData.getLongitude());
-            mFirestore.collection(COLLECTION_DRIVING_ROUTE).document().set(docData);
+            docData.put("location", new GeoPoint(mLocationData.getLatitude(), mLocationData.getLongitude()));
+
+            mFirestore.collection(COLLECTION_DRIVING_ROUTE)
+                    .document(driveId)
+                    .collection("routes")
+                    .document()
+                    .set(docData);
         }
     }
+    */
+    public void updateDrivingRoute(ArrayList<Location> mLocationDataList){
+        Log.d(TAG, "updateDrivingRoute start");
+        //sendMessage("db updateDrivingRoute with " + mLocationDataList.size() + " locations");
+        String driveId = getCurrentDriveID();
+        Log.d(TAG, "updateDrivingRoute driveId: " + driveId);
+        ArrayList<Map<String, Object>> items = new ArrayList();
+        for(int i=0; i < mLocationDataList.size(); i++){
+            Location mLocationData = mLocationDataList.get(i);
+            Map<String, Object> itemData = new HashMap<>();
+            itemData.put("timestamp", new Timestamp(mLocationData.getTime()));
+            itemData.put("location", new GeoPoint(mLocationData.getLatitude(), mLocationData.getLongitude()));
+            items.add(itemData);
+        }
+
+        Log.d(TAG, "updateDrivingRoute items: " + items.size());
+        mFirestore.collection(COLLECTION_DRIVING_ROUTE)
+                .document(driveId)
+                .update(DRIVING_ROUTE_DOCUMENT, FieldValue.arrayUnion(items.toArray(new Object[0])));
+        Log.d(TAG, "updateDrivingRoute despues de items" + items.size());
+        //sendMessage("db updateDrivingRoute done");
+    }
+
 
     /**
      * This method takes the ArrayList of the EventData objects and inserts
@@ -132,35 +210,41 @@ public class LocationDBHelper {
     public void updateEventDetails(ArrayList<EventData> mEventDataList){
         sendMessage("db updateEventDetails with size " + mEventDataList.size());
         String driveId = getCurrentDriveID();
+
+        ArrayList<Map<String, Object>> items = new ArrayList();
         for (int i = 0; i < mEventDataList.size(); i++){
             EventData mEventData = mEventDataList.get(i);
-            Map<String, Object> docData = new HashMap<>();
-            docData.put(DRIVE_ID, driveId);
-            docData.put("time", mEventData.eventTime);
-            docData.put("type", mEventData.eventType);
-            docData.put("latitute", mEventData.latitude);
-            docData.put("longitude", mEventData.longitude);
-            docData.put("isFused", mEventData.isFused);
+            Map<String, Object> data = new HashMap<>();
+            data.put("timestamp", new Timestamp(mEventData.eventTime));
+            data.put("type", mEventData.eventType.name());
+            data.put("location", new GeoPoint(mEventData.latitude, mEventData.longitude));
+            data.put("isFused", mEventData.isFused);
 
-            if(mEventData.eventType == DrivingEventType.SPEEDING.ordinal()
-                    || mEventData.eventType == DrivingEventType.HARD_BRAKING.ordinal()
-                    || mEventData.eventType == DrivingEventType.HARD_ACCELERATION.ordinal()
+            if(mEventData.eventType == DrivingEventType.SPEEDING
+                    || mEventData.eventType == DrivingEventType.HARD_BRAKING
+                    || mEventData.eventType == DrivingEventType.HARD_ACCELERATION
             ) {
-                docData.put("acceleration", mEventData.acceleration);
-                docData.put("driving_speed", mEventData.speed);
+                data.put("acceleration", mEventData.acceleration);
+                data.put("driving_speed", mEventData.speed);
             }
-            else if (mEventData.eventType == DrivingEventType.PHONE_DISTRACTION.ordinal()
-                    || mEventData.eventType == DrivingEventType.HARD_TURN.ordinal()
+            else if (mEventData.eventType == DrivingEventType.PHONE_DISTRACTION
+                    || mEventData.eventType == DrivingEventType.HARD_TURN
             ) {
-                docData.put("driving_speed", mEventData.speed);
-                docData.put("acceleration", 0);
+                data.put("driving_speed", mEventData.speed);
+                data.put("acceleration", 0);
             }
             else {
-                docData.put("acceleration", 0);
-                docData.put("driving_speed", 0);
+                data.put("acceleration", 0);
+                data.put("driving_speed", 0);
             }
-            mFirestore.collection(COLLECTION_EVENT_DETAILS).document().set(docData);
+            items.add(data);
         }
+
+        Log.d(TAG, "updateEventDetails: " + items.size());
+        mFirestore.collection(COLLECTION_EVENT_DETAILS)
+                .document(driveId)
+                .update(DRIVING_EVENTS_DOCUMENT, FieldValue.arrayUnion(items.toArray(new Object[0])));
+        Log.d(TAG, "updateEventDeailts despues de items" + items.size());
 
     }
 
@@ -171,7 +255,6 @@ public class LocationDBHelper {
     // Send an Intent with an action named "driving-event-detection". The Intent sent should
     // be received by the MainActivity.
     private void sendMessage(String msg) {
-        Log.d(TAG,"SEND MESSAGE");
         // add timestamp to logger msg
         String DATE_FORMAT_NOW = "dd-MM HH:mm:ss";
         Calendar cal = Calendar.getInstance();

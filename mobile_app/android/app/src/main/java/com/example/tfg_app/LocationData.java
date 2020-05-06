@@ -14,7 +14,7 @@ import android.location.Location;
  */
 public class LocationData {
     public Location mLocation;
-    public int eventType;
+    public DrivingEventType eventType;
     public boolean isFused;
     public boolean isDuplicate;
     public long time;

@@ -82,6 +82,19 @@ dependencies:
   # from the image library, and taking new pictures with the camera.
   image_picker: ^0.6.4
 
+  # A Flutter plugin that provides a Google Maps widget.
+  google_maps_flutter: ^0.5.26+4
+
+  # A carousel slider widget.
+  carousel_slider: ^2.1.0
+
+  # A flutter plugin that decodes encoded google polyline string into list 
+  # of geo-coordinates suitable for showing route/polyline on maps
+  flutter_polyline_points: ^0.1.0
+
+  # A draggable Flutter widget that makes implementing a SlidingUpPanel much easie
+  sliding_up_panel: ^1.0.2
+
   # Command-line tool which simplifies the task 
   # of updating your Flutter app's launcher icon
   flutter_launcher_icons: ^0.7.4

@@ -16,13 +16,15 @@ public class Constants {
     static final String GEOFENCE_NAME = "geo-fence-identifier";
 
     static final double BACKINDRIVE_SPEED_THRESHOLD = 3.57;
-    static final long POTENTIALSTOP_TIME_THRESHOLD = 1000 * 60 * 5;
+
+    //CAMBIAR A 5 MINUTES
+    static final long POTENTIALSTOP_TIME_THRESHOLD = 1000 * 60 * 3;
 
     static final double POTENTIALSTOP_SPEED_THRESHOLD = 6.7;
     static final long POTENTIALSTART_TIME_THRESHOLD = 1000 * 60;
 
     // Desired interval between any two active location updates in milliseconds.
-    static final long GPS_INTERVAL = 1000;
+    static final long GPS_INTERVAL = 1000 * 1;
 
     static final long INITIAL_DELAY = 1000 * 30;
     static final long FIXED_DELAY = 1000 * 30;

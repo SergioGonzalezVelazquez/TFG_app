@@ -8,6 +8,7 @@
     "start": "npm run shell",
     "deploy": "firebase deploy --only functions",
     "deploy:patient": "firebase deploy --only functions:patient",
+    "deploy:driving": "firebase deploy --only functions:driving_event_detection",
     "logs": "firebase functions:log"
   },
   "engines": {

@@ -15,6 +15,6 @@ public class EventData {
     public double speed;
     public double acceleration;
     public long eventTime;
-    public int eventType;
+    public DrivingEventType eventType;
     public boolean isFused;
 }

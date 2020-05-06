@@ -116,10 +116,10 @@ public class EventDetectionService extends Service {
         Log.d(TAG,"onStartCommand()");
         if(intent!=null && intent.getBooleanExtra
                 ("isDriveStarted", false)) {
-            sendMessage("EventDetectionService startEventProcessing");
+            sendMessage("EventDetectionService startDriving Event Processing");
             startEventProcessing();
         } else {
-            sendMessage("EventDetectionService stopEventProcessing");
+            sendMessage("EventDetectionService stopDriving Event Processing");
             stopEventProcessing();
         }
         return Service.START_STICKY;
@@ -142,7 +142,6 @@ public class EventDetectionService extends Service {
     // Send an Intent with an action named "driving-event-detection". The Intent sent should
     // be received by the MainActivity.
     private void sendMessage(String msg) {
-        Log.d(TAG,"SEND MESSAGE");
         // add timestamp to logger msg
         String DATE_FORMAT_NOW = "dd-MM HH:mm:ss";
         Calendar cal = Calendar.getInstance();
@@ -169,8 +168,6 @@ public class EventDetectionService extends Service {
         editor.putString("logger", newJson);
         editor.apply();
         // END OF SHARED PREFERENCES
-
-        Log.d(TAG, "Broadcasting message");
         Intent intent = new Intent("driving-event-detection");
         intent.putExtra("msg", msg);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
@@ -184,7 +181,7 @@ public class EventDetectionService extends Service {
      *  - Start processing sensor data once every 30 seconds
      */
     public void startEventProcessing() {
-        mLocationDBHelper.generateDriveID();
+        //mLocationDBHelper.generateDriveID();
         GyroscopeSensor.getInstance().register(mHandler, getApplicationContext());
         GPSSensor.getInstance().register(mHandler, getApplicationContext());
         AccelerometerSensor.getInstance().register(mHandler, getApplicationContext());
@@ -344,7 +341,7 @@ public class EventDetectionService extends Service {
                         }
                     }
                     if(correspondingGPSFound) {
-                        mEventData.eventType = DrivingEventType.PHONE_DISTRACTION.ordinal();
+                        mEventData.eventType = DrivingEventType.PHONE_DISTRACTION;
                         mEventData.eventTime = mGyroscopePotentialList.get(i).time;
                         mEventList.add(mEventData);
                     }
@@ -449,7 +446,7 @@ public class EventDetectionService extends Service {
 
                     //This is considered as hard turn and adding this hard turn to Detected Event List Array
                     mEventData = new EventData();
-                    mEventData.eventType = DrivingEventType.HARD_TURN.ordinal();
+                    mEventData.eventType = DrivingEventType.HARD_TURN;
                     mEventData.speed = mGPSRawList.get(i + 2).getSpeed();
                     mEventData.latitude = mGPSRawList.get(i + 2).getLatitude();
                     mEventData.longitude = mGPSRawList.get(i + 2).getLongitude();
@@ -479,7 +476,7 @@ public class EventDetectionService extends Service {
                 //Checking for HARD ACCELERATION PEAK(above 8 mph or 3.57632 meters per second)
                 if(acceleration > Constants.HARD_ACCELERATION_PEAK){
                     mLocationData = new LocationData();
-                    mLocationData.eventType = DrivingEventType.HARD_ACCELERATION.ordinal();
+                    mLocationData.eventType = DrivingEventType.HARD_ACCELERATION;
                     mLocationData.mLocation = mGPSRawList.get(i+1);
                     mLocationData.acceleration = acceleration;
                     mGPSPotentialList.add(mLocationData);
@@ -493,7 +490,7 @@ public class EventDetectionService extends Service {
                         (acceleration < Constants.HARD_BREAKING_LOWER_PEAK)) {
                     //Potential Candidate for Hard Brake Severe Crash
                     mLocationData = new LocationData();
-                    mLocationData.eventType = DrivingEventType.HARD_BRAKING.ordinal();
+                    mLocationData.eventType = DrivingEventType.HARD_BRAKING;
                     mLocationData.mLocation = mGPSRawList.get(i+1);
                     mLocationData.acceleration = acceleration;
                     mGPSPotentialList.add(mLocationData);
@@ -502,7 +499,7 @@ public class EventDetectionService extends Service {
                 if(mGPSRawList.get(i).getSpeed() > Constants.HIGH_SPEED_PEAK &&
                         !isHighSpeedEventPresent) {
                     mEventData = new EventData();
-                    mEventData.eventType = DrivingEventType.SPEEDING.ordinal();
+                    mEventData.eventType = DrivingEventType.SPEEDING;
                     mEventData.acceleration = acceleration;
                     mEventData.speed = mGPSRawList.get(i).getSpeed();
                     mEventData.latitude = mGPSRawList.get(i).getLatitude();
@@ -634,11 +631,11 @@ public class EventDetectionService extends Service {
                                 if(timeDifference < Constants.TWO_SECONDS) {
                                     mGPSPotentialList.get(i).isFused = true;
                                     mEventData = new EventData();
-                                    if(mGPSPotentialList.get(i).eventType == DrivingEventType.HARD_ACCELERATION.ordinal()) {
-                                        mEventData.eventType = DrivingEventType.HARD_ACCELERATION.ordinal();
+                                    if(mGPSPotentialList.get(i).eventType == DrivingEventType.HARD_ACCELERATION) {
+                                        mEventData.eventType = DrivingEventType.HARD_ACCELERATION;
                                     }
                                     else {
-                                        mEventData.eventType = DrivingEventType.HARD_BRAKING.ordinal();
+                                        mEventData.eventType = DrivingEventType.HARD_BRAKING;
                                     }
                                     mEventData.isFused = true;
                                     mEventData.acceleration = mGPSPotentialList.get(i).acceleration;

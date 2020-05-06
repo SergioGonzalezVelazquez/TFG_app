@@ -2,8 +2,11 @@ import 'dart:io';
 import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
+import 'package:tfg_app/pages/driving_activity/driving_activity_list.dart';
 import 'package:tfg_app/widgets/buttons.dart';
+import 'package:tfg_app/services/auth.dart';
 import 'dart:convert';
 
 class DemoDrivingPage extends StatefulWidget {
@@ -81,20 +84,24 @@ class _DemoDrivingPageState extends State<DemoDrivingPage> {
     print("_reloadLogger");
     String logger = await _methodChannel.invokeMethod('getLogger');
 
-    var decoded = json.decode(logger);
-    List newMsgs = [];
+    if (logger != null) {
+      var decoded = json.decode(logger);
+      List newMsgs = [];
 
-    decoded.forEach((msg) {
-      print(msg);
-      newMsgs.insert(0, Text(
-        msg,
-        style: TextStyle(fontSize: 10),
-      ));
-    });
+      decoded.forEach((msg) {
+        print(msg);
+        newMsgs.insert(
+            0,
+            Text(
+              msg,
+              style: TextStyle(fontSize: 10),
+            ));
+      });
 
-    setState(() {
-      messages = newMsgs;
-    });
+      setState(() {
+        messages = newMsgs;
+      });
+    }
   }
 
   Future<void> _stopBackground() async {
@@ -109,7 +116,6 @@ class _DemoDrivingPageState extends State<DemoDrivingPage> {
   }
 
   void _onActivityUpdateReceived(dynamic activity) {
-    print("Flutter: onActivityUpdateReceived");
     setState(() {
       messages.insert(
         0,
@@ -205,6 +211,21 @@ class _DemoDrivingPageState extends State<DemoDrivingPage> {
                                   : Colors.red),
                         ),
                       ],
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.65,
+                      child: primaryButton(context, () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    DrivingActivityListPage()));
+                      }, "View activities"),
                     ),
                   ],
                 ),
