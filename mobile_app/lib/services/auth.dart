@@ -3,263 +3,246 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:tfg_app/models/user.dart';
+import 'package:tfg_app/models/patient.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-// Provides an instance of this class corresponding to the default app.
-final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
-User user;
-
-// Gets users collection reference
+// Gets user and patient collections references
 final usersRef = Firestore.instance.collection('users');
+final patientRef = Firestore.instance.collection('patient');
 
-// Initializes global sign-in configuration settings.
-final GoogleSignIn googleSignIn = GoogleSignIn();
+class AuthService {
+  /// Entry point of the Firebase Authentication SDK.
+  FirebaseAuth _firebaseAuth;
 
-Future<bool> isAuth() async {
-  if (user == null) await getUser();
-  return user != null;
-}
+  User _user;
 
-Future<FirebaseUser> getUser() async {
-  FirebaseUser currentUser = await firebaseAuth.currentUser();
-  if (currentUser != null) {
-    DocumentSnapshot doc = await usersRef.document(currentUser.uid).get();
-    user = User.fromDocument(doc);
+  /// Factory constructor which returns a singleton instance of the service
+  AuthService._();
+  static final AuthService _instance = AuthService._();
+  factory AuthService() => _instance;
+  bool _initialized = false;
+
+  /// Getters.
+  User get user => this._user;
+  bool get isAuth => this._user != null;
+
+  /// Initialize service
+  Future<void> init() async {
+    if (!_initialized) {
+      _initialized = true;
+
+      // Obtain an instance of FirebaseAuth
+      _firebaseAuth = FirebaseAuth.instance;
+
+      // Get the currently signed-in user
+      await _getSignedInUser();
+    }
   }
 
-  // Read user id from shared preferences
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String id = await prefs.getString('userId');
-  print("id leido de las shared preferences");
-  print(id);
-
-  return currentUser;
-}
-
-/// Use the Google sign in data to authenticate a
-/// FirebaseUser and then return that user.
-Future<User> signInWithGoogle() async {
-  GoogleSignInAccount googleUser = await googleSignIn.signIn();
-  final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
-  final AuthCredential credential = GoogleAuthProvider.getCredential(
-    accessToken: googleAuth.accessToken,
-    idToken: googleAuth.idToken,
-  );
-  await firebaseAuth.signInWithCredential(credential);
-
-  final FirebaseUser currentUser = await firebaseAuth.currentUser();
-  assert(currentUser.email != null);
-  assert(!currentUser.isAnonymous);
-  assert(await currentUser.getIdToken() != null);
-
-  if (googleUser != null) {
-    // if user does not exist  in users collection, make new user documents in users collections
-    user = await createUserDocument();
-    return user;
-  } else {
-    print("account null");
-    return null;
+  void dispose() {
+    _initialized = false;
   }
-}
 
-/// Use the Facebook sign in data to authenticate a
-/// FirebaseUser and then return that user.
-Future<User> signInWithFacebook() async {
-  final facebookLogin = FacebookLogin();
-  final facebookAuth = await facebookLogin.logIn(['email']);
+  /// Get the currently signed-in user
+  /// According to Google's official documentation, the recommended way to get
+  /// the current user is by calling the getCurrentUser method.
+  /// If no user is signed in, getCurrentUser returns null
+  Future<void> _getSignedInUser() async {
+    FirebaseUser currentUser = await this._firebaseAuth.currentUser();
 
-  if (facebookAuth.status != FacebookLoginStatus.loggedIn) return null;
+    if (currentUser != null) {
+      // User is signed in
+      DocumentSnapshot doc = await usersRef.document(currentUser.uid).get();
 
-  AuthCredential credential = FacebookAuthProvider.getCredential(
-      accessToken: facebookAuth.accessToken.token);
+      if (doc.exists) {
+        this._user = User.fromDocument(doc);
 
-  await firebaseAuth.signInWithCredential(credential);
+        // Get patient data for this user
+        await _getPatientData();
+      }
+    }
+  }
 
-  final FirebaseUser currentUser = await firebaseAuth.currentUser();
-  assert(currentUser.email != null);
-  assert(!currentUser.isAnonymous);
-  assert(await currentUser.getIdToken() != null);
-
-  await createUserDocument();
-
-  return user;
-}
-
-Future<User> createUserDocument() async {
-  final FirebaseUser currentUser = await firebaseAuth.currentUser();
-
-  DocumentSnapshot doc = await usersRef.document(currentUser.uid).get();
-  if (!doc.exists) {
-    usersRef.document(currentUser.uid).setData({
-      "id": currentUser.uid,
-      "photo": currentUser.photoUrl,
-      "email": currentUser.email,
-      "name": currentUser.displayName,
-      "created_at": DateTime.now()
+  /// Check if there is a document for auth user auth in 'patient' collection
+  Future<void> _getPatientData() async {
+    await patientRef.document(this._user.id).get().then((doc) {
+      if (doc.exists) {
+        this._user.patient = new Patient.fromDocument(doc);
+      }
     });
   }
-  doc = await usersRef.document(currentUser.uid).get();
-  user = User.fromDocument(doc);
 
-  // Save user id in shared preferences
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  await prefs.setString('userId', user.id);
-
-  return user;
-}
-
-/// Register users with their email addresses and passwords.
-/// Then send an email verification
-Future<bool> registerWithEmail(
-    String name, String email, String password) async {
-  await firebaseAuth.createUserWithEmailAndPassword(
-      email: email, password: password);
-
-  final FirebaseUser currentUser = await firebaseAuth.currentUser();
-  assert(currentUser.email != null);
-  assert(!currentUser.isAnonymous);
-  await currentUser.sendEmailVerification();
-
-  // Update the name filed of the user
-  UserUpdateInfo userUpdateInfo = new UserUpdateInfo();
-  userUpdateInfo.displayName = name;
-  currentUser.updateProfile(userUpdateInfo);
-
-  return true;
-}
-
-/// Sign In user with their email addresses and passwords.
-Future<User> signInWithEmail(String email, String password) async {
-  await firebaseAuth.signInWithEmailAndPassword(
-      email: email, password: password);
-
-  final FirebaseUser currentUser = await firebaseAuth.currentUser();
-  assert(currentUser.email != null);
-  assert(!currentUser.isAnonymous);
-
-  DocumentSnapshot doc = await usersRef.document(currentUser.uid).get();
-  if (!doc.exists) {
-    return await createUserDocument();
+  /// create document in 'patient' collection for current auth user
+  /// firebase cloud functions trigger this event and will calculate
+  /// the type of patient based on pretest questionnaire answers
+  Future<void> createPatient() async {
+    await patientRef
+        .document(this._user.id)
+        .setData({"created_at": DateTime.now()}).then((value) async {
+      await this._getPatientData();
+    });
   }
-  user = User.fromDocument(doc);
-  return user;
-}
 
-Future<void> updateProfile({String name, String photo}) async {
-  final FirebaseUser currentUser = await firebaseAuth.currentUser();
+  /// Use the Google sign in data to authenticate a
+  /// FirebaseUser and then return that user.
+  /// https://firebase.google.com/docs/auth/android/google-signin
+  /// https://fireship.io/lessons/flutter-firebase-google-oauth-firestore/
+  Future<void> signInWithGoogle() async {
+    // Step 1. Login with Google. This shows Google’s native login screen and provides
+    // the idToken and accessToken
+    GoogleSignIn googleSignIn = GoogleSignIn();
+    GoogleSignInAccount googleUser = await googleSignIn.signIn();
 
-  Map<String, dynamic> updatedData = {};
-  if (name != null) updatedData['name'] = name;
+    if (googleUser != null) {
+      /// Step 2. Login to Firebase. Get an ID token from the GoogleSignInAccount object,
+      /// exchange it for a Firebase credential, and authenticate with Firebase
+      /// using the Firebase credential
+      GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+      AuthCredential credential = GoogleAuthProvider.getCredential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+      await _firebaseAuth.signInWithCredential(credential);
 
-  usersRef.document(currentUser.uid).updateData(updatedData);
+      FirebaseUser currentUser = await _firebaseAuth.currentUser();
+      assert(currentUser.email != null);
+      assert(!currentUser.isAnonymous);
+      assert(await currentUser.getIdToken() != null);
 
-  DocumentSnapshot doc = await usersRef.document(currentUser.uid).get();
-  user = User.fromDocument(doc);
-}
-
-/// Send email to the user for verification after they have signed up
-Future<void> sendEmailVerification() async {
-  FirebaseUser user = await firebaseAuth.currentUser();
-  user.sendEmailVerification();
-}
-
-Future<bool> isEmailVerified() async {
-  FirebaseUser user = await firebaseAuth.currentUser();
-  return user.isEmailVerified;
-}
-
-/// Send email to reset password it user forget it
-Future<void> resetPassword(String email) async {
-  await firebaseAuth.sendPasswordResetEmail(email: email);
-}
-
-/// Signs out the current user
-Future<void> signOut() async {
-  await firebaseAuth.signOut();
-  user = null;
-
-  // Delete user id in shared preferences
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  prefs.remove('userId');
-}
-
-String signInCredentialsErrorMsg(error) {
-  String authError;
-  switch (error.code.toString().toUpperCase()) {
-    case 'NETWORK_ERROR':
-      authError =
-          'No se pudo conectar. Compruebe su conexión a Internet e intentelo de nuevo más tarde.';
-      break;
-    case 'ERROR_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL':
-      authError =
-          'Esta cuenta está asociada a . Por favor, inicie sesión con ella.';
-      break;
-    case 'ERROR_OPERATION_NOT_ALLOWED':
-      authError = 'ERROR_OPERATION_NOT_ALLOWED';
-      break;
-    case 'ERROR_INVALID_ACTION_CODE':
-      authError = 'ERROR_INVALID_ACTION_CODE';
-      break;
-    default:
-      authError = 'No se pudo iniciar sesión. Inténtelo de nuevo más tarde';
-      break;
+      /// Step 3: Create Firestore if user document does not exists.
+      await this.createUserDocument();
+    }
   }
-  return authError;
-}
 
-String signInEmailErrorMsg(error) {
-  String authError;
-  switch (error.code.toString().toUpperCase()) {
-    case 'ERROR_NETWORK_REQUEST_FAILED':
-      authError =
-          'No se pudo conectar. Compruebe su conexión a Internet e intentelo de nuevo más tarde.';
-      break;
-    case 'ERROR_INVALID_EMAIL':
-      authError = 'Introduce una cuenta de correo electrónico válida';
-      break;
-    case 'ERROR_WRONG_PASSWORD':
-      authError = 'La contraseña que has introducido es incorrecta';
-      break;
-    case 'ERROR_USER_NOT_FOUND':
-      authError =
-          'El correo electrónico que has introducido no coincide con ninguna cuenta';
-      break;
-    case 'ERROR_USER_DISABLED':
-      authError =
-          'El usuario vinculado a esa cuenta de correo ha sido desactivado';
-      break;
-    default:
-      authError = 'Error';
-      break;
+  /// Use the Facebook sign in data to authenticate a
+  /// FirebaseUser and then return that user.
+  Future<void> signInWithFacebook() async {
+    // Step 1. Login with Facebook. This shows Facebook native login screen and provides
+    // the idToken and accessToken
+    final facebookLogin = FacebookLogin();
+    final facebookAuth = await facebookLogin.logIn(['email']);
+
+    if (facebookAuth.status != FacebookLoginStatus.loggedIn) return null;
+
+    /// Step 2. Login to Firebase. Get an ID token from the FacebookLogin object,
+    /// exchange it for a Firebase credential, and authenticate with Firebase
+    /// using the Firebase credential
+    AuthCredential credential = FacebookAuthProvider.getCredential(
+        accessToken: facebookAuth.accessToken.token);
+
+    await _firebaseAuth.signInWithCredential(credential);
+
+    final FirebaseUser currentUser = await _firebaseAuth.currentUser();
+    assert(currentUser.email != null);
+    assert(!currentUser.isAnonymous);
+    assert(await currentUser.getIdToken() != null);
+
+    /// Step 3: Create Firestore if user document does not exists.
+    await createUserDocument();
   }
-  return authError;
-}
 
-String signUpErrorMsg(error) {
-  String authError;
-  switch (error.code.toString().toUpperCase()) {
-    case 'ERROR_NETWORK_REQUEST_FAILED':
-      authError =
-          'No se pudo conectar. Compruebe su conexión a Internet e intentelo de nuevo más tarde.';
-      break;
-    case 'ERROR_WEAK_PASSWORD':
-      authError = 'Tu contraseña debe tener al menos 6 caracteres';
-      break;
-    case 'ERROR_INVALID_EMAIL':
-      authError = 'Introduce una cuenta de correo electrónico válida';
-      break;
-    case 'ERROR_EMAIL_ALREADY_IN_USE':
-      authError = 'Ya hay una cuenta registrada con esa dirección de correo';
-      break;
-    default:
-      authError =
-          'No se pudo completar el registro. Inténtalo de nuevo más tarde.';
-      break;
+  /// Method which takes in an email address and password,
+  /// validates them, and then signs a user in with the
+  /// signInWithEmailAndPassword method.
+  Future<void> signInWithEmail(String email, String password) async {
+    // If successful, it also signs the user in into the app
+    await _firebaseAuth.signInWithEmailAndPassword(
+        email: email, password: password);
+
+    FirebaseUser currentUser = await _firebaseAuth.currentUser();
+    assert(currentUser.email != null);
+    assert(!currentUser.isAnonymous);
+
+    await this.createUserDocument();
   }
-  return authError;
-}
 
-/// Sign out of the current Google account
-void signOutGoogle() async {
-  await googleSignIn.signOut();
+  /// Register users with their email addresses and passwords.
+  /// Then send an email verification
+  Future<bool> registerWithEmail(
+      String name, String email, String password) async {
+    await _firebaseAuth.createUserWithEmailAndPassword(
+        email: email, password: password);
+
+    final FirebaseUser currentUser = await _firebaseAuth.currentUser();
+    assert(currentUser.email != null);
+    assert(!currentUser.isAnonymous);
+    await currentUser.sendEmailVerification();
+
+    // Update the name field of the user
+    UserUpdateInfo userUpdateInfo = new UserUpdateInfo();
+    userUpdateInfo.displayName = name;
+    currentUser.updateProfile(userUpdateInfo);
+
+    // User document will be created when email is verified
+    return true;
+  }
+
+  Future<void> createUserDocument() async {
+    print("create user document");
+    FirebaseUser currentUser = await _firebaseAuth.currentUser();
+
+    DocumentSnapshot doc = await usersRef.document(currentUser.uid).get();
+    // Firt time user is logged-in
+    if (!doc.exists) {
+      print("doc exists");
+      await usersRef.document(currentUser.uid).setData({
+        "id": currentUser.uid,
+        "photo": currentUser.photoUrl,
+        "email": currentUser.email,
+        "name": currentUser.displayName,
+        "created_at": DateTime.now()
+      });
+    } else {
+      print("doc not exits");
+    }
+
+    doc = await usersRef.document(currentUser.uid).get();
+    this._user = User.fromDocument(doc);
+    await this._getPatientData();
+
+    // Save user id in shared preferences
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('userId', user.id);
+  }
+
+  /// Returns true if the user's email is verified.
+  Future<bool> isEmailVerified() async {
+    FirebaseUser user = await _firebaseAuth.currentUser();
+    return user.isEmailVerified;
+  }
+
+  /// Send email to the user for verification after they have signed up
+  Future<void> sendEmailVerification() async {
+    FirebaseUser user = await _firebaseAuth.currentUser();
+    user.sendEmailVerification();
+  }
+
+  /// Send email to reset password it user forget it
+  Future<void> resetPassword(String email) async {
+    await _firebaseAuth.sendPasswordResetEmail(email: email);
+  }
+
+  /// Update a user's basic profile information—the user's
+  /// display name and profile photo URL—with the Firebase updateProfile method
+  Future<void> updateProfile({String name, String photo}) async {
+    final FirebaseUser currentUser = await _firebaseAuth.currentUser();
+
+    Map<String, dynamic> updatedData = {};
+    if (name != null) updatedData['name'] = name;
+
+    usersRef.document(currentUser.uid).updateData(updatedData);
+
+    DocumentSnapshot doc = await usersRef.document(currentUser.uid).get();
+    this._user = User.fromDocument(doc);
+  }
+
+  /// Signs out the current user
+  Future<void> signOut() async {
+    await _firebaseAuth.signOut();
+    this._user = null;
+
+    // Delete user id in shared preferences
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.remove('userId');
+  }
 }

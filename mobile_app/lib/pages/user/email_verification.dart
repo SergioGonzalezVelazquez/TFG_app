@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:android_intent/android_intent.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:tfg_app/pages/home_page.dart';
+import 'package:tfg_app/pages/questionnaire/pretest/signup_questionnaire_page.dart';
 import 'package:tfg_app/pages/user/login_page.dart';
 import 'package:tfg_app/services/auth.dart';
 import 'package:tfg_app/widgets/buttons.dart';
@@ -12,7 +12,8 @@ import 'package:tfg_app/widgets/snackbar.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class EmailVerificationPage extends StatefulWidget {
-  String email;
+  /// Creates a StatelessElement to manage this widget's location in the tree.
+  final String email;
 
   EmailVerificationPage(this.email);
 
@@ -20,19 +21,26 @@ class EmailVerificationPage extends StatefulWidget {
   _EmailVerificationPageState createState() => _EmailVerificationPageState();
 }
 
+/// State object for EmailVerificationPage that contains fields that affect
+/// how it looks.
 class _EmailVerificationPageState extends State<EmailVerificationPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
+  // Flags to render loading spinner UI.
   bool _isLoading = false;
-  bool _isEmailVerified = false;
+
+  // Repeating timer used to check if user has verified the email
   Timer _timer;
 
+  /// Method called when this widget is inserted into the tree.
   @override
   void initState() {
     super.initState();
     _checkEmailVerification();
   }
 
+  /// Cancels the timer when the widget is removed from the
+  /// widget tree.
   @override
   void dispose() {
     super.dispose();
@@ -50,39 +58,24 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
   /// https://stackoverflow.com/questions/57192651/flutter-how-to-listen-to-the-firebaseuser-is-email-verified-boolean
   ///
   void _checkEmailVerification() async {
-    _timer = Timer.periodic(Duration(seconds: 5), (timer) async {
-      await FirebaseAuth.instance.currentUser()
-        ..reload();
-      var user = await FirebaseAuth.instance.currentUser();
-      if (user.isEmailVerified) {
-        setState(() {
-          _isEmailVerified = user.isEmailVerified;
-        });
-        timer.cancel();
-        await _createUserDocument();
-      }
-    });
-  }
+    _timer = Timer.periodic(
+      Duration(seconds: 5),
+      (timer) async {
+        await FirebaseAuth.instance.currentUser()
+          ..reload();
+        var user = await FirebaseAuth.instance.currentUser();
+        if (user.isEmailVerified) {
+          setState(() {
+            _isLoading = true;
+            timer.cancel();
+          });
 
-  Future<void> _createUserDocument() async {
-    setState(() {
-      _isLoading = true;
-    });
-    await createUserDocument();
-    setState(() {
-      _isLoading = false;
-    });
-
-    if (user != null) {}
-  }
-
-  void _start() {
-    Route route = new MaterialPageRoute(
-        builder: (context) => new HomePage(
-              isauth: true,
-            ));
-    Navigator.popUntil(context, (route) => route.isFirst);
-    Navigator.pushReplacement(context, route);
+          await AuthService().createUserDocument();
+          Navigator.of(context).pushNamedAndRemoveUntil(
+              SignUpQuestionnairePage.route, (Route<dynamic> route) => false);
+        }
+      },
+    );
   }
 
   /// Open default email app
@@ -95,13 +88,17 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
         action: 'android.intent.action.MAIN',
         category: 'android.intent.category.APP_EMAIL',
       );
-      intent.launch().catchError((e) {
-        _scaffoldKey.currentState.showSnackBar(snackBar);
-      });
+      intent.launch().catchError(
+        (e) {
+          _scaffoldKey.currentState.showSnackBar(snackBar);
+        },
+      );
     } else if (Platform.isIOS) {
-      launch("message://").catchError((e) {
-        _scaffoldKey.currentState.showSnackBar(snackBar);
-      });
+      launch("message://").catchError(
+        (e) {
+          _scaffoldKey.currentState.showSnackBar(snackBar);
+        },
+      );
     }
   }
 
@@ -111,11 +108,7 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
 
   Widget _linkToLogin() {
     return InkWell(
-      onTap: () {
-        Route route =
-            new MaterialPageRoute(builder: (context) => new LoginPage());
-        Navigator.push(context, route);
-      },
+      onTap: () => Navigator.pushNamed(context, LoginPage.route),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
@@ -189,43 +182,6 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
     );
   }
 
-  Widget _emailVerifiedPage() {
-    return Padding(
-      padding: EdgeInsets.symmetric(
-          horizontal: MediaQuery.of(context).size.width * 0.1),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Image.asset(
-            'assets/images/comprobar_primario.png',
-            height: MediaQuery.of(context).size.height * 0.15,
-          ),
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.02,
-          ),
-          Text(
-            "¡Bienvenido!",
-            style: Theme.of(context).textTheme.headline6,
-          ),
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.02,
-          ),
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.01,
-          ),
-          Text(
-            "Tu cuenta ha sido verificada",
-            textAlign: TextAlign.justify,
-          ),
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.05,
-          ),
-          primaryButton(context, _start, "Empezar"),
-        ],
-      ),
-    );
-  }
-
   ///Describes the part of the user interface represented by this widget.
   @override
   Widget build(BuildContext context) {
@@ -238,9 +194,7 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
       backgroundColor: Colors.white,
       body: _isLoading
           ? circularProgress(context, text: "Entrando")
-          : (_isEmailVerified
-              ? _emailVerifiedPage()
-              : _emailVerificationPage()),
+          : _emailVerificationPage(),
     );
   }
 }

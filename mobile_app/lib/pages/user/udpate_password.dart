@@ -7,6 +7,9 @@ import 'package:tfg_app/widgets/password_strength.dart';
 import 'package:tfg_app/widgets/progress.dart';
 
 class UpdatePassword extends StatefulWidget {
+  /// Name use for navigate to this screen
+  static const route = "/update-password";
+
   ///Creates a StatelessElement to manage this widget's location in the tree.
   _UpdatePasswordState createState() => _UpdatePasswordState();
 }

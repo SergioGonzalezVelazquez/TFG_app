@@ -48,9 +48,9 @@ class _TherapistPageState extends State<TherapistPage> {
                 padding: EdgeInsets.only(
                     bottom: MediaQuery.of(context).size.height * 0.05),
                 child: primaryButton(context, () {
-                  Navigator.push(
+                  Navigator.pushNamed(
                     context,
-                    MaterialPageRoute(builder: (context) => ChatPage()),
+                    ChatPage.route,
                   );
                 }, "Empezar sesión"),
               ),

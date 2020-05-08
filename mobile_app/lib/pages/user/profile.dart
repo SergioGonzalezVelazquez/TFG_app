@@ -7,13 +7,19 @@ import 'package:tfg_app/widgets/inputs.dart';
 import 'package:tfg_app/widgets/progress.dart';
 import 'package:tfg_app/services/auth.dart';
 import 'package:tfg_app/themes/custom_icon_icons.dart';
+import 'package:tfg_app/models/user.dart';
 import 'dart:io';
 
 class ProfilePage extends StatefulWidget {
+  /// Name use for navigate to this screen
+  static const route = "/profile";
+
   ///Creates a StatelessElement to manage this widget's location in the tree.
   _ProfilePageState createState() => _ProfilePageState();
 }
 
+/// State object for ProfilePage that contains fields that affect
+/// how it looks.
 class _ProfilePageState extends State<ProfilePage> {
   // Create controllers for handle changes in text fields
   final TextEditingController _emailController = TextEditingController();
@@ -22,28 +28,37 @@ class _ProfilePageState extends State<ProfilePage> {
   // new profile image uploaded from camera or gallery
   File _file;
 
+  //Auth user
+  User _user;
+
   // Create a global key that uniquely identifies the Form widget
   // and allows validation of the form.
   final _formKey = GlobalKey<FormState>();
 
+  // Flags to render loading spinner UI.
   bool _isLoading = false;
   bool _editable = false;
+
+  AuthService _authService;
 
   // Create a global key that uniquely identifies the Scaffold widget,
   // and allows to display snackbars.
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
+  /// Method called when this widget is inserted into the tree.
   @override
   void initState() {
-    _emailController.text = user.email;
-    _nameController.text = user.name;
+    _authService = AuthService();
+    _user = _authService.user;
+    _emailController.text = _user.email;
+    _nameController.text = _user.name;
     super.initState();
   }
 
+  // Clean up the controllers when the widget is removed from the
+  // widget tree.
   @override
   void dispose() {
-    // Clean up the controllers when the widget is removed from the
-    // widget tree.
     _emailController.dispose();
     _nameController.dispose();
     super.dispose();
@@ -53,8 +68,8 @@ class _ProfilePageState extends State<ProfilePage> {
   * Functions used to handle events in this screen 
   */
   bool _updated() {
-    return (_nameController.text.trim() != user.name) ||
-        (_emailController.text.trim() != user.email);
+    return (_nameController.text.trim() != _user.name) ||
+        (_emailController.text.trim() != _user.email);
   }
 
   /// Dialog to select image from gallery or take new photo with camera
@@ -100,15 +115,13 @@ class _ProfilePageState extends State<ProfilePage> {
 
   _handleTakePhoto() async {
     Navigator.pop(context);
-    
+
     File file = await ImagePicker.pickImage(
         source: ImageSource.camera, maxHeight: 675, maxWidth: 960);
-    
+
     setState(() {
       this._file = file;
     });
-    
-  
   }
 
   _handleChooseFromGallery() async {
@@ -187,7 +200,7 @@ class _ProfilePageState extends State<ProfilePage> {
             setState(() {
               _editable = false;
             });
-            await updateProfile(name: _nameController.text.trim());
+            await _authService.updateProfile(name: _nameController.text.trim());
           }, "Guardar cambios", width: deviceWidth * 0.51, enabled: _updated())
         ],
       ),
@@ -209,8 +222,8 @@ class _ProfilePageState extends State<ProfilePage> {
                 shape: BoxShape.circle,
                 image: new DecorationImage(
                   fit: BoxFit.cover,
-                  image: user.photoUrl != null
-                      ? CachedNetworkImageProvider(user.photoUrl)
+                  image: _user.photoUrl != null
+                      ? CachedNetworkImageProvider(_user.photoUrl)
                       : AssetImage("assets/images/default-user.jpg"),
                 ),
               ),

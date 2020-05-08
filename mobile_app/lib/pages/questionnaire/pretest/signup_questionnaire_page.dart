@@ -10,6 +10,9 @@ import 'package:tfg_app/widgets/progress.dart';
 import 'package:tfg_app/utils/questionnaire_utils.dart';
 
 class SignUpQuestionnairePage extends StatefulWidget {
+  /// Name use for navigate to this screen
+  static const route = "/signUpQuestionnaire";
+
   ///Creates a StatelessElement to manage this widget's location in the tree.
   _SignUpQuestionnairePageState createState() =>
       _SignUpQuestionnairePageState();
@@ -105,9 +108,9 @@ class _SignUpQuestionnairePageState extends State<SignUpQuestionnairePage>
     }
     // End of questionnaire
     else {
-      Navigator.pushReplacement(
+      Navigator.pushReplacementNamed(
         context,
-        MaterialPageRoute(builder: (context) => SignUpQuestionnaireCompleted()),
+       SignUpQuestionnaireCompleted.route,
       );
     }
   }
