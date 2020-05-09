@@ -29,6 +29,7 @@ Future<List<QuestionnaireItemGroup>> getSignupQuestionnaire() async {
     QuerySnapshot items = await signUpQuestionnaireRef
         .document(questionGroups[i].id.toString())
         .collection('questions')
+        .orderBy("linkId", descending: false)
         .getDocuments();
     questionGroups[i].items = items.documents
         .map((item) => QuestionnaireItem.fromDocument(item))
@@ -62,5 +63,3 @@ Future<void> deleteSignUpResponse(QuestionnaireItem item) async {
       .document(_authService.user.id)
       .updateData({item.id: FieldValue.delete()});
 }
-
-

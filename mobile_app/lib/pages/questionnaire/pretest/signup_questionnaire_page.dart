@@ -18,31 +18,40 @@ class SignUpQuestionnairePage extends StatefulWidget {
       _SignUpQuestionnairePageState();
 }
 
+/// State object for LoginPage that contains fields that affect
+/// how it looks.
 class _SignUpQuestionnairePageState extends State<SignUpQuestionnairePage>
     with TickerProviderStateMixin {
-  // Create a global key that uniquely identifies the Form widget
-  // and allows validation of the form.
-  final _formKey = GlobalKey<FormState>();
-
-  //
+  /// Controller for animations.
   AnimationController _animateController;
 
+  /// Flags to render loading spinner UI.
   bool _isLoading = true;
 
+  /// List of Questions within the Questionnaire
   List<QuestionnaireItemGroup> _questionsGroups = [];
+
+  /// List of sections within the Questionnaire
   List<QuestionnaireItem> _questionnaireItems = [];
+
   Map _mapItemToGroup = new Map();
+
   int _currentGroupIndex = 0;
+
+  /// Question which is being answered
   QuestionnaireItem _currentQuestionnaireItem;
 
+  /// Variables used as controllers for handle changes in questions answers
   String _choiceInputSelected = '';
   List<String> _multipleChoiceInputSelected = [];
   bool _booleanInputSelected;
 
-  // Create a global key that uniquely identifies the Scaffold widget,
-  // and allows to display snackbars.
+  /// Create a global key that uniquely identifies the Scaffold widget,
+  /// and allows to display snackbars.
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
+  /// Method called when this widget is inserted into the tree.
+  /// Initialize animation controller and fecht questionnaire items
   @override
   void initState() {
     _animateController = AnimationController(
@@ -51,34 +60,40 @@ class _SignUpQuestionnairePageState extends State<SignUpQuestionnairePage>
     super.initState();
   }
 
+  /// Release the resources used by the animation controller
+  /// when the widget is removed from the widget tree.
   @override
   void dispose() {
     _animateController.dispose();
     super.dispose();
   }
 
+  /**
+  * Functions used to handle events in this screen 
+  */
+
+  /// Read questions and sections from Firebase
   Future<void> _loadSignupQuestionnaire() async {
     await getSignupQuestionnaire().then((response) {
-      setState(() {
-        _questionsGroups = response;
-        if (response.length > 0)
-          _currentQuestionnaireItem = _questionsGroups[0].items[0];
-        for (QuestionnaireItemGroup group in _questionsGroups) {
-          _questionnaireItems = _questionnaireItems + group.items;
-          for (QuestionnaireItem item in group.items) {
-            _mapItemToGroup[item.linkId] = group.index;
+      setState(
+        () {
+          _questionsGroups = response;
+          if (response.length > 0)
+            _currentQuestionnaireItem = _questionsGroups[0].items[0];
+          for (QuestionnaireItemGroup group in _questionsGroups) {
+            _questionnaireItems = _questionnaireItems + group.items;
+            for (QuestionnaireItem item in group.items) {
+              _mapItemToGroup[item.linkId] = group.index;
+            }
           }
-        }
-        _isLoading = false;
-      });
+          _isLoading = false;
+        },
+      );
     }).catchError((error) {
       print(error);
     });
   }
 
-  /**
-  * Functions used to handle events in this screen 
-  */
   Future _startAnimation() async {
     try {
       await _animateController.forward().orCancel;
@@ -86,6 +101,7 @@ class _SignUpQuestionnairePageState extends State<SignUpQuestionnairePage>
     } on TickerCanceled {}
   }
 
+  /// Method used to used handle the system back button.
   Future<bool> _onWillPop() async {
     if (_currentQuestionnaireItem != null && _previousQuestion() >= 0) {
       return false;
@@ -96,6 +112,13 @@ class _SignUpQuestionnairePageState extends State<SignUpQuestionnairePage>
 
   void _continue() {
     addSignUpResponse(_currentQuestionnaireItem);
+
+    // If answer has been updated, check enableWhen clauses of
+    // other questions which depends on this current question
+    if (_currentQuestionnaireItem.updated) {
+      evaluateAndDeleteAnswers(_currentQuestionnaireItem, _questionnaireItems);
+    }
+
     int index = getNextEnableQuestion(
         _questionnaireItems, _currentQuestionnaireItem.linkId - 1);
     // Not all questions have been completed
@@ -110,7 +133,7 @@ class _SignUpQuestionnairePageState extends State<SignUpQuestionnairePage>
     else {
       Navigator.pushReplacementNamed(
         context,
-       SignUpQuestionnaireCompleted.route,
+        SignUpQuestionnaireCompleted.route,
       );
     }
   }
@@ -193,21 +216,58 @@ class _SignUpQuestionnairePageState extends State<SignUpQuestionnairePage>
           currentGroup.name,
           style: Theme.of(context)
               .textTheme
-              .headline6
+              .bodyText1
               .apply(color: Theme.of(context).primaryColor),
         ),
         SizedBox(
-          height: MediaQuery.of(context).size.height * 0.05,
+          height: MediaQuery.of(context).size.height * 0.03,
         ),
         Text(
           _currentQuestionnaireItem.text,
-          style: Theme.of(context).textTheme.headline5,
+          style: Theme.of(context).textTheme.headline6,
         ),
+        _buildQuestionInfo(),
         SizedBox(
-          height: MediaQuery.of(context).size.height * 0.01,
+          height: MediaQuery.of(context).size.height * 0.02,
         ),
         _buildQuestionInput(),
       ],
+    );
+  }
+
+  Widget _buildQuestionInfo() {
+    String mandatory = (_currentQuestionnaireItem.mandatory)
+        ? ''
+        : 'La respuesta a esta pregunta es opcional.';
+
+    String type = '';
+    if (_currentQuestionnaireItem.type ==
+        QuestionnaireItemType.multiple_choice) {
+      type = !(_currentQuestionnaireItem.mandatory)
+          ? 'Si la respondes, puedes seleccionar una o varias respuestas'
+          : 'Puedes seleccionar una o varias respuestas';
+    }
+    else if(_currentQuestionnaireItem.mandatory) {
+      type = 'Elige una única respuesta.';
+    }
+
+    return Visibility(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.01,
+          ),
+          Text(
+            mandatory + (mandatory.isNotEmpty ? ' ' : '') + type,
+            style: Theme.of(context)
+                .textTheme
+                .bodyText2
+                .apply(fontSizeFactor: 0.8),
+          ),
+        ],
+      ),
+      visible: mandatory.isNotEmpty || type.isNotEmpty,
     );
   }
 

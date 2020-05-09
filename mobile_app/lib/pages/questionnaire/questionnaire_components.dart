@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:tfg_app/models/questionnaire_item.dart';
-import 'package:tfg_app/themes/custom_icon_icons.dart';
 
 Widget questionnaireStepper(
     BuildContext context, double screenWidth, int size, int currentIndex,
@@ -94,7 +93,6 @@ Widget choiceInput(BuildContext context, List<AnswerValue> answerValueSet,
                 onRadioTap(answerValue.value);
               },
               child: Container(
-                height: 50.0,
                 color: selectedValue == answerValue.value
                     ? Theme.of(context).primaryColorLight.withAlpha(100)
                     : Colors.white,
@@ -103,18 +101,24 @@ Widget choiceInput(BuildContext context, List<AnswerValue> answerValueSet,
                     Row(
                       children: <Widget>[
                         Radio(
-                            activeColor: Theme.of(context).primaryColorDark,
-                            value: answerValue.value,
-                            groupValue: selectedValue,
-                            onChanged: (String value) {
-                              onRadioTap(value);
-                            }),
-                        Text(
-                          answerValue.text,
-                          style: TextStyle(
-                              fontWeight: selectedValue == answerValue.value
-                                  ? FontWeight.bold
-                                  : FontWeight.normal),
+                          activeColor: Theme.of(context).primaryColorDark,
+                          value: answerValue.value,
+                          groupValue: selectedValue,
+                          onChanged: (String value) {
+                            onRadioTap(value);
+                          },
+                        ),
+                        Flexible(
+                          child: Padding(
+                            padding: EdgeInsets.only(right: 15, top: 5, bottom: 10),
+                            child: Text(
+                              answerValue.text,
+                              style: TextStyle(
+                                  fontWeight: selectedValue == answerValue.value
+                                      ? FontWeight.bold
+                                      : FontWeight.normal),
+                            ),
+                          ),
                         )
                       ],
                     ),
