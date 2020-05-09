@@ -1,10 +1,10 @@
 {
     "pretest_questionnaire": {
-        "pretest_personal": {
-            "name": "Información personal",
+        "pretest_demografica": {
+            "name": "Información demográfica",
             "index": 1,
             "questions": {
-                "personal_1": {
+                "demografica_1": {
                     "linkId": 1,
                     "text": "Selecciona tu género",
                     "type": "choice",
@@ -28,7 +28,7 @@
                         }
                     ]
                 },
-                "personal_2": {
+                "demografica_2": {
                     "linkId": 2,
                     "text": "¿Cuál es tu grupo de edad?",
                     "type": "choice",
@@ -60,20 +60,127 @@
                         }
                     ]
                 },
-                "personal_3": {},
-                "personal_4": {},
-                "personal_5": {},
-                "personal_6": {},
-                "personal_7": {},
-                "personal_8": {}
+                "demografica_3": {
+                    "linkId": 3,
+                    "text": "¿Podrías decir cuántas personas conviven contigo?",
+                    "mandatory": false,
+                    "type": "choice",
+                    "answerValueSet": [
+                        {
+                            "text": "Ninguna, vivo solo",
+                            "value": "0"
+                        },
+                        {
+                            "text": "Una",
+                            "value": "1"
+                        },
+                        {
+                            "text": "Más de una",
+                            "value": ">1"
+                        }
+                    ]
+                },
+                "demografica_4": {
+                    "linkId": 4,
+                    "text": "¿Y cuál es tu estado civil?",
+                    "mandatory": false,
+                    "type": "choice",
+                    "answerValueSet": [
+                        {
+                            "text": "Soltero",
+                            "value": "soltero"
+                        },
+                        {
+                            "text": "Casado o vivo en pareja",
+                            "value": "pareja"
+                        },
+                        {
+                            "text": "Separado o divorciado",
+                            "value": "separado"
+                        },
+                        {
+                            "text": "Viudo",
+                            "value": "viudo"
+                        },
+                        {
+                            "text": "Otro",
+                            "value": "otro"
+                        }
+                    ]
+                },
+                "demografica_5": {
+                    "linkId": 5,
+                    "text": "¿Tienes hijos a tu cargo?",
+                    "mandatory": false,
+                    "type": "boolean"
+                },
+                "demografica_6": {
+                    "linkId": 6,
+                    "text": "¿Conviven contigo otras personas que tengan carnet de conducir?",
+                    "mandatory": false,
+                    "type": "multiple_choice",
+                    "enableWhen": [
+                        {
+                            "linkId": 3,
+                            "operator": "not_equals",
+                            "value": "0"
+                        }
+                    ],
+                    "answerValueSet": [
+                        {
+                            "text": "No, nadie más",
+                            "value": "no"
+                        },
+                        {
+                            "text": "Mi marido/mujer o pareja",
+                            "value": "pareja"
+                        },
+                        {
+                            "text": "Hijos",
+                            "value": "hijos"
+                        },
+                        {
+                            "text": "Padres",
+                            "value": "padres"
+                        },
+                        {
+                            "text": "Hermanos",
+                            "value": "hermanos"
+                        },
+                        {
+                            "text": "Amigos",
+                            "value": "amigos"
+                        }
+                    ]
+                },
+                "demografica_7": {
+                    "linkId": 7,
+                    "text": "¿Cuántos automóviles tienes en tu hogar?",
+                    "mandatory": true,
+                    "type": "choice",
+                    "answerValueSet": [
+                        {
+                            "text": "Ninguno",
+                            "value": "0"
+                        },
+                        {
+                            "text": "Uno",
+                            "value": "1"
+                        },
+                        {
+                            "text": "Dos o más",
+                            "value": ">1"
+                        }
+                    ]
+                }
             }
         },
-        "pretest_conductor": {
-            "name": "Descripción cómo conductor",
+        "pretest_inicio_conduccion": {
+            "name": "Inicio en la conducción",
             "index": 2,
             "questions": {
-                "conductor_1": {
-                    "linkId": 3,
+                "inicio_conduccion_1": {
+                    "linkId": 8,
                     "text": "¿Desde hace cuánto tiempo tienes el permiso de conducir?",
                     "type": "choice",
                     "mandatory": true,
@@ -96,22 +203,195 @@
                         }
                     ]
                 },
-                "conductor_2": {
-                    "linkId": 4,
-                    "text": "¿Conduces actualmente?",
-                    "type": "boolean",
-                    "mandatory": true
+                "inicio_conduccion_2": {
+                    "linkId": 9,
+                    "text": "¿Por qué motivos decidiste sacarte el carné de conducir?",
+                    "type": "multiple_choice",
+                    "mandatory": false,
+                    "answerValueSet": [
+                        {
+                            "text": "Por necesidad",
+                            "value": "necesidad"
+                        },
+                        {
+                            "text": "Por obligación",
+                            "value": "obligación"
+                        },
+                        {
+                            "text": "Porque todo el mundo se lo sacaba",
+                            "value": "todo_mundo"
+                        },
+                        {
+                            "text": "Para tener más libertad/independencia",
+                            "value": "independencia"
+                        },
+                        {
+                            "text": "Autoestima",
+                            "value": "autoestima"
+                        },
+                        {
+                            "text": "Placer",
+                            "value": "placer"
+                        },
+                        {
+                            "text": "Otros",
+                            "value": "otros"
+                        }
+                    ]
                 },
-                "conductor_3": {
-                    "linkId": 5,
+                "inicio_conduccion_3": {
+                    "linkId": 10,
+                    "text": "¿Recuerdas cuántas veces te examinaste de la parte teórica?",
+                    "type": "choice",
+                    "mandatory": false,
+                    "answerValueSet": [
+                        {
+                            "text": "No lo recuerdo",
+                            "value": "no_recuerdo"
+                        },
+                        {
+                            "text": "Una",
+                            "value": "1"
+                        },
+                        {
+                            "text": "Dos",
+                            "value": "2"
+                        },
+                        {
+                            "text": "Más de dos",
+                            "value": ">2"
+                        }
+                    ]
+                },
+                "inicio_conduccion_4": {
+                    "linkId": 11,
+                    "text": "¿Recuerdas cuántas veces tuviste que presentarte al examen de la parte práctica?",
+                    "type": "choice",
+                    "mandatory": false,
+                    "answerValueSet": [
+                        {
+                            "text": "No lo recuerdo",
+                            "value": "no_recuerdo"
+                        },
+                        {
+                            "text": "Una",
+                            "value": "1"
+                        },
+                        {
+                            "text": "Dos",
+                            "value": "2"
+                        },
+                        {
+                            "text": "Más de dos",
+                            "value": ">2"
+                        }
+                    ]
+                },
+                "inicio_conduccion_5": {
+                    "linkId": 12,
+                    "text": "¿Cuánto tiempo pasó desde que te sacaste el carné de conduccir hasta que cogiste un coche?",
+                    "type": "choice",
+                    "mandatory": true,
+                    "answerValueSet": [
+                        {
+                            "text": "Inmediatamente",
+                            "value": "inmediatamente"
+                        },
+                        {
+                            "text": "Más de 1 mes",
+                            "value": "un_mes"
+                        },
+                        {
+                            "text": "Más de 3 meses",
+                            "value": "tres_meses"
+                        },
+                        {
+                            "text": "Más de 6 meses",
+                            "value": "seis_meses"
+                        },
+                        {
+                            "text": "No he conducido nunca",
+                            "value": "nunca"
+                        }
+                    ]
+                },
+                "inicio_conduccion_6": {
+                    "linkId": 13,
+                    "text": "¿Y cuáles fueron los motivos por lo que tardaste en conducir o no ha conducido nunca?",
+                    "type": "multiple_choice",
+                    "mandatory": true,
+                    "enableWhen": [
+                        {
+                            "linkId": 12,
+                            "operator": "not_equals",
+                            "value": "inmediatamente"
+                        }
+                    ],
+                    "answerValueSet": [
+                        {
+                            "text": "No tenía coche",
+                            "value": "no_coche"
+                        },
+                        {
+                            "text": "Tenía miedo",
+                            "value": "miedo"
+                        },
+                        {
+                            "text": "No tenía necesidad",
+                            "value": "no_necesidad"
+                        },
+                        {
+                            "text": "Otros",
+                            "value": "otros"
+                        }
+                    ]
+                },
+                "inicio_conduccion_7": {
+                    "linkId": 14,
+                    "text": "¿Con qué frecuencia conduces actualmente?",
+                    "type": "choice",
+                    "mandatory": true,
+                    "enableWhen": [
+                        {
+                            "linkId": 12,
+                            "operator": "not_equals",
+                            "value": "nunca"
+                        }
+                    ],
+                    "answerValueSet": [
+                        {
+                            "text": "No conduzco nunca",
+                            "value": "nunca"
+                        },
+                        {
+                            "text": "De vez en cuando",
+                            "value": "ocasional"
+                        },
+                        {
+                            "text": "Conduzco todos o casi todos los días",
+                            "value": "diario"
+                        }
+                    ]
+                }
+            }
+        },
+        "pretest_conductor": {
+            "name": "Hábitos cómo conductor",
+            "index": 3,
+            "questions": {
+                "no_conductor_1": {
+                    "linkId": 15,
                     "text": "¿Cuánto tiempo hace que no conduces?",
                     "type": "choice",
                     "mandatory": true,
                     "enableWhen": [
                         {
-                            "linkId": 4,
-                            "operator": "equals",
-                            "value": false
+                            "linkId": 14,
+                            "operator": "not_contained_in",
+                            "value": [
+                                "ocasional",
+                                "diario"
+                            ]
                         }
                     ],
                     "answerValueSet": [
@@ -133,16 +413,19 @@
                         }
                     ]
                 },
-                "conductor_4": {
-                    "linkId": 6,
-                    "text": "¿Por qué dejaste de conducir?",
+                "no_conductor_2": {
+                    "linkId": 16,
+                    "text": "¿Por qué dejaste de conducir o no ha conducido nunca?",
                     "type": "multiple_choice",
-                    "mandatory": false,
+                    "mandatory": true,
                     "enableWhen": [
                         {
-                            "linkId": 4,
-                            "operator": "equals",
-                            "value": false
+                            "linkId": 14,
+                            "operator": "not_contained_in",
+                            "value": [
+                                "ocasional",
+                                "diario"
+                            ]
                         }
                     ],
                     "answerValueSet": [
@@ -155,29 +438,36 @@
                             "value": "no_coche"
                         },
                         {
+                            "text": "Por un accidente de tráfico",
+                            "value": "accidente"
+                        },
+                        {
                             "text": "Tendencia a conducir de otras personas de mi entorno",
                             "value": "conducen_otros"
                         },
                         {
-                            "text": "Miedo, pánico o angustia",
+                            "text": "Me produce miedo, pánico o angustia",
                             "value": "miedo"
                         },
                         {
-                            "text": "Otros",
-                            "value": "otro"
+                            "text": "Otros motivos",
+                            "value": "otros"
                         }
                     ]
                 },
-                "conductor_5": {
-                    "linkId": 7,
-                    "text": "¿Dejar de conducir fue un proceso paulatino o repentino",
+                "no_conductor_3": {
+                    "linkId": 17,
+                    "text": "¿Dejar de conducir fue un proceso paulatino o repentino?",
                     "type": "choice",
-                    "mandatory": false,
+                    "mandatory": true,
                     "enableWhen": [
                         {
-                            "linkId": 4,
-                            "operator": "equals",
-                            "value": false
+                            "linkId": 14,
+                            "operator": "not_contained_in",
+                            "value": [
+                                "ocasional",
+                                "diario"
+                            ]
                         }
                     ],
                     "answerValueSet": [
@@ -190,33 +480,477 @@
                             "value": "repentino"
                         }
                     ]
+                },
+                "no_conductor_4": {
+                    "linkId": 18,
+                    "text": "¿Cuál es su principal motivación para superar el miedo a conducir?",
+                    "type": "choice",
+                    "mandatory": true,
+                    "enableWhen": [
+                        {
+                            "linkId": 14,
+                            "operator": "not_contained_in",
+                            "value": [
+                                "ocasional",
+                                "diario"
+                            ]
+                        }
+                    ],
+                    "answerValueSet": [
+                        {
+                            "text": "Por necesidad (ir al trabajo/estudiar, ir la compra, ir al médico, etc.)",
+                            "value": "necesidad"
+                        },
+                        {
+                            "text": "No hay una necesidad que me obligue, sólo quiero resolver mi problema",
+                            "value": "resolver_problema"
+                        }
+                    ]
+                },
+                "no_conductor_5": {
+                    "linkId": 19,
+                    "text": "En tu vuelta a conducir, ¿circularás siempre por las mismas rutas?",
+                    "type": "boolean",
+                    "enableWhen": [
+                        {
+                            "linkId": 14,
+                            "operator": "not_contained_in",
+                            "value": [
+                                "ocasional",
+                                "diario"
+                            ]
+                        },
+                        {
+                            "linkId": 18,
+                            "operator": "equals",
+                            "value": "necesidad"
+                        }
+                    ],
+                    "mandatory": true
+                },
+                "no_conductor_6": {
+                    "linkId": 20,
+                    "text": "Dichas rutas, ¿serán sólo por ciudad o incluyen, además, desplazamiento por carretera?",
+                    "type": "choice",
+                    "mandatory": true,
+                    "enableWhen": [
+                        {
+                            "linkId": 14,
+                            "operator": "not_contained_in",
+                            "value": [
+                                "ocasional",
+                                "diario"
+                            ]
+                        },
+                        {
+                            "linkId": 19,
+                            "operator": "equals",
+                            "value": true
+                        }
+                    ],
+                    "answerValueSet": [
+                        {
+                            "text": "Sólo será en ciudad",
+                            "value": "ciudad"
+                        },
+                        {
+                            "text": "Además de circular por población, también haré desplazamientos por carretera",
+                            "value": "carretera"
+                        }
+                    ]
+                },
+                "no_conductor_7": {
+                    "linkId": 21,
+                    "text": "En dichas rutas, ¿tendrás aparcamiento asegurado (parking o plaza de garaje)?",
+                    "type": "boolean",
+                    "mandatory": true,
+                    "enableWhen": [
+                        {
+                            "linkId": 14,
+                            "operator": "not_contained_in",
+                            "value": [
+                                "ocasional",
+                                "diario"
+                            ]
+                        },
+                        {
+                            "linkId": 18,
+                            "operator": "equals",
+                            "value": "necesidad"
+                        }
+                    ]
+                },
+                "no_conductor_8": {
+                    "linkId": 22,
+                    "text": "Selecciona en qué condiciones temporales necesitarás conducir.",
+                    "type": "multiple_choice",
+                    "mandatory": true,
+                    "enableWhen": [
+                        {
+                            "linkId": 14,
+                            "operator": "not_contained_in",
+                            "value": [
+                                "ocasional",
+                                "diario"
+                            ]
+                        },
+                        {
+                            "linkId": 18,
+                            "operator": "equals",
+                            "value": "necesidad"
+                        }
+                    ],
+                    "answerValueSet": [
+                        {
+                            "text": "De día",
+                            "value": "dia"
+                        },
+                        {
+                            "text": "De noche",
+                            "value": "noche"
+                        },
+                        {
+                            "text": "En fines de semana",
+                            "value": "fin_semana"
+                        },
+                        {
+                            "text": "Entre semana",
+                            "value": "entre_semana"
+                        }
+                    ]
+                },
+                "conductor_1": {
+                    "linkId": 23,
+                    "text": "¿Cuáles son los motivos por los que conduces actualmente?",
+                    "type": "multiple_choice",
+                    "mandatory": true,
+                    "enableWhen": [
+                        {
+                            "linkId": 14,
+                            "operator": "contained_in",
+                            "value": [
+                                "ocasional",
+                                "diario"
+                            ]
+                        }
+                    ],
+                    "answerValueSet": [
+                        {
+                            "text": "Es mi trabajo (taxistas, camioneros, conductor de autobús, etc)",
+                            "value": "trabajo"
+                        },
+                        {
+                            "text": "Para ir hasta el trabajo",
+                            "value": "ir_trabajar_1"
+                        },
+                        {
+                            "text": "Desplazamientos para realizar mi trabajo (comerciales, fontaneros, reparto a domicilio)",
+                            "value": "ir_trabajar_2"
+                        },
+                        {
+                            "text": "Llevar a los niños al colegio",
+                            "value": "colegio"
+                        },
+                        {
+                            "text": "Ir a la compra",
+                            "value": "compra"
+                        },
+                        {
+                            "text": "Ir a estudiar",
+                            "value": "estudiar"
+                        },
+                        {
+                            "text": "Para ir al médico",
+                            "value": "medico"
+                        },
+                        {
+                            "text": "Viajes familiares",
+                            "value": "familiares"
+                        },
+                        {
+                            "text": "Por motivos de ocio",
+                            "value": "ocio"
+                        },
+                        {
+                            "text": "Otros motivos",
+                            "value": "otros"
+                        }
+                    ]
+                },
+                "conductor_2": {
+                    "linkId": 24,
+                    "text": "Cuándo vas en coche con otro miembro de la familia, ¿quién acostumbra a conducir?",
+                    "type": "choice",
+                    "mandatory": true,
+                    "enableWhen": [
+                        {
+                            "linkId": 14,
+                            "operator": "contained_in",
+                            "value": [
+                                "ocasional",
+                                "diario"
+                            ]
+                        }
+                    ],
+                    "answerValueSet": [
+                        {
+                            "text": "Siempre un familiar",
+                            "value": "siempre_familiar"
+                        },
+                        {
+                            "text": "Mayoritariamente un familiar",
+                            "value": "mayoria_familiar"
+                        },
+                        {
+                            "text": "Depende",
+                            "value": "depende"
+                        },
+                        {
+                            "text": "Mayoritariamente yo",
+                            "value": "mayoria_yo"
+                        },
+                        {
+                            "text": "Siempre yo",
+                            "value": "siempre_yo"
+                        }
+                    ]
+                },
+                "conductor_3": {
+                    "linkId": 25,
+                    "text": "Y cuándo vas acompañado de amigos, ¿quién acostumbra a conducir?",
+                    "type": "choice",
+                    "mandatory": true,
+                    "enableWhen": [
+                        {
+                            "linkId": 14,
+                            "operator": "contained_in",
+                            "value": [
+                                "ocasional",
+                                "diario"
+                            ]
+                        }
+                    ],
+                    "answerValueSet": [
+                        {
+                            "text": "Siempre la otra persona",
+                            "value": "siempre_otro"
+                        },
+                        {
+                            "text": "Mayoritariamente la otra persona",
+                            "value": "mayoria_otro"
+                        },
+                        {
+                            "text": "Depende",
+                            "value": "depende"
+                        },
+                        {
+                            "text": "Mayoritariamente yo",
+                            "value": "mayoria_yo"
+                        },
+                        {
+                            "text": "Siempre yo",
+                            "value": "siempre_yo"
+                        }
+                    ]
+                },
+                "conductor_4": {
+                    "linkId": 26,
+                    "text": "¿Por qué motivos no acostumbras a conducir tú?",
+                    "type": "multiple_choice",
+                    "mandatory": true,
+                    "enableWhen": [
+                        {
+                            "linkId": 14,
+                            "operator": "contained_in",
+                            "value": [
+                                "ocasional",
+                                "diario"
+                            ]
+                        },
+                        {
+                            "linkId": 24,
+                            "operator": "not_contained_in",
+                            "value": [
+                                "mayoria_yo",
+                                "siempre_yo"
+                            ]
+                        },
+                        {
+                            "linkId": 25,
+                            "operator": "not_contained_in",
+                            "value": [
+                                "mayoria_yo",
+                                "siempre_yo"
+                            ]
+                        }
+                    ],
+                    "answerValueSet": [
+                        {
+                            "text": "Por comodidad",
+                            "value": "comodidad"
+                        },
+                        {
+                            "text": "Por costumbre",
+                            "value": "costumbre"
+                        },
+                        {
+                            "text": "Al acompañante le gusta mucho conducir",
+                            "value": "gusto_acompañante"
+                        },
+                        {
+                            "text": "La ansiedad que me provoca el acompañante si conduzco yo",
+                            "value": "ansiedad_provocada"
+                        },
+                        {
+                            "text": "Me falta experiencia",
+                            "value": "experiencia"
+                        },
+                        {
+                            "text": "No me gusta, prefiero que conduzca la otra persona",
+                            "value": "no_gusta"
+                        },
+                        {
+                            "text": "Estoy desactualizado, hace mucho que no conduzco y no tengo práctica",
+                            "value": "practica"
+                        },
+                        {
+                            "text": "Otros motivos",
+                            "value": "otros"
+                        }
+                    ]
+                },
+                "conductor_5": {
+                    "linkId": 27,
+                    "text": "¿Prefieres conducir sólo o acompañado?",
+                    "type": "choice",
+                    "mandatory": true,
+                    "enableWhen": [
+                        {
+                            "linkId": 14,
+                            "operator": "contained_in",
+                            "value": [
+                                "ocasional",
+                                "diario"
+                            ]
+                        }
+                    ],
+                    "answerValueSet": [
+                        {
+                            "text": "Solo",
+                            "value": "solo"
+                        },
+                        {
+                            "text": "Acompañado",
+                            "value": "acompañado"
+                        },
+                        {
+                            "text": "Indiferente",
+                            "value": "indiferente"
+                        }
+                    ]
+                },
+                "conductor_6": {
+                    "linkId": 28,
+                    "text": "¿Evitas o pasas mal al conducir con algún tipo de acompañantes?",
+                    "type": "choice",
+                    "mandatory": true,
+                    "enableWhen": [
+                        {
+                            "linkId": 14,
+                            "operator": "contained_in",
+                            "value": [
+                                "ocasional",
+                                "diario"
+                            ]
+                        }
+                    ],
+                    "answerValueSet": [
+                        {
+                            "text": "Indiferente",
+                            "value": "indiferente"
+                        },
+                        {
+                            "text": "Acompañado de niños",
+                            "value": "niños"
+                        },
+                        {
+                            "text": "Acompañado de adultos",
+                            "value": "adultos"
+                        },
+                        {
+                            "text": "Conduciendo sólo",
+                            "value": "solo"
+                        }
+                    ]
+                },
+                "conductor_7": {
+                    "linkId": 29,
+                    "text": "Cuándo conduces acompañado, ¿Cómo te sientes?",
+                    "type": "multiple_choice",
+                    "mandatory": true,
+                    "enableWhen": [
+                        {
+                            "linkId": 14,
+                            "operator": "contained_in",
+                            "value": [
+                                "ocasional",
+                                "diario"
+                            ]
+                        }
+                    ],
+                    "answerValueSet": [
+                        {
+                            "text": "Tranquilo",
+                            "value": "tranquilo"
+                        },
+                        {
+                            "text": "Estresado",
+                            "value": "estresado"
+                        },
+                        {
+                            "text": "Recriminado",
+                            "value": "recriminado"
+                        },
+                        {
+                            "text": "Apoyado",
+                            "value": "apoyado"
+                        },
+                        {
+                            "text": "No me afecta",
+                            "value": "no_afecta"
+                        },
+                        {
+                            "text": "Otros",
+                            "value": "otros"
+                        }
+                    ]
                 }
             }
         },
         "pretest_miedo": {
-            "name": "Sobre su miedo a conducir",
-            "index": 3,
+            "name": "Sobre el miedo a conducir",
+            "index": 4,
             "questions": {
-                "pretest_miedo_1": {
-                    "linkId": 8,
+                "amaxofobia_1": {
+                    "linkId": 30,
                     "text": "Según tu opinión, ¿a consecuencia de qué se ha generado tu miedo a conducir?",
                     "type": "multiple_choice",
                     "mandatory": false,
                     "answerValueSet": [
                         {
-                            "text": "Haber estado implicado cómo conductor/a en un accidente de tráfico",
+                            "text": "He estado implicado cómo conductor/a en un accidente de tráfico",
                             "value": "conductor_accidente"
                         },
                         {
-                            "text": "Haber estado implicado cómo pasajero/a en un accidente de tráfico",
+                            "text": "He estado implicado cómo pasajero/a en un accidente de tráfico",
                             "value": "pasajero_accidente"
                         },
                         {
-                            "text": "Tener algún familiar que ha estado implicado en un accidente de tráfico",
+                            "text": "Tengo algún familiar que ha estado implicado en un accidente de tráfico",
                             "value": "familiar_accidente"
                         },
                         {
-                            "text": "Haber presenciado un accidente",
+                            "text": "He presenciado un accidente",
                             "value": "presenciar_accidente"
                         },
                         {
@@ -232,15 +966,15 @@
                             "value": "capacidad"
                         },
                         {
-                            "text": "Haber sentido peligro de desmayarse o vértigos",
+                            "text": "He sentido peligro de desmayarse o vértigos",
                             "value": "vertigo"
                         },
                         {
-                            "text": "No haber desarrollado suficiente pericia al volante",
+                            "text": "No he desarrollado suficiente pericia al volante",
                             "value": "pericia"
                         },
                         {
-                            "text": "Haber sufrido un ataque de pánico",
+                            "text": "He sufrido un ataque de pánico",
                             "value": "panico"
                         },
                         {
@@ -249,11 +983,21 @@
                         }
                     ]
                 },
-                "pretest_miedo_2": {
-                    "linkId": 9,
+                "amaxofobia_2": {
+                    "linkId": 31,
                     "text": "¿Qué medidas has adoptado ante el miedo a conducir?",
                     "type": "multiple_choice",
                     "mandatory": false,
+                    "enableWhen": [
+                        {
+                            "linkId": 14,
+                            "operator": "contained_in",
+                            "value": [
+                                "ocasional",
+                                "diario"
+                            ]
+                        }
+                    ],
                     "answerValueSet": [
                         {
                             "text": "Conducir sólo por un tipo de vía",
@@ -276,11 +1020,11 @@
                             "value": "tipo_vehivulo"
                         },
                         {
-                            "text": "Uitlizar más el transporte público",
+                            "text": "Utilizar más el transporte público",
                             "value": "transporte_publico"
                         },
                         {
-                            "text": "Buscar otras altenartivas",
+                            "text": "Buscar otras alternativas",
                             "value": "otras_alternativas"
                         },
                         {
@@ -289,25 +1033,35 @@
                         }
                     ]
                 },
-                "pretest_miedo_3": {
-                    "linkId": 10,
-                    "text": "¿Has solicitado ayuda profesional anteriormente?",
+                "amaxofobia_3": {
+                    "linkId": 32,
+                    "text": "¿El miedo a conducir, afecta de forma importante a tu vida?",
                     "type": "boolean",
                     "mandatory": false
                 },
-                "pretest_miedo_4": {
-                    "linkId": 11,
+                "amaxofobia_4": {
+                    "linkId": 33,
+                    "text": "¿Has tratado o estás tratando tu amaxofobia?",
+                    "type": "boolean",
+                    "mandatory": false
+                },
+                "amaxofobia_5": {
+                    "linkId": 34,
                     "text": "¿De qué tipo es la ayuda profesional que ha solicitado?",
                     "type": "multiple_choice",
                     "mandatory": false,
                     "enableWhen": [
                         {
-                            "linkId": 10,
+                            "linkId": 33,
                             "operator": "equals",
                             "value": true
                         }
                     ],
                     "answerValueSet": [
+                        {
+                            "text": "Médico",
+                            "value": "medico"
+                        },
                         {
                             "text": "Psicólogo",
                             "value": "psicologo"
@@ -321,6 +1075,47 @@
                             "value": "otros"
                         }
                     ]
+                },
+                "amaxofobia_6": {
+                    "linkId": 35,
+                    "text": "¿Por qué no has solicitado ayuda profesional?",
+                    "type": "multiple_choice",
+                    "mandatory": false,
+                    "enableWhen": [
+                        {
+                            "linkId": 33,
+                            "operator": "equals",
+                            "value": false
+                        }
+                    ],
+                    "answerValueSet": [
+                        {
+                            "text": "He renunciado a conducir",
+                            "value": "renuncia"
+                        },
+                        {
+                            "text": "Me da miedo tratarlo",
+                            "value": "miedo"
+                        },
+                        {
+                            "text": "No es el momento",
+                            "value": "no_momento"
+                        },
+                        {
+                            "text": "No quiero que lo sepa nadie",
+                            "value": "ocultar"
+                        },
+                        {
+                            "text": "otro",
+                            "value": "otro"
+                        }
+                    ]
+                },
+                "amaxofobia_7": {
+                    "linkId": 36,
+                    "text": "¿Tomas algún medicamente para la ansiedad?",
+                    "type": "boolean",
+                    "mandatory": false
                 }
             }
         }
