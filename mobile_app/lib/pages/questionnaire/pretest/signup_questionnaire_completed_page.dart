@@ -54,33 +54,76 @@ class _SignUpQuestionnaireCompletedState
   * Widgets (ui components) used in this screen 
   */
   Widget _buildPage(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisSize: MainAxisSize.max,
-      children: <Widget>[
-        SizedBox(
-          height: MediaQuery.of(context).size.height * 0.1,
-        ),
-        Text(
-          "Todo listo!",
-          textAlign: TextAlign.justify,
-          style: Theme.of(context).textTheme.headline5,
-        ),
-        SizedBox(
-          height: MediaQuery.of(context).size.height * 0.07,
-        ),
-        primaryButton(context, () async {
-          Navigator.pushReplacementNamed(context, HomePage.routeAuth);
-        }, "Menú principal"),
-      ],
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+    return Padding(
+      padding: EdgeInsets.symmetric(
+          horizontal: width * 0.07, vertical: height * 0.01),
+      child: ListView(
+        children: <Widget>[
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.05,
+          ),
+          Text(
+            "¡Cuestionario completado!",
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.headline5,
+          ),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.05,
+          ),
+          Image.asset(
+            'assets/images/2154468_e.jpg',
+            height: MediaQuery.of(context).size.height * 0.30,
+            fit: BoxFit.contain,
+          ),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.07,
+          ),
+          Text(
+            "¡Genial " +
+                AuthService().user.name.split(" ")[0] +
+                "! Tus respuestas nos han ayudado a encontrar el perfil terapéutico que mejor encaja contigo.",
+            textAlign: TextAlign.justify,
+          ),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.02,
+          ),
+          Text(
+            "Antes de empezar con la terapia, vamos a configurar algunas funcionalidades de la aplicación.",
+            textAlign: TextAlign.justify,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _bottonNavigationBar(BuildContext parentContext) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+    return Padding(
+      padding: EdgeInsets.symmetric(
+          horizontal: width * 0.07, vertical: height * 0.02),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: <Widget>[
+          primaryButton(
+              context,
+              () => Navigator.pushNamed(context, HomePage.routeAuth),
+              "Continuar",
+              width: MediaQuery.of(context).size.width * 0.25),
+        ],
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        //backgroundColor:  Color(0xffe8eaf6),
-        key: _scaffoldKey,
-        body: _isLoading ? circularProgress(context) : _buildPage(context));
+      //backgroundColor:  Color(0xffe8eaf6),
+      key: _scaffoldKey,
+      body: _isLoading ? circularProgress(context) : _buildPage(context),
+      bottomNavigationBar: _isLoading ? null : _bottonNavigationBar(context),
+    );
   }
 }
