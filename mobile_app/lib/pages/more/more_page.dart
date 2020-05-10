@@ -11,12 +11,20 @@ class MorePage extends StatefulWidget {
   _MorePageState createState() => _MorePageState();
 }
 
+/// State object for MorePage that contains fields that affect
+/// how it looks.
 class _MorePageState extends State<MorePage> {
-  bool _isLoadingLogout = false;
+  // Flags to render loading spinner UI.
+  bool _isLoading = false;
 
+  AuthService _authService;
+
+  /// Method called when this widget is inserted into the tree.
   @override
   void initState() {
     super.initState();
+
+    _authService = AuthService();
   }
 
   @override
@@ -29,33 +37,13 @@ class _MorePageState extends State<MorePage> {
 
   Future<void> _logout() async {
     setState(() {
-      _isLoadingLogout = true;
+      _isLoading = true;
     });
 
-    Route loginRoute =
-        new MaterialPageRoute(builder: (context) => new LoginPage());
+    await _authService.signOut();
 
-    await signOut();
-    Navigator.popUntil(context, (route) => route.isFirst);
-    Navigator.pushReplacement(context, loginRoute);
-
-    setState(() {
-      _isLoadingLogout = false;
-    });
-  }
-
-  void _routeToProfile() {
-    Route route =
-        new MaterialPageRoute(builder: (context) => new ProfilePage());
-    Navigator.popUntil(context, (route) => route.isFirst);
-    Navigator.push(context, route);
-  }
-
-  void _routeToUpdatePassword() {
-    Route route =
-        new MaterialPageRoute(builder: (context) => new UpdatePassword());
-    Navigator.popUntil(context, (route) => route.isFirst);
-    Navigator.push(context, route);
+    Navigator.of(context).pushNamedAndRemoveUntil(
+        LoginPage.route, (Route<dynamic> route) => false);
   }
 
   Widget _sectionHeader(
@@ -106,8 +94,16 @@ class _MorePageState extends State<MorePage> {
       padding: const EdgeInsets.only(top: 12.0, left: 15, right: 15),
       children: <Widget>[
         _sectionHeader("Perfil"),
-        _sectionItem("Mi cuenta", _routeToProfile),
-        _sectionItem("Cambiar contraseña", _routeToUpdatePassword),
+        _sectionItem(
+          "Mi cuenta",
+          () => Navigator.of(context).pushNamedAndRemoveUntil(
+              ProfilePage.route, (Route<dynamic> route) => false),
+        ),
+        _sectionItem(
+          "Cambiar contraseña",
+          () => Navigator.of(context).pushNamedAndRemoveUntil(
+              UpdatePassword.route, (Route<dynamic> route) => false),
+        ),
         Divider(
           height: verticalPadding,
         ),
@@ -147,6 +143,7 @@ class _MorePageState extends State<MorePage> {
     );
   }
 
+  ///Describes the part of the user interface represented by this widget.
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -154,7 +151,7 @@ class _MorePageState extends State<MorePage> {
         title: Text('Más'),
         actions: <Widget>[],
       ),
-      body: _isLoadingLogout
+      body: _isLoading
           ? circularProgress(context, text: "Cerrando sesión")
           : _morePage(),
     );

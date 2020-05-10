@@ -8,22 +8,24 @@ import 'package:uuid/uuid.dart';
 final dialogflowSessionsRef =
     Firestore.instance.collection('dialogflow_sessions');
 
+AuthService _authService = AuthService();
+
 List<TherapySession> therapySessions = [];
 
 // Write 'dialogflow_session' document in firestore.
 void _createDialogflowSession(String uuid) {
   dialogflowSessionsRef
       .document(uuid)
-      .setData({"user_id": user.id, "start_at": DateTime.now()});
+      .setData({"user_id": _authService.user.id, "start_at": DateTime.now()});
 }
 
 Future<Dialogflow> initializeSession(
     String googleCredentials, String language) async {
   String sessionId = Uuid().v4();
 
-  AuthGoogle authGoogle = await AuthGoogle(
-          fileJson: googleCredentials, sessionId: sessionId)
-      .build();
+  AuthGoogle authGoogle =
+      await AuthGoogle(fileJson: googleCredentials, sessionId: sessionId)
+          .build();
 
   // Create document in 'dialogflow_sessions' document
   _createDialogflowSession(sessionId);
@@ -34,7 +36,7 @@ Future<Dialogflow> initializeSession(
 // Read 'dialogflow_session' documents for current user
 Future<List<TherapySession>> getSessions() async {
   QuerySnapshot snapshot = await dialogflowSessionsRef
-      .where("user_id", isEqualTo: user.id)
+      .where("user_id", isEqualTo: _authService.user.id)
       .getDocuments();
 
   therapySessions = [];

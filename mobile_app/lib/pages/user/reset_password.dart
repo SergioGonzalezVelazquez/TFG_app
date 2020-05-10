@@ -12,6 +12,9 @@ import 'package:tfg_app/utils/validators.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ResetPasswordPage extends StatefulWidget {
+  /// Name use for navigate to this screen
+  static const route = "/reset-password";
+
   ///Creates a StatelessElement to manage this widget's location in the tree.
   _ResetPasswordPageState createState() => _ResetPasswordPageState();
 }
@@ -28,18 +31,23 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
   // and allows validation of the form.
   final _formKey = GlobalKey<FormState>();
 
+  // Flags to render loading spinner UI.
   bool _isLoading = false;
   bool _emailSent = false;
 
+  AuthService _authService;
+
+  /// Method called when this widget is inserted into the tree.
   @override
   void initState() {
+    _authService = AuthService();
     super.initState();
   }
 
+  // Clean up the controllers when the widget is removed from the
+  // widget tree.
   @override
   void dispose() {
-    // Clean up the controllers when the widget is removed from the
-    // widget tree.
     _emailController.dispose();
     super.dispose();
   }
@@ -53,24 +61,29 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
       setState(() {
         _isLoading = true;
       });
-      await resetPassword(_emailController.text.trim()).catchError((error) {
-        print("error");
-      }).then((value) {
-        setState(() {
-          _emailSent = true;
-        });
-      });
-      setState(() {
-        _isLoading = false;
-      });
+      await _authService.resetPassword(_emailController.text.trim()).catchError(
+        (error) {
+          print("error");
+        },
+      ).then(
+        (value) {
+          setState(
+            () {
+              _emailSent = true;
+            },
+          );
+        },
+      );
+      setState(
+        () {
+          _isLoading = false;
+        },
+      );
     }
   }
 
   /// Open default email app
   void _openEmailApp() {
-    Route loginRoute =
-        new MaterialPageRoute(builder: (context) => new LoginPage());
-
     final snackBar = customSnackbar(
         context, "No se pudo abrir ninguna aplicación de correo electrónico");
 
@@ -82,26 +95,23 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
       intent.launch().catchError((e) {
         _scaffoldKey.currentState.showSnackBar(snackBar);
       }).then((value) {
-        Navigator.popUntil(context, (route) => route.isFirst);
-        Navigator.pushReplacement(context, loginRoute);
+        Navigator.of(context).pushNamedAndRemoveUntil(
+            LoginPage.route, (Route<dynamic> route) => false);
       });
     } else if (Platform.isIOS) {
       launch("message://").catchError((e) {
         _scaffoldKey.currentState.showSnackBar(snackBar);
       }).then((value) {
-        Navigator.popUntil(context, (route) => route.isFirst);
-        Navigator.pushReplacement(context, loginRoute);
+        Navigator.of(context).pushNamedAndRemoveUntil(
+            LoginPage.route, (Route<dynamic> route) => false);
       });
     }
   }
 
   Widget _linkToLogin() {
     return InkWell(
-      onTap: () {
-        Route route =
-            new MaterialPageRoute(builder: (context) => new LoginPage());
-        Navigator.push(context, route);
-      },
+      onTap: () => Navigator.of(context).pushNamedAndRemoveUntil(
+          LoginPage.route, (Route<dynamic> route) => false),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[

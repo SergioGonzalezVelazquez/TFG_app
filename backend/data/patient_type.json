@@ -1,74 +1,474 @@
 {
     "1": {
-        "description": "Paciente que lleva un periodo largo sin conducir (>6 años) y necesita volver a hacerlo en un periodo corto de tiempo (por necesidad)",
+        "description": "Paciente que lleva un periodo largo sin conducir (>6 años) y necesita volver a hacerlo en un periodo corto de tiempo",
         "conditions": {
             "and": [
                 {
-                    "===": [
+                    "or": [
                         {
-                            "var": [
-                                "conductor_2"
+                            "===": [
+                                {
+                                    "var": [
+                                        "inicio_conduccion_5"
+                                    ]
+                                },
+                                "nunca"
                             ]
                         },
-                        false
+                        {
+                            "===": [
+                                {
+                                    "var": [
+                                        "inicio_conduccion_7"
+                                    ]
+                                },
+                                "nunca"
+                            ]
+                        }
                     ]
                 },
                 {
                     "in": [
                         {
                             "var": [
-                                "conductor_3"
+                                "no_conductor_1"
                             ]
                         },
                         [
                             "6_10",
                             ">10"
                         ]
+                    ]
+                },
+                {
+                    "===": [
+                        {
+                            "var": [
+                                "no_conductor_4"
+                            ]
+                        },
+                        "necesidad"
                     ]
                 }
             ]
-        }
-    },
-    "2": {
-        "description": "Paciente que lleva un periodo largo sin conducir (>10 años). No necesita volver a hacerlo en un periodo corto de tiempo, pero quiere resolver su problema",
-        "conditions": {
-            "and": [
-                {
+        },
+        "subtypes": {
+            "1.1": {
+                "description": "Siempre necesitarán realizar una misma ruta",
+                "conditions": {
                     "===": [
                         {
                             "var": [
-                                "conductor_2"
+                                "no_conductor_5"
+                            ]
+                        },
+                        true
+                    ]
+                },
+                "subtypes": {
+                    "1.1.1": {
+                        "description": "Dicha ruta será sólo por ciudad",
+                        "conditions": {
+                            "===": [
+                                {
+                                    "var": [
+                                        "no_conductor_6"
+                                    ]
+                                },
+                                "ciudad"
+                            ]
+                        },
+                        "subtypes": {
+                            "1.1.1.1": {
+                                "description": "Puede evitar conducir en ciertas situaciones.",
+                                "conditions": {
+                                    "!==": [
+                                        {
+                                            "reduce": [
+                                                {
+                                                    "var": "no_conductor_8"
+                                                },
+                                                {
+                                                    "+": [
+                                                        1,
+                                                        {
+                                                            "var": "accumulator"
+                                                        }
+                                                    ]
+                                                },
+                                                0
+                                            ]
+                                        },
+                                        4
+                                    ]
+                                },
+                                "subtypes": {
+                                    "1.1.1.1.1": {
+                                        "description": "Tiene aparcamiento asegurado",
+                                        "itinerary": 1,
+                                        "conditions": {
+                                            "===": [
+                                                {
+                                                    "var": [
+                                                        "no_conductor_7"
+                                                    ]
+                                                },
+                                                true
+                                            ]
+                                        }
+                                    },
+                                    "1.1.1.1.2": {
+                                        "description": "Necesita estacionar porque no tiene aparcamiento asegurado",
+                                        "itinerary": 2,
+                                        "conditions": {
+                                            "===": [
+                                                {
+                                                    "var": [
+                                                        "no_conductor_7"
+                                                    ]
+                                                },
+                                                false
+                                            ]
+                                        }
+                                    }
+                                }
+                            },
+                            "1.1.1.2": {
+                                "description": "Tiene que conducir en cualquier tipo de situación",
+                                "conditions": {
+                                    "===": [
+                                        {
+                                            "reduce": [
+                                                {
+                                                    "var": "no_conductor_8"
+                                                },
+                                                {
+                                                    "+": [
+                                                        1,
+                                                        {
+                                                            "var": "accumulator"
+                                                        }
+                                                    ]
+                                                },
+                                                0
+                                            ]
+                                        },
+                                        4
+                                    ]
+                                },
+                                "subtypes": {
+                                    "1.1.1.2.1": {
+                                        "description": "Tiene aparcamiento asegurado",
+                                        "itinerary": 3,
+                                        "conditions": {
+                                            "===": [
+                                                {
+                                                    "var": [
+                                                        "no_conductor_7"
+                                                    ]
+                                                },
+                                                true
+                                            ]
+                                        }
+                                    },
+                                    "1.1.1.2.2": {
+                                        "description": "Necesita estacionar porque no tiene aparcamiento asegurado",
+                                        "itinerary": 4,
+                                        "conditions": {
+                                            "===": [
+                                                {
+                                                    "var": [
+                                                        "no_conductor_7"
+                                                    ]
+                                                },
+                                                false
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "1.1.2": {
+                        "description": "Dicha ruta incluye, además de circulación por población, desplazamiento por carretera",
+                        "conditions": {
+                            "!==": [
+                                {
+                                    "var": [
+                                        "no_conductor_6"
+                                    ]
+                                },
+                                "ciudad"
+                            ]
+                        },
+                        "subtypes": {
+                            "1.1.2.1": {
+                                "description": "Puede evitar conducir en ciertas situaciones.",
+                                "conditions": {
+                                    "!==": [
+                                        {
+                                            "reduce": [
+                                                {
+                                                    "var": "no_conductor_8"
+                                                },
+                                                {
+                                                    "+": [
+                                                        1,
+                                                        {
+                                                            "var": "accumulator"
+                                                        }
+                                                    ]
+                                                },
+                                                0
+                                            ]
+                                        },
+                                        4
+                                    ]
+                                },
+                                "subtypes": {
+                                    "1.1.2.1.1": {
+                                        "description": "Tiene aparcamiento asegurado",
+                                        "itinerary": 5,
+                                        "conditions": {
+                                            "===": [
+                                                {
+                                                    "var": [
+                                                        "no_conductor_7"
+                                                    ]
+                                                },
+                                                true
+                                            ]
+                                        }
+                                    },
+                                    "1.1.2.1.2": {
+                                        "description": "Necesita estacionar porque no tiene aparcamiento asegurado",
+                                        "itinerary": 6,
+                                        "conditions": {
+                                            "===": [
+                                                {
+                                                    "var": [
+                                                        "no_conductor_7"
+                                                    ]
+                                                },
+                                                false
+                                            ]
+                                        }
+                                    }
+                                }
+                            },
+                            "1.1.2.2": {
+                                "description": "Tiene que conducir en cualquier tipo de situación",
+                                "conditions": {
+                                    "===": [
+                                        {
+                                            "reduce": [
+                                                {
+                                                    "var": "no_conductor_8"
+                                                },
+                                                {
+                                                    "+": [
+                                                        1,
+                                                        {
+                                                            "var": "accumulator"
+                                                        }
+                                                    ]
+                                                },
+                                                0
+                                            ]
+                                        },
+                                        4
+                                    ]
+                                },
+                                "subtypes": {
+                                    "1.1.2.2.1": {
+                                        "description": "Tiene aparcamiento asegurado",
+                                        "itinerary": 7,
+                                        "conditions": {
+                                            "===": [
+                                                {
+                                                    "var": [
+                                                        "no_conductor_7"
+                                                    ]
+                                                },
+                                                true
+                                            ]
+                                        }
+                                    },
+                                    "1.1.2.2.2": {
+                                        "description": "Necesita estacionar porque no tiene aparcamiento asegurado",
+                                        "itinerary": 8,
+                                        "conditions": {
+                                            "===": [
+                                                {
+                                                    "var": [
+                                                        "no_conductor_7"
+                                                    ]
+                                                },
+                                                false
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "1.2": {
+                "description": "No realizarán siempre una misma ruta",
+                "conditions": {
+                    "===": [
+                        {
+                            "var": [
+                                "no_conductor_5"
                             ]
                         },
                         false
+                    ]
+                },
+                "subtypes": {
+                    "1.2.1": {
+                        "description": "Tiene aparcamiento asegurado",
+                        "itinerary": 9,
+                        "conditions": {
+                            "===": [
+                                {
+                                    "var": [
+                                        "no_conductor_7"
+                                    ]
+                                },
+                                true
+                            ]
+                        }
+                    },
+                    "1.2.2": {
+                        "description": "Necesita estacionar porque no tiene aparcamiento asegurado",
+                        "itinerary": 10,
+                        "conditions": {
+                            "===": [
+                                {
+                                    "var": [
+                                        "no_conductor_7"
+                                    ]
+                                },
+                                false
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "2": {
+        "description": "Paciente que lleva un periodo largo sin conducir (>6 años) y no necesita volver a hacerlo en un periodo corto de tiempo, pero quiere resolver su problema.",
+        "itinerary": [
+            9,
+            10,
+            11
+        ],
+        "conditions": {
+            "and": [
+                {
+                    "or": [
+                        {
+                            "===": [
+                                {
+                                    "var": [
+                                        "inicio_conduccion_5"
+                                    ]
+                                },
+                                "nunca"
+                            ]
+                        },
+                        {
+                            "===": [
+                                {
+                                    "var": [
+                                        "inicio_conduccion_7"
+                                    ]
+                                },
+                                "nunca"
+                            ]
+                        }
                     ]
                 },
                 {
                     "in": [
                         {
                             "var": [
-                                "conductor_3"
+                                "no_conductor_1"
                             ]
                         },
                         [
                             "6_10",
                             ">10"
                         ]
+                    ]
+                },
+                {
+                    "===": [
+                        {
+                            "var": [
+                                "no_conductor_4"
+                            ]
+                        },
+                        "resolver_problema"
                     ]
                 }
             ]
         }
     },
     "3": {
-        "description": "Paciente que conduce pero sufre ansiedad en ciertas situaciones",
+        "description": "Paciente que conduce actualmente, pero sufre ansiedad en ciertas situaciones.",
         "conditions": {
-            "===": [
+            "or": [
                 {
-                    "var": [
-                        "conductor_2"
+                    "===": [
+                        {
+                            "var": [
+                                "inicio_conduccion_7"
+                            ]
+                        },
+                        "ocasional"
                     ]
                 },
-                true
+                {
+                    "===": [
+                        {
+                            "var": [
+                                "inicio_conduccion_7"
+                            ]
+                        },
+                        "diario"
+                    ]
+                },
+                {
+                    "and": [
+                        {
+                            "===": [
+                                {
+                                    "var": [
+                                        "inicio_conduccion_7"
+                                    ]
+                                },
+                                "nunca"
+                            ]
+                        },
+                        {
+                            "in": [
+                                {
+                                    "var": [
+                                        "no_conductor_1"
+                                    ]
+                                },
+                                [
+                                    "<1",
+                                    "1_5"
+                                ]
+                            ]
+                        }
+                    ]
+                }
             ]
         }
     }

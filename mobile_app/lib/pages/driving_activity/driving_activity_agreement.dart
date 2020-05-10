@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:tfg_app/services/driving_detection.dart';
 import 'package:tfg_app/widgets/progress.dart';
 import 'package:tfg_app/widgets/buttons.dart';
 import 'package:tfg_app/widgets/slide_dots.dart';
 
 class DrivingActivityAgreement extends StatefulWidget {
+  static const route = "/drivingActivityAgreement";
+
   @override
   State<DrivingActivityAgreement> createState() =>
       DrivingActivityAgreementState();
@@ -31,7 +34,15 @@ class DrivingActivityAgreementState extends State<DrivingActivityAgreement> {
   /**
   * Functions used to handle events in this screen 
   */
-  void _activate() {}
+  void _activate() async {
+    setState(() {
+      _isLoading = true;
+    });
+    await DrivingDetectionService().startBackgroundService();
+    setState(() {
+      _isLoading = false;
+    });
+  }
 
   void _more() {
     setState(() {

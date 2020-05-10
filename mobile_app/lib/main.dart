@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tfg_app/pages/home_page.dart';
+import 'package:tfg_app/routes.dart';
 import 'package:tfg_app/themes/style.dart';
 
 void main() => runApp(MyApp());
@@ -11,9 +12,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Stop Miedo',
       debugShowCheckedModeBanner: false,
+      routes: appRoutes,
       theme: CustomTheme.buildPurpleTheme(),
       home: HomePage(),
     );
   }
 }
-

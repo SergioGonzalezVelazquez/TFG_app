@@ -14,6 +14,7 @@ import 'package:flutter_dialogflow/dialogflow_v2.dart';
 /// https://medium.com/flutterdevs/chatbot-in-flutter-using-dialogflow-70e28665a827
 ///
 class ChatPage extends StatefulWidget {
+  static const route = "/chat";
   ChatPage({Key key}) : super(key: key);
 
   /// Creates a StatelessElement to manage this widget's location in the tree.
@@ -23,6 +24,8 @@ class ChatPage extends StatefulWidget {
 class _ChatPageState extends State<ChatPage> {
   // Create controllers for handle changes in text fields
   final TextEditingController _textController = new TextEditingController();
+
+  AuthService _authService;
 
   final List<ChatMessage> _messages = <ChatMessage>[];
   Dialogflow _dialogFlow;
@@ -34,7 +37,7 @@ class _ChatPageState extends State<ChatPage> {
   @override
   void initState() {
     super.initState();
-
+    _authService = AuthService();
     _initializeChat();
   }
 
@@ -53,12 +56,13 @@ class _ChatPageState extends State<ChatPage> {
 
     AIResponse response;
 
+    String name = _authService.user.name;
     // Check if this conversation will be the first for this user
     response = therapySessions.isEmpty
         ? await _dialogFlow.activateIntent("FIRST_SESSION",
-            parameters: {'username': user.name.split(" ").first})
+            parameters: {'username': name.split(" ").first})
         : await _dialogFlow.activateIntent("FIRST_SESSION",
-            parameters: {'username': user.name.split(" ").first});
+            parameters: {'username': name.split(" ").first});
 
     _handleAgentResponse(response);
   }

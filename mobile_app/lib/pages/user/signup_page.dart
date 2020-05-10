@@ -9,13 +9,17 @@ import 'package:tfg_app/widgets/inputs.dart';
 import 'package:tfg_app/widgets/password_strength.dart';
 import 'package:tfg_app/widgets/progress.dart';
 import 'package:tfg_app/widgets/snackbar.dart';
-import 'package:percent_indicator/percent_indicator.dart';
 
 class SignUpPage extends StatefulWidget {
-  ///Creates a StatelessElement to manage this widget's location in the tree.
+  /// Name use for navigate to this screen
+  static const route = "/signup";
+
+  /// Creates a StatelessElement to manage this widget's location in the tree.
   _SignUpPageState createState() => _SignUpPageState();
 }
 
+/// State object for SignUpPage that contains fields that affect
+/// how it looks.
 class _SignUpPageState extends State<SignUpPage> {
   // Create controllers for handle changes in email and pwd text fields
   final TextEditingController _nameController = TextEditingController();
@@ -38,17 +42,22 @@ class _SignUpPageState extends State<SignUpPage> {
   bool _showPassword1 = false;
   bool _showPassword2 = false;
 
+  // Flags to render loading spinner UI.
   bool _isLoading = false;
 
+  AuthService _authService;
+
+  /// Method called when this widget is inserted into the tree.
   @override
   void initState() {
     super.initState();
+    _authService = AuthService();
   }
 
+  // Clean up the controllers when the widget is removed from the
+  // widget tree.
   @override
   void dispose() {
-    // Clean up the controllers when the widget is removed from the
-    // widget tree.
     _nameController.dispose();
     _emailController.dispose();
     _passController.dispose();
@@ -60,31 +69,55 @@ class _SignUpPageState extends State<SignUpPage> {
    * Functions used to handle events in this screen 
    */
 
-  void onSignUpError(BuildContext context, error) {
+  /// Display a message to the user when sign up
+  /// failed
+  void _onSignUpError(BuildContext context, error) {
     setState(() {
       _isLoading = false;
     });
-    String msg = signUpErrorMsg(error);
-    print(msg);
+    String authError;
+    switch (error.code.toString().toUpperCase()) {
+      case 'ERROR_NETWORK_REQUEST_FAILED':
+        authError =
+            'No se pudo conectar. Compruebe su conexión a Internet e intentelo de nuevo más tarde.';
+        break;
+      case 'ERROR_WEAK_PASSWORD':
+        authError = 'Tu contraseña debe tener al menos 6 caracteres';
+        break;
+      case 'ERROR_INVALID_EMAIL':
+        authError = 'Introduce una cuenta de correo electrónico válida';
+        break;
+      case 'ERROR_EMAIL_ALREADY_IN_USE':
+        authError = 'Ya hay una cuenta registrada con esa dirección de correo';
+        break;
+      default:
+        authError =
+            'No se pudo completar el registro. Inténtalo de nuevo más tarde.';
+        break;
+    }
 
-    final snackBar = customSnackbar(context, msg);
+    final snackBar = customSnackbar(context, authError);
     _scaffoldKey.currentState.showSnackBar(snackBar);
   }
 
-  Future<void> signUp(BuildContext context) async {
+  /// Sign up new users
+  Future<void> _signUp(BuildContext context) async {
     if (_formKey.currentState.validate()) {
       setState(() {
         _isLoading = true;
       });
 
-      bool register = await registerWithEmail(_nameController.text.trim(),
+      bool register = await _authService
+          .registerWithEmail(_nameController.text.trim(),
               _emailController.text.trim(), _passController.text)
-          .catchError((error) => onSignUpError(context, error));
+          .catchError((error) => _onSignUpError(context, error));
 
       if (register) {
         Route route = new MaterialPageRoute(
-            builder: (context) =>
-                new EmailVerificationPage(_emailController.text.trim()));
+          builder: (context) => new EmailVerificationPage(
+            _emailController.text.trim(),
+          ),
+        );
         Navigator.pushReplacement(context, route);
       }
       setState(() {
@@ -99,11 +132,8 @@ class _SignUpPageState extends State<SignUpPage> {
 
   Widget _linkToLogin() {
     return InkWell(
-      onTap: () {
-        Route route =
-            new MaterialPageRoute(builder: (context) => new LoginPage());
-        Navigator.push(context, route);
-      },
+      onTap: () => Navigator.of(context).pushNamedAndRemoveUntil(
+          LoginPage.route, (Route<dynamic> route) => false),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
@@ -122,6 +152,7 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
+  /// Adds a form to sign up new users their email and password
   Form _signUpForm(BuildContext context, double verticalPadding) {
     return Form(
       key: _formKey,
@@ -162,21 +193,27 @@ class _SignUpPageState extends State<SignUpPage> {
           SizedBox(
             height: verticalPadding,
           ),
-          customPasswordInput("Confirmar contraseña", CustomIcon.lock,
-              controller: _passConfirmController,
-              validator: (val) =>
-                  Validator.confirmPassword(_passController.text, val),
-              visible: _showPassword2,
-              visibleController: () {
-                setState(() {
+          customPasswordInput(
+            "Confirmar contraseña",
+            CustomIcon.lock,
+            controller: _passConfirmController,
+            validator: (val) =>
+                Validator.confirmPassword(_passController.text, val),
+            visible: _showPassword2,
+            visibleController: () {
+              setState(
+                () {
                   _showPassword2 = !_showPassword2;
-                });
-              }),
+                },
+              );
+            },
+          ),
         ],
       ),
     );
   }
 
+  /// Build signup screen widgets
   Widget _signUpPage() {
     double verticalPadding = MediaQuery.of(context).size.height * 0.02;
     return SafeArea(
@@ -184,35 +221,35 @@ class _SignUpPageState extends State<SignUpPage> {
         padding: EdgeInsets.symmetric(
             horizontal: MediaQuery.of(context).size.width * 0.1),
         children: <Widget>[
-            Container(
-              height: MediaQuery.of(context).size.height * 0.3,
-              padding:
-                  EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.02),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.45,
-                    child: Text(
-                      "Supera la ansiedad al volante",
-                      style: Theme.of(context).textTheme.headline6.copyWith(
-                          color: Theme.of(context).primaryColor,
-                          fontWeight: FontWeight.w600),
-                    ),
+          Container(
+            height: MediaQuery.of(context).size.height * 0.3,
+            padding:
+                EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.02),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.45,
+                  child: Text(
+                    "Supera la ansiedad al volante",
+                    style: Theme.of(context).textTheme.headline6.copyWith(
+                        color: Theme.of(context).primaryColor,
+                        fontWeight: FontWeight.w600),
                   ),
-                  //Stop Image
-                  Image.asset(
-                    'assets/images/stop.png',
-                  ),
-                ],
-              ),
+                ),
+                //Stop Image
+                Image.asset(
+                  'assets/images/stop.png',
+                ),
+              ],
             ),
+          ),
           _signUpForm(context, verticalPadding),
           SizedBox(
             height: verticalPadding * 2,
           ),
           primaryButton(context, () async {
-            await signUp(context);
+            await _signUp(context);
           }, "Crear cuenta"),
           SizedBox(
             height: verticalPadding,

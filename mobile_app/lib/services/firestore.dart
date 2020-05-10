@@ -10,12 +10,12 @@ final signUpQuestionnaireRef =
     Firestore.instance.collection('pretest_questionnaire');
 final signUpQuestionnaireResponseRef =
     Firestore.instance.collection('pretest_questionnaire_response');
-final patientRef = Firestore.instance.collection('patient');
 
 final drivingActivityRef = Firestore.instance.collection('driving_activity');
-final drivingEventRef =
-    Firestore.instance.collection('driving_event_details');
+final drivingEventRef = Firestore.instance.collection('driving_event_details');
 final drivingRoutesRef = Firestore.instance.collection('driving_routes');
+
+AuthService _authService = AuthService();
 
 /// Get pretest questions
 Future<List<QuestionnaireItemGroup>> getSignupQuestionnaire() async {
@@ -31,6 +31,7 @@ Future<List<QuestionnaireItemGroup>> getSignupQuestionnaire() async {
     QuerySnapshot items = await signUpQuestionnaireRef
         .document(questionGroups[i].id.toString())
         .collection('questions')
+        .orderBy("linkId", descending: false)
         .getDocuments();
     questionGroups[i].items = items.documents
         .map((item) => QuestionnaireItem.fromDocument(item))
@@ -43,7 +44,7 @@ Future<List<QuestionnaireItemGroup>> getSignupQuestionnaire() async {
 /// current auth user
 Future<void> createSignUpResponse() async {
   await signUpQuestionnaireResponseRef
-      .document(user.id)
+      .document(_authService.user.id)
       .setData({"start_at": DateTime.now()});
 }
 
@@ -51,7 +52,7 @@ Future<void> createSignUpResponse() async {
 /// pretest_questionnaire_response collection
 Future<void> addSignUpResponse(QuestionnaireItem item) async {
   await signUpQuestionnaireResponseRef
-      .document(user.id)
+      .document(_authService.user.id)
       .updateData({item.id: item.answerValue});
 }
 
@@ -60,30 +61,14 @@ Future<void> addSignUpResponse(QuestionnaireItem item) async {
 Future<void> deleteSignUpResponse(QuestionnaireItem item) async {
   print("delete response para " + item.id);
   await signUpQuestionnaireResponseRef
-      .document(user.id)
+      .document(_authService.user.id)
       .updateData({item.id: FieldValue.delete()});
-}
-
-/// check if there is a document for auth user auth in 'patient' collection
-Future<bool> patientExists() async {
-  bool exists;
-  await patientRef.document(user.id).get().then((doc) {
-    exists = doc.exists;
-  });
-  return exists;
-}
-
-/// create document in 'patient' collection for current auth user
-/// firebase functions calculate the type of patient based on pretest
-/// questionnaire answers
-Future<void> createPatient() async {
-  await patientRef.document(user.id).setData({"created_at": DateTime.now()});
 }
 
 Future<List<DrivingActivity>> getDrivingActivities() async {
   QuerySnapshot activitiesDocs = await drivingActivityRef
       // .document("OXdhwafP8zc96dtKRtk3mcaoUFx1")
-      .document(user.id)
+      .document(_authService.user.id)
       .collection('user_driving_activity')
       .getDocuments();
 
