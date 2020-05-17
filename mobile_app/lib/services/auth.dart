@@ -25,6 +25,10 @@ class AuthService {
   /// Getters.
   User get user => this._user;
   bool get isAuth => this._user != null;
+  Future<PatientStatus> get patietStatus async {
+    await this._getPatientData();
+    return this._user.patient.status;
+  }
 
   /// Initialize service
   Future<void> init() async {
@@ -75,10 +79,27 @@ class AuthService {
   /// create document in 'patient' collection for current auth user
   /// firebase cloud functions trigger this event and will calculate
   /// the type of patient based on pretest questionnaire answers
-  Future<void> createPatient() async {
+  Future<void> _createPatientDocument(String userId) async {
+    String status = PatientStatus.pretest_pending.toString().split(".")[1];
+    await patientRef.document(userId).setData({"status": status});
+  }
+
+  /*
+  Future<void> updatePatient(Map<String, dynamic> data) async {
     await patientRef
         .document(this._user.id)
-        .setData({"created_at": DateTime.now()}).then((value) async {
+        .updateData(data)
+        .then((value) async {
+      await this._getPatientData();
+    });
+  }
+  */
+
+  Future<void> updatePatientStatus(PatientStatus status) async {
+    String strStatus = status.toString().split(".")[1];
+    await patientRef
+        .document(this._user.id)
+        .updateData({"status": strStatus}).then((value) async {
       await this._getPatientData();
     });
   }
@@ -138,7 +159,7 @@ class AuthService {
     assert(await currentUser.getIdToken() != null);
 
     /// Step 3: Create Firestore if user document does not exists.
-    await createUserDocument();
+    await this.createUserDocument();
   }
 
   /// Method which takes in an email address and password,
@@ -191,9 +212,9 @@ class AuthService {
         "email": currentUser.email,
         "name": currentUser.displayName,
         "created_at": DateTime.now()
+      }).then((value) async {
+        await this._createPatientDocument(currentUser.uid);
       });
-    } else {
-      print("doc not exits");
     }
 
     doc = await usersRef.document(currentUser.uid).get();

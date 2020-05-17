@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tfg_app/pages/phy_activity/daily_heart_rate.dart';
 import 'package:tfg_app/pages/user/login_page.dart';
 import 'package:tfg_app/pages/user/udpate_password.dart';
 import 'package:tfg_app/widgets/buttons.dart';
@@ -96,13 +97,13 @@ class _MorePageState extends State<MorePage> {
         _sectionHeader("Perfil"),
         _sectionItem(
           "Mi cuenta",
-          () => Navigator.of(context).pushNamedAndRemoveUntil(
-              ProfilePage.route, (Route<dynamic> route) => false),
+          () => Navigator.of(context).pushNamed(ProfilePage.route),
         ),
         _sectionItem(
           "Cambiar contraseña",
-          () => Navigator.of(context).pushNamedAndRemoveUntil(
-              UpdatePassword.route, (Route<dynamic> route) => false),
+          () => Navigator.of(context).pushNamed(
+            UpdatePassword.route,
+          ),
         ),
         Divider(
           height: verticalPadding,
@@ -113,6 +114,20 @@ class _MorePageState extends State<MorePage> {
         _sectionHeader("Terapia"),
         _sectionItem("Sobre la amaxofobia", null),
         _sectionItem("Desensibilización sistemática", null),
+        Divider(
+          height: verticalPadding,
+        ),
+        SizedBox(
+          height: verticalPadding,
+        ),
+        _sectionHeader("Frecuencia cardiaca"),
+        _sectionItem(
+          "Datos diarios",
+          () => Navigator.of(context).pushNamed(
+            DailyHeartRatePage.route,
+          ),
+        ),
+        _sectionItem("Configurar", null),
         Divider(
           height: verticalPadding,
         ),

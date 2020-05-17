@@ -1,6 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:tfg_app/pages/chat/chat_page.dart';
 import 'package:tfg_app/pages/home_page.dart';
+import 'package:tfg_app/pages/initial_page.dart';
+import 'package:tfg_app/pages/phy_activity/bluetooth_connection_page.dart';
+import 'package:tfg_app/pages/phy_activity/daily_heart_rate.dart';
+import 'package:tfg_app/pages/phy_activity/phy_activity_agreement.dart';
 import 'package:tfg_app/pages/questionnaire/pretest/signup_questionnaire_completed_page.dart';
 import 'package:tfg_app/pages/questionnaire/pretest/signup_questionnaire_page.dart';
 import 'package:tfg_app/pages/user/login_page.dart';
@@ -33,10 +37,20 @@ final appRoutes = {
   SignUpQuestionnaireCompleted.route: (BuildContext context) =>
       SignUpQuestionnaireCompleted(),
 
+  // Initial Page
+  InitialPage.route: (BuildContext context) => InitialPage(),
+
+  // Therapy
+  ChatPage.route: (BuildContext context) => ChatPage(),
+
+
   // Driving Activity Detection
   DrivingActivityAgreement.route: (BuildContext context) =>
       DrivingActivityAgreement(),
 
-  // Therapy
-  ChatPage.route: (BuildContext context) => ChatPage(),
+  // eMOVI
+  BluetoothConnectionInterface.route: (BuildContext context) =>
+      BluetoothConnectionInterface(),
+  PhyActivityAgreement.route: (BuildContext context) => PhyActivityAgreement(),
+  DailyHeartRatePage.route : (BuildContext context) => DailyHeartRatePage(),
 };

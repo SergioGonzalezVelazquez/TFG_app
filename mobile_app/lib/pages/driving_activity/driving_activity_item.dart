@@ -17,7 +17,6 @@ class DrivingActivityItem extends StatelessWidget {
             _activity.startLocationDetails.city) {
       return "Por " + _activity.startLocationDetails.city;
     }
-    print("else");
 
     return "De " +
         _activity.startLocationDetails.city +
@@ -55,7 +54,9 @@ class DrivingActivityItem extends StatelessWidget {
             ),
             Spacer(),
             Text(
-              _activity.endTime != null ? timeFormatter.format(_activity.endTime.toDate()) : '',
+              _activity.endTime != null
+                  ? timeFormatter.format(_activity.endTime.toDate())
+                  : '',
               style: TextStyle(fontSize: 11),
             )
           ],
@@ -153,9 +154,15 @@ class DrivingActivityItem extends StatelessWidget {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: <Widget>[
-                        Text(dateFormatter.format(_activity.startTime.toDate())),
+                        Text(
+                            dateFormatter.format(_activity.startTime.toDate())),
                         Spacer(),
-                        Text("Ver detalles")
+                        Text(
+                          "Ver detalles",
+                          style: TextStyle(
+                              color: Theme.of(context).primaryColor,
+                              fontWeight: FontWeight.bold),
+                        )
                       ],
                     )
                   ],

@@ -1,8 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:tfg_app/demo_driving.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tfg_app/models/patient.dart';
+import 'package:tfg_app/pages/chat/chat_page.dart';
+import 'package:tfg_app/pages/driving_activity/driving_activity_agreement.dart';
+import 'package:tfg_app/pages/driving_activity/driving_activity_page.dart';
 import 'package:tfg_app/pages/exercises/exercises.dart';
 import 'package:tfg_app/pages/more/more_page.dart';
+import 'package:tfg_app/pages/phy_activity/phy_activity_agreement.dart';
 import 'package:tfg_app/pages/progress/progress.dart';
 import 'package:tfg_app/pages/questionnaire/pretest/signup_questionnaire_page.dart';
 import 'package:tfg_app/pages/therapist/therapist.dart';
@@ -40,6 +45,9 @@ class _HomePageState extends State<HomePage> {
   // Flag to render loading spinner UI.
   bool _isLoading = true;
 
+  bool showAutoDriveDetectionAgreement;
+  bool showPhyActivityAgreement;
+
   PageController _pageController;
   int pageIndex = 0;
 
@@ -64,6 +72,7 @@ class _HomePageState extends State<HomePage> {
       _isAuth = true;
       _isLoading = false;
     }
+    _checkSettings();
   }
 
   /// Called when this widget is removed from the tree permanently.
@@ -71,6 +80,17 @@ class _HomePageState extends State<HomePage> {
   void dispose() {
     _pageController.dispose();
     super.dispose();
+  }
+
+  Future<void> _checkSettings() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool autoDriveDetection = prefs.getBool("drive_detection_enabled");
+    bool phyActivity = prefs.getBool("phy_activity_enabled");
+
+    setState(() {
+      showAutoDriveDetectionAgreement = autoDriveDetection;
+      showPhyActivityAgreement = phyActivity;
+    });
   }
 
   /// Check if user is signed in or not, using a singleton instance of
@@ -103,49 +123,77 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  Widget _buildHomePage() {
+    return Scaffold(
+      key: _scaffoldKey,
+      body: PageView(
+        children: <Widget>[
+          TherapistPage(),
+          ExercisePage(),
+          ProgressPage(),
+          DrivingActivityPage(),
+          MorePage(),
+        ],
+        controller: _pageController,
+        onPageChanged: onPageChanged,
+        physics: NeverScrollableScrollPhysics(),
+      ),
+      bottomNavigationBar: CupertinoTabBar(
+        currentIndex: pageIndex,
+        backgroundColor: Colors.white,
+        onTap: onTap,
+        activeColor: Theme.of(context).primaryColor,
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(CustomIcon.speech_bubble),
+            title: Text('Terapeuta'),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(CustomIcon.ejercicios),
+            title: Text('Ejercicios'),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              CustomIcon.line_chart2,
+            ),
+            title: Text('Progreso'),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(CustomIcon.car2),
+            title: Text('Rutas'),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(CustomIcon.more),
+            title: Text('Más'),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildAuthScreen() {
-    if (_authService.user.patient == null)
+    Patient patient = _authService.user.patient;
+    PatientStatus status = patient.status;
+
+    if (status == PatientStatus.pretest_pending)
       return SignUpQuestionnairePage();
-    else {
-      return Scaffold(
-        key: _scaffoldKey,
-        body: PageView(
-          children: <Widget>[
-            TherapistPage(),
-            ExercisePage(),
-            ProgressPage(),
-            MorePage(),
-          ],
-          controller: _pageController,
-          onPageChanged: onPageChanged,
-          physics: NeverScrollableScrollPhysics(),
-        ),
-        bottomNavigationBar: CupertinoTabBar(
-          currentIndex: pageIndex,
-          backgroundColor: Colors.white,
-          onTap: onTap,
-          activeColor: Theme.of(context).primaryColor,
-          items: [
-            BottomNavigationBarItem(
-              icon: Icon(CustomIcon.speech_bubble),
-              title: Text('Terapeuta'),
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(CustomIcon.car2),
-              title: Text('Retos'),
-            ),
-            BottomNavigationBarItem(
-                icon: Icon(
-                  CustomIcon.line_chart2,
-                ),
-                title: Text('Progreso')),
-            BottomNavigationBarItem(
-              icon: Icon(CustomIcon.more),
-              title: Text('Más'),
-            ),
-          ],
-        ),
+    else if (status == PatientStatus.pretest_in_progress)
+      return SignUpQuestionnairePage(
+        inProgress: true,
       );
+    else if (showAutoDriveDetectionAgreement == null)
+      return DrivingActivityAgreement();
+    else if (showPhyActivityAgreement == null)
+      return PhyActivityAgreement();
+    else if ([
+      PatientStatus.identify_categories_in_progress,
+      PatientStatus.identify_situations_in_progress,
+      PatientStatus.identify_situations_in_progress,
+      PatientStatus.identify_situations_pending
+    ].contains(status)) {
+      return ChatPage();
+    } else {
+      return _buildHomePage();
     }
   }
 

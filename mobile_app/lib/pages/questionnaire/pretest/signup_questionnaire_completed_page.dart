@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:tfg_app/models/patient.dart';
 import 'package:tfg_app/pages/driving_activity/driving_activity_agreement.dart';
-import 'package:tfg_app/pages/home_page.dart';
+import 'package:tfg_app/pages/initial_page.dart';
 import 'package:tfg_app/widgets/buttons.dart';
 import 'package:tfg_app/widgets/progress.dart';
 import 'package:tfg_app/services/auth.dart';
@@ -45,7 +46,7 @@ class _SignUpQuestionnaireCompletedState
 
   /// Creates document in 'patient' collection for current auth user
   Future<void> _createPatient() async {
-    await _authService.createPatient();
+    await _authService.updatePatientStatus(PatientStatus.pretest_completed);
     setState(() {
       _isLoading = false;
     });

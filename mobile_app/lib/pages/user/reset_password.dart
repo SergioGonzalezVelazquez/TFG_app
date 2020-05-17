@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:tfg_app/services/auth.dart';
-import 'package:android_intent/android_intent.dart';
+// import 'package:android_intent/android_intent.dart';
 import 'package:flutter/material.dart';
 import 'package:tfg_app/pages/user/login_page.dart';
 import 'package:tfg_app/themes/custom_icon_icons.dart';
@@ -86,7 +86,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
   void _openEmailApp() {
     final snackBar = customSnackbar(
         context, "No se pudo abrir ninguna aplicación de correo electrónico");
-
+    /*
     if (Platform.isAndroid) {
       AndroidIntent intent = AndroidIntent(
         action: 'android.intent.action.MAIN',
@@ -106,6 +106,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
             LoginPage.route, (Route<dynamic> route) => false);
       });
     }
+    */
   }
 
   Widget _linkToLogin() {

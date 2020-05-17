@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tfg_app/pages/home_page.dart';
 import 'package:tfg_app/services/driving_detection.dart';
 import 'package:tfg_app/widgets/progress.dart';
 import 'package:tfg_app/widgets/buttons.dart';
@@ -17,7 +19,6 @@ class DrivingActivityAgreementState extends State<DrivingActivityAgreement> {
   PageController _pageController = PageController();
 
   bool _isLoading = false;
-
   int _currentPage = 0;
 
   @override
@@ -34,14 +35,23 @@ class DrivingActivityAgreementState extends State<DrivingActivityAgreement> {
   /**
   * Functions used to handle events in this screen 
   */
-  void _activate() async {
+  Future<void> _activate() async {
     setState(() {
       _isLoading = true;
     });
     await DrivingDetectionService().startBackgroundService();
+    Navigator.of(context).pushNamedAndRemoveUntil(
+        HomePage.routeAuth, (Route<dynamic> route) => false);
+  }
+
+  Future<void> _cancel() async {
     setState(() {
-      _isLoading = false;
+      _isLoading = true;
     });
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool("drive_detection_enabled", false);
+    Navigator.of(context).pushNamedAndRemoveUntil(
+        HomePage.routeAuth, (Route<dynamic> route) => false);
   }
 
   void _more() {
@@ -117,7 +127,7 @@ class DrivingActivityAgreementState extends State<DrivingActivityAgreement> {
             height: MediaQuery.of(context).size.height * 0.03,
           ),
           Image.asset(
-            'assets/images/driving_route.png',
+            'assets/images/51541.png',
             height: MediaQuery.of(context).size.height * 0.30,
             fit: BoxFit.contain,
           ),
@@ -155,8 +165,8 @@ class DrivingActivityAgreementState extends State<DrivingActivityAgreement> {
               padding: EdgeInsets.all(0),
               onPressed: _currentPage != items - 1
                   ? null
-                  : () {
-                      /*...*/
+                  : () async {
+                      await _cancel();
                     },
               child: Text(
                 "No, gracias",
@@ -190,18 +200,19 @@ class DrivingActivityAgreementState extends State<DrivingActivityAgreement> {
     List<Widget> pages = [_infoPage(), _locationPage()];
     return Scaffold(
       body: SafeArea(
-          child: _isLoading
-              ? circularProgress(context)
-              : PageView(
-                  onPageChanged: (int page) {
-                    setState(() {
-                      _currentPage = page;
-                    });
-                  },
-                  controller: _pageController,
-                  scrollDirection: Axis.horizontal,
-                  children: <Widget>[_infoPage(), _locationPage()],
-                )),
+        child: _isLoading
+            ? circularProgress(context)
+            : PageView(
+                onPageChanged: (int page) {
+                  setState(() {
+                    _currentPage = page;
+                  });
+                },
+                controller: _pageController,
+                scrollDirection: Axis.horizontal,
+                children: <Widget>[_infoPage(), _locationPage()],
+              ),
+      ),
       bottomNavigationBar:
           _isLoading ? null : _bottonNavigationBar(context, pages.length),
     );

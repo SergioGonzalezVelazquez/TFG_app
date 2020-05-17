@@ -37,6 +37,7 @@ Future<List<QuestionnaireItemGroup>> getSignupQuestionnaire() async {
         .map((item) => QuestionnaireItem.fromDocument(item))
         .toList();
   }
+
   return questionGroups;
 }
 
@@ -65,9 +66,17 @@ Future<void> deleteSignUpResponse(QuestionnaireItem item) async {
       .updateData({item.id: FieldValue.delete()});
 }
 
+/// fetch questionnaire response and set each answer to it question.
+/// It is used when user has a questionnaire in progress
+Future<Map<String, dynamic>> getQuestionnaireResponses() async {
+  DocumentSnapshot doc =
+      await signUpQuestionnaireResponseRef.document(_authService.user.id).get();
+
+  return doc.exists ? doc.data : null;
+}
+
 Future<List<DrivingActivity>> getDrivingActivities() async {
   QuerySnapshot activitiesDocs = await drivingActivityRef
-      // .document("OXdhwafP8zc96dtKRtk3mcaoUFx1")
       .document(_authService.user.id)
       .collection('user_driving_activity')
       .getDocuments();

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 Widget primaryButton(BuildContext context, Function onPressed, String text,
-    {int fontSize,
+    {double fontSizeFactor = 1.0,
     Color color,
     double width,
     bool light = false,
@@ -19,10 +19,11 @@ Widget primaryButton(BuildContext context, Function onPressed, String text,
       color: !light ? primaryColor : Colors.white,
       child: Text(
         text,
-        style: TextStyle(
-            color: !light ? Colors.white : primaryColor,
-            //fontSize: fontSize ?? 14,
-            fontWeight: FontWeight.w800),
+        style: Theme.of(context).textTheme.button.apply(
+          color: !light ? Colors.white : primaryColor,
+          fontWeightDelta: 1,
+          fontSizeFactor: fontSizeFactor
+        )
       ),
     ),
   );

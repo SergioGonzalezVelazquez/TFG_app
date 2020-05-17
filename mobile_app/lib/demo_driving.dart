@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
-import 'package:tfg_app/pages/driving_activity/driving_activity_list.dart';
+import 'package:tfg_app/pages/driving_activity/driving_activity_page.dart';
 import 'package:tfg_app/widgets/buttons.dart';
 import 'package:tfg_app/services/auth.dart';
 import 'dart:convert';
@@ -224,7 +224,7 @@ class _DemoDrivingPageState extends State<DemoDrivingPage> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
-                                    DrivingActivityListPage()));
+                                    DrivingActivityPage()));
                       }, "View activities"),
                     ),
                   ],

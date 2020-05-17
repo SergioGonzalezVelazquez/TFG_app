@@ -1,17 +1,28 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:tfg_app/models/patient.dart';
 import 'package:tfg_app/models/questionnaire_group.dart';
 import 'package:tfg_app/models/questionnaire_item.dart';
 import 'package:tfg_app/pages/questionnaire/questionnaire_initial_page.dart';
 import 'package:tfg_app/pages/questionnaire/pretest/signup_questionnaire_completed_page.dart';
 import 'package:tfg_app/pages/questionnaire/questionnaire_components.dart';
+import 'package:tfg_app/services/auth.dart';
 import 'package:tfg_app/services/firestore.dart';
 import 'package:tfg_app/widgets/progress.dart';
+import 'package:tfg_app/widgets/custom_dialog.dart';
 import 'package:tfg_app/utils/questionnaire_utils.dart';
 
 class SignUpQuestionnairePage extends StatefulWidget {
   /// Name use for navigate to this screen
   static const route = "/signUpQuestionnaire";
+
+  // Flag used to determine wheter user has a questionnaire
+  // in progress or not
+  bool inProgress;
+
+  SignUpQuestionnairePage({bool inProgress = false}) {
+    this.inProgress = inProgress;
+  }
 
   ///Creates a StatelessElement to manage this widget's location in the tree.
   _SignUpQuestionnairePageState createState() =>
@@ -46,6 +57,12 @@ class _SignUpQuestionnairePageState extends State<SignUpQuestionnairePage>
   List<String> _multipleChoiceInputSelected = [];
   bool _booleanInputSelected;
 
+  bool _inProgress = false;
+
+  AuthService _authService;
+
+  DateTime _lastResponseDate = DateTime.now();
+
   /// Create a global key that uniquely identifies the Scaffold widget,
   /// and allows to display snackbars.
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
@@ -54,6 +71,7 @@ class _SignUpQuestionnairePageState extends State<SignUpQuestionnairePage>
   /// Initialize animation controller and fecht questionnaire items
   @override
   void initState() {
+    _authService = AuthService();
     _animateController = AnimationController(
         duration: Duration(milliseconds: 2000), vsync: this);
     _loadSignupQuestionnaire();
@@ -86,12 +104,53 @@ class _SignUpQuestionnairePageState extends State<SignUpQuestionnairePage>
               _mapItemToGroup[item.linkId] = group.index;
             }
           }
-          _isLoading = false;
         },
       );
-    }).catchError((error) {
-      print(error);
     });
+
+    if (widget.inProgress) {
+      await _setQuestionnaireResponses();
+    }
+
+    setState(() {
+      _isLoading = false;
+    });
+
+    print("inProgress " + _inProgress.toString());
+  }
+
+  Future<void> _setQuestionnaireResponses() async {
+    Map<String, dynamic> response = await getQuestionnaireResponses();
+
+    if (response == null || response.length <= 1) {
+      setState(() {
+        _inProgress = false;
+      });
+    } else {
+      int index = 0;
+
+      while (index < _questionnaireItems.length && response.length > 1) {
+        QuestionnaireItem item = _questionnaireItems[index];
+        if (response.containsKey(item.id)) {
+          _questionnaireItems[index].answerValue = response[item.id];
+          response.removeWhere((key, value) => key == item.id);
+        }
+        index++;
+      }
+      index--;
+      setState(() {
+        _inProgress = (index > 0);
+        if (_inProgress) {
+          _lastResponseDate = response['start_at'].toDate();
+          _currentQuestionnaireItem = _questionnaireItems[index - 1];
+          print(_currentQuestionnaireItem.linkId.toString());
+          _currentGroupIndex =
+              _mapItemToGroup[_currentQuestionnaireItem.linkId];
+
+          print(_currentGroupIndex);
+        }
+      });
+    }
   }
 
   Future _startAnimation() async {
@@ -103,11 +162,26 @@ class _SignUpQuestionnairePageState extends State<SignUpQuestionnairePage>
 
   /// Method used to used handle the system back button.
   Future<bool> _onWillPop() async {
-    if (_currentQuestionnaireItem != null && _previousQuestion() >= 0) {
-      return false;
-    }
-    //TODO: Mostrar diálogo preguntado si se quiere salir del cuestionario
-    return false;
+    bool close = false;
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) => CustomDialog(
+        title: "¿Seguro que quieres salir?",
+        description:
+            "Cuando vuelvas podrás continuar respondiendo desde la última pregunta en que lo dejaste.",
+        buttonText2: "Salir",
+        buttonFunction2: () {
+          close = true;
+          Navigator.pop(context);
+        },
+        buttonFunction1: () {
+          close = false;
+          Navigator.pop(context);
+        },
+        buttonText1: "Continuar",
+      ),
+    );
+    return close;
   }
 
   void _continue() {
@@ -246,8 +320,7 @@ class _SignUpQuestionnairePageState extends State<SignUpQuestionnairePage>
       type = !(_currentQuestionnaireItem.mandatory)
           ? 'Si la respondes, puedes seleccionar una o varias respuestas'
           : 'Puedes seleccionar una o varias respuestas';
-    }
-    else if(_currentQuestionnaireItem.mandatory) {
+    } else if (_currentQuestionnaireItem.mandatory) {
       type = 'Elige una única respuesta.';
     }
 
@@ -359,6 +432,53 @@ class _SignUpQuestionnairePageState extends State<SignUpQuestionnairePage>
     );
   }
 
+  Widget _resumePage() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisSize: MainAxisSize.max,
+      children: <Widget>[
+        SizedBox(
+          height: MediaQuery.of(context).size.height * 0.1,
+        ),
+        Text(
+          "¡Bienvenido a STOPMiedo!",
+          textAlign: TextAlign.justify,
+          style: Theme.of(context).textTheme.headline5,
+        ),
+        SizedBox(
+          height: MediaQuery.of(context).size.height * 0.05,
+        ),
+        Image.asset(
+          'assets/images/4824.jpg',
+          width: MediaQuery.of(context).size.width,
+        ),
+        SizedBox(
+          height: MediaQuery.of(context).size.height * 0.05,
+        ),
+        Text(
+          "Cuéntanos un poco más sobre ti",
+          textAlign: TextAlign.start,
+          style: Theme.of(context).textTheme.subtitle1,
+        ),
+        SizedBox(
+          height: MediaQuery.of(context).size.height * 0.02,
+        ),
+        Text(
+          "Empezaste a responder este cuestionario el " +
+              _lastResponseDate.toString(),
+          textAlign: TextAlign.justify,
+        ),
+        SizedBox(
+          height: MediaQuery.of(context).size.height * 0.02,
+        ),
+        Text(
+          "Puedes continuar respondiendo por la pregunta en que lo dejaste, o borrar tus respuestas anteriores y empezar a responder desde cero.",
+          textAlign: TextAlign.justify,
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -382,17 +502,31 @@ class _SignUpQuestionnairePageState extends State<SignUpQuestionnairePage>
                   ),
                   child: _animateController.isCompleted
                       ? _buildPage(context)
-                      : QuestionnaireInitialPage(
-                          buttonText: "Empezar",
-                          animateController: _animateController,
-                          pageWidget: _welcomePage(),
-                          screenWidth: width,
-                          screenHeigth: height,
-                          onStartAnimation: () {
-                            createSignUpResponse();
-                            _startAnimation();
-                          },
-                        ),
+                      : (_inProgress
+                          ? QuestionnaireInitialPage(
+                              buttonText: "Reanudar",
+                              animateController: _animateController,
+                              pageWidget: _resumePage(),
+                              screenWidth: width,
+                              screenHeigth: height,
+                              onStartAnimation: () {
+                                _startAnimation();
+                              },
+                            )
+                          : QuestionnaireInitialPage(
+                              buttonText: "Empezar",
+                              animateController: _animateController,
+                              pageWidget: _welcomePage(),
+                              screenWidth: width,
+                              screenHeigth: height,
+                              onStartAnimation: () {
+                                createSignUpResponse();
+                                _authService.updatePatientStatus(
+                                    PatientStatus.pretest_in_progress);
+
+                                _startAnimation();
+                              },
+                            )),
                 ),
               ),
         bottomNavigationBar: _animateController.isCompleted && !_isLoading
