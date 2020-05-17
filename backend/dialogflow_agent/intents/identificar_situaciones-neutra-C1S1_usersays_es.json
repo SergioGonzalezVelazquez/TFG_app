@@ -1,0 +1,130 @@
+[
+  {
+    "id": "4c578c90-1083-4fca-9f7d-ef172eb6211b",
+    "data": [
+      {
+        "text": "subirme al vehículo",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "42487f55-9ee8-421a-8b90-6cf52b5009bd",
+    "data": [
+      {
+        "text": "subirme al coche",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "4027648c-aca7-4c8b-8eca-8c55a8f5e323",
+    "data": [
+      {
+        "text": "acercarme al coche",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "24430e6e-92c4-41c5-99ad-35709813990a",
+    "data": [
+      {
+        "text": "aproximarme ",
+        "userDefined": false
+      },
+      {
+        "text": "al vehículo",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "421410c7-1293-41e8-a84b-e8fcb6583aa6",
+    "data": [
+      {
+        "text": "sentarme en el vehículo",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "b2f4d87a-b7f9-46d8-a68a-8fe2592276e9",
+    "data": [
+      {
+        "text": "estar dentro ",
+        "userDefined": false
+      },
+      {
+        "text": "del",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      },
+      {
+        "text": " vehículo",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "8f1003f2-7c22-4f77-aa69-b07b5aafde0e",
+    "data": [
+      {
+        "text": "estar sentado en el coche",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "224154a3-0b38-4a13-8404-77812da88515",
+    "data": [
+      {
+        "text": "estar sentado en el vehículo",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "39c686e4-15e3-4b62-b085-71c408048555",
+    "data": [
+      {
+        "text": "sentarme en el coche",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  }
+]

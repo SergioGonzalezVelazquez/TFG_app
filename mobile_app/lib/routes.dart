@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:tfg_app/pages/chat/chat_page.dart';
+import 'package:tfg_app/pages/chat/identify_situations.dart';
 import 'package:tfg_app/pages/home_page.dart';
+import 'package:tfg_app/pages/initial_page.dart';
 import 'package:tfg_app/pages/questionnaire/pretest/signup_questionnaire_completed_page.dart';
 import 'package:tfg_app/pages/questionnaire/pretest/signup_questionnaire_page.dart';
 import 'package:tfg_app/pages/user/login_page.dart';
@@ -18,14 +20,24 @@ final appRoutes = {
   HomePage.routeAuth: (BuildContext context) => HomePage(
         isAuth: true,
       ),
+
+  // User
   LoginPage.route: (BuildContext context) => LoginPage(),
   SignUpPage.route: (BuildContext context) => SignUpPage(),
   ResetPasswordPage.route: (BuildContext context) => ResetPasswordPage(),
+  ProfilePage.route: (BuildContext context) => ProfilePage(),
+  UpdatePassword.route: (BuildContext context) => UpdatePassword(),
+
+  // Pretest - Questionnaire
   SignUpQuestionnairePage.route: (BuildContext context) =>
       SignUpQuestionnairePage(),
   SignUpQuestionnaireCompleted.route: (BuildContext context) =>
       SignUpQuestionnaireCompleted(),
+
+  // Initial Page
+  InitialPage.route: (BuildContext context) => InitialPage(),
+
+  // Therapy
   ChatPage.route: (BuildContext context) => ChatPage(),
-  ProfilePage.route: (BuildContext context) => ProfilePage(),
-  UpdatePassword.route: (BuildContext context) => UpdatePassword(),
+  SituationsPage.route: (BuildContext context) => SituationsPage(),
 };

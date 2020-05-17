@@ -1,0 +1,80 @@
+{
+  "id": "0e31203f-d96a-4693-9487-748002647ef8",
+  "name": "identificar_categorias.estacionamiento.decidir",
+  "auto": true,
+  "contexts": [
+    "identificar_categorias_estacionamiento",
+    "identificar_categorias_global"
+  ],
+  "responses": [
+    {
+      "resetContexts": false,
+      "affectedContexts": [
+        {
+          "name": "identificar_categorias_estacionamiento",
+          "parameters": {},
+          "lifespan": 5
+        },
+        {
+          "name": "identificar_categorias_global",
+          "parameters": {},
+          "lifespan": 5
+        }
+      ],
+      "parameters": [],
+      "messages": [
+        {
+          "type": 0,
+          "lang": "es",
+          "condition": "",
+          "speech": "Sentir ansiedad en el momento de tener que buscar un sitio para estacionar parece un problema menor, y muchas veces la gente no va a terapia para tratar directamente este tema."
+        },
+        {
+          "type": 0,
+          "lang": "es",
+          "condition": "",
+          "speech": "¿Por qué?"
+        },
+        {
+          "type": 0,
+          "lang": "es",
+          "condition": "",
+          "speech": "En la mayoría de los casos porque las personas que sufren este miedo no se enfrentan al problema, y dejan de coger el coche o se limitan a conducir por zonas qué conocen perfectamente cómo se aparca."
+        },
+        {
+          "type": 4,
+          "lang": "es",
+          "condition": "",
+          "payload": {
+            "suggestions": [
+              {
+                "text": "Sin que venga ningún vehículo detrás",
+                "event": "ESTACIONAMIENTO_DECIDIR_SINVEHICULO"
+              },
+              {
+                "text": "Viniendo uno o varios vehículos detrás",
+                "event": "ESTACIONAMIENTO_DECIDIR_CONVEHICULOS"
+              },
+              {
+                "text": "Siempre",
+                "event": "ESTACIONAMIENTO_DECIDIR_SIEMPRE"
+              }
+            ]
+          }
+        }
+      ],
+      "defaultResponsePlatforms": {
+        "google": true
+      },
+      "speech": []
+    }
+  ],
+  "priority": 500000,
+  "webhookUsed": true,
+  "webhookForSlotFilling": false,
+  "fallbackIntent": false,
+  "events": [],
+  "conditionalResponses": [],
+  "condition": "",
+  "conditionalFollowupEvents": []
+}

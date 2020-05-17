@@ -10,3 +10,10 @@ export async function readFromDB(collection: string, documentId) {
     const documentSnapshot = await db.collection(collection).doc(documentId).get();
     return documentSnapshot;
 }
+
+export async function writeInDB(collection: string, documentId: string, data) {
+    // Get the database collection reference and read document with documentId
+    await db.collection(collection).doc(documentId).update(data);
+    console.log("escrito")
+}
+

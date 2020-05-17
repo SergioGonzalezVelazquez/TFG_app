@@ -1,0 +1,74 @@
+[
+  {
+    "id": "573d0cb5-f9ee-4c45-8d33-b23b02e40c57",
+    "data": [
+      {
+        "text": "tengo fobia a arrancar el ",
+        "userDefined": false
+      },
+      {
+        "text": "coche",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "0e5fa1f8-2b29-44d7-b1c2-b3239490f112",
+    "data": [
+      {
+        "text": "no",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      },
+      {
+        "text": " puedo poner en ",
+        "userDefined": false
+      },
+      {
+        "text": "marcha",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      },
+      {
+        "text": " el ",
+        "userDefined": false
+      },
+      {
+        "text": "coche",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "66a06b8e-b663-4c1e-819f-e84f72c64836",
+    "data": [
+      {
+        "text": "me da miedo empezar a circular",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "60274dbb-02a9-4dfe-b802-91eb94600f62",
+    "data": [
+      {
+        "text": "me produce ansiedad arrancar el vehículo",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  }
+]

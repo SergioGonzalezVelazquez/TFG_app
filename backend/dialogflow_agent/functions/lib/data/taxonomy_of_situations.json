@@ -1,0 +1,369 @@
+{
+    "N1": {
+        "category": "Situaciones de aproximación al vehículo y puesta en marcha",
+        "situations": {
+            "S1": {
+                "name": "Sentarme en el vehículo",
+                "items": [
+                    {
+                        "C1-S1": "Sentarme en el vehículo"
+                    }
+                ]
+            },
+            "S2": {
+                "name": "Arrancar el vehículo",
+                "items": [
+                    {
+                        "C1-S2": "Arrancar el vehículo"
+                    }
+                ]
+            }
+        }
+    },
+    "N2": {
+        "category": "Situaciones de inicio o reanudación de la marcha",
+        "situations": {
+            "S1": {
+                "name": "Salir de la cochera",
+                "items": {
+                    "C2-S1": "Salir de la cochera"
+                }
+            },
+            "S2": {
+                "name": "Incorporación al tráfico desde una situación de parada",
+                "items": {
+                    "C2-S2": "Incorporarme al tráfico desde una situación de parada"
+                }
+            },
+            "S3": {
+                "name": "Incorporación al tráfico desde otra vía",
+                "items": {
+                    "C2-S3": "Incorporarme al tráfico desde otra vía (p.ej incorporación a una autovía desde una vía convencional)"
+                }
+            }
+        }
+    },
+    "N3": {
+        "category": "Estacionamiento",
+        "situations": {
+            "S1": {
+                "name": "Decidir un sitio en el que aparcar",
+                "variants": {
+                    "PC": {
+                        "name": "Presión de otros conductores",
+                        "items": {
+                            "C3-S1-PCA": "Decidir dónde aparcar sin que venga ningún vehículo detrás",
+                            "C3-S1-PCB": "Decidir dónde aparcar viniendo uno o varios vehículos detrás",
+                            "C3-S1-PCC": "Otros conductores hacen sonar el claxon mientras se busco un sitio en el que aparcar"
+                        }
+                    }
+                }
+            },
+            "S2": {
+                "name": "Realizar maniobras de estacionamiento",
+                "variants": {
+                    "PS": {
+                        "name": "Presión social",
+                        "items": {
+                            "C3-S2-PSA": "Aparco sin que haya vehículos esperando",
+                            "C3-S2-PSB": "Otras personas me miran mientras realizo maniobras de estacionamiento",
+                            "C3-S2-PSC": "Aparco sin que haya vehículos esperando",
+                            "C3-S2-PSD": "Aparco habiendo un vehículo a la espera",
+                            "C3-S2-PSE": "Aparco habiendo una cola de vehículos a la espera",
+                            "C3-S2-PSF": "Otros conductores hacen sonar el claxon mientras realizo maniobras para aparcar"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "N4": {
+        "category": "Circulación",
+        "situations": {
+            "S1": {
+                "name": "Circulación por población",
+                "variants": {
+                    "CON": {
+                        "name": "¿Ruta Conocida o no?",
+                        "items": {
+                            "C4-S1-CONA": "Circulo por una población conocida",
+                            "C4-S1-CONB": "Circulo por una población no conocida"
+                        }
+                    },
+                    "CC": {
+                        "name": "Condiciones del conductor",
+                        "items": {
+                            "C4-S1-CCA": "Circulo por una población cuando me encuentro mal físicamente",
+                            "C4-S1-CCB": "Circulo por una población cuando me encuentro mal psiquicamente/emocionalmente"
+                        }
+                    },
+                    "TAM": {
+                        "name": "Tamaño población",
+                        "items": {
+                            "C4-S1-TAMA": "Circulo por una población pequeña",
+                            "C4-S1-TAMB": "Circulo por una gran población"
+                        }
+                    },
+                    "CCA": {
+                        "name": "Condiciones climatológicas adversas",
+                        "items": {
+                            "C4-S1-CCAA": "Circulo por una población en un día soleado",
+                            "C4-S1-CCAB": "Circulo por una población mientras llueve",
+                            "C4-S1-CCAC": "Circulo por una población mientras nieva"
+                        }
+                    },
+                    "FT": {
+                        "name": "Fluidez del tráfico",
+                        "items": {
+                            "C4-S1-FTA": "Circulo por población y hay poco tráfico",
+                            "C4-S1-FTB": "Circulo por población y el tráfico es fluido",
+                            "C4-S1-FTC": "Circulo por población y hay mucho tráfico"
+                        }
+                    },
+                    "CT": {
+                        "name": "Condiciones temporales",
+                        "items": {
+                            "C4-S1-CTA": "Circulo por población de día",
+                            "C4-S1-CTB": "Circulo por población de noche",
+                            "C4-S1-CTC": "Circulo por población en fin de semana",
+                            "C4-S1-CTD": "Circulo por población entre semana"
+                        }
+                    },
+                    "OC": {
+                        "name": "Ocupantes",
+                        "items": {
+                            "C4-S1-OCA": "Circulo por población solo/a",
+                            "C4-S1-OCB": "Circulo por población acompañado de adulto/s",
+                            "C4-S1-OCC": "Circulo por población con niños"
+                        }
+                    },
+                    "OT": {
+                        "name": "Otros",
+                        "items": {
+                            "C4-S1-OTA": "Circulo por población con circulación densa y oigo que se acerca una ambulancia, coche de bomberos, policía, ...",
+                            "C4-S1-OTB": "Circulo por población y llego a un cruce complicado",
+                            "C4-S1-OTC": "Circulo por población y mis acompañantes critican mi forma de conducir",
+                            "C4-S1-OTD": "Circulo por población y otros conductores o los peatones me increpan"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "N5": {
+        "category": "Circulación",
+        "situations": {
+            "S2": {
+                "name": "Circulación por carretera",
+                "variants": {
+                    "CON": {
+                        "name": "¿Ruta Conocida o no?",
+                        "items": {
+                            "C4-S2-CONA": "Circulo por una carretera conocida",
+                            "C4-S2-CONB": "Circulo por una carretera no conocida"
+                        }
+                    },
+                    "CC": {
+                        "name": "Condiciones del conductor",
+                        "items": {
+                            "C4-S2-CCA": "Circulo por una carretera cuando me encuentro mal físicamente",
+                            "C4-S2-CCB": "Circulo por una carretera cuando me encuentro mal psiquicamente/emocionalmente"
+                        }
+                    },
+                    "TV": {
+                        "name": "Tipo de vía",
+                        "items": {
+                            "C4-S2-TVA": "Circulo por una carretera nacional",
+                            "C4-S2-TVB": "Circulo por una autovía/autopista",
+                            "C4-S2-TVC": "Circulo por una carretera regional/comarcal"
+                        }
+                    },
+                    "CCA": {
+                        "name": "Condiciones climatológicas adversas",
+                        "items": {
+                            "C4-S2-CCAA": "Circulo por una carretera en un día soleado",
+                            "C4-S2-CCAB": "Circulo por una carretera en un día con viento",
+                            "C4-S2-CCAC": "Circulo por una carretera mientras llueve",
+                            "C4-S2-CCAD": "Circulo por una carretera mientras nieva"
+                        }
+                    },
+                    "FT": {
+                        "name": "Fluidez del tráfico",
+                        "items": {
+                            "C4-S2-FTA": "Circulo por carretera y hay poco tráfico",
+                            "C4-S2-FTB": "Circulo por carretera y el tráfico es fluido",
+                            "C4-S2-FTC": "Circulo por carretera y hay mucho tráfico"
+                        }
+                    },
+                    "CT": {
+                        "name": "Condiciones temporales",
+                        "items": {
+                            "C4-S2-CTA": "Circulo por carretera de día",
+                            "C4-S2-CTB": "Circulo por carretera de noche",
+                            "C4-S2-CTC": "Circulo por carretera en fin de semana",
+                            "C4-S2-CTD": "Circulo por carretera entre semana"
+                        }
+                    },
+                    "OC": {
+                        "name": "Ocupantes",
+                        "items": {
+                            "C4-S2-OCA": "Circulo por carretera solo/a",
+                            "C4-S2-OCB": "Circulo por carretera acompañado de adulto/s",
+                            "C4-S2-OCC": "Circulo por carretera con niños"
+                        }
+                    },
+                    "OT": {
+                        "name": "Otros",
+                        "items": {
+                            "C4-S2-OTA": "Circulo por carretera con circulación densa y oigo que se acerca una ambulancia, coche de bomberos, policía, ...",
+                            "C4-S2-OTB": "Circulo por carretera y otros vehículos me adelantan a gran velocidad y sin avisar",
+                            "C4-S2-OTC": "Circulo por carretera y llego a un cruce complicado",
+                            "C4-S2-OTD": "Circulo por una vía sin arcén",
+                            "C4-S2-OTE": "Circulo por una vía en la que es díficil detenerse o dar la vuelta",
+                            "C4-S2-OTF": "Tengo que realizar un trayecto largo por carretera",
+                            "C4-S2-OTG": "Circulo por carretera y detrás hay un vehículo muy pegado al mio",
+                            "C4-S2-OTH": "Circulo por carretera y los acompañantes critican mi forma de conducir",
+                            "C4-S2-OTI": "Circulo por carretera y veo durante el viaje indicios de un accidente reciente",
+                            "C4-S2-OTJ": "Circulo por carretera y otros conductores me increpan"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "N6": {
+        "category": "Adelantamiento",
+        "situations": {
+            "S1": {
+                "name": "Carretera de un único sentido del tráfico en la misma calzada",
+                "variants": {
+                    "CC": {
+                        "name": "Condiciones del conductor",
+                        "items": {
+                            "C5-S1-CCA": "Adelantamiento en una carretera de sentido único (autopista/autovía) cuando me encuentro mal físicamente",
+                            "C5-S1-CCB": "Adelantamiento en una carretera de sentido único (autopista/autovía) cuando me encuentro mal psiquicamente/emocionalmente"
+                        }
+                    },
+                    "VA": {
+                        "name": "Tipo de vehículo a adelantar",
+                        "items": {
+                            "C5-S1-VAA": "Adelantamiento en una carretera de sentido único (autopista/autovía) a un vehículo corto",
+                            "C5-S1-VAB": "Adelantamiento en una carretera de sentido único (autopista/autovía) a bicicletas/motos",
+                            "C5-S1-VAC": "Adelantamiento en una carretera de sentido único (autopista/autovía) a un vehículo largo (camión o autobus)",
+                            "C5-S1-VAD": "Adelantamiento en una carretera de sentido único (autopista/autovía) a un vehículo lento (tractor)",
+                            "C5-S1-VAE": "Adelantamiento en una carretera de sentido único (autopista/autovía) a varios vehículos"
+                        }
+                    },
+                    "CCA": {
+                        "name": "Condiciones climatológicas adversas",
+                        "items": {
+                            "C5-S1-CCAA": "Adelantamiento en una carretera de sentido único (autopista/autovía) en un día soleado",
+                            "C5-S1-CCAB": "Adelantamiento en una carretera de sentido único (autopista/autovía) en un día con viento",
+                            "C5-S1-CCAC": "Adelantamiento en una carretera de sentido único (autopista/autovía) mientras llueve",
+                            "C5-S1-CCAD": "Adelantamiento en una carretera de sentido único (autopista/autovía) mientras nieva"
+                        }
+                    },
+                    "FT": {
+                        "name": "Fluidez del tráfico",
+                        "items": {
+                            "C5-S1-FTA": "Adelantamiento en una carretera de sentido único (autopista/autovía) y hay poco tráfico",
+                            "C5-S1-FTB": "Adelantamiento en una carretera de sentido único (autopista/autovía) y el tráfico es fluido",
+                            "C5-S1-FTC": "Adelantamiento en una carretera de sentido único (autopista/autovía) y hay mucho tráfico"
+                        }
+                    },
+                    "CT": {
+                        "name": "Condiciones temporales",
+                        "items": {
+                            "C5-S1-CTA": "Adelantamiento en una carretera de sentido único (autopista/autovía) de día",
+                            "C5-S1-CTB": "Adelantamiento en una carretera de sentido único (autopista/autovía) de noche",
+                            "C5-S1-CTC": "Adelantamiento en una carretera de sentido único (autopista/autovía) en fin de semana",
+                            "C5-S1-CTD": "Adelantamiento en una carretera de sentido único (autopista/autovía) entre semana"
+                        }
+                    },
+                    "OC": {
+                        "name": "Ocupantes",
+                        "items": {
+                            "C5-S1-OCA": "Adelantamiento en una carretera de sentido único (autopista/autovía) solo/a",
+                            "C5-S1-OCB": "Adelantamiento en una carretera de sentido único (autopista/autovía) acompañado de adulto/s",
+                            "C5-S1-OCC": "Adelantamiento en una carretera de sentido único (autopista/autovía) con niños"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "N7": {
+        "category": "Adelantamiento",
+        "situations": {
+            "S2": {
+                "name": "Carretera con doble sentido del tráfico en la misma calzada",
+                "variants": {
+                    "CC": {
+                        "name": "Condiciones del conductor",
+                        "items": {
+                            "C5-S2-CCA": "Adelantamiento en una carretera con doble sentido cuando me encuentro mal físicamente",
+                            "C5-S2-CCB": "Adelantamiento en una carretera con doble sentido cuando me encuentro mal psiquicamente/emocionalmente"
+                        }
+                    },
+                    "TV": {
+                        "name": "Tipo de vía",
+                        "items": {
+                            "C5-S2-TVA": "Adelantamiento en una carretera nacional (con doble sentido)",
+                            "C5-S2-TVB": "Adelantamiento en una carretera regional/comarcal (con doble sentido)"
+                        }
+                    },
+                    "VA": {
+                        "name": "Tipo de vehículo a adelantar",
+                        "items": {
+                            "C5-S2-VAA": "Adelantamiento en una carretera con doble sentido a un vehículo corto",
+                            "C5-S2-VAB": "Adelantamiento en una carretera con doble sentido a bicicletas/motos",
+                            "C5-S2-VAC": "Adelantamiento en una carretera con doble sentido a un vehículo largo (camión o autobus)",
+                            "C5-S2-VAD": "Adelantamiento en una carretera con doble sentido a un vehículo lento (tractor)",
+                            "C5-S2-VAE": "Adelantamiento en una carretera con doble sentido a varios vehículos"
+                        }
+                    },
+                    "CCA": {
+                        "name": "Condiciones climatológicas adversas",
+                        "items": {
+                            "C5-S2-CCAA": "Adelantamiento en una carretera con doble sentido en un día soleado",
+                            "C5-S2-CCAB": "Adelantamiento en una carretera con doble sentido en un día con viento",
+                            "C5-S2-CCAC": "Adelantamiento en una carretera con doble sentido mientras llueve",
+                            "C5-S2-CCAD": "Adelantamiento en una carretera con doble sentido mientras nieva"
+                        }
+                    },
+                    "FT": {
+                        "name": "Fluidez del tráfico",
+                        "items": {
+                            "C5-S2-FTA": "Adelantamiento en una carretera con doble sentido y hay poco tráfico",
+                            "C5-S2-FTB": "Adelantamiento en una carretera con doble sentido y el tráfico es fluido",
+                            "C5-S2-FTC": "Adelantamiento en una carretera con doble sentido y hay mucho tráfico"
+                        }
+                    },
+                    "CT": {
+                        "name": "Condiciones temporales",
+                        "items": {
+                            "C5-S2-CTA": "Adelantamiento en una carretera con doble sentido de día",
+                            "C5-S2-CTB": "Adelantamiento en una carretera con doble sentido de noche",
+                            "C5-S2-CTC": "Adelantamiento en una carretera con doble sentido en fin de semana",
+                            "C5-S2-CTD": "Adelantamiento en una carretera con doble sentido entre semana"
+                        }
+                    },
+                    "OC": {
+                        "name": "Ocupantes",
+                        "items": {
+                            "C5-S2-OCA": "Adelantamiento en una carretera con doble sentido solo/a",
+                            "C5-S2-OCB": "Adelantamiento en una carretera con doble sentido acompañado de adulto/s",
+                            "C5-S2-OCC": "Adelantamiento en una carretera con doble sentido con niños"
+                        }
+                    },
+                    "OT": {
+                        "name": "Otros",
+                        "items": {
+                            "C5-S2-OTA": "Adelantamiento en una carretera con doble sentido, creo que no me dará tiempo a acabar el adelantamiento y viene un coche de frente"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

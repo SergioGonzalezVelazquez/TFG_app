@@ -63,3 +63,12 @@ Future<void> deleteSignUpResponse(QuestionnaireItem item) async {
       .document(_authService.user.id)
       .updateData({item.id: FieldValue.delete()});
 }
+
+/// fetch questionnaire response and set each answer to it question.
+/// It is used when user has a questionnaire in progress
+Future<Map<String, dynamic>> getQuestionnaireResponses() async {
+  DocumentSnapshot doc =
+      await signUpQuestionnaireResponseRef.document(_authService.user.id).get();
+
+  return doc.exists ? doc.data : null;
+}

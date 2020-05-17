@@ -1,0 +1,178 @@
+{
+    "1": {
+        "name": "Básico-limitado ciudad sin estacionamiento",
+        "situations": {
+            "N1": [
+                "C1-S1",
+                "C1-S2"
+            ],
+            "N2": [
+                "C2-S1",
+                "C2-S2",
+                "C2-S3"
+            ],
+            "N4": [
+                "C4-S1-CONA",
+                "C4-S1-CCA",
+                "C4-S1-CCB",
+                "C4-S1-TAMA",
+                "C4-S1-TAMB",
+                "C4-S1-FTA",
+                "C4-S1-FTB",
+                "C4-S1-FTC",
+                "C4-S1-CCAA",
+                "C4-S1-CCAB",
+                "C4-S1-CCAC",
+                "C4-S1-OCA",
+                "C4-S1-OCB",
+                "C4-S1-OCC",
+                "C4-S1-OTA",
+                "C4-S1-OTB",
+                "C4-S1-OTC",
+                "C4-S1-OTD"
+            ]
+        },
+        "greatest_anxiety": [
+            "C4-S1-FTC",
+            "C4-S1-CCAB",
+            "C4-S1-OCA",
+            "C4-S1-OCC",
+            "C4-S1-OTA",
+            "C4-S1-OTB",
+            "C4-S1-OTC",
+            "C4-S1-OTD"
+        ]
+    },
+    "2": {
+        "name": "Básico-limitado ciudad",
+        "greatest_anxiety": [
+            "C3-S2-PSE",
+            "C3-S2-PSF",
+            "C4-S1-FTC",
+            "C4-S1-CCAB",
+            "C4-S1-OCA",
+            "C4-S1-OCC",
+            "C4-S1-OTA",
+            "C4-S1-OTB",
+            "C4-S1-OTC",
+            "C4-S1-OTD"
+        ]
+    },
+    "3": {
+        "name": "Básico ciudad sin estacionamiento",
+        "greatest_anxiety": [
+            "C4-S1-CONB",
+            "C4-S1-TAMB",
+            "C4-S1-FTC",
+            "C4-S1-CCAB",
+            "C4-S1-OCA",
+            "C4-S1-OCC",
+            "C4-S1-OTA",
+            "C4-S1-OTB",
+            "C4-S1-OTC",
+            "C4-S1-OTD"
+        ]
+    },
+    "4": {
+        "name": "Básico ciudad",
+        "greatest_anxiety": [
+            "C3-S2-PSE",
+            "C3-S2-PSF",
+            "C4-S1-CONB",
+            "C4-S1-TAMB",
+            "C4-S1-FTC",
+            "C4-S1-CCAB",
+            "C4-S1-OCA",
+            "C4-S1-OCC",
+            "C4-S1-OTA",
+            "C4-S1-OTB",
+            "C4-S1-OTC",
+            "C4-S1-OTD"
+        ]
+    },
+    "5": {
+        "name": "Básico-limitado completo sin estacionamiento",
+        "greatest_anxiety": [
+            "C4-S2-CONB",
+            "C4-S2-CCB",
+            "C4-S2-FTC",
+            "C4-S2-OCA",
+            "C4-S2-OCC",
+            "C4-S2-OTA",
+            "C4-S2-OTB",
+            "C4-S2-OTC",
+            "C4-S2-OTD",
+            "C4-S2-OTE",
+            "C4-S2-OTF",
+            "C4-S2-OTG"
+        ]
+    },
+    "6": {
+        "name": "Básico-limitado completo",
+        "greatest_anxiety": [
+            "C3-S2-PSE",
+            "C3-S2-PSF",
+            "C4-S2-CONB",
+            "C4-S2-CCB",
+            "C4-S2-FTC",
+            "C4-S2-OCA",
+            "C4-S2-OCC",
+            "C4-S2-OTA",
+            "C4-S2-OTB",
+            "C4-S2-OTC",
+            "C4-S2-OTD",
+            "C4-S2-OTE",
+            "C4-S2-OTF",
+            "C4-S2-OTG"
+        ]
+    },
+    "7": {
+        "name": "Básico completo sin estacionamiento",
+        "greatest_anxiety": [
+            "C4-S2-CONB",
+            "C4-S2-CCB",
+            "C4-S2-CTB",
+            "C4-S2-CCAC",
+            "C4-S2-FTC",
+            "C4-S2-OCA",
+            "C4-S2-OCC",
+            "C4-S2-OTA",
+            "C4-S2-OTB",
+            "C4-S2-OTC",
+            "C4-S2-OTD",
+            "C4-S2-OTE",
+            "C4-S2-OTF",
+            "C4-S2-OTG"
+        ]
+    },
+    "8": {
+        "name": "Básico completo",
+        "greatest_anxiety": [
+            "C3-S2-PSE",
+            "C3-S2-PSF",
+            "C4-S2-CONB",
+            "C4-S2-CCB",
+            "C4-S2-CTB",
+            "C4-S2-CCAC",
+            "C4-S2-FTC",
+            "C4-S2-OCA",
+            "C4-S2-OCC",
+            "C4-S2-OTA",
+            "C4-S2-OTB",
+            "C4-S2-OTC",
+            "C4-S2-OTD",
+            "C4-S2-OTE",
+            "C4-S2-OTF",
+            "C4-S2-OTG"
+        ]
+    },
+    "9": {
+        "name": "Avanzado sin estacionamiento"
+    },
+    "10": {
+        "name": "Avazando completo"
+    },
+    "11": {
+        "name": "Avazando completo + adelantamiento"
+    }
+}

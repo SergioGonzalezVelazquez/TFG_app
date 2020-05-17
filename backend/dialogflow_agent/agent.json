@@ -7,7 +7,7 @@
   "disableInteractionLogs": false,
   "disableStackdriverLogs": true,
   "googleAssistant": {
-    "googleAssistantCompatible": false,
+    "googleAssistantCompatible": true,
     "project": "stopmiedo-ikiqvp",
     "welcomeIntentSignInRequired": false,
     "startIntents": [],

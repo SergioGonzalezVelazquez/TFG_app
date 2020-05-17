@@ -1,0 +1,39 @@
+{
+  "id": "329bd7d1-dcf7-4ff7-9c7c-6f29767ed237",
+  "parentId": "c1655de4-03a7-4f73-93d8-5568cd6f29ce",
+  "rootParentId": "0f4b914c-3281-46a6-9202-32e864c250da",
+  "name": "identificar_situaciones-neutra-C1S1-no",
+  "auto": true,
+  "contexts": [
+    "identificar_situaciones",
+    "identificar_situaciones-neutra-followup",
+    "identificar_situaciones-neutra-value-followup",
+    "identificar_situaciones-neutra-C1S1-followup"
+  ],
+  "responses": [
+    {
+      "resetContexts": false,
+      "action": "identificar_situaciones.identificar_situaciones-custom.identificar_situaciones-neutra-custom.identificar_situaciones-neutra-C1S1-no",
+      "affectedContexts": [],
+      "parameters": [],
+      "messages": [
+        {
+          "type": 0,
+          "lang": "es",
+          "condition": "",
+          "speech": "De acuerdo. ¿Puedes repetirme una situación que no te provoca ansiedad?"
+        }
+      ],
+      "defaultResponsePlatforms": {},
+      "speech": []
+    }
+  ],
+  "priority": 500000,
+  "webhookUsed": false,
+  "webhookForSlotFilling": false,
+  "fallbackIntent": false,
+  "events": [],
+  "conditionalResponses": [],
+  "condition": "",
+  "conditionalFollowupEvents": []
+}

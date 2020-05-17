@@ -1,0 +1,77 @@
+{
+  "id": "db38499f-e5ef-4ddc-9018-6a408b7c5166",
+  "name": "viejo.welcome",
+  "auto": true,
+  "contexts": [],
+  "responses": [
+    {
+      "resetContexts": false,
+      "affectedContexts": [
+        {
+          "name": "identificar_situaciones",
+          "parameters": {},
+          "lifespan": 5
+        },
+        {
+          "name": "identificar_situacioneswelcome-followup",
+          "parameters": {},
+          "lifespan": 2
+        }
+      ],
+      "parameters": [
+        {
+          "id": "0d9504ff-9471-433d-ba82-151ecd1f2bb8",
+          "required": false,
+          "dataType": "",
+          "name": "username",
+          "value": "#IDENTIFY_SITUATIONS_PENDING.username",
+          "promptMessages": [],
+          "noMatchPromptMessages": [],
+          "noInputPromptMessages": [],
+          "outputDialogContexts": [],
+          "isList": false
+        }
+      ],
+      "messages": [
+        {
+          "type": 0,
+          "lang": "es",
+          "condition": "",
+          "speech": [
+            "¡Hola $username!, Bienvenido a STOPMiedo.",
+            "¡Buenos días $username! Bienvenido a STOPMiedo."
+          ]
+        },
+        {
+          "type": 0,
+          "lang": "es",
+          "condition": "",
+          "speech": [
+            "Voy ayudarte a superar la ansiedad al volante. Para ello, vamos a seguir un programa sistemático y estructurado de exposición a situaciones temidas que requiere un esfuerzo continuo.",
+            "Cómo muchos otros miedos, la ansiedad al volante puede tratarse mediante la exposición a situaciones que le producen miedo o ansiedad. Dicho método de exposición es lo que se conoce cómo desensibilización sistemática."
+          ]
+        },
+        {
+          "type": 0,
+          "lang": "es",
+          "condition": "",
+          "speech": "¿Por dónde empezamos? Puedo explicarte más en detalle la técnica que vamos a seguir, hablar sobre la amaxofobia o, si estás preparado, empezar con la terapia."
+        }
+      ],
+      "defaultResponsePlatforms": {},
+      "speech": []
+    }
+  ],
+  "priority": 500000,
+  "webhookUsed": true,
+  "webhookForSlotFilling": false,
+  "fallbackIntent": false,
+  "events": [
+    {
+      "name": "IDENTIFY_SITUATIONS_PENDING"
+    }
+  ],
+  "conditionalResponses": [],
+  "condition": "",
+  "conditionalFollowupEvents": []
+}

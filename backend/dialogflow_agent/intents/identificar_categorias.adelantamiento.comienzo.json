@@ -1,0 +1,44 @@
+{
+  "id": "0f1e29d4-a300-41f8-8c90-25f9406dad6f",
+  "name": "identificar_categorias.adelantamiento.comienzo",
+  "auto": true,
+  "contexts": [
+    "identificar_categorias"
+  ],
+  "responses": [
+    {
+      "resetContexts": false,
+      "affectedContexts": [
+        {
+          "name": "identificar_categorias",
+          "parameters": {},
+          "lifespan": 5
+        },
+        {
+          "name": "identificar_categorias_adelantamiento",
+          "parameters": {},
+          "lifespan": 5
+        }
+      ],
+      "parameters": [],
+      "messages": [
+        {
+          "type": 0,
+          "lang": "es",
+          "condition": "",
+          "speech": "Evento de estacionar"
+        }
+      ],
+      "defaultResponsePlatforms": {},
+      "speech": []
+    }
+  ],
+  "priority": 500000,
+  "webhookUsed": false,
+  "webhookForSlotFilling": false,
+  "fallbackIntent": false,
+  "events": [],
+  "conditionalResponses": [],
+  "condition": "",
+  "conditionalFollowupEvents": []
+}

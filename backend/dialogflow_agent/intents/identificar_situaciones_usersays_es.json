@@ -1,0 +1,176 @@
+[
+  {
+    "id": "48f3fb78-f91e-4766-8236-6ed407820254",
+    "data": [
+      {
+        "text": "claro que si",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "c2182c9a-45a3-44a6-845f-3a90662c51d5",
+    "data": [
+      {
+        "text": "claro",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "3b89b18a-72bf-46d0-8f48-d62061ae5407",
+    "data": [
+      {
+        "text": "confirmar",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "0534ec28-eb68-4b55-b22c-d49bc3e4f2b8",
+    "data": [
+      {
+        "text": "correcto",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "ee163591-1534-4253-a2bb-763e15d0eede",
+    "data": [
+      {
+        "text": "adelante",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "b05d718e-af36-426d-b2b1-3d75b4c99368",
+    "data": [
+      {
+        "text": "dale",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "1f64ef32-0974-4a40-abb3-bf4fc1d84769",
+    "data": [
+      {
+        "text": "empecemos",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "50a8b272-389b-4712-a348-f1726e9b6cf4",
+    "data": [
+      {
+        "text": "buena idea",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "5ded189a-bfc1-4592-be06-87a610ab5f0e",
+    "data": [
+      {
+        "text": "de acuerdo",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "f9b6cfa8-55ae-42b0-899d-73dcac6ce3b4",
+    "data": [
+      {
+        "text": "vamos",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "96338433-f8e1-4e0c-ab22-8b48b95f6f17",
+    "data": [
+      {
+        "text": "por supuesto",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "8e1d908f-86b0-44ec-a811-27154fc9e36f",
+    "data": [
+      {
+        "text": "si",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "6efece7f-dffb-4431-9dc2-b5ed9712d0c0",
+    "data": [
+      {
+        "text": "vale",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "a183ae47-9bb9-47d0-ba48-4982a2927954",
+    "data": [
+      {
+        "text": "venga",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  }
+]

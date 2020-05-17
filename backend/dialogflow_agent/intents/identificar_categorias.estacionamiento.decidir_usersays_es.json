@@ -1,0 +1,334 @@
+[
+  {
+    "id": "6b37187a-8f3a-4902-8294-311719a231c4",
+    "data": [
+      {
+        "text": "no",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      },
+      {
+        "text": " me gusta tener que buscar ",
+        "userDefined": false
+      },
+      {
+        "text": "aparcamiento",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "ad01aeef-b6f3-4ae8-8b8c-c4294957a7ff",
+    "data": [
+      {
+        "text": "me da miedo el tener que buscar ",
+        "userDefined": false
+      },
+      {
+        "text": "aparcamiento",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "5a609f40-b9b2-4980-8eac-4d8565a0f2db",
+    "data": [
+      {
+        "text": "mi",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      },
+      {
+        "text": " problema empieza cuando tengo que buscar sitio para ",
+        "userDefined": false
+      },
+      {
+        "text": "aparcar",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "bd1a90f3-db5f-498c-8442-fd7b70412aef",
+    "data": [
+      {
+        "text": "Cojo ",
+        "userDefined": false
+      },
+      {
+        "text": "el coche",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      },
+      {
+        "text": " sólo por zonas que conozco perfectamente cómo se ",
+        "userDefined": false
+      },
+      {
+        "text": "aparca",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "dc87fad6-f8a9-4fcb-8fbe-e568ba284912",
+    "data": [
+      {
+        "text": "me bloqueo ",
+        "userDefined": false
+      },
+      {
+        "text": "al",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      },
+      {
+        "text": " buscar ",
+        "userDefined": false
+      },
+      {
+        "text": "estacionamiento",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "ea279e0a-d13e-4904-a466-d331b5ec180d",
+    "data": [
+      {
+        "text": "siento torpeza ",
+        "userDefined": false
+      },
+      {
+        "text": "al",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      },
+      {
+        "text": " buscar ",
+        "userDefined": false
+      },
+      {
+        "text": "aparcamiento",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "3a54a785-db93-4ca8-b1db-f58bfa709dad",
+    "data": [
+      {
+        "text": "me ",
+        "userDefined": false
+      },
+      {
+        "text": "cuesta",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      },
+      {
+        "text": " mucho encontrar un ",
+        "userDefined": false
+      },
+      {
+        "text": "estacionamiento",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "98f5ff81-b687-4399-a2b9-80110e0e9322",
+    "data": [
+      {
+        "text": "me produce estrés decidir ",
+        "userDefined": false
+      },
+      {
+        "text": "un",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      },
+      {
+        "text": " sitio ",
+        "userDefined": false
+      },
+      {
+        "text": "en el",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      },
+      {
+        "text": " que ",
+        "userDefined": false
+      },
+      {
+        "text": "estacionar",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "b2260308-1a93-4691-96a5-e08a88bd2a44",
+    "data": [
+      {
+        "text": "tengo ansiedad ",
+        "userDefined": false
+      },
+      {
+        "text": "al",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      },
+      {
+        "text": " decidir ",
+        "userDefined": false
+      },
+      {
+        "text": "un",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      },
+      {
+        "text": " sitio para ",
+        "userDefined": false
+      },
+      {
+        "text": "estacionar",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "c36c3794-4e67-4ab4-acbc-c01d0911509f",
+    "data": [
+      {
+        "text": "me produce ansiedad elegir el sitio para ",
+        "userDefined": false
+      },
+      {
+        "text": "aparcar",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "11c16746-4139-4203-b243-aa1c4848085a",
+    "data": [
+      {
+        "text": "no",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      },
+      {
+        "text": " puedo pensar ",
+        "userDefined": false
+      },
+      {
+        "text": "en",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      },
+      {
+        "text": " qué lugar ",
+        "userDefined": false
+      },
+      {
+        "text": "estacionar",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "514c650a-5056-4203-b27b-59690f492ee0",
+    "data": [
+      {
+        "text": "no",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      },
+      {
+        "text": " soy ",
+        "userDefined": false
+      },
+      {
+        "text": "capaz",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      },
+      {
+        "text": " de decidir ",
+        "userDefined": false
+      },
+      {
+        "text": "un",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      },
+      {
+        "text": " sitio ",
+        "userDefined": false
+      },
+      {
+        "text": "en el",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      },
+      {
+        "text": " que ",
+        "userDefined": false
+      },
+      {
+        "text": "aparcar",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  }
+]

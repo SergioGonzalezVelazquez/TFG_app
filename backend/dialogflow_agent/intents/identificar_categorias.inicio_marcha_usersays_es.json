@@ -1,0 +1,138 @@
+[
+  {
+    "id": "e666c85c-cd5c-42c4-8568-5c5d11059034",
+    "data": [
+      {
+        "text": "no puedo conducir en situaciones habituales",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "57b06403-9de4-4e01-ad1c-e49e78e42954",
+    "data": [
+      {
+        "text": "no puedo conducir en situaciones conocidas",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "e141345d-40ae-4517-a09b-8ed5e3fa6792",
+    "data": [
+      {
+        "text": "miedo en situaciones conocidas",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "d3820188-d463-4d14-af82-3232c36df4ec",
+    "data": [
+      {
+        "text": "ansiedad haciendo ",
+        "userDefined": false
+      },
+      {
+        "text": "mi",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      },
+      {
+        "text": " ",
+        "userDefined": false
+      },
+      {
+        "text": "camino diario",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "0de82539-4e65-4af1-aa80-72fb944dbbdc",
+    "data": [
+      {
+        "text": "ansiedad sacando el coche de la cochera",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "d141a7b9-bd94-4320-8bcc-973d8bd44e04",
+    "data": [
+      {
+        "text": "miedo a salir de la cochera",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "940866f6-8a24-4ef8-98fb-e6f62522ab5c",
+    "data": [
+      {
+        "text": "no puedo realizar ",
+        "userDefined": false
+      },
+      {
+        "text": "mi",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      },
+      {
+        "text": " ",
+        "userDefined": false
+      },
+      {
+        "text": "ruta habitual",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "bc00dfe1-8ffa-469b-ad67-595ab150d8a6",
+    "data": [
+      {
+        "text": "no puedo empezar a conducir",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "10d8fb1e-0874-47bb-92c8-008945149c9c",
+    "data": [
+      {
+        "text": "salir de la cochera",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  }
+]

@@ -1,0 +1,63 @@
+{
+  "id": "adb5af63-c7cf-41c4-bc15-fb8891875d76",
+  "parentId": "a0728082-116c-4218-b8ed-6cc17e37c0f5",
+  "rootParentId": "0f4b914c-3281-46a6-9202-32e864c250da",
+  "name": "identificar_situaciones-neutra-C1S2",
+  "auto": true,
+  "contexts": [
+    "identificar_situaciones",
+    "identificar_situaciones-neutra",
+    "identificar_situaciones-neutra-followup",
+    "identificar_situaciones-neutra-followup-2"
+  ],
+  "responses": [
+    {
+      "resetContexts": false,
+      "action": "identificar_situaciones.identificar_situaciones-custom.identificar_situaciones-neutra-custom",
+      "affectedContexts": [
+        {
+          "name": "identificar_situaciones",
+          "parameters": {},
+          "lifespan": 50
+        },
+        {
+          "name": "identificar_situaciones-neutra-followup",
+          "parameters": {},
+          "lifespan": 5
+        },
+        {
+          "name": "identificar_situaciones-neutra-value-followup",
+          "parameters": {},
+          "lifespan": 2
+        },
+        {
+          "name": "identificar_situaciones-neutra-C1S2-followup",
+          "parameters": {},
+          "lifespan": 2
+        }
+      ],
+      "parameters": [],
+      "messages": [
+        {
+          "type": 0,
+          "lang": "es",
+          "condition": "",
+          "speech": [
+            "Genial, ¿marcamos \u0027\u0027Arrancar el vehículo\" cómo una situación neutra que no te provoca ansiedad?",
+            "Perfecto, creo que \"Arrancar el vehículo\" puede ser una situación neutra que no te provoca ansiedad. ¿Te parece bien?"
+          ]
+        }
+      ],
+      "defaultResponsePlatforms": {},
+      "speech": []
+    }
+  ],
+  "priority": 500000,
+  "webhookUsed": false,
+  "webhookForSlotFilling": false,
+  "fallbackIntent": false,
+  "events": [],
+  "conditionalResponses": [],
+  "condition": "",
+  "conditionalFollowupEvents": []
+}

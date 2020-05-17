@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:tfg_app/models/patient.dart';
+import 'package:tfg_app/pages/chat/chat_page.dart';
 import 'package:tfg_app/pages/exercises/exercises.dart';
 import 'package:tfg_app/pages/more/more_page.dart';
 import 'package:tfg_app/pages/progress/progress.dart';
@@ -102,49 +104,66 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  Widget _buildHomePage() {
+    return Scaffold(
+      key: _scaffoldKey,
+      body: PageView(
+        children: <Widget>[
+          TherapistPage(),
+          ExercisePage(),
+          ProgressPage(),
+          MorePage(),
+        ],
+        controller: _pageController,
+        onPageChanged: onPageChanged,
+        physics: NeverScrollableScrollPhysics(),
+      ),
+      bottomNavigationBar: CupertinoTabBar(
+        currentIndex: pageIndex,
+        backgroundColor: Colors.white,
+        onTap: onTap,
+        activeColor: Theme.of(context).primaryColor,
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(CustomIcon.speech_bubble),
+            title: Text('Terapeuta'),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(CustomIcon.car2),
+            title: Text('Retos'),
+          ),
+          BottomNavigationBarItem(
+              icon: Icon(
+                CustomIcon.line_chart2,
+              ),
+              title: Text('Progreso')),
+          BottomNavigationBarItem(
+            icon: Icon(CustomIcon.more),
+            title: Text('Más'),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildAuthScreen() {
-    if (_authService.user.patient == null)
+    PatientStatus status = _authService.user.patient.status;
+
+    if (status == PatientStatus.pretest_pending)
       return SignUpQuestionnairePage();
-    else {
-      return Scaffold(
-        key: _scaffoldKey,
-        body: PageView(
-          children: <Widget>[
-            TherapistPage(),
-            ExercisePage(),
-            ProgressPage(),
-            MorePage(),
-          ],
-          controller: _pageController,
-          onPageChanged: onPageChanged,
-          physics: NeverScrollableScrollPhysics(),
-        ),
-        bottomNavigationBar: CupertinoTabBar(
-          currentIndex: pageIndex,
-          backgroundColor: Colors.white,
-          onTap: onTap,
-          activeColor: Theme.of(context).primaryColor,
-          items: [
-            BottomNavigationBarItem(
-              icon: Icon(CustomIcon.speech_bubble),
-              title: Text('Terapeuta'),
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(CustomIcon.car2),
-              title: Text('Retos'),
-            ),
-            BottomNavigationBarItem(
-                icon: Icon(
-                  CustomIcon.line_chart2,
-                ),
-                title: Text('Progreso')),
-            BottomNavigationBarItem(
-              icon: Icon(CustomIcon.more),
-              title: Text('Más'),
-            ),
-          ],
-        ),
+    else if (status == PatientStatus.pretest_in_progress)
+      return SignUpQuestionnairePage(
+        inProgress: true,
       );
+    else if ([
+      PatientStatus.identify_categories_in_progress,
+      PatientStatus.identify_situations_in_progress,
+      PatientStatus.identify_situations_in_progress,
+      PatientStatus.identify_situations_pending
+    ].contains(status)) {
+      return ChatPage();
+    } else {
+      return _buildHomePage();
     }
   }
 

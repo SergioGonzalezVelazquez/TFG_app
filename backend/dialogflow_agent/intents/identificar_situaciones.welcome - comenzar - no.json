@@ -1,0 +1,37 @@
+{
+  "id": "da01860d-bbcc-426a-898d-4889ecc6e92b",
+  "parentId": "63778b42-7cb3-4c81-b2be-8f2f0a20468a",
+  "rootParentId": "db38499f-e5ef-4ddc-9018-6a408b7c5166",
+  "name": "identificar_situaciones.welcome - comenzar - no",
+  "auto": true,
+  "contexts": [
+    "identificar_situacioneswelcome-custom-followup",
+    "identificar_situacioneswelcome-comenzar-followup"
+  ],
+  "responses": [
+    {
+      "resetContexts": false,
+      "action": "identificar_situacioneswelcome.identificar_situacioneswelcome-custom.identificar_situacioneswelcome-comenzar-no",
+      "affectedContexts": [],
+      "parameters": [],
+      "messages": [
+        {
+          "type": 0,
+          "lang": "es",
+          "condition": "",
+          "speech": []
+        }
+      ],
+      "defaultResponsePlatforms": {},
+      "speech": []
+    }
+  ],
+  "priority": 500000,
+  "webhookUsed": false,
+  "webhookForSlotFilling": false,
+  "fallbackIntent": false,
+  "events": [],
+  "conditionalResponses": [],
+  "condition": "",
+  "conditionalFollowupEvents": []
+}

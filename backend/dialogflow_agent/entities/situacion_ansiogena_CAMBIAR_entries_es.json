@@ -1,0 +1,41 @@
+[
+  {
+    "value": "acercamiento",
+    "synonyms": [
+      "abrir el coche",
+      "ponerme el cinturón",
+      "estar sentado en el coche",
+      "tocar el volante",
+      "subirme al coche",
+      "meterme en el coche"
+    ]
+  },
+  {
+    "value": "circulacion",
+    "synonyms": [
+      "circulacion",
+      "conducir",
+      "llevar",
+      "guiar",
+      "circular"
+    ]
+  },
+  {
+    "value": "adelantamiento",
+    "synonyms": [
+      "adelantamiento",
+      "adelantar",
+      "rebasar"
+    ]
+  },
+  {
+    "value": "estacionamiento",
+    "synonyms": [
+      "estacionamiento",
+      "aparcar",
+      "estacionar",
+      "aparcamiento",
+      "parking"
+    ]
+  }
+]

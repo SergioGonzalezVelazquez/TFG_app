@@ -1,0 +1,66 @@
+{
+  "id": "91c2ab74-1325-431c-9aea-f3a48a53ca11",
+  "name": "primera_sesion",
+  "auto": true,
+  "contexts": [],
+  "responses": [
+    {
+      "resetContexts": false,
+      "affectedContexts": [
+        {
+          "name": "primera_sesion-followup",
+          "parameters": {},
+          "lifespan": 2
+        }
+      ],
+      "parameters": [
+        {
+          "id": "2b76ea32-3567-4978-8008-700677f37bff",
+          "required": false,
+          "dataType": "",
+          "name": "username",
+          "value": "#FIRST_SESSION.username",
+          "promptMessages": [],
+          "noMatchPromptMessages": [],
+          "noInputPromptMessages": [],
+          "outputDialogContexts": [],
+          "isList": false
+        }
+      ],
+      "messages": [
+        {
+          "type": 0,
+          "lang": "es",
+          "condition": "",
+          "speech": [
+            "¡Hola $username!, Bienvenido a STOPMiedo.",
+            "¡Buenos días $username! Bienvenido a STOPMiedo."
+          ]
+        },
+        {
+          "type": 0,
+          "lang": "es",
+          "condition": "",
+          "speech": [
+            "Vamos ayudarte a superar la ansiedad al volante con un programa sistemático y estructurado de exposición a situaciones temidas.",
+            "Cómo muchos otros miedos, la ansiedad al volante puede tratarse mediante la exposición a situaciones que le producen miedo o ansiedad."
+          ]
+        }
+      ],
+      "defaultResponsePlatforms": {},
+      "speech": []
+    }
+  ],
+  "priority": 500000,
+  "webhookUsed": true,
+  "webhookForSlotFilling": false,
+  "fallbackIntent": false,
+  "events": [
+    {
+      "name": "FIRST_SESSION"
+    }
+  ],
+  "conditionalResponses": [],
+  "condition": "",
+  "conditionalFollowupEvents": []
+}

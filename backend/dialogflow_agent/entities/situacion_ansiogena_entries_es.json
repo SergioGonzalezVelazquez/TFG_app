@@ -1,0 +1,56 @@
+[
+  {
+    "value": "C1-S1",
+    "synonyms": [
+      "sentarme en el coche",
+      "estar sentado en el coche",
+      "sentarme en el vehículo",
+      "estar sentado en el vehículo",
+      "subirme al coche",
+      "subirme al vehículo"
+    ]
+  },
+  {
+    "value": "C1-S2",
+    "synonyms": [
+      "arrancar",
+      "arrancar el coche",
+      "arrancar el vehículo",
+      "poner el coche en marcha",
+      "arrancar el motor",
+      "ponerlo en marcha"
+    ]
+  },
+  {
+    "value": "C2-S1",
+    "synonyms": [
+      "Salir de la cochera",
+      "sacar el coche de la cochera",
+      "salir del garaje",
+      "sacar el coche del garaje"
+    ]
+  },
+  {
+    "value": "C2-S2",
+    "synonyms": [
+      "Incoporarme al tráfico"
+    ]
+  },
+  {
+    "value": "C2-S3",
+    "synonyms": [
+      "Incorporarme al tráfico desde otra vía"
+    ]
+  },
+  {
+    "value": "C3-S1",
+    "synonyms": [
+      "Decidir un sitio en el que aparcar",
+      "buscar aparcamiento",
+      "buscar estacionamiento",
+      "encontrar un estacionamiento",
+      "decidir un sitio para estacionar",
+      "elegir el sitio para aparcar"
+    ]
+  }
+]

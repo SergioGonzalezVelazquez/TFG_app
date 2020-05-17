@@ -1,0 +1,67 @@
+{
+  "id": "0f4b914c-3281-46a6-9202-32e864c250da",
+  "name": "identificar_situaciones",
+  "auto": true,
+  "contexts": [
+    "identificar_situaciones-followup"
+  ],
+  "responses": [
+    {
+      "resetContexts": false,
+      "affectedContexts": [
+        {
+          "name": "identificar_situaciones-neutra",
+          "parameters": {},
+          "lifespan": 10
+        },
+        {
+          "name": "identificar_situaciones",
+          "parameters": {},
+          "lifespan": 40
+        },
+        {
+          "name": "identificar_situaciones-followup",
+          "parameters": {},
+          "lifespan": 2
+        }
+      ],
+      "parameters": [],
+      "messages": [
+        {
+          "type": 0,
+          "lang": "es",
+          "condition": "",
+          "speech": "Nuestro objetivo ahora es construir una jerarquía de situaciones temidas, ordenadas en función del miedo que te provoca cada una."
+        },
+        {
+          "type": 0,
+          "lang": "es",
+          "condition": "",
+          "speech": "Para ello, vamos a empezar buscando entre diez y quince situaciones que te provocan ansiedad. Más adelante, las ordenaremos."
+        },
+        {
+          "type": 0,
+          "lang": "es",
+          "condition": "",
+          "speech": "Necesito pedirte, por favor, que estés tranquilo. Respira profundamente y cálmate."
+        },
+        {
+          "type": 0,
+          "lang": "es",
+          "condition": "",
+          "speech": "Cuándo estés preparado, empezamos."
+        }
+      ],
+      "defaultResponsePlatforms": {},
+      "speech": []
+    }
+  ],
+  "priority": 500000,
+  "webhookUsed": true,
+  "webhookForSlotFilling": false,
+  "fallbackIntent": false,
+  "events": [],
+  "conditionalResponses": [],
+  "condition": "",
+  "conditionalFollowupEvents": []
+}

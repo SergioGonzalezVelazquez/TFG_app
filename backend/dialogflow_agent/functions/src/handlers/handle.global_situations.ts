@@ -1,5 +1,4 @@
 import { readFromDB } from "../utils/db_manager";
-import { getNextSituation } from "../situations";
 
 
 const admin = require('firebase-admin');
@@ -36,6 +35,7 @@ export async function handleGlobalSituations2(session: string, situations: strin
     return documents;
 }
 
+/*
 export async function handleGlobalSituations(session: string, situations: string[]) {
     // Get the database collection reference and write document with documentId
     const collectionRef = db.collection('session_identify_situations').doc(session);
@@ -57,3 +57,4 @@ export async function handleGlobalSituations(session: string, situations: string
 
     return current;
 }
+*/

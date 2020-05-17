@@ -1,0 +1,147 @@
+[
+  {
+    "id": "b08b0a6d-e7d3-4a1e-beca-6a0564227cbd",
+    "data": [
+      {
+        "text": "Adelante",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "11573834-c4d9-428f-aa60-e1f38aba5cfd",
+    "data": [
+      {
+        "text": "Empezar con la terapia",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "51a44909-a526-4037-8c3b-2e12b0d6c5e7",
+    "data": [
+      {
+        "text": "Vamos con la terapia",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "50047c1e-a632-4ead-b696-2c65336f7b39",
+    "data": [
+      {
+        "text": "Empezar",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "47097c23-729b-4b8e-8f8f-0c1feaca5e9f",
+    "data": [
+      {
+        "text": "Comenzar",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "862a131b-c64c-4aa9-b837-38acf53f4370",
+    "data": [
+      {
+        "text": "Vamos allá",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "447bc1b3-1d37-439b-b0ee-5b982fe159ee",
+    "data": [
+      {
+        "text": "Empezar tratamiento",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "8ccf35e6-ae38-4db9-b9ab-906f0a242d25",
+    "data": [
+      {
+        "text": "Estoy listo",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "ecb62492-3035-4de4-9f86-a703beb52ae5",
+    "data": [
+      {
+        "text": "Quiero empezar",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "2a8b31da-802e-4fc9-8e73-fb5a25281eea",
+    "data": [
+      {
+        "text": "Estoy preparado",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "b21dee28-5979-43b0-aa14-f2da5e1ca227",
+    "data": [
+      {
+        "text": "Empecemos",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "01f2871a-db35-4d26-8ace-709725e961d6",
+    "data": [
+      {
+        "text": "Cuando quieras",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  }
+]

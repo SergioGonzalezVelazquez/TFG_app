@@ -20,11 +20,11 @@ class ListTextDialogflow {
 
 class SuggestionDialogflow {
   String text;
-  String event;
+  String value;
 
   SuggestionDialogflow(Map suggestion) {
     this.text = suggestion['text'];
-    this.event = suggestion['event'];
+    this.value = suggestion['value'];
   }
 }
 
@@ -159,12 +159,14 @@ class TypeMessage {
   TypeMessage(Map message) {
     this.platform = message['platform'];
     //Extendido para soportar todos los tipos de dialogFlow
+    if(message.containsKey('payload')){
+      message = message['payload'];
+    }
+
     if (message.containsKey('text')) {
       this.type = 'text';
     } else if (message.containsKey('suggestions')) {
-      this.type = 'card';
-    } else if (message.containsKey('suggestions')) {
-      this.type = 'card';
+      this.type = 'suggestion';
     } else if (message.containsKey('basicCard')) {
       this.type = 'basicCard';
     } else if (message.containsKey('simpleResponses')) {

@@ -1,0 +1,212 @@
+[
+  {
+    "id": "17818bc5-3181-4d4a-abf9-892040b5abfd",
+    "data": [
+      {
+        "text": "Meter",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      },
+      {
+        "text": " las llaves en el contacto ",
+        "userDefined": false
+      },
+      {
+        "text": "del coche",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "a2e4c197-9bab-44f3-9a94-17e7ffbdd1ff",
+    "data": [
+      {
+        "text": "Arrancar el coche",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "cae3df21-6396-4fca-8b91-7a3652c70124",
+    "data": [
+      {
+        "text": "Arrancar el motor",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "aa07c989-b42b-4150-ba33-a4b83cf0ec74",
+    "data": [
+      {
+        "text": "Arrancar el vehículo",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "d21d9ff8-ee83-4b92-b760-b7163371906d",
+    "data": [
+      {
+        "text": "Poner en marcha el coche",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "ee546062-8c60-4eca-a96d-ce2ec96d900a",
+    "data": [
+      {
+        "text": "Girar",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      },
+      {
+        "text": " las llaves ",
+        "userDefined": false
+      },
+      {
+        "text": "del",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      },
+      {
+        "text": " contacto",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "8a3da69e-a762-4fe8-9665-f269fa843609",
+    "data": [
+      {
+        "text": "Estar montado en el ",
+        "userDefined": false
+      },
+      {
+        "text": "coche",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      },
+      {
+        "text": " ",
+        "userDefined": false
+      },
+      {
+        "text": "para",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      },
+      {
+        "text": " ",
+        "userDefined": false
+      },
+      {
+        "text": "arrancarlo",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "d1a1cdd4-3479-49cb-a071-b54fd5373e26",
+    "data": [
+      {
+        "text": "Arrancar",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "34ecb16f-03e7-421f-a515-791b374e0816",
+    "data": [
+      {
+        "text": "Subir",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      },
+      {
+        "text": " al ",
+        "userDefined": false
+      },
+      {
+        "text": "automóvil",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      },
+      {
+        "text": " ",
+        "userDefined": false
+      },
+      {
+        "text": "para",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      },
+      {
+        "text": " ",
+        "userDefined": false
+      },
+      {
+        "text": "arrancarlo",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "c8206b87-59fa-4630-8276-1314170ad673",
+    "data": [
+      {
+        "text": "Arrancar el",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      },
+      {
+        "text": " ",
+        "userDefined": false
+      },
+      {
+        "text": "automovil",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  }
+]
