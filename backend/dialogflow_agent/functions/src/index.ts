@@ -12,8 +12,8 @@ const admin = require('firebase-admin');
 admin.initializeApp(functions.config().firebase);
 const { WebhookClient, Payload } = require('dialogflow-fulfillment');
 
-import { readFromDB, writeInDB } from './utils/db_manager';
-import { getAnxietySuggestionsPayload } from './utils/situations';
+import { readUserId, readPatient } from './utils/db_manager';
+import { getAnxietySuggestionsPayload, getSituationData, loopIdentitifySituations, startIdentifySituations } from './utils/situations';
 
 process.env.DEBUG = 'dialogflow:debug'; // enables lib debugging statements
 
@@ -21,6 +21,7 @@ export const dialogflowFulfillment = functions.https.onRequest(async (request, r
     // Create an instance of the class that handles the communication 
     // with Dialogflow's webhook fulfillment 
     const agent = new WebhookClient({ request, response });
+    console.log("contexts:")
     console.log(agent.contexts)
 
     console.log('Dialogflow Request headers: ' + JSON.stringify(request.headers));
@@ -28,9 +29,9 @@ export const dialogflowFulfillment = functions.https.onRequest(async (request, r
 
     // Using pop() to get to the last item of the splitted string
     const session: string = agent.session.split("/").pop();
-    const userId: string = (await readFromDB("dialogflow_sessions", session)).data()['user_id'];
 
-    console.log(`agent properties. query: ${agent.query}; session: ${agent.session}; intent: ${agent.intent}; action: ${agent.action}; parameters: ${JSON.stringify(agent.parameters)}`);
+
+    // console.log(`agent properties. query: ${agent.query}; session: ${agent.session}; intent: ${agent.intent}; action: ${agent.action}; parameters: ${JSON.stringify(agent.parameters)}`);
 
     //await writeUserMessage(session, agent.query);
 
@@ -39,16 +40,20 @@ export const dialogflowFulfillment = functions.https.onRequest(async (request, r
         // El intent 'primera_sesion' es activado por la app móvil cuándo el usuario 
         // entra por primera vez en un chat con el agente. La respuesta debe ser contarle al usuario
         // lo que el agente es capaz de hacer, y en función del tipo de paciente, añadir un contexto u otro.
+        console.log("intent: " + agent.intent);
         if (agent.intent === 'primera_sesion') {
+
             addOriginalResponse();
 
-            const patientType: string = (await readFromDB("patient", userId)).data()['type'];
+            // Read patient type from db
+            const session: string = agent.session.split("/").pop();
+            const patientType = (await readPatient(session))['type'];
 
             if (patientType.startsWith("1")) {
                 agent.add('Gracias a tus respuestas en el cuestionario inicial hemos podido encontrar el tipo de terapia más apropiada');
                 agent.add('¿Empezamos?');
 
-                let context = { 'name': `identificar_situaciones-followup`, 'lifespan': 2 };
+                const context = { 'name': `identificar_situaciones-followup`, 'lifespan': 2 };
                 agent.context.set(context);
 
             }
@@ -62,63 +67,87 @@ export const dialogflowFulfillment = functions.https.onRequest(async (request, r
                 agent.add('Sin embargo, necesitamos conocerte un poco más y saber qué situaciones te provocan ansiedad');
                 agent.add('¿Empezamos?');
             }
-
-            console.log("primera sesión");
         }
         else if (agent.intent.startsWith("identificar_situaciones-neutra")) {
-            const situation = agent.intent.split("-")[2];
+            let situation = agent.intent.split("-")[2];
             const confirm = agent.intent.split("-")[3];
-            console.log(situation)
             addOriginalResponse();
             if (confirm === 'yes') {
-                await writeInDB("dialogflow_sessions", session, { neutra: situation });
-                const itinerary = (await readFromDB("patient", userId)).data()['itinerary'];
+                situation = situation.slice(0, 2) + "-" + situation.slice(2);
+                console.log("situation neutra: " + situation)
+
+                // Read itinerary from patient document
+                const session: string = agent.session.split("/").pop();
+                const itinerary = (await readPatient(session))['itinerary'];
+
+                console.log(itinerary)
                 const payload = getAnxietySuggestionsPayload(itinerary);
+                console.log(payload);
+
                 agent.add(
                     new Payload(agent.UNSPECIFIED, payload, { rawPayload: true, sendAsMessage: true })
                 );
+                console.log("añadido")
+
+                // Custom parameters to pass with context
+                const parameters = {
+                    neutral: situation,
+                    itinerary: itinerary
+                };
+                const context = { 'name': `identificar_situaciones-ansiogena`, 'lifespan': 10, 'parameters': parameters };
+                agent.context.set(context);
+
+
             }
         } else if (agent.intent.startsWith("identificar_situaciones-ansiogena")) {
-            addOriginalResponse();
+            if (agent.intent === 'identificar_situaciones-ansiogena-yes') {
+                addOriginalResponse();
+                const contextParameters = agent.context.get('identificar_situaciones-ansiogena').parameters;
+                console.log("contextParameters")
+                console.log(contextParameters);
+                await startIdentifySituations(agent, contextParameters.itinerary, contextParameters.neutral, contextParameters.anxiety);
+            }
+            else {
+                const ansiogena = agent.query;
+                //await writeInDB("dialogflow_sessions", session, { ansiogena: ansiogena });
+                //let doc = (await readFromDB("dialogflow_sessions", session)).data()
+                const contextParameters = agent.context.get('identificar_situaciones-ansiogena').parameters;
+                const neutraCode = contextParameters.neutral;
+                console.log("neutraCode: " + neutraCode);
+                const neutraStr = getSituationData(neutraCode)['item'];
+                const ansiogenaStr = getSituationData(ansiogena)['item'];
+                agent.add('¡Entendido! Ya verás como con un trabajo continuo eres capaz de enfrentarte a esa situación sin ningún tipo de miedo.');
+                agent.add('Hasta ahora, hemos definido "' + neutraStr + '" cómo una situación que no te produce ansiedad.');
+                agent.add('Y, "' + ansiogenaStr + '" como la situación que mayor ansiedad te produce');
+                addOriginalResponse();
+
+                // Custom parameters to pass with context
+                const parameters = {
+                    neutral: contextParameters.neutral,
+                    itinerary: contextParameters.itinerary,
+                    anxiety: ansiogena
+                };
+                const context = { 'name': `identificar_situaciones-ansiogena`, 'lifespan': 5, 'parameters': parameters };
+                agent.context.set(context);
+                agent.context.set({ 'name': `identificar_situaciones-ansiogena-followup`, 'lifespan': 5 });
+            }
         }
-
-
-        /*
-        else if (agent.intent === 'identificar_situaciones.global') {
-            // El agente habrá reconocido una serie de categorías ansiógenas
-            // a las cuales podemos acceder mediante el parámetro "situacion_ansiogena".
-            // Vamos a guardar todas ellas en una colección "session_situation", de forma
-            // que el agente pueda ir explorando cada una de ellas para obtener información
-            // más concreta sobre las situaciones que le producen ansiedad al usuario.
-            //
-            // Es posible que en esa lista de situaciones haya alguna duplicada. Por ejemplo, el agente 
-            // relacionará "decidir un sitio en el que estacionar" y "realizar maniobras de estacionamiento"
-            // con la misma categoría "estacionar". Hay que limpiar ese listado para que no haya situaciones
-            // repetidas.
-            let situations = [];
-            agent.parameters['situacion_ansiogena'].forEach(element => {
-                if (!situations.includes(element))
-                    situations.push(element);
-            });
-            agent.parameters['situacion_ansiogena'] = situations;
-
-            const currentSituation = await handleGlobalSituations(session, situations);
-            console.log("currentSituation: " + currentSituation);
-
+        else if (agent.intent.startsWith("identificar_situaciones-listado")) {
             addOriginalResponse();
-            agent.add(`Vamos a empezar explorando más en detalle posibles situaciones ansiógenas relacionadas con ${currentSituation}`);
-            let context = { 'name': `identificar_situaciones_${currentSituation}`, 'lifespan': 3 };
-            agent.context.set(context);
+            await loopIdentitifySituations(agent);
+
         }
-        */
         else {
-            console.log(agent.consoleMessages);
             addOriginalResponse();
         }
     }
 
     function addOriginalResponse() {
         agent.consoleMessages.forEach((message) => agent.add(message));
+    }
+
+    function clearOutgoingContexts() {
+        agent.contexts.forEach((context) => agent.context.set({ 'name': context.name, 'lifespan': 0 }));
     }
 
 
