@@ -1,0 +1,9 @@
+{
+  "id": "53931d50-05e3-4bd4-9941-5726cf060c87",
+  "name": "situacion_ansiogena",
+  "isOverridable": true,
+  "isEnum": false,
+  "isRegexp": false,
+  "automatedExpansion": false,
+  "allowFuzzyExtraction": true
+}

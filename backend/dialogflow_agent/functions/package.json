@@ -8,7 +8,10 @@
     "shell": "npm run build && firebase functions:shell",
     "start": "npm run shell",
     "deploy": "firebase deploy --only functions",
-    "logs": "firebase functions:log"
+    "logs": "firebase functions:log",
+    "dev": "node --inspect=5858 -r ts-node/register ./src/index_local.ts",
+    "dev:watch": "nodemon",
+    "tunnel": "ngrok http 5000"
   },
   "engines": {
     "node": "8"
@@ -18,13 +21,29 @@
     "actions-on-google": "^2.12.0",
     "dialogflow": "^1.2.0",
     "dialogflow-fulfillment": "^0.6.1",
+    "express": "^4.17.1",
     "firebase-admin": "^8.10.0",
     "firebase-functions": "^3.3.0"
   },
   "devDependencies": {
+    "firebase-functions-test": "^0.1.6",
+    "ngrok": "^3.2.7",
+    "nodemon": "^2.0.3",
     "tslint": "^5.12.0",
-    "typescript": "^3.2.2",
-    "firebase-functions-test": "^0.1.6"
+    "typescript": "^3.2.2"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "**/*.test.ts",
+      "**/*.spec.ts",
+      ".git",
+      "node_modules"
+    ],
+    "watch": [
+      "src"
+    ],
+    "exec": "npm start",
+    "ext": "ts"
   },
   "private": true
 }

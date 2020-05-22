@@ -6,6 +6,7 @@ import 'package:tfg_app/pages/chat/chat_page.dart';
 import 'package:tfg_app/pages/driving_activity/driving_activity_agreement.dart';
 import 'package:tfg_app/pages/driving_activity/driving_activity_page.dart';
 import 'package:tfg_app/pages/exercises/exercises.dart';
+import 'package:tfg_app/pages/initial_page.dart';
 import 'package:tfg_app/pages/more/more_page.dart';
 import 'package:tfg_app/pages/phy_activity/phy_activity_agreement.dart';
 import 'package:tfg_app/pages/progress/progress.dart';
@@ -23,6 +24,7 @@ class HomePage extends StatefulWidget {
   /// Name use for navigate to this screen
   static const route = "/home";
   static const routeAuth = "/home-auth";
+  static const routeNoCheck = "/home-auth";
 
   // Flag used to determine wheter auth user must be checked or not
   // When HomePage is inserted into the tree from another widget, we pass a true value
@@ -174,6 +176,7 @@ class _HomePageState extends State<HomePage> {
   Widget _buildAuthScreen() {
     Patient patient = _authService.user.patient;
     PatientStatus status = patient.status;
+    print(status);
 
     if (status == PatientStatus.pretest_pending)
       return SignUpQuestionnairePage();
@@ -181,17 +184,17 @@ class _HomePageState extends State<HomePage> {
       return SignUpQuestionnairePage(
         inProgress: true,
       );
-    else if (showAutoDriveDetectionAgreement == null)
+    
+    if (showAutoDriveDetectionAgreement == null)
       return DrivingActivityAgreement();
     else if (showPhyActivityAgreement == null)
       return PhyActivityAgreement();
-    else if ([
-      PatientStatus.identify_categories_in_progress,
-      PatientStatus.identify_situations_in_progress,
-      PatientStatus.identify_situations_in_progress,
+
+    if ([
+      PatientStatus.identify_categories_pending,
       PatientStatus.identify_situations_pending
     ].contains(status)) {
-      return ChatPage();
+      return InitialPage();
     } else {
       return _buildHomePage();
     }

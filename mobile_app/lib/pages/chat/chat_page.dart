@@ -1,7 +1,9 @@
 import 'package:animator/animator.dart';
 import 'package:flutter/material.dart';
 import 'package:tfg_app/models/message.dart';
+import 'package:tfg_app/models/patient.dart';
 import 'package:tfg_app/pages/chat/chat_message.dart';
+import 'package:tfg_app/pages/chat/identify_situations.dart';
 import 'package:tfg_app/services/auth.dart';
 import 'package:tfg_app/services/dialogflow.dart';
 import 'package:tfg_app/themes/custom_icon_icons.dart';
@@ -29,6 +31,7 @@ class _ChatPageState extends State<ChatPage> {
 
   final List<ChatMessage> _messages = <ChatMessage>[];
   Dialogflow _dialogFlow;
+  ListSuggestionDialogflow _suggestions;
 
   bool _showBotWritingAnimation = true;
   bool _showTextInput = false;
@@ -45,7 +48,8 @@ class _ChatPageState extends State<ChatPage> {
    * Functions used to handle events in this screen 
    */
 
-  ///
+  /// Trigger the initial intent using dialogflow events.
+  /// Send auth user name as parameter
   Future<void> _initializeChat() async {
     setState(() {
       _showBotWritingAnimation = true;
@@ -57,17 +61,21 @@ class _ChatPageState extends State<ChatPage> {
     AIResponse response;
 
     String name = _authService.user.name;
-    // Check if this conversation will be the first for this user
-    response = therapySessions.isEmpty
-        ? await _dialogFlow.activateIntent("FIRST_SESSION",
-            parameters: {'username': name.split(" ").first})
-        : await _dialogFlow.activateIntent("FIRST_SESSION",
-            parameters: {'username': name.split(" ").first});
+    PatientStatus patientStatus = await AuthService().patietStatus;
+    if ([
+      PatientStatus.identify_categories_pending,
+      PatientStatus.identify_situations_pending
+    ].contains(patientStatus)) {
+      response = await _dialogFlow.activateIntent('FIRST_SESSION',
+          parameters: {'username': name.split(" ").first});
+    } else {
+      response = await _dialogFlow.activateIntent('FIRST_SESSION',
+          parameters: {'username': name.split(" ").first});
+    }
 
     _handleAgentResponse(response);
   }
 
-  ///
   void _handleSubmitted(String text) {
     _textController.clear();
     ChatMessage message = new ChatMessage(userMessage: UserMessage(text));
@@ -80,7 +88,7 @@ class _ChatPageState extends State<ChatPage> {
     _sendMessage(text);
   }
 
-  ///
+  /// Send query as response to DialogFlow Agent
   Future<void> _sendMessage(String query) async {
     _textController.clear();
     setState(() {
@@ -90,52 +98,60 @@ class _ChatPageState extends State<ChatPage> {
     _handleAgentResponse(responses);
   }
 
+  /// Handle Agent response
   void _handleAgentResponse(AIResponse responses) async {
+    setState(() {
+      _showTextInput = false;
+      _showChipInput = false;
+    });
+
     List messages = responses.getListMessage();
     print("messages:");
     print(messages);
     TypeMessage typeMessage;
-    ChatMessage message;
 
     for (int i = 0; i < messages.length; i++) {
-      setState(() {
-        _showBotWritingAnimation = true;
-      });
+      print(messages[i]);
       typeMessage = TypeMessage(messages[i]);
       print("tipo de mensaje: ");
       print(typeMessage.type);
-      print(typeMessage.platform);
 
-      switch (typeMessage.type) {
-        case "text":
-          message = new ChatMessage(
-            typeMessage: typeMessage,
-            botTextResponse: TextDialogflow(messages[i]['text']),
-            showInfo: i == 0,
-          );
-          // Nº of words in this message
-          int messageLength = message.botTextResponse.text.split(' ').length;
+      if (typeMessage.type == 'text') {
+        setState(() {
+          _showBotWritingAnimation = true;
+          _showTextInput = true;
+        });
+        ChatMessage message = new ChatMessage(
+          botTextResponse: TextDialogflow(messages[i]['text']),
+          showInfo: i == 0,
+        );
 
-          await new Future.delayed(
-              Duration(milliseconds: (300 * messageLength)));
-          break;
-        case "simpleResponses":
-          message = new ChatMessage(
-            typeMessage: typeMessage,
-            botSimpleResponse: SimpleResponse(messages[i]),
-            showInfo: i == 0,
-          );
-          await new Future.delayed(const Duration(milliseconds: 900));
-          break;
+        // Nº of words in this message
+        int messageLength = message.botTextResponse.text.split(' ').length;
+
+        await new Future.delayed(
+          Duration(
+            milliseconds: (300 * messageLength),
+          ),
+        );
+        print("lo añades");
+        print(message);
+        setState(
+          () {
+            _showBotWritingAnimation = false;
+            _messages.insert(0, message);
+          },
+        );
+      } else if (typeMessage.type == 'suggestion') {
+        print("no lo añades");
+        setState(
+          () {
+            _suggestions = ListSuggestionDialogflow(messages[i]['payload']);
+            _showBotWritingAnimation = false;
+            _showChipInput = true;
+          },
+        );
       }
-      setState(
-        () {
-          _showBotWritingAnimation = false;
-          _messages.insert(0, message);
-          _showTextInput = typeMessage.type == "text" ||
-              typeMessage.type == "simpleResponses";
-        },
-      );
     }
   }
 
@@ -171,6 +187,14 @@ class _ChatPageState extends State<ChatPage> {
                           hintText: "Escribe un mensaje"),
                     ),
                   ),
+                  Visibility(
+                    visible: true,
+                    child: IconButton(
+                      icon: Icon(CustomIcon.list),
+                      onPressed: () =>
+                          Navigator.pushNamed(context, SituationsPage.route),
+                    ),
+                  ),
                   _textController.text.isEmpty
                       ? Material(
                           borderRadius: BorderRadius.circular(4),
@@ -202,12 +226,57 @@ class _ChatPageState extends State<ChatPage> {
     );
   }
 
+  Widget _suggestionsComposer() {
+    List<Widget> chips = [];
+    chips.add(Divider(
+      height: 1.0,
+    ));
+    chips.add(SizedBox(
+      height: 8.0,
+    ));
+    _suggestions.listSuggestions.forEach((suggestion) {
+      Widget chip = new Padding(
+        padding: const EdgeInsets.only(bottom: 8.0, right: 10, left: 20),
+        child: InkWell(
+          onTap: () {
+            _messages.insert(
+                0, new ChatMessage(userMessage: UserMessage(suggestion.text)));
+            _sendMessage(suggestion.value);
+          },
+          child: Align(
+              alignment: Alignment.topRight,
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                decoration: BoxDecoration(
+                  //color: Color(0xffE4DFFD),
+                  color: Colors.white,  
+                  border: Border.all(
+                    color: Theme.of(context).primaryColor,
+                  ),
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                ),
+                child: Text(
+                  suggestion.text,
+                  style: Theme.of(context).textTheme.bodyText2.apply(
+                      color: Theme.of(context).primaryColor,
+                      fontSizeFactor: .75),
+                ),
+              )),
+        ),
+      );
+      chips.add(chip);
+    });
+
+    return Column(crossAxisAlignment: CrossAxisAlignment.end, children: chips);
+  }
+
   Widget _answerComposer() {
-    Widget composer;
-    if (_showTextInput) {
+    Widget composer = Text("");
+    if (_showChipInput && _suggestions != null) {
+      composer = _suggestionsComposer();
+    } else if (_showTextInput) {
       composer = _textComposer();
-    } else if (_showChipInput) {
-      composer = Text("");
     }
     return composer;
   }

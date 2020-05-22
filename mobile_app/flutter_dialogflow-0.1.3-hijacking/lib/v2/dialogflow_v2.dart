@@ -123,9 +123,14 @@ class Dialogflow {
             "{'queryInput':{'text':{'text':'$query','language_code':'$language'}}}");
     print("response:");
     print(response.statusCode);
-    print(response.body);
+    print(response.body.toString());
+    print("ouput contexts: ");
+    json
+        .decode(response.body)['queryResult']['outputContexts']
+        .forEach((item) => print(item));
     return AIResponse(body: json.decode(response.body));
   }
+
 
   /// Esta función sirve cómo complemento a la librería flutter_dialogflow,
   /// pues no soporta el uso de eventos de DialogFlow.

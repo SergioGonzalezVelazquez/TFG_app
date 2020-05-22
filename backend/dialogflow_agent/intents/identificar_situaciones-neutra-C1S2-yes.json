@@ -1,0 +1,59 @@
+{
+  "id": "18772bca-f797-405f-9807-454424351a57",
+  "parentId": "adb5af63-c7cf-41c4-bc15-fb8891875d76",
+  "rootParentId": "0f4b914c-3281-46a6-9202-32e864c250da",
+  "name": "identificar_situaciones-neutra-C1S2-yes",
+  "auto": true,
+  "contexts": [
+    "identificar_situaciones",
+    "identificar_situaciones-neutra-followup",
+    "identificar_situaciones-neutra-value-followup",
+    "identificar_situaciones-neutra-C1S2-followup"
+  ],
+  "responses": [
+    {
+      "resetContexts": false,
+      "action": "identificar_situaciones.identificar_situaciones-custom.identificar_situaciones-neutra-custom.identificar_situaciones-neutra-C1S2-yes",
+      "affectedContexts": [
+        {
+          "name": "identificar_situaciones-ansiogena",
+          "parameters": {},
+          "lifespan": 5
+        },
+        {
+          "name": "identificar_situaciones",
+          "parameters": {},
+          "lifespan": 50
+        }
+      ],
+      "parameters": [],
+      "messages": [
+        {
+          "type": 0,
+          "lang": "es",
+          "condition": "",
+          "speech": [
+            "¡Muy bien!",
+            "¡Perfecto!"
+          ]
+        },
+        {
+          "type": 0,
+          "lang": "es",
+          "condition": "",
+          "speech": "Ahora, te propondré una serie de posibles situaciones temidas.  Tienes que elegir aquella que mayor ansiedad te provoque."
+        }
+      ],
+      "defaultResponsePlatforms": {},
+      "speech": []
+    }
+  ],
+  "priority": 500000,
+  "webhookUsed": true,
+  "webhookForSlotFilling": false,
+  "fallbackIntent": false,
+  "events": [],
+  "conditionalResponses": [],
+  "condition": "",
+  "conditionalFollowupEvents": []
+}

@@ -1,0 +1,39 @@
+{
+  "id": "2b6383d4-18c5-49e9-9818-1944f0c69152",
+  "name": "identificar_categorias.welcome",
+  "auto": true,
+  "contexts": [
+    "identificar_categorias"
+  ],
+  "responses": [
+    {
+      "resetContexts": false,
+      "affectedContexts": [
+        {
+          "name": "identificar_categorias",
+          "parameters": {},
+          "lifespan": 5
+        }
+      ],
+      "parameters": [],
+      "messages": [
+        {
+          "type": 0,
+          "lang": "es",
+          "condition": "",
+          "speech": "¡Hola otra vez! Sigamos identificando situaciones ansiógenas."
+        }
+      ],
+      "defaultResponsePlatforms": {},
+      "speech": []
+    }
+  ],
+  "priority": 500000,
+  "webhookUsed": true,
+  "webhookForSlotFilling": false,
+  "fallbackIntent": false,
+  "events": [],
+  "conditionalResponses": [],
+  "condition": "",
+  "conditionalFollowupEvents": []
+}

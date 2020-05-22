@@ -1,0 +1,39 @@
+{
+  "id": "f2950add-7f9e-4314-8b7f-f489633ff4c9",
+  "name": "identificar_categorias.puesta_en_marcha",
+  "auto": true,
+  "contexts": [
+    "identificar_categorias"
+  ],
+  "responses": [
+    {
+      "resetContexts": false,
+      "affectedContexts": [
+        {
+          "name": "identificar_categorias",
+          "parameters": {},
+          "lifespan": 5
+        }
+      ],
+      "parameters": [],
+      "messages": [
+        {
+          "type": 0,
+          "lang": "es",
+          "condition": "",
+          "speech": "Creo que te producen ansiedad situaciones relacionadas con la puesta en marcha del vehículo"
+        }
+      ],
+      "defaultResponsePlatforms": {},
+      "speech": []
+    }
+  ],
+  "priority": 500000,
+  "webhookUsed": true,
+  "webhookForSlotFilling": false,
+  "fallbackIntent": false,
+  "events": [],
+  "conditionalResponses": [],
+  "condition": "",
+  "conditionalFollowupEvents": []
+}

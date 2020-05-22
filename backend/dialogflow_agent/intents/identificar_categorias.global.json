@@ -1,0 +1,45 @@
+{
+  "id": "60eb23ef-79a7-4a11-8edd-15fce74c4d26",
+  "name": "identificar_categorias.global",
+  "auto": true,
+  "contexts": [
+    "identificar_categorias_global"
+  ],
+  "responses": [
+    {
+      "resetContexts": false,
+      "affectedContexts": [
+        {
+          "name": "identificar_categorias_global",
+          "parameters": {},
+          "lifespan": 5
+        }
+      ],
+      "parameters": [],
+      "messages": [
+        {
+          "type": 0,
+          "lang": "es",
+          "condition": "",
+          "speech": "En términos generales entiendo que te producen ansiedad situaciones relacionadas con $categoria_ansiogena."
+        },
+        {
+          "type": 0,
+          "lang": "es",
+          "condition": "",
+          "speech": "¡Tranquilo! Es un problema más común de lo que parece. Poco a poco conseguirás superarlo."
+        }
+      ],
+      "defaultResponsePlatforms": {},
+      "speech": []
+    }
+  ],
+  "priority": 500000,
+  "webhookUsed": true,
+  "webhookForSlotFilling": false,
+  "fallbackIntent": false,
+  "events": [],
+  "conditionalResponses": [],
+  "condition": "",
+  "conditionalFollowupEvents": []
+}

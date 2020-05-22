@@ -1,0 +1,46 @@
+{
+  "id": "7e69cc7b-e30c-4d20-9522-5c73a47dfe98",
+  "name": "identificar_categorias.comienzo",
+  "auto": true,
+  "contexts": [],
+  "responses": [
+    {
+      "resetContexts": false,
+      "affectedContexts": [
+        {
+          "name": "identificar_categorias_global",
+          "parameters": {},
+          "lifespan": 5
+        }
+      ],
+      "parameters": [],
+      "messages": [
+        {
+          "type": 0,
+          "lang": "es",
+          "condition": "",
+          "speech": [
+            "El primer paso es construir un listado de situaciones temidas o evitadas relacionadas con la conducción.",
+            "Vamos a empezar identificando posibles situaciones relacionadas con la conducción que te producen ansiedad."
+          ]
+        },
+        {
+          "type": 0,
+          "lang": "es",
+          "condition": "",
+          "speech": "Por favor, cuénteme situaciones que temas encontrarte o, situaciones que te hayan producido ataques de ansiedad."
+        }
+      ],
+      "defaultResponsePlatforms": {},
+      "speech": []
+    }
+  ],
+  "priority": 500000,
+  "webhookUsed": true,
+  "webhookForSlotFilling": false,
+  "fallbackIntent": false,
+  "events": [],
+  "conditionalResponses": [],
+  "condition": "",
+  "conditionalFollowupEvents": []
+}

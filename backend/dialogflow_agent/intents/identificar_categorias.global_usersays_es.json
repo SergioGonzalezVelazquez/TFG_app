@@ -1,0 +1,169 @@
+[
+  {
+    "id": "91db379c-a8b8-4e93-9d0f-9130b73c77ea",
+    "data": [
+      {
+        "text": "tengo fobia a ",
+        "userDefined": false
+      },
+      {
+        "text": "conducir",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "db8eaebb-6feb-428d-8803-b6e9664ffc77",
+    "data": [
+      {
+        "text": "no me atrevo a ",
+        "userDefined": false
+      },
+      {
+        "text": "circular",
+        "meta": "@sys.ignore",
+        "userDefined": true
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "9e43a4b1-362e-4ca4-a19d-f9b1dc842201",
+    "data": [
+      {
+        "text": "pánico",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      },
+      {
+        "text": " a ",
+        "userDefined": false
+      },
+      {
+        "text": "circular",
+        "meta": "@sys.ignore",
+        "userDefined": true
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "a757aeef-b761-4215-9895-9fbb76db7aa5",
+    "data": [
+      {
+        "text": "tengo miedo a ",
+        "userDefined": false
+      },
+      {
+        "text": "conducir",
+        "meta": "@sys.ignore",
+        "userDefined": true
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "37ad3fbd-d3cc-4e17-baa2-4ca480a2318c",
+    "data": [
+      {
+        "text": "me da miedo ",
+        "userDefined": false
+      },
+      {
+        "text": "subirme al coche",
+        "meta": "@sys.ignore",
+        "userDefined": true
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "116d17c5-96e2-4f3e-ba39-3a58136c95a4",
+    "data": [
+      {
+        "text": "no soy ",
+        "userDefined": false
+      },
+      {
+        "text": "capaz",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      },
+      {
+        "text": " de ",
+        "userDefined": false
+      },
+      {
+        "text": "adelantar",
+        "meta": "@sys.ignore",
+        "userDefined": true
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "b11584c8-28db-44c1-b2bd-eeeac7310af9",
+    "data": [
+      {
+        "text": "fobia a ",
+        "userDefined": false
+      },
+      {
+        "text": "estacionar",
+        "meta": "@sys.ignore",
+        "userDefined": true
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "9a86f571-d564-4304-a331-c43f298f34cb",
+    "data": [
+      {
+        "text": "ansiedad al ",
+        "userDefined": false
+      },
+      {
+        "text": "aparcar",
+        "meta": "@sys.ignore",
+        "userDefined": true
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "7ba1ffff-7e95-4980-a7fc-f92389da65fa",
+    "data": [
+      {
+        "text": "me produce ansiedad ",
+        "userDefined": false
+      },
+      {
+        "text": "conducir",
+        "meta": "@sys.ignore",
+        "userDefined": true
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  }
+]

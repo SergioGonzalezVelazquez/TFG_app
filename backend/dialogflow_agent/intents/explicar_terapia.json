@@ -1,0 +1,63 @@
+{
+  "id": "6c4fadfc-cbcb-4c68-a740-3c49cb17e9af",
+  "name": "explicar_terapia",
+  "auto": true,
+  "contexts": [
+    "identificar_situaciones",
+    "identificar_categorias"
+  ],
+  "responses": [
+    {
+      "resetContexts": false,
+      "affectedContexts": [
+        {
+          "name": "identificar_situaciones",
+          "parameters": {},
+          "lifespan": 5
+        },
+        {
+          "name": "identificar_categorias",
+          "parameters": {},
+          "lifespan": 5
+        }
+      ],
+      "parameters": [],
+      "messages": [
+        {
+          "type": 0,
+          "lang": "es",
+          "condition": "",
+          "speech": "Ok, voy a explicarte"
+        },
+        {
+          "type": "simple_response",
+          "platform": "google",
+          "lang": "es",
+          "condition": "",
+          "textToSpeech": "Para ayudarte a superar el miedo a conducir vamos a aplicar una técnica de exposición conocida cómo Desensibilización Sistemática.",
+          "ssml": "",
+          "displayText": "Para ayudarte a superar el miedo a conducir vamos a aplicar una técnica de exposición conocida cómo Desensibilización Sistemática."
+        },
+        {
+          "type": "simple_response",
+          "platform": "google",
+          "lang": "es",
+          "condition": "",
+          "textToSpeech": "La aplicación de la Desensibilización Sistemática requiere elaborar una jerarquía de situaciones ansiógenas, y exponerse de manera gradual a esas situaciones temidas.",
+          "ssml": "",
+          "displayText": "La aplicación de la DS requiere elaborar una jerarquía de situaciones ansiógenas y exponerse de manera gradual a esas situaciones temidas."
+        }
+      ],
+      "defaultResponsePlatforms": {},
+      "speech": []
+    }
+  ],
+  "priority": 500000,
+  "webhookUsed": false,
+  "webhookForSlotFilling": false,
+  "fallbackIntent": false,
+  "events": [],
+  "conditionalResponses": [],
+  "condition": "",
+  "conditionalFollowupEvents": []
+}

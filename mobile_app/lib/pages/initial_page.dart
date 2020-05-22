@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:tfg_app/pages/chat/chat_page.dart';
+import 'package:tfg_app/pages/home_page.dart';
 import 'package:tfg_app/widgets/buttons.dart';
 import 'package:tfg_app/widgets/progress.dart';
+import 'package:tfg_app/services/auth.dart';
 import 'package:tfg_app/widgets/slide_dots.dart';
 
 class InitialPage extends StatefulWidget {
@@ -25,11 +27,13 @@ class _InitialPageState extends State<InitialPage> {
   // and allows to display snackbars.
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
+  AuthService _authService;
 
   /// Method called when this widget is inserted into the tree.
   @override
   void initState() {
     super.initState();
+    _authService = AuthService();
   }
 
   /// Returns a string representation of this object.
@@ -88,16 +92,18 @@ class _InitialPageState extends State<InitialPage> {
             height: MediaQuery.of(context).size.height * 0.01,
           ),
           Text(
-            "STOPMiedo cuenta con un terapeuta virtual que te ayudará en el primer paso del proceso de exposición a construir un listado con todos los temores o situaciones ansiógenas.",
+            "STOPMiedo cuenta con un terapeuta virtual que te ayudará durante el primer paso del proceso de exposición a construir un listado con todos los temores o situaciones ansiógenas.",
             textAlign: TextAlign.justify,
           ),
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.02,
           ),
+          /*
           Text(
             "Más adelante .",
             textAlign: TextAlign.justify,
           ),
+          */
         ],
       ),
     );
@@ -177,7 +183,7 @@ class _InitialPageState extends State<InitialPage> {
     );
   }
 
-  Widget _bottonNavigationBar(BuildContext parentContext, int items) {
+  Widget _bottonNavigationBarChatPage(BuildContext parentContext, int items) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Padding(
@@ -186,37 +192,56 @@ class _InitialPageState extends State<InitialPage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Opacity(
-            opacity: _currentPage == items - 1 ? 0 : 1,
-            child: FlatButton(
-              padding: EdgeInsets.all(0),
-              onPressed: _currentPage != items - 1
-                  ? null
-                  : () {
-                      /*...*/
-                    },
-              child: Text(
-                "Leer más",
-                style: TextStyle(
-                    color: Theme.of(context).primaryColor,
-                    fontWeight: FontWeight.bold),
-              ),
+          FlatButton(
+            padding: EdgeInsets.all(0),
+            onPressed: () => Navigator.of(context).pushNamedAndRemoveUntil(
+                HomePage.routeAuth, (Route<dynamic> route) => false),
+            child: Text(
+              "Más tarde",
+              style: TextStyle(
+                  color: Theme.of(context).primaryColor,
+                  fontWeight: FontWeight.bold),
             ),
           ),
           _buildSlideDots(context, items),
-          _currentPage == items - 1
-              ? primaryButton(
-                  context,
-                  () => Navigator.of(context).pushNamedAndRemoveUntil(
-                      ChatPage.route, (Route<dynamic> route) => false),
-                  "Empezar",
-                  width: MediaQuery.of(context).size.width * 0.25)
-              : primaryButton(context, () {
-                  _pageController.animateToPage(_currentPage + 1,
-                      duration: Duration(milliseconds: 500),
-                      curve: Curves.ease);
-                }, "Siguiente",
-                  width: MediaQuery.of(context).size.width * 0.25),
+          primaryButton(
+              context,
+              () => Navigator.of(context).pushNamedAndRemoveUntil(
+                  ChatPage.route, (Route<dynamic> route) => false),
+              "Empezar",
+              width: MediaQuery.of(context).size.width * 0.25)
+        ],
+      ),
+    );
+  }
+
+  Widget _bottonNavigationBarInfoPage(BuildContext parentContext, int items) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+    return Padding(
+      padding: EdgeInsets.symmetric(
+          horizontal: width * 0.07, vertical: height * 0.02),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          FlatButton(
+            padding: EdgeInsets.all(0),
+            onPressed: () {
+              /*...*/
+            },
+            child: Text(
+              "Leer más",
+              style: TextStyle(
+                  color: Theme.of(context).primaryColor,
+                  fontWeight: FontWeight.bold),
+            ),
+          ),
+          _buildSlideDots(context, items),
+          primaryButton(context, () {
+            setState(() {});
+            _pageController.animateToPage(_currentPage + 1,
+                duration: Duration(milliseconds: 500), curve: Curves.ease);
+          }, "Siguiente", width: MediaQuery.of(context).size.width * 0.25),
         ],
       ),
     );
@@ -235,24 +260,26 @@ class _InitialPageState extends State<InitialPage> {
     List<Widget> pages = [_infoPage(context), _chatPage(context)];
 
     return Scaffold(
-      //backgroundColor:  Color(0xffe8eaf6),
-      key: _scaffoldKey,
-      body: SafeArea(
-        child: _isLoading
-            ? circularProgress(context)
-            : PageView(
-                onPageChanged: (int page) {
-                  setState(() {
-                    _currentPage = page;
-                  });
-                },
-                controller: _pageController,
-                scrollDirection: Axis.horizontal,
-                children: pages,
-              ),
-      ),
-      bottomNavigationBar:
-          _isLoading ? null : _bottonNavigationBar(context, pages.length),
-    );
+        //backgroundColor:  Color(0xffe8eaf6),
+        key: _scaffoldKey,
+        body: SafeArea(
+          child: _isLoading
+              ? circularProgress(context)
+              : PageView(
+                  onPageChanged: (int page) {
+                    setState(() {
+                      _currentPage = page;
+                    });
+                  },
+                  controller: _pageController,
+                  scrollDirection: Axis.horizontal,
+                  children: pages,
+                ),
+        ),
+        bottomNavigationBar: _isLoading
+            ? null
+            : (_currentPage != 0
+                ? _bottonNavigationBarChatPage(context, pages.length)
+                : _bottonNavigationBarInfoPage(context, pages.length)));
   }
 }

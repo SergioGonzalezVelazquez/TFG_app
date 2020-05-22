@@ -1,0 +1,71 @@
+[
+  {
+    "id": "198a0136-a810-4996-bd37-c7cbd70adc66",
+    "data": [
+      {
+        "text": "no puedo conducir",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "ab9cec09-b6d2-471d-9910-2435484d9913",
+    "data": [
+      {
+        "text": "tengo fobia a conducir",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "82632de8-d49b-40d0-a126-b2414eedb56f",
+    "data": [
+      {
+        "text": "no soy ",
+        "userDefined": false
+      },
+      {
+        "text": "capaz",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      },
+      {
+        "text": " de circular",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "106c1e8e-d849-43bd-9559-28efbf7a29d1",
+    "data": [
+      {
+        "text": "me produce ansiedad conducir",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "fe8d87ca-63dc-4215-a08a-198e22c5e43a",
+    "data": [
+      {
+        "text": "me da miedo conducir",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  }
+]

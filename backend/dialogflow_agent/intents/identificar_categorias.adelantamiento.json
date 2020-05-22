@@ -1,0 +1,65 @@
+{
+  "id": "5b0b34cb-d25e-46a6-a637-16647b29e086",
+  "name": "identificar_categorias.adelantamiento",
+  "auto": true,
+  "contexts": [
+    "identificar_categorias",
+    "identificar_categorias_adelantamiento"
+  ],
+  "responses": [
+    {
+      "resetContexts": false,
+      "action": "save_situation,",
+      "affectedContexts": [
+        {
+          "name": "identificar_categorias",
+          "parameters": {},
+          "lifespan": 5
+        },
+        {
+          "name": "identificar_categorias_adelantamiento",
+          "parameters": {},
+          "lifespan": 5
+        }
+      ],
+      "parameters": [
+        {
+          "id": "b0aa7239-7c3d-4616-b82f-e79f421873c9",
+          "required": true,
+          "dataType": "@tipo_vehiculo",
+          "name": "tipo_vehiculo",
+          "value": "$tipo_vehiculo",
+          "prompts": [
+            {
+              "lang": "es",
+              "value": "Vale, ¿a qué tipos de vehículos tienes miedo adelantar? ¿Vehículos cortos cómo turismos o coches, vehículos largos cómo camiones o autobuses?"
+            }
+          ],
+          "promptMessages": [],
+          "noMatchPromptMessages": [],
+          "noInputPromptMessages": [],
+          "outputDialogContexts": [],
+          "isList": true
+        }
+      ],
+      "messages": [
+        {
+          "type": 0,
+          "lang": "es",
+          "condition": "",
+          "speech": "Entiendo que te producen ansiedad situaciones de adelantamiento a $tipo_vehiculo"
+        }
+      ],
+      "defaultResponsePlatforms": {},
+      "speech": []
+    }
+  ],
+  "priority": 500000,
+  "webhookUsed": true,
+  "webhookForSlotFilling": false,
+  "fallbackIntent": false,
+  "events": [],
+  "conditionalResponses": [],
+  "condition": "",
+  "conditionalFollowupEvents": []
+}

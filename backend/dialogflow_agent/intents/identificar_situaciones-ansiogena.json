@@ -1,0 +1,58 @@
+{
+  "id": "ec84ae93-6368-4670-a0c6-da88c05bd2f1",
+  "parentId": "0f4b914c-3281-46a6-9202-32e864c250da",
+  "rootParentId": "0f4b914c-3281-46a6-9202-32e864c250da",
+  "name": "identificar_situaciones-ansiogena",
+  "auto": true,
+  "contexts": [
+    "identificar_situaciones",
+    "identificar_situaciones-followup",
+    "identificar_situaciones-ansiogena"
+  ],
+  "responses": [
+    {
+      "resetContexts": false,
+      "action": "identificar_situaciones.identificar_situaciones-custom",
+      "affectedContexts": [
+        {
+          "name": "identificar_situaciones",
+          "parameters": {},
+          "lifespan": 50
+        },
+        {
+          "name": "identificar_situaciones-ansiogena",
+          "parameters": {},
+          "lifespan": 5
+        }
+      ],
+      "parameters": [],
+      "messages": [
+        {
+          "type": 0,
+          "lang": "es",
+          "condition": "",
+          "speech": [
+            "¡Vale! Seguro de todo el proceso de terapia serás capaz de exponerte a esa situación sin ningún tipo de ansiedad",
+            "¡ Entendido! Ya verás como con un trabajo continuo eres capaz de enfrentarte a esa situación sin ningún tipo de miedo"
+          ]
+        },
+        {
+          "type": 0,
+          "lang": "es",
+          "condition": "",
+          "speech": []
+        }
+      ],
+      "defaultResponsePlatforms": {},
+      "speech": []
+    }
+  ],
+  "priority": 500000,
+  "webhookUsed": true,
+  "webhookForSlotFilling": false,
+  "fallbackIntent": false,
+  "events": [],
+  "conditionalResponses": [],
+  "condition": "",
+  "conditionalFollowupEvents": []
+}

@@ -1,0 +1,185 @@
+[
+  {
+    "id": "394bbf4c-f07d-41d8-90f4-8eee56be7552",
+    "data": [
+      {
+        "text": "siguamos",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "3257f85e-9e0f-4f91-b27d-cf120a78d263",
+    "data": [
+      {
+        "text": "seguir",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "69b93860-d6a8-44fc-8306-e84f0e7fad09",
+    "data": [
+      {
+        "text": "continuar",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "0da4c48d-4828-4540-ba47-8c6df43b327e",
+    "data": [
+      {
+        "text": "confirmar",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "89acf60e-47f0-4259-b8bb-c296fcbed2af",
+    "data": [
+      {
+        "text": "adelante",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "cdfe96ee-96bf-4bf6-8897-349a1186cb9b",
+    "data": [
+      {
+        "text": "empezar",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "2aad8a1d-d0e4-47b4-9f11-f5d2f52a39ac",
+    "data": [
+      {
+        "text": "empezamos",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "47cc2302-0c78-4827-a543-7ebc24456d7a",
+    "data": [
+      {
+        "text": "vamos allá",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "83e35907-88c8-4f72-b816-2099047a46b2",
+    "data": [
+      {
+        "text": "vamos",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "dcc7e58d-dd6a-4697-87a6-484d715972f5",
+    "data": [
+      {
+        "text": "venga",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "f2b0377f-fe7f-4d81-b795-e6950b3b4a02",
+    "data": [
+      {
+        "text": "ya estoy",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "96dc4f60-1bca-412c-ac9e-775fc99d3392",
+    "data": [
+      {
+        "text": "ya",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "eb53c936-2629-4145-a782-6fd0d7165562",
+    "data": [
+      {
+        "text": "vale",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 1,
+    "updated": 0
+  },
+  {
+    "id": "c997eca9-d617-4fe4-844c-4ecb586bd2b3",
+    "data": [
+      {
+        "text": "cuando quieras",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "01a0c02d-7a19-4a5a-b501-179f17480b82",
+    "data": [
+      {
+        "text": "estoy preparado",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  }
+]
