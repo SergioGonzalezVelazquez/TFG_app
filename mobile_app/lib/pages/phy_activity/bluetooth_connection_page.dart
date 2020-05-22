@@ -114,10 +114,12 @@ class _BluetoothConnectionInterfaceState
   }
 
   // Service Management (pass the device's direction to mibandlib in android)
-  void startServiceInPlatform(String macAddress) async {
-    var methodChannel = MethodChannel("es.uclm.esi.mami.macAddress");
+  void _startServiceInPlatform(String macAddress) async {
+    var methodChannel = MethodChannel("emovi/methodChannel");
     await _activate();
-    await methodChannel.invokeMethod(macAddress);
+    await methodChannel.invokeMethod("startService", {
+      "macAddress": macAddress,
+    });
   }
 
   // Widgets
@@ -132,7 +134,7 @@ class _BluetoothConnectionInterfaceState
             context,
             () {
               _flutterBlue.stopScan();
-              startServiceInPlatform(device.id.toString());
+              _startServiceInPlatform(device.id.toString());
             },
             "Conectar",
             width: MediaQuery.of(context).size.width * 0.2,

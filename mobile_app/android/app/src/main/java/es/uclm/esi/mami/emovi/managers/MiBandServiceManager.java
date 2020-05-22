@@ -4,6 +4,7 @@ import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.le.ScanResult;
@@ -20,7 +21,9 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 
+import es.uclm.esi.R;
 import es.uclm.esi.mami.mibandlib.MiBand;
+import es.uclm.esi.stopmiedo.MainActivity;
 import io.reactivex.functions.Consumer;
 
 import es.uclm.esi.mami.emovi.behaviour.AutomatonMiBandManager;
@@ -57,6 +60,7 @@ public class MiBandServiceManager extends Service {
 
     private static AutomatonMiBandManager automataConducta;
     private final String TAG = "MiBandServiceManager";
+    private final String CHANNEL_ID = "eMOVIService";
 
     public MiBandServiceManager() {
         super();
@@ -297,7 +301,7 @@ public class MiBandServiceManager extends Service {
         intentFilter.addAction("recordingArray");
         registerReceiver(new MyReceiver(),intentFilter);
         */
-/*
+        /*
         if (Build.VERSION.SDK_INT >= 26) {
             String CHANNEL_ID = "my_channel_01";
             NotificationChannel channel = new NotificationChannel(CHANNEL_ID,
@@ -309,14 +313,43 @@ public class MiBandServiceManager extends Service {
                     .setContentText("").build();
             startForeground(1, notification);
         }
- */
+        */
+        Intent notificationIntent = new Intent(this, MainActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this,
+                0, notificationIntent, 0);
+
+        // A Foreground service must provide a notification for the status bar.
+        Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setContentTitle("STOPMiedo")
+                .setContentText("eMOVI is active")
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentIntent(pendingIntent)
+                .build();
+        startForeground(102, notification);
+
         /*
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "messages").setContentText("eMOVI is running in background").setContentTitle("eMOVI").setSmallIcon(R.drawable.culturas);
-            startForeground(101, builder.build());
-        }
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "messages").
+                setContentText("eMOVI is running in background")
+                .setContentTitle("eMOVI")
+                .setSmallIcon(R.mipmap.ic_launcher);
+        startForeground(101, builder.build());
          */
     }
+
+
+    public void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel serviceChannel = new NotificationChannel(
+                    CHANNEL_ID,
+                    "STOPMiedo",
+                    NotificationManager.IMPORTANCE_DEFAULT
+            );
+
+            NotificationManager manager = getSystemService(NotificationManager.class);
+            manager.createNotificationChannel(serviceChannel);
+        }
+    }
+
 
     public String getMacAddress() {
         return macAddress;

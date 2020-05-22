@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tfg_app/pages/phy_activity/daily_heart_rate.dart';
+import 'package:tfg_app/pages/phy_activity/phy_activity_settings.dart';
 import 'package:tfg_app/pages/user/login_page.dart';
 import 'package:tfg_app/pages/user/udpate_password.dart';
 import 'package:tfg_app/widgets/buttons.dart';
@@ -127,7 +128,12 @@ class _MorePageState extends State<MorePage> {
             DailyHeartRatePage.route,
           ),
         ),
-        _sectionItem("Configurar", null),
+        _sectionItem(
+          "Configurar",
+          () => Navigator.of(context).pushNamed(
+            PhyActivitySettings.route,
+          ),
+        ),
         Divider(
           height: verticalPadding,
         ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tfg_app/models/driving_activity.dart';
 import 'package:tfg_app/pages/driving_activity/driving_activity_item.dart';
+import 'package:tfg_app/pages/driving_activity/driving_activity_settings.dart';
 import 'package:tfg_app/themes/custom_icon_icons.dart';
 import 'package:tfg_app/widgets/progress.dart';
 import 'package:tfg_app/services/firestore.dart';
@@ -61,6 +62,20 @@ class _DrivingActivityPageState extends State<DrivingActivityPage>
     return Scaffold(
       appBar: AppBar(
         title: const Text('Rutas registradas'),
+        actions: <Widget>[
+          Padding(
+            padding: EdgeInsets.only(right: 20.0),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.pushNamed(context, DrivingActivitySettings.route);
+              },
+              child: Icon(
+                CustomIcon.cog,
+                size: 20.0,
+              ),
+            ),
+          ),
+        ],
         bottom: TabBar(
           unselectedLabelColor: Colors.black38,
           labelColor: Theme.of(context).primaryColor,
@@ -84,8 +99,8 @@ class _DrivingActivityPageState extends State<DrivingActivityPage>
       body: TabBarView(
         children: [
           _buildActivities(),
-          new Text("This is chat Tab View"),
-          new Text("This is notification Tab View"),
+          new Text("Este mes"),
+          new Text("Todas"),
         ],
         controller: _tabController,
       ),

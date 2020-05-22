@@ -1,5 +1,9 @@
 /// Line chart example
 import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:charts_flutter/src/text_style.dart' as ChartStyle;
+import 'package:charts_flutter/src/text_element.dart' as ChartText;
+import 'dart:math';
+import 'package:charts_flutter/flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:tfg_app/models/phy_activity.dart';
 
@@ -10,6 +14,7 @@ class HeartRateChart extends StatelessWidget {
   final DateTime seriesEnd;
   final DateTime rangeAnnotationStart;
   final DateTime rangeAnnotationEnd;
+  static String pointerValue;
 
   HeartRateChart(
     this.seriesList,
@@ -38,65 +43,74 @@ class HeartRateChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new charts.TimeSeriesChart(
-      seriesList,
-      animate: animate,
-      customSeriesRenderers: [
-        new charts.LineRendererConfig(
-            // ID used to link series to this renderer.
-            customRendererId: 'customArea',
-            roundEndCaps: true,
-            includeArea: true),
-      ],
-      primaryMeasureAxis: new charts.NumericAxisSpec(
-        showAxisLine: false,
-        tickProviderSpec: new charts.StaticNumericTickProviderSpec(
-           <charts.TickSpec<num>>[
-          charts.TickSpec<num>(60),
-          charts.TickSpec<num>(80),
-          charts.TickSpec<num>(100),
-          charts.TickSpec<num>(120),
-          charts.TickSpec<num>(140),
-
-        ],),
-      ),
-      domainAxis: new charts.DateTimeAxisSpec(
-        tickFormatterSpec: new charts.AutoDateTimeTickFormatterSpec(
-          day: new charts.TimeFormatterSpec(
-            format: 'dd',
-            transitionFormat: 'dd',
-          ),
-          hour: new charts.TimeFormatterSpec(
-            format: 'HH:mm',
-            transitionFormat: 'HH:mm',
-          ),
-          minute: new charts.TimeFormatterSpec(
-            format: 'HH:mm',
-            transitionFormat: 'HH:mm',
+    return new charts.TimeSeriesChart(seriesList,
+        animate: animate,
+        customSeriesRenderers: [
+          new charts.LineRendererConfig(
+              // ID used to link series to this renderer.
+              customRendererId: 'customArea',
+              //includePoints: true,
+              roundEndCaps: true,
+              includeArea: true),
+        ],
+        primaryMeasureAxis: new charts.NumericAxisSpec(
+          showAxisLine: false,
+          tickProviderSpec: new charts.StaticNumericTickProviderSpec(
+            <charts.TickSpec<num>>[
+              charts.TickSpec<num>(60),
+              charts.TickSpec<num>(80),
+              charts.TickSpec<num>(100),
+              charts.TickSpec<num>(120),
+              charts.TickSpec<num>(140),
+            ],
           ),
         ),
-      ),
-      behaviors: [
-        new charts.RangeAnnotation(
-          (rangeAnnotationStart != null && rangeAnnotationEnd != null)
-              ? [
-                  new charts.RangeAnnotationSegment(
-                    rangeAnnotationStart,
-                    rangeAnnotationEnd,
-                    charts.RangeAnnotationAxisType.domain,
-                    labelAnchor: charts.AnnotationLabelAnchor.end,
-                    labelDirection: charts.AnnotationLabelDirection.horizontal,
-                    color: charts.MaterialPalette.gray.shade200,
-                    labelPosition: charts.AnnotationLabelPosition.margin,
-                    startLabel: 'Inicio',
-                    endLabel: 'Fin',
-                  ), 
-                ]
-              : [],
+        domainAxis: new charts.DateTimeAxisSpec(
+          tickFormatterSpec: new charts.AutoDateTimeTickFormatterSpec(
+            day: new charts.TimeFormatterSpec(
+              format: 'dd',
+              transitionFormat: 'dd',
+            ),
+            hour: new charts.TimeFormatterSpec(
+              format: 'HH:mm',
+              transitionFormat: 'HH:mm',
+            ),
+            minute: new charts.TimeFormatterSpec(
+              format: 'HH:mm',
+              transitionFormat: 'HH:mm',
+            ),
+          ),
         ),
-        new charts.PanAndZoomBehavior(), 
-      ],
-    );
+        behaviors: [
+          new charts.RangeAnnotation(
+            (rangeAnnotationStart != null && rangeAnnotationEnd != null)
+                ? [
+                    new charts.RangeAnnotationSegment(
+                      rangeAnnotationStart,
+                      rangeAnnotationEnd,
+                      charts.RangeAnnotationAxisType.domain,
+                      labelAnchor: charts.AnnotationLabelAnchor.end,
+                      labelDirection:
+                          charts.AnnotationLabelDirection.horizontal,
+                      color: charts.MaterialPalette.gray.shade200,
+                      labelPosition: charts.AnnotationLabelPosition.margin,
+                      startLabel: 'Inicio',
+                      endLabel: 'Fin',
+                    ),
+                  ]
+                : [],
+          ),
+          new charts.PanAndZoomBehavior(),
+          LinePointHighlighter(symbolRenderer: CustomCircleSymbolRenderer())
+        ],
+        selectionModels: [
+          SelectionModelConfig(changedListener: (SelectionModel model) {
+            if (model.hasDatumSelection)
+              pointerValue = model.selectedSeries[0]
+                  .measureFn(model.selectedDatum[0].index)
+                  .toString();
+          })
+        ]);
   }
 
   /// Create one series with sample hard coded data.
@@ -215,5 +229,33 @@ class HeartRateChart extends StatelessWidget {
         // Configure our custom bar target renderer for this series.
         ..setAttribute(charts.rendererIdKey, 'customArea'),
     ];
+  }
+}
+
+// https://github.com/google/charts/issues/58
+class CustomCircleSymbolRenderer extends CircleSymbolRenderer {
+  @override
+  void paint(ChartCanvas canvas, Rectangle bounds,
+      {List<int> dashPattern,
+      Color fillColor,
+      charts.FillPatternType fillPattern,
+      Color strokeColor,
+      double strokeWidthPx}) {
+    super.paint(canvas, bounds,
+        dashPattern: dashPattern,
+        fillColor: fillColor,
+        strokeColor: strokeColor,
+        strokeWidthPx: strokeWidthPx);
+    canvas.drawRect(
+        Rectangle(bounds.left - 5, bounds.top - 60, bounds.width + 13,
+            bounds.height + 10),
+        fill: Color.fromHex(code: '#f2f2f2'));
+    var textStyle = ChartStyle.TextStyle();
+    textStyle.color = Color.black;
+    textStyle.fontSize = 13;
+    canvas.drawText(
+        ChartText.TextElement(HeartRateChart.pointerValue, style: textStyle),
+        (bounds.left - 2).round(),
+        (bounds.top - 58).round());
   }
 }

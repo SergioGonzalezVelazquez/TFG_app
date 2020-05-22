@@ -1,10 +1,13 @@
 import 'package:flutter/cupertino.dart';
+import 'package:tfg_app/models/phy_activity.dart';
 import 'package:tfg_app/pages/chat/chat_page.dart';
+import 'package:tfg_app/pages/driving_activity/driving_activity_settings.dart';
 import 'package:tfg_app/pages/home_page.dart';
 import 'package:tfg_app/pages/initial_page.dart';
 import 'package:tfg_app/pages/phy_activity/bluetooth_connection_page.dart';
 import 'package:tfg_app/pages/phy_activity/daily_heart_rate.dart';
 import 'package:tfg_app/pages/phy_activity/phy_activity_agreement.dart';
+import 'package:tfg_app/pages/phy_activity/phy_activity_settings.dart';
 import 'package:tfg_app/pages/questionnaire/pretest/signup_questionnaire_completed_page.dart';
 import 'package:tfg_app/pages/questionnaire/pretest/signup_questionnaire_page.dart';
 import 'package:tfg_app/pages/user/login_page.dart';
@@ -43,14 +46,16 @@ final appRoutes = {
   // Therapy
   ChatPage.route: (BuildContext context) => ChatPage(),
 
-
   // Driving Activity Detection
   DrivingActivityAgreement.route: (BuildContext context) =>
       DrivingActivityAgreement(),
+  DrivingActivitySettings.route: (BuildContext context) =>
+      DrivingActivitySettings(),
 
   // eMOVI
   BluetoothConnectionInterface.route: (BuildContext context) =>
       BluetoothConnectionInterface(),
   PhyActivityAgreement.route: (BuildContext context) => PhyActivityAgreement(),
-  DailyHeartRatePage.route : (BuildContext context) => DailyHeartRatePage(),
+  DailyHeartRatePage.route: (BuildContext context) => DailyHeartRatePage(),
+  PhyActivitySettings.route: (BuildContext context) => PhyActivitySettings(),
 };

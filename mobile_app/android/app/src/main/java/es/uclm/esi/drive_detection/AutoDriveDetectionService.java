@@ -126,6 +126,14 @@ public class AutoDriveDetectionService extends Service {
         }
     }
 
+    @Override
+    public void onTaskRemoved(Intent rootIntent) {
+        Intent restartServiceIntent = new Intent(getApplicationContext(),this.getClass());
+        restartServiceIntent.setPackage(getPackageName());
+        startService(restartServiceIntent);
+        super.onTaskRemoved(rootIntent);
+    }
+
     /**
      * We will receive the input of the Activity recognition and Geo-fence APIs inside
      * onStartCommand() from the service.
@@ -158,6 +166,8 @@ public class AutoDriveDetectionService extends Service {
         }
         return Service.START_STICKY;
     }
+
+
 
     // If not-in-drive and not-in-checking-for-potential-start drive, then we remove the
     // last geo-fence.

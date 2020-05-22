@@ -122,8 +122,8 @@
     <orderEntry type="library" scope="TEST" name="Gradle: androidx.test:runner:1.1.0-alpha3@aar" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: androidx.test:monitor:1.1.0-alpha3@aar" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: androidx.test.espresso:espresso-idling-resource:3.1.0-alpha3@aar" level="project" />
-    <orderEntry type="library" name="Gradle: __local_aars__:C./Users/Sergio/Documents/Git/TFG_app_sensors/mobile_app/build/app/intermediates/flutter/debug/libs.jar:unspecified@jar" level="project" />
-    <orderEntry type="library" name="Gradle: __local_aars__:C./Users/Sergio/Documents/Git/TFG_app_sensors/mobile_app/android/app/libs/EasyFSM.jar:unspecified@jar" level="project" />
+    <orderEntry type="library" name="Gradle: __local_aars__:C./Users/Sergio/Documents/Git/fluttereMOVI4Driving/build/app/intermediates/flutter/debug/libs.jar:unspecified@jar" level="project" />
+    <orderEntry type="library" name="Gradle: __local_aars__:C./Users/Sergio/Documents/Git/fluttereMOVI4Driving/android/app/libs/EasyFSM.jar:unspecified@jar" level="project" />
     <orderEntry type="library" name="Gradle: io.flutter:flutter_embedding_debug:1.0.0-d96f962ca21a104b08836f34814eb6b267937511@jar" level="project" />
     <orderEntry type="library" name="Gradle: io.flutter:armeabi_v7a_debug:1.0.0-d96f962ca21a104b08836f34814eb6b267937511@jar" level="project" />
     <orderEntry type="library" name="Gradle: io.flutter:arm64_v8a_debug:1.0.0-d96f962ca21a104b08836f34814eb6b267937511@jar" level="project" />
@@ -233,7 +233,7 @@
     <orderEntry type="module" module-name="firebase_auth" />
     <orderEntry type="module" module-name="image_picker" />
     <orderEntry type="module" module-name="cloud_firestore_web" />
-    <orderEntry type="module" module-name="android-permission_handler" />
+    <orderEntry type="module" module-name="permission_handler" />
     <orderEntry type="module" module-name="firebase_auth_web" />
     <orderEntry type="module" module-name="google_maps_flutter" />
     <orderEntry type="module" module-name="shared_preferences" />

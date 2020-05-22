@@ -59,6 +59,13 @@ class DrivingDetectionService {
     return permissions;
   }
 
+  /// Stop AutoDriveDetection service
+  Future<void> stopBackgroundService() async {
+    await _methodChannel.invokeMethod('stopDrivingDetectionService');
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool("drive_detection_enabled", false);
+  }
+
   /// Check if AutoDriveService is running
   Future<bool> isRunning() async {
     print("is Running?");
