@@ -2,9 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:tfg_app/models/therapy.dart';
 import 'package:tfg_app/models/user.dart';
 import 'package:tfg_app/models/patient.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tfg_app/services/firestore.dart';
 
 // Gets user and patient collections references
 final usersRef = Firestore.instance.collection('users');
@@ -69,9 +71,14 @@ class AuthService {
 
   /// Check if there is a document for auth user auth in 'patient' collection
   Future<void> _getPatientData() async {
-    await patientRef.document(this._user.id).get().then((doc) {
+    await patientRef.document(this._user.id).get().then((doc) async {
       if (doc.exists) {
         this._user.patient = new Patient.fromDocument(doc);
+        if ([PatientStatus.hierarchy_pending, PatientStatus.hierarchy_completed]
+            .contains(this._user.patient.status)) {
+          Therapy therapy = await getPatientCurrentTherapy();
+          this._user.patient.currentTherapy = therapy;
+        }
       }
     });
   }

@@ -101,8 +101,11 @@ dependencies:
   # Material Design data visualization library written natively in Dart.
   charts_flutter: ^0.9.0
   
-  # Syncfusion Flutter Charts is a data visualization library written natively in Dart for creating beautiful and high-performance chart
-  syncfusion_flutter_charts: ^18.1.52
+  timeline_list: ^0.0.5
+
+  # Package which provides wonderful and custom animation while sorting
+  # a list instead of reloading the app
+  smooth_sort: ^1.0.1
 
   # eMOVI
   rxdart: 0.22.0
@@ -135,6 +138,7 @@ flutter:
   assets:
     - assets/credentials.json
     - assets/images/  
+    - assets/images/stress/ 
 
   # Fonts section 
   fonts:

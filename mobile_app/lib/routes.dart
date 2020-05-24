@@ -13,6 +13,7 @@ import 'package:tfg_app/pages/home_page.dart';
 import 'package:tfg_app/pages/initial_page.dart';
 import 'package:tfg_app/pages/questionnaire/pretest/signup_questionnaire_completed_page.dart';
 import 'package:tfg_app/pages/questionnaire/pretest/signup_questionnaire_page.dart';
+import 'package:tfg_app/pages/root_page.dart';
 import 'package:tfg_app/pages/user/login_page.dart';
 import 'package:tfg_app/pages/user/udpate_password.dart';
 import 'package:tfg_app/pages/user/profile.dart';
@@ -25,10 +26,9 @@ import 'package:tfg_app/pages/driving_activity/driving_activity_agreement.dart';
 /// When a named route is pushed with Navigator.pushNamed,
 /// the route name is looked up in this map.
 final appRoutes = {
+  RootPage.route: (BuildContext context) => RootPage(),
+
   HomePage.route: (BuildContext context) => HomePage(),
-  HomePage.routeAuth: (BuildContext context) => HomePage(
-        isAuth: true,
-      ),
 
   // User
   LoginPage.route: (BuildContext context) => LoginPage(),

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tfg_app/models/patient.dart';
-import 'package:tfg_app/pages/home_page.dart';
-import 'package:tfg_app/pages/initial_page.dart';
+import 'package:tfg_app/pages/root_page.dart';
 import 'package:tfg_app/widgets/buttons.dart';
 import 'package:tfg_app/widgets/progress.dart';
 import 'package:tfg_app/services/auth.dart';
@@ -112,7 +111,7 @@ class _SignUpQuestionnaireCompletedState
           primaryButton(
               context,
               () => Navigator.of(context).pushNamedAndRemoveUntil(
-                  HomePage.routeAuth, (Route<dynamic> route) => false),
+                  RootPage.route, (Route<dynamic> route) => false),
               "Continuar",
               width: MediaQuery.of(context).size.width * 0.25),
         ],

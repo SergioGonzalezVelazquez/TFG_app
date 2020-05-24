@@ -16,7 +16,7 @@ export const onCreateDrivingActivity = functions.firestore
         const start_location = snap.data().start_location;
 
         // Reverse Geocode for start driving location
-        let geoCoder = nodeGeocoder(geocoderOptions);
+        const geoCoder = nodeGeocoder(geocoderOptions);
         await geoCoder.reverse({ lat: start_location.latitude, lon: start_location.longitude })
             .then(async (res) => {
                 const reverse = res[0];

@@ -4,6 +4,7 @@ import 'package:flutter_blue/flutter_blue.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tfg_app/pages/home_page.dart';
+import 'package:tfg_app/pages/root_page.dart';
 import 'package:tfg_app/services/auth.dart';
 import 'package:tfg_app/widgets/buttons.dart';
 import 'package:tfg_app/widgets/progress.dart';
@@ -45,7 +46,7 @@ class _BluetoothConnectionInterfaceState
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool("phy_activity_enabled", true);
     Navigator.of(context).pushNamedAndRemoveUntil(
-        HomePage.routeAuth, (Route<dynamic> route) => false);
+        RootPage.route, (Route<dynamic> route) => false);
   }
 
   Future<void> _cancel() async {
@@ -57,7 +58,7 @@ class _BluetoothConnectionInterfaceState
     prefs.setBool("phy_activity_enabled", false);
 
     Navigator.of(context).pushNamedAndRemoveUntil(
-        HomePage.routeAuth, (Route<dynamic> route) => false);
+        RootPage.route, (Route<dynamic> route) => false);
   }
 
   /// Request location permissions

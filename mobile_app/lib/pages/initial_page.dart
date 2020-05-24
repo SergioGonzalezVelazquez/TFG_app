@@ -195,7 +195,7 @@ class _InitialPageState extends State<InitialPage> {
           FlatButton(
             padding: EdgeInsets.all(0),
             onPressed: () => Navigator.of(context).pushNamedAndRemoveUntil(
-                HomePage.routeAuth, (Route<dynamic> route) => false),
+                HomePage.route, (Route<dynamic> route) => false),
             child: Text(
               "Más tarde",
               style: TextStyle(

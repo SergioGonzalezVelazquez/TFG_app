@@ -36,6 +36,7 @@ class _ChatPageState extends State<ChatPage> {
   bool _showBotWritingAnimation = true;
   bool _showTextInput = false;
   bool _showChipInput = false;
+  bool _conversationEnd = false;
 
   @override
   void initState() {
@@ -153,6 +154,33 @@ class _ChatPageState extends State<ChatPage> {
         );
       }
     }
+
+    print("outputContexts: " +
+        responses.queryResult.outputContexts.length.toString());
+    // End of conversation
+    if (responses.queryResult.outputContexts.isEmpty) {
+      setState(() {
+        _showTextInput = false;
+        _showChipInput = false;
+        _showBotWritingAnimation = false;
+        _conversationEnd = true;
+      });
+    } 
+    /*else if (responses.queryResult.outputContexts.length == 1) {
+      List<String> contextNameSplit =
+          responses.queryResult.outputContexts[0]["name"].split("/");
+      String context = contextNameSplit[contextNameSplit.length - 1];
+      if (context == 'end') {
+        setState(() {
+          _showTextInput = false;
+          _showChipInput = false;
+          _showBotWritingAnimation = false;
+          _conversationEnd = true;
+        });
+      }
+      print(context);
+    }
+    */
   }
 
   /**
@@ -250,7 +278,7 @@ class _ChatPageState extends State<ChatPage> {
                     const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                 decoration: BoxDecoration(
                   //color: Color(0xffE4DFFD),
-                  color: Colors.white,  
+                  color: Colors.white,
                   border: Border.all(
                     color: Theme.of(context).primaryColor,
                   ),
@@ -271,12 +299,25 @@ class _ChatPageState extends State<ChatPage> {
     return Column(crossAxisAlignment: CrossAxisAlignment.end, children: chips);
   }
 
+  Widget _endComposer() {
+    return Column(
+      children: <Widget>[
+        Divider(
+          height: 1.0,
+        ),
+        Text("Fin de la conversación")
+      ],
+    );
+  }
+
   Widget _answerComposer() {
     Widget composer = Text("");
     if (_showChipInput && _suggestions != null) {
       composer = _suggestionsComposer();
     } else if (_showTextInput) {
       composer = _textComposer();
+    } else if (_conversationEnd) {
+      composer = _endComposer();
     }
     return composer;
   }

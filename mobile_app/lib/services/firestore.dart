@@ -1,8 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tfg_app/models/driving_activity.dart';
 import 'package:tfg_app/models/driving_event.dart';
+import 'package:tfg_app/models/patient.dart';
 import 'package:tfg_app/models/questionnaire_group.dart';
 import 'package:tfg_app/models/questionnaire_item.dart';
+import 'package:tfg_app/models/situation.dart';
+import 'package:tfg_app/models/therapy.dart';
 import 'dart:async';
 import 'package:tfg_app/services/auth.dart';
 
@@ -14,6 +17,7 @@ final signUpQuestionnaireResponseRef =
 final drivingActivityRef = Firestore.instance.collection('driving_activity');
 final drivingEventRef = Firestore.instance.collection('driving_event_details');
 final drivingRoutesRef = Firestore.instance.collection('driving_routes');
+final patientRef = Firestore.instance.collection('patient');
 
 AuthService _authService = AuthService();
 
@@ -64,6 +68,35 @@ Future<void> deleteSignUpResponse(QuestionnaireItem item) async {
   await signUpQuestionnaireResponseRef
       .document(_authService.user.id)
       .updateData({item.id: FieldValue.delete()});
+}
+
+Future<Therapy> getPatientCurrentTherapy() async {
+  String userId = _authService.user.id;
+  QuerySnapshot docs = await patientRef
+      .document(userId)
+      .collection('userTherapies')
+      .where("active", isEqualTo: true)
+      .getDocuments();
+
+  return Therapy.fromDocument(docs.documents[0]);
+}
+
+Future<void> setHierarchy(List<Situation> situation) async {
+  List<Map<String, dynamic>> hierarchy = [];
+
+  situation.forEach((element) {
+    hierarchy.add(element.toMap());
+  });
+
+  String userId = _authService.user.id;
+  String therapyId = _authService.user.patient.currentTherapy.id;
+  await patientRef
+      .document(userId)
+      .collection('userTherapies')
+      .document(therapyId)
+      .updateData({'hierarchy': hierarchy});
+
+  await _authService.updatePatientStatus(PatientStatus.hierarchy_completed);
 }
 
 /// fetch questionnaire response and set each answer to it question.

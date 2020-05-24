@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       routes: appRoutes,
       theme: CustomTheme.buildPurpleTheme(),
-      home: HomePage(),
+      //home: HomePage(),
     );
   }
 }

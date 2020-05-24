@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tfg_app/pages/home_page.dart';
 import 'package:tfg_app/pages/phy_activity/bluetooth_connection_page.dart';
+import 'package:tfg_app/pages/root_page.dart';
 import 'package:tfg_app/widgets/progress.dart';
 import 'package:tfg_app/widgets/buttons.dart';
 
@@ -39,7 +39,7 @@ class PhyActivityAgreementState extends State<PhyActivityAgreement> {
     prefs.setBool("phy_activity_enabled", false);
 
     Navigator.of(context).pushNamedAndRemoveUntil(
-        HomePage.routeAuth, (Route<dynamic> route) => false);
+        RootPage.route, (Route<dynamic> route) => false);
   }
 
   /**

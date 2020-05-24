@@ -1,16 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:tfg_app/models/therapy.dart';
 
 class Patient {
   final String id;
   final String type;
   final PatientStatus status;
+  Therapy currentTherapy;
 
   /// Default class constructor
-  Patient({
-    this.id,
-    this.type,
-    this.status,
-  });
+  Patient({this.id, this.type, this.status, this.currentTherapy});
 
   /// Converts Firestore Document into a User object
   factory Patient.fromDocument(DocumentSnapshot doc) {
@@ -35,7 +33,8 @@ enum PatientStatus {
   pretest_in_progress,
   pretest_completed,
   identify_categories_pending,
-  identify_categories_in_progress,
   identify_situations_pending,
-  identify_situations_in_progress
+  hierarchy_pending,
+  hierarchy_completed,
+  in_exercise
 }

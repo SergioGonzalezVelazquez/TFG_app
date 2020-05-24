@@ -1,20 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tfg_app/models/patient.dart';
-import 'package:tfg_app/pages/chat/chat_page.dart';
-import 'package:tfg_app/pages/driving_activity/driving_activity_agreement.dart';
 import 'package:tfg_app/pages/driving_activity/driving_activity_page.dart';
 import 'package:tfg_app/pages/exercises/exercises.dart';
-import 'package:tfg_app/pages/initial_page.dart';
 import 'package:tfg_app/pages/more/more_page.dart';
-import 'package:tfg_app/pages/phy_activity/phy_activity_agreement.dart';
 import 'package:tfg_app/pages/progress/progress.dart';
-import 'package:tfg_app/pages/questionnaire/pretest/signup_questionnaire_page.dart';
+import 'package:tfg_app/pages/therapist/hierarchy_page.dart';
 import 'package:tfg_app/pages/therapist/therapist.dart';
-import 'package:tfg_app/pages/user/login_page.dart';
-import 'package:tfg_app/widgets/progress.dart';
-import 'package:tfg_app/services/auth.dart';
 import 'package:tfg_app/themes/custom_icon_icons.dart';
 
 /// This widget is the home page of the application,
@@ -23,17 +14,6 @@ import 'package:tfg_app/themes/custom_icon_icons.dart';
 class HomePage extends StatefulWidget {
   /// Name use for navigate to this screen
   static const route = "/home";
-  static const routeAuth = "/home-auth";
-  static const routeNoCheck = "/home-auth";
-
-  // Flag used to determine wheter auth user must be checked or not
-  // When HomePage is inserted into the tree from another widget, we pass a true value
-  // for auth property, meaning that the user is authenticated.
-  bool auth;
-
-  HomePage({bool isAuth = false}) {
-    this.auth = isAuth;
-  }
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -42,18 +22,13 @@ class HomePage extends StatefulWidget {
 /// State object for HomePage that contains fields that affect
 /// how it looks.
 class _HomePageState extends State<HomePage> {
-  bool _isAuth = false;
-
   // Flag to render loading spinner UI.
-  bool _isLoading = true;
 
   bool showAutoDriveDetectionAgreement;
   bool showPhyActivityAgreement;
 
   PageController _pageController;
   int pageIndex = 0;
-
-  AuthService _authService;
 
   /// Create a global key that uniquely identifies the Scaffold widget,
   /// and allows to display snackbars.
@@ -64,17 +39,6 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _pageController = PageController();
-
-    // initialize AuthService class and check if
-    // user is signed in or not
-    _authService = AuthService();
-    if (!widget.auth) {
-      _checkAuth();
-    } else {
-      _isAuth = true;
-      _isLoading = false;
-    }
-    _checkSettings();
   }
 
   /// Called when this widget is removed from the tree permanently.
@@ -82,33 +46,6 @@ class _HomePageState extends State<HomePage> {
   void dispose() {
     _pageController.dispose();
     super.dispose();
-  }
-
-  Future<void> _checkSettings() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool autoDriveDetection = prefs.getBool("drive_detection_enabled");
-    bool phyActivity = prefs.getBool("phy_activity_enabled");
-
-    setState(() {
-      showAutoDriveDetectionAgreement = autoDriveDetection;
-      showPhyActivityAgreement = phyActivity;
-    });
-  }
-
-  /// Check if user is signed in or not, using a singleton instance of
-  /// AuthService class. Auth status (signed in or not) is hold by
-  /// _isAuth attribute.
-  Future<void> _checkAuth() async {
-    await _authService.init();
-
-    setState(() {
-      _isAuth = _authService.isAuth;
-      _isLoading = false;
-    });
-
-    if (_isAuth) {
-      print(_authService.user.toString());
-    }
   }
 
   void onPageChanged(int pageIndex) {
@@ -132,7 +69,7 @@ class _HomePageState extends State<HomePage> {
         children: <Widget>[
           TherapistPage(),
           ExercisePage(),
-          ProgressPage(),
+          HierarchyPage(),
           DrivingActivityPage(),
           MorePage(),
         ],
@@ -173,40 +110,11 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildAuthScreen() {
-    Patient patient = _authService.user.patient;
-    PatientStatus status = patient.status;
-    print(status);
-
-    if (status == PatientStatus.pretest_pending)
-      return SignUpQuestionnairePage();
-    else if (status == PatientStatus.pretest_in_progress)
-      return SignUpQuestionnairePage(
-        inProgress: true,
-      );
-    
-    if (showAutoDriveDetectionAgreement == null)
-      return DrivingActivityAgreement();
-    else if (showPhyActivityAgreement == null)
-      return PhyActivityAgreement();
-
-    if ([
-      PatientStatus.identify_categories_pending,
-      PatientStatus.identify_situations_pending
-    ].contains(status)) {
-      return InitialPage();
-    } else {
-      return _buildHomePage();
-    }
-  }
-
   /// Describes the part of the user interface represented by this widget.
   /// The given BuildContext contains information about the location in the
   /// tree at which this widget is being built.
   @override
   Widget build(BuildContext context) {
-    return _isLoading
-        ? Scaffold(key: _scaffoldKey, body: circularProgress(context))
-        : (_isAuth ? _buildAuthScreen() : LoginPage());
+    return _buildHomePage();
   }
 }

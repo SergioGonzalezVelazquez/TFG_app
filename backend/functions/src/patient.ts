@@ -15,6 +15,9 @@ enum PatientStatus {
     identify_categories_in_progress = "identify_categories_in_progress",
     identify_situations_pending = "identify_situations_pending",
     identify_situations_in_progress = "identify_situations_in_progress",
+    hierarchy_pending = "hierarchy_pending",
+    hierarchy_completed = "hierarchy_completed",
+    in_exercise = "in_exercise"
 }
 
 // Event handler that fires every time a 'patient' document is updated.
@@ -28,7 +31,6 @@ export const onUpdatePatient = functions.firestore
 
         // Calculate type of patient
         console.log(patient['status']);
-        console.log(PatientStatus.pretest_completed.toString())
         if (patient['status'] === PatientStatus.pretest_completed.toString()) {
             // Get pretest response of this patient
             const doc = await admin.firestore()
@@ -58,9 +60,61 @@ export const onUpdatePatient = functions.firestore
                 }
             }
         }
+        else if (patient['status'] === PatientStatus.hierarchy_completed.toString()) {
+            console.log(JSON.stringify(patient));
+
+            // Obtener la jerarquía de situaciones que ha construido el paciente
+            const snapshot = await admin.firestore()
+                .collection("patient")
+                .doc(userId)
+                .collection("userTherapies")
+                .where('active', '==', true)
+                .limit(1)
+                .get();
+
+            if (!snapshot.empty) {
+                const doc = snapshot.docs[0];
+                const hierarchy = doc.data()['hierarchy'];
+                console.log(hierarchy);
+
+                // For each situation in hierarchy, create an exercise
+                hierarchy.forEach(async (situation, index) => {
+                    const data = situation;
+
+                    // Add hierarchy usas as currentUsas
+                    data['originalUSAs'] = situation['usas'];
+                    delete data['usas'];
+                    data['index'] = index;
+                    data['status'] = index === 0 ? 'in_progress' : 'waiting'
+
+                    await admin.firestore()
+                        .collection("patient")
+                        .doc(userId)
+                        .collection("userTherapies")
+                        .doc(doc.id)
+                        .collection("exercises")
+                        .doc()
+                        .set(data);
+                });
+            }
+            else {
+                console.log("is empty");
+            }
+
+
+            /*
+            await admin.firestore()
+                .collection("patient")
+                .doc(userId)
+                .update({ status: PatientStatus.in_exercise.toString() });
+            */
+
+        }
         return Promise.resolve(SUCCESS_CODE);
 
     });
+
+
 
 function findPatientTypeDFS(response, tree, description = '') {
     let itinerary;

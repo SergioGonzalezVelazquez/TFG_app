@@ -9,8 +9,13 @@ const db = admin.firestore();
 
 
 export async function createTherapy(userId: string, data) {
-    const collection = db.collection('therapy').doc(userId).collection('userTherapies').doc();
+    data['active'] = true;
+    const collection = db.collection('patient').doc(userId).collection('userTherapies').doc();
     await writeInDB(collection, data);
+
+    // Update patient status
+    const patientCollection = db.collection('patient').doc(userId);
+    await writeInDB(patientCollection, { status: 'hierarchy_pending' }, true);
 }
 
 export async function readUserId(sessionId: string): Promise<string> {
@@ -33,7 +38,7 @@ async function readFromDB(collection) {
 }
 
 
-async function writeInDB(collection, data, update: boolean = false) {
+export async function writeInDB(collection, data, update: boolean = false) {
     // Get the database collection reference and read document with documentId
     if (update) {
         await collection.update(data);

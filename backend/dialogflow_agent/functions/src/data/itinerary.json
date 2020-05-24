@@ -82,8 +82,7 @@
                         "C3-S2-PSB",
                         "C3-S2-PSC",
                         "C3-S2-PSD",
-                        "C3-S2-PSE",
-                        "C3-S2-PSF"
+                        "C3-S2-PSE"
                     ]
                 }
             },
@@ -123,7 +122,6 @@
         },
         "greatest_anxiety": [
             "C3-S2-PSE",
-            "C3-S2-PSF",
             "C4-S1-FTC",
             "C4-S1-CCAB",
             "C4-S1-OCA",
@@ -229,8 +227,7 @@
                         "C3-S2-PSB",
                         "C3-S2-PSC",
                         "C3-S2-PSD",
-                        "C3-S2-PSE",
-                        "C3-S2-PSF"
+                        "C3-S2-PSE"
                     ]
                 }
             },
@@ -280,7 +277,6 @@
         },
         "greatest_anxiety": [
             "C3-S2-PSE",
-            "C3-S2-PSF",
             "C4-S1-CONB",
             "C4-S1-TAMB",
             "C4-S1-FTC",
@@ -421,8 +417,7 @@
                         "C3-S2-PSB",
                         "C3-S2-PSC",
                         "C3-S2-PSD",
-                        "C3-S2-PSE",
-                        "C3-S2-PSF"
+                        "C3-S2-PSE"
                     ]
                 }
             },
@@ -503,7 +498,6 @@
         },
         "greatest_anxiety": [
             "C3-S2-PSE",
-            "C3-S2-PSF",
             "C4-S2-CONB",
             "C4-S2-CCB",
             "C4-S2-FTC",
@@ -665,8 +659,7 @@
                         "C3-S2-PSB",
                         "C3-S2-PSC",
                         "C3-S2-PSD",
-                        "C3-S2-PSE",
-                        "C3-S2-PSF"
+                        "C3-S2-PSE"
                     ]
                 }
             },
@@ -764,7 +757,6 @@
         },
         "greatest_anxiety": [
             "C3-S2-PSE",
-            "C3-S2-PSF",
             "C4-S2-CONB",
             "C4-S2-CCB",
             "C4-S2-CTB",

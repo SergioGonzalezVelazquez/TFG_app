@@ -28,6 +28,10 @@ export async function startIdentifySituations(agent, itinerary: number, neutral:
     parameters['currentSituation'] = firstSituationData.situationCode;
     parameters['currentVariant'] = firstSituationData.variantCode;
     parameters['currentItem'] = firstSituationData.itemCode;
+    parameters['currentLevelStr'] = firstSituationData.levelStr;
+    parameters['currentSituationStr'] = firstSituationData.situationStr;
+    parameters['currentVariantStr'] = firstSituationData.variantStr;
+    parameters['currentItemStr'] = firstSituationData.itemStr;
 
     if (Object.keys(parameters['available']).length > 1) {
         agent.add('Vamos a empezar hablando sobre situaciones relacionadas con ' + firstSituationData.levelStr.toLowerCase());
@@ -67,11 +71,23 @@ export async function loopIdentitifySituations(agent) {
     const answer = agent.query;
     if (answer !== 'indiferente') {
         // Añade la situación al listado de situaciones elegidas
-        newParameters['included'].push(contextParameters['currentItem']);
+        const situation = {
+            itemCode: contextParameters['currentItem'],
+            itemStr: contextParameters['currentItemStr'],
+            situationCode: contextParameters['currentSituation'],
+            situationStr: contextParameters['currentSituationStr'],
+            levelCode: contextParameters['currentLevel'],
+            levelStr: contextParameters['currentLevelStr']
+        }
+        if (contextParameters['currentVariant']) {
+            situation['variantCode'] = contextParameters['currentVariant'];
+            situation['variantStr'] = contextParameters['currentVariantStr'];
+        }
+        newParameters['included'].push(situation);
 
         // 16 situaciones: neutra, ansiogéna y 14 del listado
         if (newParameters['included'].length === 14) {
-            agent.add('¡Completado! Ya tenemos un listado de 15 situaciones temidas');
+            agent.add('¡Completado! Ya tenemos un listado de 16 situaciones temidas');
             await endIdentifySituations(agent, contextParameters['neutral'], contextParameters['anxiety'], newParameters['included']);
             return;
             // TERMINAR CONVERSACIÓN
@@ -86,16 +102,20 @@ export async function loopIdentitifySituations(agent) {
     // Obtiene la siguiente situación que se propone al paciente
     const nextSituationData = getNextSituation(contextParameters['available']);
     if (nextSituationData['itemCode']) {
-        if (contextParameters['currentLevel'] !== nextSituationData.level && contextParameters['currentSituation'] !== nextSituationData.situationCode) {
+        if (contextParameters['currentLevel'] !== nextSituationData.level || contextParameters['currentSituation'] !== nextSituationData.situationCode) {
             agent.add('Hablemos ahora sobre situaciones relacionadas con ' + nextSituationData.situationStr.toLowerCase());
         }
 
         newParameters['neutral'] = contextParameters['neutral'];
         newParameters['anxiety'] = contextParameters['anxiety'];
         newParameters['currentLevel'] = nextSituationData.level;
+        newParameters['currentLevelStr'] = nextSituationData.levelStr;
         newParameters['currentSituation'] = nextSituationData.situationCode;
+        newParameters['currentSituationStr'] = nextSituationData.situationStr;
         newParameters['currentVariant'] = nextSituationData.variantCode;
+        newParameters['currentVariantStr'] = nextSituationData.variantStr;
         newParameters['currentItem'] = nextSituationData.itemCode;
+        newParameters['currentItemStr'] = nextSituationData.itemStr;
         newParameters['available'] = nextSituationData.available;
 
         agent.add('¿Te produce ansiedad "' + nextSituationData.itemStr + '"?');
@@ -116,7 +136,7 @@ export async function loopIdentitifySituations(agent) {
         const length = newParameters['included'].length;
         // 11 situaciones, ansiógena, neutra y 9 o más del listado
         if (length >= 9) {
-            agent.add('¡Terminado! Ya tenemos un listado de ' + length + ' situaciones temidas');
+            agent.add('¡Terminado! Ya tenemos un listado de ' + (length + 2) + ' situaciones temidas');
             await endIdentifySituations(agent, contextParameters['neutral'], contextParameters['anxiety'], newParameters['included']);
         }
         else {
@@ -129,7 +149,19 @@ export async function loopIdentitifySituations(agent) {
 async function endIdentifySituations(agent, neutral: string, anxiety: string, situations) {
     const session: string = agent.session.split("/").pop();
     const userId: string = await readUserId(session);
-    await createTherapy(userId, { neutra: neutral, anxiety: anxiety, situations: situations });
+    const neutralData = getSituationData(neutral);
+    const anxietyData = getSituationData(anxiety);
+    const neutralDoc = { itemCode: neutral, itemStr: neutralData.item, levelCode: neutralData.level }
+    const anxietyDoc = { itemCode: anxiety, itemStr: anxietyData.item, levelCode: anxietyData.level }
+    await createTherapy(userId, { neutra: neutralDoc, anxiety: anxietyDoc, situations: situations });
+
+    clearOutgoingContexts(agent);
+
+    // Close conversation
+    agent.end("El siguiente paso es elaborar una jerarquía de ansiedad a partir de las situaciones que hemos identificado.");
+    agent.end("Puedes hacerlo desde la pantalla 'Terapia'.");
+
+
 }
 
 function situationsAddedMsg(added: number): string {
@@ -173,7 +205,7 @@ function getNextSituation(availableSituations) {
         variantStr = situationsTaxonomy[levelCode]['situations'][situationCode]['variants'][variantCode]['name'];
 
         itemCode = newAvailableSituations[levelCode][situationCode][variantCode][0];
-        itemStr = situationsTaxonomy[levelCode]['situations'][situationCode]['variants'][variantCode]['items'][itemCode];
+        itemStr = situationsTaxonomy[levelCode]['situations'][situationCode]['variants'][variantCode]['items'][itemCode]['name'];
 
         // Elimina la situación de disponibles
         newAvailableSituations[levelCode][situationCode][variantCode].shift();
@@ -272,27 +304,38 @@ function setInitialSituations(itinerary: number, neutralItem: string, anxietyIte
 }
 
 export function getSituationData(itemCode: string, level?: string) {
-    const situation: string = itemCode.split("-")[1];
+    let situation: string = itemCode.split("-")[1];
+    let levelStr: string;
 
     if (!level) {
         level = getSituationLevel(itemCode);
     }
+    levelStr = situationsTaxonomy[level]['category'];
+    let situationStr: string = situationsTaxonomy[level]['situations'][situation]['name'];
 
     let itemStr: string = '';
+    let itemImg;
+    let itemAudio;
 
     const situationTaxonomy = situationsTaxonomy[level]["situations"][situation];
 
     if (situationTaxonomy['variants']) {
         let variant: string = itemCode.split("-")[2];
         variant = variant.substring(0, variant.length - 1);
-        itemStr = situationTaxonomy['variants'][variant]['items'][itemCode];
+        let variantStr: string = situationTaxonomy['variants'][variant]['name'];
+        itemStr = situationTaxonomy['variants'][variant]['items'][itemCode]['name'];
+        itemImg = situationTaxonomy['variants'][variant]['items'][itemCode]['image'];
+        itemAudio = situationTaxonomy['variants'][variant]['items'][itemCode]['audio'];
+        return { level: level, levelStr: levelStr, situation: situation, situationStr: situationStr, variant: variant, variantStr: variantStr, item: itemStr, itemImg: itemImg, itemAudio: itemAudio };
     }
     else {
-        itemStr = situationTaxonomy['items'][itemCode];
+        itemStr = situationTaxonomy['items'][itemCode]['name'];
+        itemImg = situationTaxonomy['items'][itemCode]['image'];
+        itemAudio = situationTaxonomy['items'][itemCode]['audio'];
+        return { level: level, levelStr: levelStr, situation: situation, situationStr: situationStr, item: itemStr, itemImg: itemImg, itemAudio: itemAudio };
     }
-
-    return { level: level, item: itemStr };
 }
+
 
 function getSituationLevel(itemCode: string): string {
     const category: string = itemCode.split("-")[0];

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tfg_app/pages/home_page.dart';
+import 'package:tfg_app/pages/root_page.dart';
 import 'package:tfg_app/services/driving_detection.dart';
 import 'package:tfg_app/widgets/progress.dart';
 import 'package:tfg_app/widgets/buttons.dart';
@@ -41,7 +42,7 @@ class DrivingActivityAgreementState extends State<DrivingActivityAgreement> {
     });
     await DrivingDetectionService().startBackgroundService();
     Navigator.of(context).pushNamedAndRemoveUntil(
-        HomePage.routeAuth, (Route<dynamic> route) => false);
+        RootPage.route, (Route<dynamic> route) => false);
   }
 
   Future<void> _cancel() async {
@@ -51,7 +52,7 @@ class DrivingActivityAgreementState extends State<DrivingActivityAgreement> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool("drive_detection_enabled", false);
     Navigator.of(context).pushNamedAndRemoveUntil(
-        HomePage.routeAuth, (Route<dynamic> route) => false);
+        RootPage.route, (Route<dynamic> route) => false);
   }
 
   void _more() {

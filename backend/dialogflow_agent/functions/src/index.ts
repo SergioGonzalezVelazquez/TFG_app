@@ -50,7 +50,7 @@ export const dialogflowFulfillment = functions.https.onRequest(async (request, r
             const patientType = (await readPatient(session))['type'];
 
             if (patientType.startsWith("1")) {
-                agent.add('Gracias a tus respuestas en el cuestionario inicial hemos podido encontrar el tipo de terapia más apropiada');
+                agent.add('La aplicación de la Desensibilización Sistemática requiere de unos pasos iniciales antes de empezar con las sesiones de exposición.');
                 agent.add('¿Empezamos?');
 
                 const context = { 'name': `identificar_situaciones-followup`, 'lifespan': 2 };
