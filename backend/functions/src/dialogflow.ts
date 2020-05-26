@@ -6,10 +6,10 @@
 
 // Cloud Functions for Firebase SDK to create Cloud Functions and setup triggers.
 import * as functions from 'firebase-functions';
+import * as admin from 'firebase-admin';
 
 // Firebase Admin SDK to access the Firebase Realtime Database.
-const admin = require('firebase-admin');
-admin.initializeApp(functions.config().firebase);
+
 const { WebhookClient, Payload } = require('dialogflow-fulfillment');
 
 import { readUserId, readPatient } from './utils/db_manager';

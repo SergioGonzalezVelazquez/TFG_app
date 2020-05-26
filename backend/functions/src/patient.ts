@@ -2,6 +2,7 @@ import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
 import * as jsonLogic from 'json-logic-js';
 
+import { getSituationData } from './utils/situations';
 import * as patientTypes from '../../data/patient_type.json';
 
 const patientRef = 'patient/{userId}';
@@ -61,7 +62,6 @@ export const onUpdatePatient = functions.firestore
             }
         }
         else if (patient['status'] === PatientStatus.hierarchy_completed.toString()) {
-            console.log(JSON.stringify(patient));
 
             // Obtener la jerarquía de situaciones que ha construido el paciente
             const snapshot = await admin.firestore()
@@ -75,11 +75,18 @@ export const onUpdatePatient = functions.firestore
             if (!snapshot.empty) {
                 const doc = snapshot.docs[0];
                 const hierarchy = doc.data()['hierarchy'];
-                console.log(hierarchy);
 
                 // For each situation in hierarchy, create an exercise
                 hierarchy.forEach(async (situation, index) => {
-                    const data = situation;
+                    const data = getSituationData(situation['itemCode']);
+                    data['itemCode'] = situation['itemCode'];
+                    console.log(data);
+
+                    Object.keys(data).forEach(key => {
+                        if (data[key] === undefined) {
+                            delete data[key];
+                        }
+                    });
 
                     // Add hierarchy usas as currentUsas
                     data['originalUSAs'] = situation['usas'];
@@ -102,12 +109,11 @@ export const onUpdatePatient = functions.firestore
             }
 
 
-            /*
             await admin.firestore()
                 .collection("patient")
                 .doc(userId)
                 .update({ status: PatientStatus.in_exercise.toString() });
-            */
+       
 
         }
         return Promise.resolve(SUCCESS_CODE);

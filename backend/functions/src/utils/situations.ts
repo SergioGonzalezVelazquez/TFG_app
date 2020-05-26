@@ -1,17 +1,14 @@
 import { createTherapy, readUserId } from "./db_manager";
 
 const { WebhookClient, Payload } = require('dialogflow-fulfillment');
-const itineraries = require("../data/itinerary.json");
-const situationsTaxonomy = require("../data/taxonomy_of_situations.json");
+const itineraries = require("../../../data/itinerary.json");
+const situationsTaxonomy = require("../../../data/taxonomy_of_situations.json");
 
 function clearOutgoingContexts(agent) {
     agent.contexts.forEach((context) => agent.context.set({ 'name': context.name, 'lifespan': 0 }));
 }
 
 export async function startIdentifySituations(agent, itinerary: number, neutral: string, anxiety: string) {
-    console.log("start Identifity Situations");
-    console.log(neutral);
-    console.log(anxiety);
     const parameters = {};
     parameters['neutral'] = neutral;
     parameters['anxiety'] = anxiety;
@@ -19,18 +16,12 @@ export async function startIdentifySituations(agent, itinerary: number, neutral:
     parameters['available'] = setInitialSituations(itinerary, neutral, anxiety);
     // Listado de situaciones incluidas hasta el momento
     parameters['included'] = [];
-    console.log("primeros parametros definidos");
 
     // Obtiene la primera situación que se propone al paciente
     const firstSituationData = getNextSituation(parameters['available']);
-    console.log(firstSituationData)
     parameters['currentLevel'] = firstSituationData.level;
     parameters['currentSituation'] = firstSituationData.situationCode;
-    parameters['currentVariant'] = firstSituationData.variantCode;
     parameters['currentItem'] = firstSituationData.itemCode;
-    parameters['currentLevelStr'] = firstSituationData.levelStr;
-    parameters['currentSituationStr'] = firstSituationData.situationStr;
-    parameters['currentVariantStr'] = firstSituationData.variantStr;
     parameters['currentItemStr'] = firstSituationData.itemStr;
 
     if (Object.keys(parameters['available']).length > 1) {
@@ -74,15 +65,8 @@ export async function loopIdentitifySituations(agent) {
         const situation = {
             itemCode: contextParameters['currentItem'],
             itemStr: contextParameters['currentItemStr'],
-            situationCode: contextParameters['currentSituation'],
-            situationStr: contextParameters['currentSituationStr'],
-            levelCode: contextParameters['currentLevel'],
-            levelStr: contextParameters['currentLevelStr']
         }
-        if (contextParameters['currentVariant']) {
-            situation['variantCode'] = contextParameters['currentVariant'];
-            situation['variantStr'] = contextParameters['currentVariantStr'];
-        }
+
         newParameters['included'].push(situation);
 
         // 16 situaciones: neutra, ansiogéna y 14 del listado
@@ -90,7 +74,6 @@ export async function loopIdentitifySituations(agent) {
             agent.add('¡Completado! Ya tenemos un listado de 16 situaciones temidas');
             await endIdentifySituations(agent, contextParameters['neutral'], contextParameters['anxiety'], newParameters['included']);
             return;
-            // TERMINAR CONVERSACIÓN
         }
 
         // Cada 3 situaciones elegidas, recuerda al usuario cuántas lleva
@@ -109,11 +92,7 @@ export async function loopIdentitifySituations(agent) {
         newParameters['neutral'] = contextParameters['neutral'];
         newParameters['anxiety'] = contextParameters['anxiety'];
         newParameters['currentLevel'] = nextSituationData.level;
-        newParameters['currentLevelStr'] = nextSituationData.levelStr;
         newParameters['currentSituation'] = nextSituationData.situationCode;
-        newParameters['currentSituationStr'] = nextSituationData.situationStr;
-        newParameters['currentVariant'] = nextSituationData.variantCode;
-        newParameters['currentVariantStr'] = nextSituationData.variantStr;
         newParameters['currentItem'] = nextSituationData.itemCode;
         newParameters['currentItemStr'] = nextSituationData.itemStr;
         newParameters['available'] = nextSituationData.available;
@@ -151,8 +130,18 @@ async function endIdentifySituations(agent, neutral: string, anxiety: string, si
     const userId: string = await readUserId(session);
     const neutralData = getSituationData(neutral);
     const anxietyData = getSituationData(anxiety);
-    const neutralDoc = { itemCode: neutral, itemStr: neutralData.item, levelCode: neutralData.level }
-    const anxietyDoc = { itemCode: anxiety, itemStr: anxietyData.item, levelCode: anxietyData.level }
+    const neutralDoc = {
+        itemCode: neutral,
+        itemStr: neutralData.item,
+    }
+
+
+    const anxietyDoc = {
+        itemCode: anxiety,
+        itemStr: anxietyData.item,
+    }
+
+
     await createTherapy(userId, { neutra: neutralDoc, anxiety: anxietyDoc, situations: situations });
 
     clearOutgoingContexts(agent);
