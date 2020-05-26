@@ -2,21 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tfg_app/models/patient.dart';
-import 'package:tfg_app/pages/chat/chat_page.dart';
 import 'package:tfg_app/pages/driving_activity/driving_activity_agreement.dart';
-import 'package:tfg_app/pages/driving_activity/driving_activity_page.dart';
-import 'package:tfg_app/pages/exercises/exercises.dart';
 import 'package:tfg_app/pages/home_page.dart';
 import 'package:tfg_app/pages/initial_page.dart';
-import 'package:tfg_app/pages/more/more_page.dart';
 import 'package:tfg_app/pages/phy_activity/phy_activity_agreement.dart';
-import 'package:tfg_app/pages/progress/progress.dart';
 import 'package:tfg_app/pages/questionnaire/pretest/signup_questionnaire_page.dart';
-import 'package:tfg_app/pages/therapist/therapist.dart';
 import 'package:tfg_app/pages/user/login_page.dart';
 import 'package:tfg_app/widgets/progress.dart';
 import 'package:tfg_app/services/auth.dart';
-import 'package:tfg_app/themes/custom_icon_icons.dart';
 
 /// This widget is the root page of the application,
 /// this is the route that is displayed first when the application is started normally.

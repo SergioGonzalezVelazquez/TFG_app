@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tfg_app/models/driving_activity.dart';
 import 'package:tfg_app/models/driving_event.dart';
+import 'package:tfg_app/models/exercise.dart';
 import 'package:tfg_app/models/patient.dart';
 import 'package:tfg_app/models/questionnaire_group.dart';
 import 'package:tfg_app/models/questionnaire_item.dart';
@@ -79,6 +80,26 @@ Future<Therapy> getPatientCurrentTherapy() async {
       .getDocuments();
 
   return Therapy.fromDocument(docs.documents[0]);
+}
+
+Future<List<Exercise>> getPatientExercises() async {
+  String userId = _authService.user.id;
+  String therapyId = _authService.user.patient.currentTherapy.id;
+  List<Exercise> exercises = [];
+
+  QuerySnapshot docs = await patientRef
+      .document(userId)
+      .collection('userTherapies')
+      .document(therapyId)
+      .collection('exercises')
+      .orderBy('index')
+      .getDocuments();
+
+  if (docs.documents.isNotEmpty) {
+    exercises =
+        docs.documents.map((doc) => Exercise.fromDocument(doc)).toList();
+  }
+  return exercises;
 }
 
 Future<void> setHierarchy(List<Situation> situation) async {

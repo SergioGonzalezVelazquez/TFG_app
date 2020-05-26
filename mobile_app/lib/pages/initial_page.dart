@@ -204,12 +204,11 @@ class _InitialPageState extends State<InitialPage> {
             ),
           ),
           _buildSlideDots(context, items),
-          primaryButton(
-              context,
-              () => Navigator.of(context).pushNamedAndRemoveUntil(
-                  ChatPage.route, (Route<dynamic> route) => false),
-              "Empezar",
-              width: MediaQuery.of(context).size.width * 0.25)
+          primaryButton(context, () {
+            Navigator.of(context).pushNamedAndRemoveUntil(
+                HomePage.route, (Route<dynamic> route) => false);
+            Navigator.of(context).pushNamed(ChatPage.route);
+          }, "Empezar", width: MediaQuery.of(context).size.width * 0.25)
         ],
       ),
     );

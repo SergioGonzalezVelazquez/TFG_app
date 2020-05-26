@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:tfg_app/models/exercise.dart';
 import 'package:tfg_app/models/therapy.dart';
 import 'package:tfg_app/models/user.dart';
 import 'package:tfg_app/models/patient.dart';
@@ -74,10 +75,18 @@ class AuthService {
     await patientRef.document(this._user.id).get().then((doc) async {
       if (doc.exists) {
         this._user.patient = new Patient.fromDocument(doc);
-        if ([PatientStatus.hierarchy_pending, PatientStatus.hierarchy_completed]
-            .contains(this._user.patient.status)) {
+        if ([
+          PatientStatus.hierarchy_pending,
+          PatientStatus.hierarchy_completed,
+          PatientStatus.in_exercise
+        ].contains(this._user.patient.status)) {
           Therapy therapy = await getPatientCurrentTherapy();
           this._user.patient.currentTherapy = therapy;
+          if (this._user.patient.status == PatientStatus.in_exercise) {
+            List<Exercise> exercises = await getPatientExercises();
+            this._user.patient.exercises = exercises;
+            print("EJERCICIOS " + exercises.length.toString());
+          }
         }
       }
     });

@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tfg_app/pages/driving_activity/driving_activity_page.dart';
-import 'package:tfg_app/pages/exercises/exercises.dart';
+import 'package:tfg_app/pages/exercises/exercises_page.dart';
 import 'package:tfg_app/pages/more/more_page.dart';
 import 'package:tfg_app/pages/progress/progress.dart';
 import 'package:tfg_app/pages/therapist/hierarchy_page.dart';

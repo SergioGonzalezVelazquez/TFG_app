@@ -1,40 +1,27 @@
 class Situation implements Comparable {
   final String itemCode;
   final String itemStr;
-  final String situationCode;
-  final String situationStr;
-  final String levelStr;
-  final String levelCode;
+
   int usas;
 
   /// Default class constructor
-  Situation(
-      {this.itemCode,
-      this.itemStr,
-      this.situationCode,
-      this.situationStr,
-      this.levelStr,
-      this.levelCode});
+  Situation({
+    this.itemCode,
+    this.itemStr,
+  });
 
   /// Converts Firestore Document into a Situation object
   factory Situation.fromMap(Map<String, dynamic> map) {
     return Situation(
-        itemCode: map['itemCode'],
-        itemStr: map['itemStr'],
-        situationCode: map['situationCode'],
-        situationStr: map['situationStr'],
-        levelCode: map['levelCode'],
-        levelStr: map['levelStr']);
+      itemCode: map['itemCode'],
+      itemStr: map['itemStr'],
+    );
   }
 
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = new Map();
     map['itemCode'] = itemCode;
     map['itemStr'] = itemStr;
-    map['situationCode'] = situationCode;
-    map['situationStr'] = situationStr;
-    map['levelCode'] = levelCode;
-    map['levelStr'] = levelStr;
     map['usas'] = usas;
 
     return map;
@@ -43,7 +30,7 @@ class Situation implements Comparable {
   /// Returns a string representation of this object.
   @override
   String toString() {
-    return 'itemCode: $itemCode, itemStr: $itemStr, situationCode: $situationCode, situationStr: $situationStr';
+    return 'itemCode: $itemCode, itemStr: $itemStr';
   }
 
   @override
