@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
@@ -28,9 +30,46 @@ class AuthService {
   /// Getters.
   User get user => this._user;
   bool get isAuth => this._user != null;
-  Future<PatientStatus> get patietStatus async {
-    await this._getPatientData();
-    return this._user.patient.status;
+  PatientStatus get patietStatus => this.user?.patient?.status;
+  StreamSubscription<DocumentSnapshot> _patientSubscription;
+  StreamController<PatientStatus>  _patientStatusStream = StreamController<PatientStatus>.broadcast();
+  StreamController<PatientStatus> get patientStatusStream => this._patientStatusStream;
+
+  Future<void> _initializePatientListener(String userId) async {
+    print("_initialize Patient Listener");
+    // Get patient Data
+    DocumentSnapshot patientDoc = await patientRef.document(userId).get();
+    await _getPatientData(patientDoc);
+
+    // initialize subscription
+    _patientSubscription = patientRef
+        .document(_user.id)
+        .snapshots()
+        .listen((DocumentSnapshot doc) async {
+      print("llega un patient");
+      await _getPatientData(doc);
+    });
+  }
+
+  Future<void> _getPatientData(DocumentSnapshot doc) async {
+    this._user.patient = new Patient.fromDocument(doc);
+    _patientStatusStream.sink.add(this._user?.patient?.status);
+
+    if ([
+      PatientStatus.hierarchy_pending,
+      PatientStatus.hierarchy_completed,
+      PatientStatus.in_exercise
+    ].contains(this._user.patient.status)) {
+      Therapy therapy = await getPatientCurrentTherapy();
+      this._user.patient.currentTherapy = therapy;
+
+      // CAMBIAR PARA QUE LOS EJERCICIOS SEAN UN STREAM BUILDER
+      if (this._user.patient.status == PatientStatus.in_exercise) {
+        List<Exercise> exercises = await getPatientExercises();
+        this._user.patient.exercises = exercises;
+        print("EJERCICIOS " + exercises.length.toString());
+      }
+    }
   }
 
   /// Initialize service
@@ -43,11 +82,19 @@ class AuthService {
 
       // Get the currently signed-in user
       await _getSignedInUser();
+
+      if (isAuth) {
+        print("isAuth");
+        await _initializePatientListener(_user.id);
+      }
     }
   }
 
   void dispose() {
+    print("auth dispose");
     _initialized = false;
+    _patientSubscription.cancel();
+    _patientStatusStream.close();
   }
 
   /// Get the currently signed-in user
@@ -65,31 +112,9 @@ class AuthService {
         this._user = User.fromDocument(doc);
 
         // Get patient data for this user
-        await _getPatientData();
+        // await _getPatientData();
       }
     }
-  }
-
-  /// Check if there is a document for auth user auth in 'patient' collection
-  Future<void> _getPatientData() async {
-    await patientRef.document(this._user.id).get().then((doc) async {
-      if (doc.exists) {
-        this._user.patient = new Patient.fromDocument(doc);
-        if ([
-          PatientStatus.hierarchy_pending,
-          PatientStatus.hierarchy_completed,
-          PatientStatus.in_exercise
-        ].contains(this._user.patient.status)) {
-          Therapy therapy = await getPatientCurrentTherapy();
-          this._user.patient.currentTherapy = therapy;
-          if (this._user.patient.status == PatientStatus.in_exercise) {
-            List<Exercise> exercises = await getPatientExercises();
-            this._user.patient.exercises = exercises;
-            print("EJERCICIOS " + exercises.length.toString());
-          }
-        }
-      }
-    });
   }
 
   /// create document in 'patient' collection for current auth user
@@ -98,6 +123,7 @@ class AuthService {
   Future<void> _createPatientDocument(String userId) async {
     String status = PatientStatus.pretest_pending.toString().split(".")[1];
     await patientRef.document(userId).setData({"status": status});
+    await _initializePatientListener(userId);
   }
 
   /*
@@ -116,7 +142,7 @@ class AuthService {
     await patientRef
         .document(this._user.id)
         .updateData({"status": strStatus}).then((value) async {
-      await this._getPatientData();
+      //await this._getPatientData();
     });
   }
 
@@ -228,14 +254,12 @@ class AuthService {
         "email": currentUser.email,
         "name": currentUser.displayName,
         "created_at": DateTime.now()
-      }).then((value) async {
-        await this._createPatientDocument(currentUser.uid);
       });
     }
 
     doc = await usersRef.document(currentUser.uid).get();
     this._user = User.fromDocument(doc);
-    await this._getPatientData();
+    await this._createPatientDocument(currentUser.uid);
 
     // Save user id in shared preferences
     SharedPreferences prefs = await SharedPreferences.getInstance();

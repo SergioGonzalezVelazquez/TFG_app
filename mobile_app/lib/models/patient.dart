@@ -6,18 +6,31 @@ class Patient {
   final String id;
   final String type;
   final PatientStatus status;
+  final DateTime identifySituationsDate;
+  final DateTime hierarchyCompletedDate;
+  final String identifySituationsSessionId;
   Therapy currentTherapy;
   List<Exercise> exercises;
 
   /// Default class constructor
   Patient(
-      {this.id, this.type, this.status, this.currentTherapy, this.exercises});
+      {this.id,
+      this.type,
+      this.status,
+      this.currentTherapy,
+      this.exercises,
+      this.hierarchyCompletedDate,
+      this.identifySituationsDate,
+      this.identifySituationsSessionId});
 
   /// Converts Firestore Document into a User object
   factory Patient.fromDocument(DocumentSnapshot doc) {
     return Patient(
         id: doc['id'],
         type: doc['type'],
+        identifySituationsDate: doc['identifySituationsDate']?.toDate(),
+        hierarchyCompletedDate: doc['hierarchyCompletedDate']?.toDate(),
+        identifySituationsSessionId: doc['identifySituationsSessionId'],
         status: PatientStatus.values.firstWhere(
             (e) => e.toString() == 'PatientStatus.' + doc['status']),
         exercises: []);

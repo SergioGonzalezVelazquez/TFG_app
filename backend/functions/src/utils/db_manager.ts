@@ -18,6 +18,11 @@ export async function createTherapy(userId: string, data) {
     await writeInDB(patientCollection, { status: 'hierarchy_pending' }, true);
 }
 
+export async function updatePatient(userId: string, data) {
+    const collection = db.collection('patient').doc(userId);
+    await writeInDB(collection, data, true);
+}
+
 export async function readUserId(sessionId: string): Promise<string> {
     const collection = db.collection('dialogflow_sessions').doc(sessionId);
     const userId: string = (await readFromDB(collection)).data()['user_id'];

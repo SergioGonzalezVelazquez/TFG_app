@@ -5,7 +5,7 @@ import 'package:tfg_app/pages/exercises/exercises_page.dart';
 import 'package:tfg_app/pages/more/more_page.dart';
 import 'package:tfg_app/pages/progress/progress.dart';
 import 'package:tfg_app/pages/therapist/hierarchy_page.dart';
-import 'package:tfg_app/pages/therapist/therapist.dart';
+import 'package:tfg_app/pages/therapist/therapy_page.dart';
 import 'package:tfg_app/themes/custom_icon_icons.dart';
 
 /// This widget is the home page of the application,
@@ -28,7 +28,7 @@ class _HomePageState extends State<HomePage> {
   bool showPhyActivityAgreement;
 
   PageController _pageController;
-  int pageIndex = 0;
+  int pageIndex = 2;
 
   /// Create a global key that uniquely identifies the Scaffold widget,
   /// and allows to display snackbars.
@@ -38,7 +38,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    _pageController = PageController();
+    _pageController = PageController(initialPage: pageIndex);
   }
 
   /// Called when this widget is removed from the tree permanently.
@@ -66,10 +66,11 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       key: _scaffoldKey,
       body: PageView(
+
         children: <Widget>[
-          TherapistPage(),
           ExercisePage(),
-          HierarchyPage(),
+          ProgressPage(),
+          TherapistPage(),
           DrivingActivityPage(),
           MorePage(),
         ],
@@ -84,18 +85,22 @@ class _HomePageState extends State<HomePage> {
         activeColor: Theme.of(context).primaryColor,
         items: [
           BottomNavigationBarItem(
-            icon: Icon(CustomIcon.speech_bubble),
-            title: Text('Terapeuta'),
-          ),
-          BottomNavigationBarItem(
             icon: Icon(CustomIcon.ejercicios),
             title: Text('Ejercicios'),
           ),
           BottomNavigationBarItem(
             icon: Icon(
-              CustomIcon.line_chart2,
+             // CustomIcon.line_chart2,
+             CustomIcon.goal
             ),
             title: Text('Progreso'),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              //CustomIcon.speech_bubble
+              CustomIcon.meditacion
+            ),
+            title: Text('Terapia'),
           ),
           BottomNavigationBarItem(
             icon: Icon(CustomIcon.car2),

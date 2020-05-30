@@ -55,7 +55,8 @@ class _ChatPageState extends State<ChatPage> {
   Future<bool> _willPopCallback() async {
     bool close = false;
     if (_conversationEnd) {
-      close = true;
+      Navigator.pop(context, true);
+      return false;
     } else {
       await showDialog(
         context: context,

@@ -29,7 +29,8 @@
                 "name": "Salir de la cochera",
                 "items": {
                     "C2-S1": {
-                        "name": "Salir de la cochera"
+                        "name": "Salir de la cochera",
+                        "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2Fretro-house-wall-1083480.jpg?alt=media&token=a2c381c2-5af6-4f63-8c1c-613da0c495df"
                     }
                 }
             },
@@ -68,7 +69,8 @@
                             },
                             "C3-S1-PCC": {
                                 "name": "Otros conductores hacen sonar el claxon mientras busco un sitio en el que aparcar",
-                                "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2Fhorn.jpg?alt=media&token=e9e1c1d3-5b4a-48c3-a9a7-a3403a17c8dc"
+                                "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2Fhorn.jpg?alt=media&token=e9e1c1d3-5b4a-48c3-a9a7-a3403a17c8dc",
+                                "audio": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/audio%2F144137_car-horns.mp3?alt=media&token=88482810-456b-43f2-aa63-60c1bb9e2994"
                             }
                         }
                     }
@@ -93,7 +95,8 @@
                                 "name": "Aparco habiendo una cola de vehículos a la espera"
                             },
                             "C3-S2-PSE": {
-                                "name": "Otros conductores hacen sonar el claxon mientras realizo maniobras para aparcar"
+                                "name": "Otros conductores hacen sonar el claxon mientras realizo maniobras para aparcar",
+                                "audio": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/audio%2F144137_car-horns.mp3?alt=media&token=88482810-456b-43f2-aa63-60c1bb9e2994"
                             }
                         }
                     }
@@ -148,7 +151,8 @@
                             },
                             "C4-S1-CCAB": {
                                 "name": "Circulo por una población mientras llueve",
-                                "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2F42983-min.jpg?alt=media&token=51470f84-3a94-4600-b223-906990d18408"
+                                "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2F42983-min.jpg?alt=media&token=51470f84-3a94-4600-b223-906990d18408",
+                                "audio": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/audio%2F367008_rain.mp3?alt=media&token=0c558ba0-2425-4891-a810-90dc6dda583c"
                             },
                             "C4-S1-CCAC": {
                                 "name": "Circulo por una población mientras nieva",
@@ -175,6 +179,7 @@
                         "name": "Condiciones temporales",
                         "items": {
                             "C4-S1-CTA": {
+                                "name": "Circulo por población de día"
                             },
                             "C4-S1-CTB": {
                                 "name": "Circulo por población de noche",
@@ -207,7 +212,9 @@
                         "name": "Otros",
                         "items": {
                             "C4-S1-OTA": {
-                                "name": "Circulo por población con circulación densa y oigo que se acerca una ambulancia, coche de bomberos, policía, ..."
+                                "name": "Circulo por población con circulación densa y oigo que se acerca una ambulancia, coche de bomberos, policía, ...",
+                                "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2F37010530044.jpg?alt=media&token=39ffafe4-9dfb-45b7-80d2-2116f033c6e3",
+                                "audio": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/audio%2F135718__ikbenraar__police.mp3?alt=media&token=a24be9d8-3bc8-420c-a325-62442f54c0a7"
                             },
                             "C4-S1-OTB": {
                                 "name": "Circulo por población y llego a un cruce complicado"
@@ -256,7 +263,8 @@
                         "name": "Tipo de vía",
                         "items": {
                             "C4-S2-TVA": {
-                                "name": "Circulo por una carretera nacional"
+                                "name": "Circulo por una carretera nacional",
+                                "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2Fnacional.jpg?alt=media&token=29e96d41-7a99-48b2-8503-dbe8e7081cb6"
                             },
                             "C4-S2-TVB": {
                                 "name": "Circulo por una autovía/autopista",
@@ -278,7 +286,8 @@
                                 "name": "Circulo por una carretera en un día con viento"
                             },
                             "C4-S2-CCAC": {
-                                "name": "Circulo por una carretera mientras llueve"
+                                "name": "Circulo por una carretera mientras llueve",
+                                "audio": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/audio%2F367008_rain.mp3?alt=media&token=0c558ba0-2425-4891-a810-90dc6dda583c"
                             },
                             "C4-S2-CCAD": {
                                 "name": "Circulo por una carretera mientras nieva",
@@ -293,7 +302,8 @@
                                 "name": "Circulo por carretera y hay poco tráfico"
                             },
                             "C4-S2-FTB": {
-                                "name": "Circulo por carretera y el tráfico es fluido"
+                                "name": "Circulo por carretera y el tráfico es fluido",
+                                "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2Fcar-highway-driving-1216881.jpg?alt=media&token=46e8b3fe-f895-419e-87ad-6d3a61833404"
                             },
                             "C4-S2-FTC": {
                                 "name": "Circulo por carretera y hay mucho tráfico"
@@ -337,7 +347,9 @@
                         "name": "Otros",
                         "items": {
                             "C4-S2-OTA": {
-                                "name": "Circulo por carretera con circulación densa y oigo que se acerca una ambulancia, coche de bomberos, policía, ..."
+                                "name": "Circulo por carretera con circulación densa y oigo que se acerca una ambulancia, coche de bomberos, policía, ...",
+                                "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2Fambulancia.jpg?alt=media&token=26007fb5-8b20-4821-a7e7-de2b6f86e879",
+                                "audio": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/audio%2F135718__ikbenraar__police.mp3?alt=media&token=a24be9d8-3bc8-420c-a325-62442f54c0a7"
                             },
                             "C4-S2-OTB": {
                                 "name": "Circulo por carretera y otros vehículos me adelantan a gran velocidad y sin avisar"
@@ -421,7 +433,8 @@
                                 "name": "Adelantar en una carretera de sentido único (autopista/autovía) en un día con viento"
                             },
                             "C5-S1-CCAC": {
-                                "name": "Adelantar en una carretera de sentido único (autopista/autovía) mientras llueve"
+                                "name": "Adelantar en una carretera de sentido único (autopista/autovía) mientras llueve",
+                                "audio": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/audio%2F367008_rain.mp3?alt=media&token=0c558ba0-2425-4891-a810-90dc6dda583c"
                             },
                             "C5-S1-CCAD": {
                                 "name": "Adelantar en una carretera de sentido único (autopista/autovía) mientras nieva"
@@ -498,8 +511,7 @@
                         "name": "Tipo de vía",
                         "items": {
                             "C5-S2-TVA": {
-                                "name": "Adelantar en una carretera nacional (con doble sentido)",
-                                "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2Fnacional.jpg?alt=media&token=29e96d41-7a99-48b2-8503-dbe8e7081cb6"
+                                "name": "Adelantar en una carretera nacional (con doble sentido)"
                             },
                             "C5-S2-TVB": {
                                 "name": "Adelantar en una carretera regional/comarcal (con doble sentido)"
@@ -536,7 +548,8 @@
                                 "name": "Adelantar en una carretera con doble sentido en un día con viento"
                             },
                             "C5-S2-CCAC": {
-                                "name": "Adelantar en una carretera con doble sentido mientras llueve"
+                                "name": "Adelantar en una carretera con doble sentido mientras llueve",
+                                "audio": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/audio%2F367008_rain.mp3?alt=media&token=0c558ba0-2425-4891-a810-90dc6dda583c"
                             },
                             "C5-S2-CCAD": {
                                 "name": "Adelantar en una carretera con doble sentido mientras nieva"

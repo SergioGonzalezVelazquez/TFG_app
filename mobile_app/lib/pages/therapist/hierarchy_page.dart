@@ -7,7 +7,11 @@ import 'package:tfg_app/widgets/progress.dart';
 import 'package:tfg_app/widgets/stress_slider_dialog.dart';
 
 class HierarchyPage extends StatefulWidget {
-  HierarchyPage({Key key}) : super(key: key);
+  static const routeEditable = "/buildHierarchy";
+  static const routeNoEditable = "/viewHierarchy";
+
+  final bool editable;
+  HierarchyPage(this.editable);
 
   @override
   _HierarchyPageState createState() => _HierarchyPageState();
@@ -15,7 +19,6 @@ class HierarchyPage extends StatefulWidget {
 
 class _HierarchyPageState extends State<HierarchyPage> {
   final GlobalKey<AnimatedListState> _listKey = GlobalKey();
-
   bool _isLoading = true;
   bool _isCompleted = false;
   AuthService _authService;
@@ -34,17 +37,17 @@ class _HierarchyPageState extends State<HierarchyPage> {
       _isLoading = true;
     });
     _therapy = _authService.user.patient.currentTherapy;
-    Situation neutral = _therapy.neutral;
-    neutral.usas = 0;
-    _situations.add(neutral);
+    print(widget.editable);
+    if (widget.editable) {
+      Situation neutral = _therapy.neutral;
+      neutral.usas = 0;
+      _situations.add(neutral);
 
-    Situation anxiety = _therapy.anxiety;
-    anxiety.usas = 100;
-    _situations.add(anxiety);
-
+      Situation anxiety = _therapy.anxiety;
+      anxiety.usas = 100;
+      _situations.add(anxiety);
+    }
     _situations = _situations + _therapy.situations;
-
-    print(_situations.length);
 
     setState(() {
       _isLoading = false;
@@ -113,6 +116,7 @@ class _HierarchyPageState extends State<HierarchyPage> {
       axis: Axis.vertical,
       child: new SituationItem(
         key: ObjectKey(_situations[index]),
+        editable: widget.editable,
         situation: _situations[index],
         isNeutral: index == 0,
         isAnxiety: _situations[index].itemCode == _therapy.anxiety.itemCode,
@@ -145,14 +149,17 @@ class _HierarchyPageState extends State<HierarchyPage> {
             text: TextSpan(
               text:
                   'Ordena las situaciones temidas en función de una puntuación de 0 a 100 ',
-              style:
-                  DefaultTextStyle.of(context).style.apply(fontSizeFactor: 0.8),
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyText2
+                  .apply(fontSizeFactor: 0.75),
               children: <TextSpan>[
                 TextSpan(
                   text: 'USAs ',
-                  style: DefaultTextStyle.of(context)
-                      .style
-                      .apply(fontWeightDelta: 2, fontSizeFactor: 0.8),
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyText2
+                      .apply(fontSizeFactor: 0.75, fontWeightDelta: 2),
                 ),
                 TextSpan(text: '(Unidades subjetivas de ansiedad). \n'),
                 TextSpan(
@@ -171,37 +178,45 @@ class _HierarchyPageState extends State<HierarchyPage> {
 
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Jerarquía de situaciones"),
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(58.0),
-          child: Theme(
-              data: Theme.of(context).copyWith(accentColor: Colors.white),
-              child: _buildInfo()),
-        ),
-        actions: [
-          FlatButton(
-            onPressed: _isCompleted
-                ? () async {
-                    await _save();
-                  }
-                : null,
-            textColor: Theme.of(context).primaryColorLight,
-            child: Text(
-              'Confirmar',
-              style: TextStyle(
-                fontSize: 12,
+      appBar: widget.editable
+          ? AppBar(
+              title: Text("Jerarquía"),
+              bottom: PreferredSize(
+                preferredSize:
+                    Size.fromHeight(MediaQuery.of(context).size.height * 0.09),
+                child: Theme(
+                  data: Theme.of(context).copyWith(accentColor: Colors.white),
+                  child: _buildInfo(),
+                ),
               ),
+              actions: [
+                FlatButton(
+                  onPressed: _isCompleted
+                      ? () async {
+                          await _save();
+                          Navigator.pop(context);
+                        }
+                      : null,
+                  textColor: Theme.of(context).primaryColorLight,
+                  child: Text(
+                    'Confirmar',
+                    style: TextStyle(
+                      fontSize: 12,
+                    ),
+                  ),
+                )
+              ],
+            )
+          : AppBar(
+              title: Text("Jerarquía"),
             ),
-          )
-        ],
-      ),
       body: _isLoading ? circularProgress(context) : _buildPage(),
     );
   }
 }
 
 class SituationItem extends StatefulWidget {
+  final bool editable;
   final Situation situation;
   final bool isNeutral;
   final bool isAnxiety;
@@ -209,6 +224,7 @@ class SituationItem extends StatefulWidget {
 
   SituationItem({
     Key key,
+    this.editable,
     this.situation,
     this.isNeutral,
     this.isAnxiety,
@@ -251,12 +267,13 @@ class _SituationItemState extends State<SituationItem> {
   BoxDecoration _border(BuildContext context) {
     return new BoxDecoration(
         border: Border(
-            top: widget.isNeutral
-                ? Divider.createBorderSide(context) //
-                : BorderSide.none,
-            bottom: widget.isAnxiety
-                ? BorderSide.none //
-                : Divider.createBorderSide(context)),
+          top: widget.isNeutral
+              ? Divider.createBorderSide(context)
+              : BorderSide.none,
+          bottom: widget.isAnxiety
+              ? BorderSide.none
+              : Divider.createBorderSide(context),
+        ),
         color: Colors.white);
   }
 
@@ -279,7 +296,7 @@ class _SituationItemState extends State<SituationItem> {
             height: 5,
           ),
           Text(_situation.usas == null ? '-' : _situation.usas.toString(),
-              style: widget.isNeutral || widget.isAnxiety
+              style: widget.isNeutral || widget.isAnxiety || !widget.editable
                   ? Theme.of(context).textTheme.bodyText2
                   : Theme.of(context).textTheme.bodyText1),
         ],
@@ -289,7 +306,7 @@ class _SituationItemState extends State<SituationItem> {
 
   Widget _buildItem(BuildContext context) {
     return InkWell(
-      onTap: widget.isNeutral || widget.isAnxiety
+      onTap: widget.isNeutral || widget.isAnxiety || !widget.editable
           ? null
           : () async {
               _onItemTap(context);

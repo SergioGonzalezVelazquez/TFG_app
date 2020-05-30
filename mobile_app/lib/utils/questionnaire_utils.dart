@@ -86,7 +86,7 @@ void evaluateAndDeleteAnswers(
         if (clause.linkId == updatedItem.linkId) {
           if (!evalueEnableWhenClause(clause, updatedItem.answerValue)) {
             element.deleteAnswer();
-            deleteSignUpResponse(element);
+            deleteSignUpResponseItem(element);
           }
         }
       }

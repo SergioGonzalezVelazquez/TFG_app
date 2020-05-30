@@ -8,6 +8,7 @@ class Situation implements Comparable {
   Situation({
     this.itemCode,
     this.itemStr,
+    this.usas
   });
 
   /// Converts Firestore Document into a Situation object
@@ -15,6 +16,7 @@ class Situation implements Comparable {
     return Situation(
       itemCode: map['itemCode'],
       itemStr: map['itemStr'],
+      usas: map['usas'],
     );
   }
 

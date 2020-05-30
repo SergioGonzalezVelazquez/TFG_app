@@ -175,7 +175,7 @@ class _InitialPageState extends State<InitialPage> {
             height: MediaQuery.of(context).size.height * 0.02,
           ),
           Text(
-            "Después, te asignaremos unos ejercicios que te ayudarán a exponerte de manera progresiva a las sensaciones temida.",
+            "Después, te asignaremos unos ejercicios que te ayudarán a exponerte de manera progresiva a las sensaciones temidas.",
             textAlign: TextAlign.justify,
           ),
         ],

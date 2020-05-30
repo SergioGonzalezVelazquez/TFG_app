@@ -14,6 +14,7 @@ import 'package:tfg_app/pages/initial_page.dart';
 import 'package:tfg_app/pages/questionnaire/pretest/signup_questionnaire_completed_page.dart';
 import 'package:tfg_app/pages/questionnaire/pretest/signup_questionnaire_page.dart';
 import 'package:tfg_app/pages/root_page.dart';
+import 'package:tfg_app/pages/therapist/hierarchy_page.dart';
 import 'package:tfg_app/pages/user/login_page.dart';
 import 'package:tfg_app/pages/user/udpate_password.dart';
 import 'package:tfg_app/pages/user/profile.dart';
@@ -48,6 +49,8 @@ final appRoutes = {
 
   // Therapy
   ChatPage.route: (BuildContext context) => ChatPage(),
+  HierarchyPage.routeEditable: (BuildContext context) => HierarchyPage(true),
+  HierarchyPage.routeNoEditable: (BuildContext context) => HierarchyPage(false),
 
   // Driving Activity Detection
   DrivingActivityAgreement.route: (BuildContext context) =>

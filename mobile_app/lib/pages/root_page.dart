@@ -27,6 +27,9 @@ class RootPage extends StatefulWidget {
 class _RootPageState extends State<RootPage> {
   bool _isAuth = false;
 
+  Patient _patient;
+  PatientStatus _status;
+
   // Flag to render loading spinner UI.
   bool _isLoading = true;
 
@@ -75,19 +78,21 @@ class _RootPageState extends State<RootPage> {
 
     setState(() {
       _isAuth = _authService.isAuth;
+      if (_isAuth) {
+        _patient = _authService.user.patient;
+        _status = _patient.status;
+      }
       _isLoading = false;
     });
   }
 
   Widget _buildAuthScreen() {
-    Patient patient = _authService.user.patient;
-    PatientStatus status = patient.status;
+    print(_status);
+    _status = _authService.patietStatus;
 
-    print(status);
-
-    if (status == PatientStatus.pretest_pending)
+    if (_status == PatientStatus.pretest_pending)
       return SignUpQuestionnairePage();
-    else if (status == PatientStatus.pretest_in_progress)
+    else if (_status == PatientStatus.pretest_in_progress)
       return SignUpQuestionnairePage(
         inProgress: true,
       );
@@ -98,8 +103,9 @@ class _RootPageState extends State<RootPage> {
 
     if ([
       PatientStatus.identify_categories_pending,
-      PatientStatus.identify_situations_pending
-    ].contains(status)) {
+      PatientStatus.identify_situations_pending,
+      PatientStatus.pretest_completed
+    ].contains(_status)) {
       return InitialPage();
     } else {
       return HomePage();

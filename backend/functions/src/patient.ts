@@ -53,7 +53,6 @@ export const onUpdatePatient = functions.firestore
                     if (!patient['itinerary']) {
                         delete patient['itinerary'];
                     }
-                    console.log(patientType)
                     await admin.firestore()
                         .collection("patient")
                         .doc(userId)
@@ -61,6 +60,8 @@ export const onUpdatePatient = functions.firestore
                 }
             }
         }
+
+        // Jerarquía de situaciones completada
         else if (patient['status'] === PatientStatus.hierarchy_completed.toString()) {
 
             // Obtener la jerarquía de situaciones que ha construido el paciente
@@ -74,13 +75,12 @@ export const onUpdatePatient = functions.firestore
 
             if (!snapshot.empty) {
                 const doc = snapshot.docs[0];
-                const hierarchy = doc.data()['hierarchy'];
+                const hierarchy = doc.data()['situations'];
 
                 // For each situation in hierarchy, create an exercise
                 hierarchy.forEach(async (situation, index) => {
                     const data = getSituationData(situation['itemCode']);
                     data['itemCode'] = situation['itemCode'];
-                    console.log(data);
 
                     Object.keys(data).forEach(key => {
                         if (data[key] === undefined) {
@@ -104,16 +104,12 @@ export const onUpdatePatient = functions.firestore
                         .set(data);
                 });
             }
-            else {
-                console.log("is empty");
-            }
-
 
             await admin.firestore()
                 .collection("patient")
                 .doc(userId)
-                .update({ status: PatientStatus.in_exercise.toString() });
-       
+                .update({ status: PatientStatus.in_exercise.toString(), hierarchyCompletedDate: admin.firestore.FieldValue.serverTimestamp() });
+
 
         }
         return Promise.resolve(SUCCESS_CODE);

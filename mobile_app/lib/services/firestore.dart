@@ -10,15 +10,24 @@ import 'package:tfg_app/models/therapy.dart';
 import 'dart:async';
 import 'package:tfg_app/services/auth.dart';
 
-final signUpQuestionnaireRef =
-    Firestore.instance.collection('pretest_questionnaire');
-final signUpQuestionnaireResponseRef =
-    Firestore.instance.collection('pretest_questionnaire_response');
+/// Entry point for accesing firestore.
+/// Gets the instance of Firestore for the default Firebase app
+Firestore database = Firestore.instance;
 
-final drivingActivityRef = Firestore.instance.collection('driving_activity');
-final drivingEventRef = Firestore.instance.collection('driving_event_details');
-final drivingRoutesRef = Firestore.instance.collection('driving_routes');
-final patientRef = Firestore.instance.collection('patient');
+/// Gets a CollectionReference for pretest_questionnaire path.
+final signUpQuestionnaireRef = database.collection('pretest_questionnaire');
+
+/// Gets a CollectionReference for pretest_questionnaire_response path.
+final signUpQuestionnaireResponseRef =
+    database.collection('pretest_questionnaire_response');
+
+/// Gets Collection References for driving activity path.
+final drivingActivityRef = database.collection('driving_activity');
+final drivingEventRef = database.collection('driving_event_details');
+final drivingRoutesRef = database.collection('driving_routes');
+
+/// Gets Collection References for patient path.
+final patientRef = database.collection('patient');
 
 AuthService _authService = AuthService();
 
@@ -54,6 +63,12 @@ Future<void> createSignUpResponse() async {
       .setData({"start_at": DateTime.now()});
 }
 
+/// delete document on pretest_questionnaire_response collection for
+/// current auth user
+Future<void> deleteSignUpResponse() async {
+  await signUpQuestionnaireResponseRef.document(_authService.user.id).delete();
+}
+
 /// add question response for current user document at
 /// pretest_questionnaire_response collection
 Future<void> addSignUpResponse(QuestionnaireItem item) async {
@@ -64,7 +79,7 @@ Future<void> addSignUpResponse(QuestionnaireItem item) async {
 
 /// delete question response in current user document at
 /// pretest_questionnaire_response collection
-Future<void> deleteSignUpResponse(QuestionnaireItem item) async {
+Future<void> deleteSignUpResponseItem(QuestionnaireItem item) async {
   print("delete response para " + item.id);
   await signUpQuestionnaireResponseRef
       .document(_authService.user.id)
@@ -115,7 +130,7 @@ Future<void> setHierarchy(List<Situation> situation) async {
       .document(userId)
       .collection('userTherapies')
       .document(therapyId)
-      .updateData({'hierarchy': hierarchy});
+      .updateData({'situations': hierarchy});
 
   await _authService.updatePatientStatus(PatientStatus.hierarchy_completed);
 }

@@ -11,10 +11,14 @@ import 'package:tfg_app/services/firestore.dart';
 import 'package:tfg_app/widgets/progress.dart';
 import 'package:tfg_app/widgets/custom_dialog.dart';
 import 'package:tfg_app/utils/questionnaire_utils.dart';
+import 'package:intl/intl.dart';
 
 class SignUpQuestionnairePage extends StatefulWidget {
   /// Name use for navigate to this screen
   static const route = "/signUpQuestionnaire";
+
+  final DateFormat dateFormatter = new DateFormat('dd-MM-yyyy');
+  final DateFormat timeFormatter = new DateFormat('HH:mm');
 
   // Flag used to determine wheter user has a questionnaire
   // in progress or not
@@ -90,6 +94,38 @@ class _SignUpQuestionnairePageState extends State<SignUpQuestionnairePage>
   * Functions used to handle events in this screen 
   */
 
+  Future<void> _reset() async {
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) => CustomDialog(
+        title: "¿Seguro que quieres volver a empezar?",
+        description: "Se borrarán tus respuestas anteriores",
+        buttonText2: "Cancelar",
+        buttonFunction2: () {
+          Navigator.pop(context);
+        },
+        buttonFunction1: () async {
+          Navigator.pop(context);
+          await _cleanAnswers();
+          _startAnimation();
+        },
+        buttonText1: "Reiniciar",
+      ),
+    );
+  }
+
+  Future<void> _cleanAnswers() async {
+    await deleteSignUpResponse();
+    await createSignUpResponse();
+    _questionnaireItems.forEach((element) {
+      element.answerValue = null;
+    });
+    setState(() {
+      _currentGroupIndex = 0;
+      _currentQuestionnaireItem = _questionsGroups[0].items[0];
+    });
+  }
+
   /// Read questions and sections from Firebase
   Future<void> _loadSignupQuestionnaire() async {
     await getSignupQuestionnaire().then((response) {
@@ -146,6 +182,8 @@ class _SignUpQuestionnairePageState extends State<SignUpQuestionnairePage>
           print(_currentQuestionnaireItem.linkId.toString());
           _currentGroupIndex =
               _mapItemToGroup[_currentQuestionnaireItem.linkId];
+              print("current gorup index");
+              print(_currentGroupIndex);
 
           print(_currentGroupIndex);
         }
@@ -465,7 +503,10 @@ class _SignUpQuestionnairePageState extends State<SignUpQuestionnairePage>
         ),
         Text(
           "Empezaste a responder este cuestionario el " +
-              _lastResponseDate.toString(),
+              widget.dateFormatter.format(_lastResponseDate) +
+              " a las " +
+              widget.timeFormatter.format(_lastResponseDate) +
+              ". ",
           textAlign: TextAlign.justify,
         ),
         SizedBox(
@@ -475,6 +516,17 @@ class _SignUpQuestionnairePageState extends State<SignUpQuestionnairePage>
           "Puedes continuar respondiendo por la pregunta en que lo dejaste, o borrar tus respuestas anteriores y empezar a responder desde cero.",
           textAlign: TextAlign.justify,
         ),
+        Align(
+          alignment: Alignment.bottomRight,
+          child: FlatButton(
+            padding: EdgeInsets.all(0),
+            textColor: Theme.of(context).primaryColor,
+            onPressed: () async {
+              _reset();
+            },
+            child: Text("Empezar desde cero"),
+          ),
+        )
       ],
     );
   }

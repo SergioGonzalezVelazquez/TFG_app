@@ -1,4 +1,5 @@
-import { createTherapy, readUserId } from "./db_manager";
+import { createTherapy, readUserId, updatePatient } from "./db_manager";
+import * as admin from 'firebase-admin';
 
 const { WebhookClient, Payload } = require('dialogflow-fulfillment');
 const itineraries = require("../../../data/itinerary.json");
@@ -143,6 +144,7 @@ async function endIdentifySituations(agent, neutral: string, anxiety: string, si
 
 
     await createTherapy(userId, { neutra: neutralDoc, anxiety: anxietyDoc, situations: situations });
+    await updatePatient(userId, { identifySituationsSessionId: session, identifySituationsDate: admin.firestore.FieldValue.serverTimestamp() });
 
     clearOutgoingContexts(agent);
 
