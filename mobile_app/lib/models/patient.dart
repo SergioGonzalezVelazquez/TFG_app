@@ -9,6 +9,9 @@ class Patient {
   final DateTime identifySituationsDate;
   final DateTime hierarchyCompletedDate;
   final String identifySituationsSessionId;
+  final DateTime lastExerciseCompleted;
+  final int bestDailyStreak;
+  int currentDailyStreak;
   Therapy currentTherapy;
   List<Exercise> exercises;
 
@@ -21,6 +24,9 @@ class Patient {
       this.exercises,
       this.hierarchyCompletedDate,
       this.identifySituationsDate,
+      this.lastExerciseCompleted,
+      this.bestDailyStreak,
+      this.currentDailyStreak,
       this.identifySituationsSessionId});
 
   /// Converts Firestore Document into a User object
@@ -30,10 +36,26 @@ class Patient {
         type: doc['type'],
         identifySituationsDate: doc['identifySituationsDate']?.toDate(),
         hierarchyCompletedDate: doc['hierarchyCompletedDate']?.toDate(),
+        lastExerciseCompleted: doc['lastExerciseCompleted']?.toDate(),
+        bestDailyStreak: doc['bestDailyStreak'],
+        currentDailyStreak: doc['currentDailyStreak'],
         identifySituationsSessionId: doc['identifySituationsSessionId'],
         status: PatientStatus.values.firstWhere(
             (e) => e.toString() == 'PatientStatus.' + doc['status']),
         exercises: []);
+  }
+
+  Exercise getExercise(String id) {
+    print("get Exercise " + id);
+    return this
+        .exercises
+        .firstWhere((element) => element.id == id, orElse: null);
+  }
+
+  int get completedExercises {
+    int completed = 0;
+    this.exercises.forEach((element) {completed+= element.status == ExerciseStatus.completed ? 1 : 0;});
+    return completed;
   }
 
   /// Returns a string representation of this object.

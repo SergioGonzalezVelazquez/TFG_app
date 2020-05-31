@@ -10,6 +10,7 @@ import 'package:tfg_app/models/user.dart';
 import 'package:tfg_app/models/patient.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tfg_app/services/firestore.dart';
+import 'package:tfg_app/utils/datetime_extensions.dart';
 
 // Gets user and patient collections references
 final usersRef = Firestore.instance.collection('users');
@@ -32,14 +33,22 @@ class AuthService {
   bool get isAuth => this._user != null;
   PatientStatus get patietStatus => this.user?.patient?.status;
   StreamSubscription<DocumentSnapshot> _patientSubscription;
-  StreamController<PatientStatus>  _patientStatusStream = StreamController<PatientStatus>.broadcast();
-  StreamController<PatientStatus> get patientStatusStream => this._patientStatusStream;
+  StreamController<PatientStatus> _patientStatusStream =
+      StreamController<PatientStatus>.broadcast();
+  StreamController<PatientStatus> get patientStatusStream =>
+      this._patientStatusStream;
 
   Future<void> _initializePatientListener(String userId) async {
-    print("_initialize Patient Listener");
     // Get patient Data
     DocumentSnapshot patientDoc = await patientRef.document(userId).get();
     await _getPatientData(patientDoc);
+
+    // Check daily streak
+    DateTime lastExposure = this._user.patient.lastExerciseCompleted;
+    if (!isToday(lastExposure) && !isYesterday(lastExposure)) {
+      this._user.patient.currentDailyStreak = 0;
+      await this.updatePatient({"currentDailyStreak": 0});
+    } 
 
     // initialize subscription
     _patientSubscription = patientRef
@@ -122,20 +131,14 @@ class AuthService {
   /// the type of patient based on pretest questionnaire answers
   Future<void> _createPatientDocument(String userId) async {
     String status = PatientStatus.pretest_pending.toString().split(".")[1];
-    await patientRef.document(userId).setData({"status": status});
+    await patientRef.document(userId).setData(
+        {"status": status, "bestDailyStreak": 0, "currentDailyStreak": 0});
     await _initializePatientListener(userId);
   }
 
-  /*
   Future<void> updatePatient(Map<String, dynamic> data) async {
-    await patientRef
-        .document(this._user.id)
-        .updateData(data)
-        .then((value) async {
-      await this._getPatientData();
-    });
+    await patientRef.document(this._user.id).updateData(data);
   }
-  */
 
   Future<void> updatePatientStatus(PatientStatus status) async {
     String strStatus = status.toString().split(".")[1];
@@ -244,7 +247,10 @@ class AuthService {
     print("create user document");
     FirebaseUser currentUser = await _firebaseAuth.currentUser();
 
+    print("currentUser Id: " + currentUser.uid);
+
     DocumentSnapshot doc = await usersRef.document(currentUser.uid).get();
+    bool exists = doc.exists;
     // Firt time user is logged-in
     if (!doc.exists) {
       print("doc exists");
@@ -259,7 +265,9 @@ class AuthService {
 
     doc = await usersRef.document(currentUser.uid).get();
     this._user = User.fromDocument(doc);
-    await this._createPatientDocument(currentUser.uid);
+    if (!exists) {
+      await this._createPatientDocument(currentUser.uid);
+    }
 
     // Save user id in shared preferences
     SharedPreferences prefs = await SharedPreferences.getInstance();

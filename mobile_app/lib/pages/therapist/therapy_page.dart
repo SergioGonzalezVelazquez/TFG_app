@@ -21,7 +21,7 @@ class _TherapistPageState extends State<TherapistPage>
   // Create a global key that uniquely identifies the Scaffold widget,
   // and allows to display snackbars.
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-  DateFormat formatter;
+  DateFormat formatter = new DateFormat("dd/MM/yyyy 'a las' HH:mm");
   bool _isLoading = true;
 
   StreamSubscription<PatientStatus> _patientStatusStream;
@@ -375,7 +375,6 @@ class _TherapistPageState extends State<TherapistPage>
 
   @override
   Widget build(BuildContext context) {
-    formatter = new DateFormat("dd/MM/yyyy 'a las' HH:mm");
     return SafeArea(
       child: Scaffold(
         key: _scaffoldKey,

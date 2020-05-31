@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:tfg_app/main.dart';
 import 'package:tfg_app/models/driving_activity.dart';
 import 'package:tfg_app/pages/driving_activity/driving_activity_details.dart';
 import 'package:tfg_app/themes/custom_icon_icons.dart';
-import 'package:intl/intl.dart';
 
 class DrivingActivityItem extends StatelessWidget {
   final DrivingActivity _activity;
   DrivingActivityItem(this._activity);
 
-  DateFormat dateFormatter = new DateFormat('dd-MM-yyyy');
-  DateFormat timeFormatter = new DateFormat('HH:mm');
 
   String _buildTitle() {
     if (_activity.endLocationDetails == null ||

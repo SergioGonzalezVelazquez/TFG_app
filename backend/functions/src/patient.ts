@@ -6,6 +6,7 @@ import { getSituationData } from './utils/situations';
 import * as patientTypes from '../../data/patient_type.json';
 
 const patientRef = 'patient/{userId}';
+const exposureRef = 'exposure/{userId}/exposures/{therapyId}';
 const SUCCESS_CODE = 0;
 
 enum PatientStatus {
@@ -116,7 +117,64 @@ export const onUpdatePatient = functions.firestore
 
     });
 
+// Event handler that fires every time a 'exposure' document is created.
+export const onExposureCreated = functions.firestore
+    .document(exposureRef)
+    .onCreate(async (snap, context) => {
+        console.log("exposure created")
+        const userId = context.params.userId;
 
+        // Get patient document
+        const document = await admin.firestore()
+            .collection("patient")
+            .doc(userId)
+            .get();
+
+        const bestDailyStreak = document.data()['bestDailyStreak'];
+        const currentDailyStreak = document.data()['currentDailyStreak'];
+        const lastExerciseCompleted = document.data()['lastExerciseCompleted'];
+
+        const updatedDoc = { lastExerciseCompleted: admin.firestore.FieldValue.serverTimestamp() };
+
+        // No hay registro o no ha sido hoy. FALTA CONDICIÓN
+        if (!lastExerciseCompleted) {
+            updatedDoc['currentDailyStreak'] = currentDailyStreak + 1;
+            if (updatedDoc['currentDailyStreak'] > bestDailyStreak) {
+                updatedDoc['bestDailyStreak'] = updatedDoc['currentDailyStreak'];
+            }
+        } else {
+            const date: Date = lastExerciseCompleted.toDate();
+            const todaysDate: Date = new Date();
+
+            // Comprueba si la fecha del último ejercicio es hoy
+            if (date.setHours(0, 0, 0, 0) != todaysDate.setHours(0, 0, 0, 0)) {
+                // Comprueba si la fecha del último ejercicio fue ayer
+                if (date.getFullYear() == todaysDate.getFullYear() && date.getMonth() == todaysDate.getMonth() && date.getDate() == (todaysDate.getDate() - 1))  {
+                    updatedDoc['currentDailyStreak'] = currentDailyStreak + 1;
+                    if (updatedDoc['currentDailyStreak'] > bestDailyStreak) {
+                        updatedDoc['bestDailyStreak'] = updatedDoc['currentDailyStreak'];
+                    }
+                }
+                else {
+                    updatedDoc['currentDailyStreak'] = 1;
+                    if (updatedDoc['currentDailyStreak'] > bestDailyStreak) {
+                        updatedDoc['bestDailyStreak'] = updatedDoc['currentDailyStreak'];
+                    }
+
+                }
+
+            }
+        }
+
+        // Update lastExerciseCompleted
+        await admin.firestore()
+            .collection("patient")
+            .doc(userId)
+            .update(updatedDoc);
+
+        return Promise.resolve(SUCCESS_CODE);
+
+    });
 
 function findPatientTypeDFS(response, tree, description = '') {
     let itinerary;

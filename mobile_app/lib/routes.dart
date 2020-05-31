@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:tfg_app/models/phy_activity.dart';
 import 'package:tfg_app/pages/chat/chat_page.dart';
 import 'package:tfg_app/pages/driving_activity/driving_activity_settings.dart';
+import 'package:tfg_app/pages/exercises/exercise_questionnaire.dart';
 import 'package:tfg_app/pages/home_page.dart';
 import 'package:tfg_app/pages/initial_page.dart';
 import 'package:tfg_app/pages/phy_activity/bluetooth_connection_page.dart';
@@ -51,7 +52,7 @@ final appRoutes = {
   ChatPage.route: (BuildContext context) => ChatPage(),
   HierarchyPage.routeEditable: (BuildContext context) => HierarchyPage(true),
   HierarchyPage.routeNoEditable: (BuildContext context) => HierarchyPage(false),
-
+  
   // Driving Activity Detection
   DrivingActivityAgreement.route: (BuildContext context) =>
       DrivingActivityAgreement(),

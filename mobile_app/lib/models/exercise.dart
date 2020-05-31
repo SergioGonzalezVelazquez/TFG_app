@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:tfg_app/models/exposure_exercise.dart';
 
 class Exercise {
   final String id;
@@ -15,6 +16,9 @@ class Exercise {
   final int originalUsas;
   final int index;
   final ExerciseStatus status;
+
+  ExposureExercise currentExposure;
+  List<ExposureExercise> exposures = [];
 
   /// Default class constructor
   Exercise(

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:tfg_app/main.dart';
 import 'package:tfg_app/models/patient.dart';
 import 'package:tfg_app/models/questionnaire_group.dart';
 import 'package:tfg_app/models/questionnaire_item.dart';
@@ -11,14 +12,10 @@ import 'package:tfg_app/services/firestore.dart';
 import 'package:tfg_app/widgets/progress.dart';
 import 'package:tfg_app/widgets/custom_dialog.dart';
 import 'package:tfg_app/utils/questionnaire_utils.dart';
-import 'package:intl/intl.dart';
 
 class SignUpQuestionnairePage extends StatefulWidget {
   /// Name use for navigate to this screen
   static const route = "/signUpQuestionnaire";
-
-  final DateFormat dateFormatter = new DateFormat('dd-MM-yyyy');
-  final DateFormat timeFormatter = new DateFormat('HH:mm');
 
   // Flag used to determine wheter user has a questionnaire
   // in progress or not
@@ -503,9 +500,9 @@ class _SignUpQuestionnairePageState extends State<SignUpQuestionnairePage>
         ),
         Text(
           "Empezaste a responder este cuestionario el " +
-              widget.dateFormatter.format(_lastResponseDate) +
+              dateFormatter.format(_lastResponseDate) +
               " a las " +
-              widget.timeFormatter.format(_lastResponseDate) +
+              timeFormatter.format(_lastResponseDate) +
               ". ",
           textAlign: TextAlign.justify,
         ),

@@ -10,6 +10,7 @@ import 'package:tfg_app/pages/questionnaire/pretest/signup_questionnaire_page.da
 import 'package:tfg_app/pages/user/login_page.dart';
 import 'package:tfg_app/widgets/progress.dart';
 import 'package:tfg_app/services/auth.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 /// This widget is the root page of the application,
 /// this is the route that is displayed first when the application is started normally.
@@ -45,6 +46,8 @@ class _RootPageState extends State<RootPage> {
   @override
   void initState() {
     super.initState();
+
+    initializeDateFormatting('es_ES', null);
 
     // initialize AuthService class and check if
     // user is signed in or not

@@ -25,7 +25,7 @@ class HeartRateChart extends StatelessWidget {
     this.rangeAnnotationEnd,
   });
 
-  /// Creates a [TimeSeriesChart] with sample data and no transition.
+  /// Creates a [TimeSeriesChart]
   factory HeartRateChart.withHeartRateData(
       List<PhyActivity> data, DateTime seriesStart, DateTime seriesEnd,
       {DateTime rangeAnnotationStart,

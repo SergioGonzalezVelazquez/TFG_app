@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:tfg_app/main.dart';
 import 'package:tfg_app/models/message.dart';
-import 'package:intl/intl.dart';
 import 'package:flutter_dialogflow/dialogflow_v2.dart';
 
 class ChatMessage extends StatelessWidget {
@@ -13,7 +13,7 @@ class ChatMessage extends StatelessWidget {
   // Flag to controls whether msg date and source photo should be displayed
   // It is used when there are several continuous messages of the same type
   final bool showInfo;
-  final DateFormat timeFormat = DateFormat(DateFormat.HOUR24_MINUTE);
+
 
   // Constructor
   ChatMessage({this.userMessage, this.botTextResponse, this.showInfo = false});
@@ -63,7 +63,7 @@ class ChatMessage extends StatelessWidget {
                     height: 3,
                   ),
                   Text(
-                    timeFormat.format(botTextResponse.timestamp),
+                    timeFormatter.format(botTextResponse.timestamp),
                     style: TextStyle(fontSize: 9),
                   ),
                 ],
@@ -137,7 +137,7 @@ class ChatMessage extends StatelessWidget {
                       .apply(color: Colors.white),
                 ),
                 Text(
-                  timeFormat.format(userMessage.timestamp.toDate()),
+                  timeFormatter.format(userMessage.timestamp.toDate()),
                   style: TextStyle(
                       fontSize: 9, color: Colors.white.withOpacity(0.8)),
                 ),

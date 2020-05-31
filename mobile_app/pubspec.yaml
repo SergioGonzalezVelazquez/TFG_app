@@ -118,6 +118,9 @@ dependencies:
   # A little widget for picking durations. Heavily inspired from the Material Design time picker widget.
   flutter_duration_picker: ^1.0.4
 
+  # Highly customizable, feature-packed Flutter Calendar with gestures, animations and multiple formats.
+  table_calendar: ^2.2.3
+
 
   # eMOVI
   rxdart: 0.22.0

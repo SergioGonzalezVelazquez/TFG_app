@@ -90,12 +90,10 @@ class QuestionnaireItem {
 
 /// Type of questionnaire item
 enum QuestionnaireItemType {
-  display,
   boolean,
   choice,
   multiple_choice,
-  date,
-  text
+  slider
 }
 
 /// Permitted answers for a questionnaire item

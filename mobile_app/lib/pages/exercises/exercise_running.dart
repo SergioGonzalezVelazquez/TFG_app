@@ -2,22 +2,25 @@ import 'dart:async';
 
 import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:tfg_app/models/exercise.dart';
+import 'package:tfg_app/pages/exercises/exercise_questionnaire.dart';
 import 'dart:math' as math;
 
 import 'package:tfg_app/widgets/custom_dialog.dart';
 
 class ExerciseRunningPage extends StatefulWidget {
   final Exercise exercise;
-  final Duration exerciseDuration;
-  ExerciseRunningPage(this.exercise, this.exerciseDuration);
+
+  ExerciseRunningPage(this.exercise);
   _ExerciseRunningPageState createState() => _ExerciseRunningPageState();
 }
 
 class _ExerciseRunningPageState extends State<ExerciseRunningPage>
     with TickerProviderStateMixin {
+  Duration _exerciseDuration;
   // https://stackoverflow.com/questions/44302588/flutter-create-a-countdown-widget
   AnimationController _initialCountDownController;
   AnimationController _timerController;
@@ -38,6 +41,8 @@ class _ExerciseRunningPageState extends State<ExerciseRunningPage>
   @override
   void initState() {
     super.initState();
+    _exerciseDuration =
+        new Duration(seconds: widget.exercise.currentExposure.presetDuration);
     _hasAudio = widget.exercise.audio != null;
     if (_hasAudio) {
       _audioCache = AudioCache();
@@ -56,7 +61,7 @@ class _ExerciseRunningPageState extends State<ExerciseRunningPage>
     // Controller for timer countdown
     _timerController = AnimationController(
       vsync: this,
-      duration: widget.exerciseDuration,
+      duration: _exerciseDuration,
     );
     _timerController.addStatusListener(_timerStatusListener);
 
@@ -69,6 +74,7 @@ class _ExerciseRunningPageState extends State<ExerciseRunningPage>
       setState(() {
         _initialCountDownCompleted = true;
       });
+      widget.exercise.currentExposure.start = Timestamp.now();
       _timerController.reverse(
           from: _timerController.value == 0.0 ? 1.0 : _timerController.value);
       _stopwatch.start();
@@ -91,6 +97,7 @@ class _ExerciseRunningPageState extends State<ExerciseRunningPage>
         buttonText2: "Salir",
         buttonFunction2: () {
           close = true;
+          widget.exercise.currentExposure = null;
           Navigator.pop(context);
         },
         buttonFunction1: () {
@@ -103,7 +110,7 @@ class _ExerciseRunningPageState extends State<ExerciseRunningPage>
     return close;
   }
 
-  Future<void> speak() async {
+  Future<void> _speak() async {
     print("speak");
     if (_hasAudio) {
       _audioPlayer.stop();
@@ -123,7 +130,7 @@ class _ExerciseRunningPageState extends State<ExerciseRunningPage>
         _timerCompleted = true;
       });
       print("dimissed");
-      await speak();
+      await _speak();
     }
   }
 
@@ -158,12 +165,13 @@ class _ExerciseRunningPageState extends State<ExerciseRunningPage>
 
   void _onReplay() {
     _stopwatch.reset();
+    widget.exercise.currentExposure.start = Timestamp.now();
     setState(() {
       _timerCompleted = false;
       _timerController.dispose();
       _timerController = AnimationController(
         vsync: this,
-        duration: widget.exerciseDuration,
+        duration: _exerciseDuration,
       );
       _timerController.reverse(
           from: _timerController.value == 0.0 ? 1.0 : _timerController.value);
@@ -171,8 +179,17 @@ class _ExerciseRunningPageState extends State<ExerciseRunningPage>
   }
 
   void _onStop() {
-    Duration duration = _stopwatch.elapsed;
-    print(duration.inSeconds);
+    widget.exercise.currentExposure.end = Timestamp.now();
+    widget.exercise.currentExposure.realDuration = _stopwatch.elapsed.inSeconds;
+
+    // Pop dialog route
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ExerciseQuestionnaire(
+            ExerciseQuestionnaireType.after, widget.exercise),
+      ),
+    );
   }
 
   @override
@@ -180,7 +197,7 @@ class _ExerciseRunningPageState extends State<ExerciseRunningPage>
     if (_hasAudio) {
       _audioPlayer.stop();
     }
-
+    _flutterTts.stop();
     _timerController.dispose();
     _initialCountDownController.dispose();
     _stopwatch.stop();
@@ -248,12 +265,10 @@ class _ExerciseRunningPageState extends State<ExerciseRunningPage>
                                   fontSize: 15.0, color: Colors.black45),
                             ),
                             Text(
-                              widget.exerciseDuration.inMinutes > 1
-                                  ? (widget.exerciseDuration.inMinutes
-                                          .toString() +
+                              _exerciseDuration.inMinutes > 1
+                                  ? (_exerciseDuration.inMinutes.toString() +
                                       " min")
-                                  : (widget.exerciseDuration.inSeconds
-                                          .toString() +
+                                  : (_exerciseDuration.inSeconds.toString() +
                                       " seg"),
                               style: TextStyle(
                                   fontSize: 15.0, color: Colors.black45),

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tfg_app/models/driving_activity.dart';
 import 'package:tfg_app/models/driving_event.dart';
 import 'package:tfg_app/models/exercise.dart';
+import 'package:tfg_app/models/exposure_exercise.dart';
 import 'package:tfg_app/models/patient.dart';
 import 'package:tfg_app/models/questionnaire_group.dart';
 import 'package:tfg_app/models/questionnaire_item.dart';
@@ -20,6 +21,28 @@ final signUpQuestionnaireRef = database.collection('pretest_questionnaire');
 /// Gets a CollectionReference for pretest_questionnaire_response path.
 final signUpQuestionnaireResponseRef =
     database.collection('pretest_questionnaire_response');
+
+/// Gets a CollectionReference for pretest_questionnaire_response path.
+final exposureRef = database.collection('exposure');
+
+Stream<List<ExposureExercise>> getExposures() {
+  return Firestore.instance
+      .collection('exposure')
+      .document(_authService.user.id)
+      .collection('exposures')
+      .orderBy("start", descending: false)
+      .getDocuments()
+      .then((snapshot) {
+    try {
+      return snapshot.documents
+          .map((doc) => ExposureExercise.fromDocument(doc))
+          .toList();
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }).asStream();
+}
 
 /// Gets Collection References for driving activity path.
 final drivingActivityRef = database.collection('driving_activity');
@@ -84,6 +107,30 @@ Future<void> deleteSignUpResponseItem(QuestionnaireItem item) async {
   await signUpQuestionnaireResponseRef
       .document(_authService.user.id)
       .updateData({item.id: FieldValue.delete()});
+}
+
+Future<void> createExposureExercise(ExposureExercise exposure) async {
+  await exposureRef
+      .document(_authService.user.id)
+      .collection('exposures')
+      .document()
+      .setData(exposure.toMap());
+}
+
+Future<List<ExposureExercise>> getExerciseExposures(String exerciseId) async {
+  List<ExposureExercise> exposures = [];
+  QuerySnapshot snapshot = await exposureRef
+      .document(_authService.user.id)
+      .collection('exposures')
+      .where("exerciseId", isEqualTo: exerciseId)
+      .orderBy("start", descending: false)
+      .getDocuments();
+
+  exposures = snapshot.documents
+      .map((doc) => ExposureExercise.fromDocument(doc))
+      .toList();
+
+  return exposures;
 }
 
 Future<Therapy> getPatientCurrentTherapy() async {

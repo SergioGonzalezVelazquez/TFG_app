@@ -7,7 +7,7 @@
                 "items": {
                     "C1-S1": {
                         "name": "Sentarme en el vehículo",
-                        "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2F457249-PFCNAN-360-min.jpg?alt=media&token=ef530486-a317-4be9-8951-c01ef0d90a76"
+                        "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2F457249-PFCNAN-360-min.jpg?alt=media&token=2d6dc65c-81ee-4c23-9775-286daafe6e9a"
                     }
                 }
             },
@@ -16,7 +16,7 @@
                 "items": {
                     "C1-S2": {
                         "name": "Arrancar el vehículo",
-                        "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2F742028-PSISG9-899-min.jpg?alt=media&token=c1687aab-aa4c-4043-83c1-aa9dff8a3582"
+                        "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2F742028-PSISG9-899-min.jpg?alt=media&token=14aacd89-7be0-4db6-98f4-34e8cddb6ed0"
                     }
                 }
             }
@@ -30,7 +30,7 @@
                 "items": {
                     "C2-S1": {
                         "name": "Salir de la cochera",
-                        "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2Fretro-house-wall-1083480.jpg?alt=media&token=a2c381c2-5af6-4f63-8c1c-613da0c495df"
+                        "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2Fretro-house-wall-1083480.jpg?alt=media&token=599cd3e9-5dce-4990-9b34-87e4b11dcdc1"
                     }
                 }
             },
@@ -62,7 +62,8 @@
                         "name": "Presión de otros conductores",
                         "items": {
                             "C3-S1-PCA": {
-                                "name": "Decidir dónde aparcar sin que venga ningún vehículo detrás"
+                                "name": "Decidir dónde aparcar sin que venga ningún vehículo detrás",
+                                "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2F2697868.jpg?alt=media&token=45b7f63c-d186-4459-9762-d652e82c409a"
                             },
                             "C3-S1-PCB": {
                                 "name": "Decidir dónde aparcar viniendo uno o varios vehículos detrás"
@@ -83,7 +84,8 @@
                         "name": "Presión social",
                         "items": {
                             "C3-S2-PSA": {
-                                "name": "Aparco sin que haya vehículos esperando"
+                                "name": "Aparco sin que haya vehículos esperando",
+                                "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2F1069786.jpg?alt=media&token=c8e559fb-a585-4b1d-8390-e37a2cca8190"
                             },
                             "C3-S2-PSB": {
                                 "name": "Otras personas me miran mientras realizo maniobras de estacionamiento"
@@ -92,7 +94,8 @@
                                 "name": "Aparco habiendo un vehículo a la espera"
                             },
                             "C3-S2-PSD": {
-                                "name": "Aparco habiendo una cola de vehículos a la espera"
+                                "name": "Aparco habiendo una cola de vehículos a la espera",
+                                "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2F338095-PA06UI-85.jpg?alt=media&token=7497492e-3f27-4d08-94e8-d265605c9fac"
                             },
                             "C3-S2-PSE": {
                                 "name": "Otros conductores hacen sonar el claxon mientras realizo maniobras para aparcar",
@@ -125,10 +128,12 @@
                         "name": "Condiciones del conductor",
                         "items": {
                             "C4-S1-CCA": {
-                                "name": "Circulo por una población cuando me encuentro mal físicamente"
+                                "name": "Circulo por una población cuando me encuentro mal físicamente",
+                                "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2F3740529.jpg?alt=media&token=ed5554fa-25d5-4e6c-9ff4-215d0c07f3c2"
                             },
                             "C4-S1-CCB": {
-                                "name": "Circulo por una población cuando me encuentro mal psiquicamente/emocionalmente"
+                                "name": "Circulo por una población cuando me encuentro mal psiquicamente/emocionalmente",
+                                "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2F3740486.jpg?alt=media&token=57ae088d-d602-4d23-a670-422b063f2794"
                             }
                         }
                     },
@@ -151,12 +156,12 @@
                             },
                             "C4-S1-CCAB": {
                                 "name": "Circulo por una población mientras llueve",
-                                "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2F42983-min.jpg?alt=media&token=51470f84-3a94-4600-b223-906990d18408",
+                                "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2F42983-min.jpg?alt=media&token=45a926a4-6699-49d3-8f25-cc87a06063cd",
                                 "audio": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/audio%2F367008_rain.mp3?alt=media&token=0c558ba0-2425-4891-a810-90dc6dda583c"
                             },
                             "C4-S1-CCAC": {
                                 "name": "Circulo por una población mientras nieva",
-                                "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2F752-min.jpg?alt=media&token=ef4017be-0084-4f85-a2c7-5f458adea6c0"
+                                "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2F752-min.jpg?alt=media&token=7bec7640-0ac0-46cd-9df5-5f063d61b27a"
                             }
                         }
                     },
@@ -171,7 +176,7 @@
                             },
                             "C4-S1-FTC": {
                                 "name": "Circulo por población y hay mucho tráfico",
-                                "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2F652731-POZCO2-551-min.jpg?alt=media&token=bf1d1434-9d56-46d0-a386-9b4ed09088f8"
+                                "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2F652731-POZCO2-551-min.jpg?alt=media&token=abc9805e-248c-4dd6-a26c-698e81ea8236"
                             }
                         }
                     },
@@ -197,10 +202,12 @@
                         "name": "Ocupantes",
                         "items": {
                             "C4-S1-OCA": {
-                                "name": "Circulo por población solo/a"
+                                "name": "Circulo por población solo/a",
+                                "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2F4190.jpg?alt=media&token=9e88eec9-e8e6-494d-82e2-e0e483b1bf83"
                             },
                             "C4-S1-OCB": {
-                                "name": "Circulo por población acompañado de adulto/s"
+                                "name": "Circulo por población acompañado de adulto/s",
+                                "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2F389135-PC5XSZ-70.jpg?alt=media&token=ca432f79-cce4-4aa3-94b5-8b9decdd159a"
                             },
                             "C4-S1-OCC": {
                                 "name": "Circulo por población con niños",
@@ -241,7 +248,8 @@
                         "name": "¿Ruta Conocida o no?",
                         "items": {
                             "C4-S2-CONA": {
-                                "name": "Circulo por una carretera conocida"
+                                "name": "Circulo por una carretera conocida",
+                                "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2F3005819.jpg?alt=media&token=81b26f39-c563-4685-92de-3b88ba3ad6d3"
                             },
                             "C4-S2-CONB": {
                                 "name": "Circulo por una carretera no conocida"
@@ -271,7 +279,8 @@
                                 "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2Fautovia.jpg?alt=media&token=0613bded-1d3c-4096-872a-954a44112e3c"
                             },
                             "C4-S2-TVC": {
-                                "name": "Circulo por una carretera regional/comarcal"
+                                "name": "Circulo por una carretera regional/comarcal",
+                                "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2F525998-PIYGFW-536.jpg?alt=media&token=ab77b99c-b041-4636-a998-a0bae51fa075"
                             }
                         }
                     },
@@ -280,7 +289,7 @@
                         "items": {
                             "C4-S2-CCAA": {
                                 "name": "Circulo por una carretera en un día soleado",
-                                "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2F3067-min.jpg?alt=media&token=c42cf856-918d-4aa9-8811-ef6f74c7ebec"
+                                "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2F3067-min.jpg?alt=media&token=5e803f45-e5e6-4807-8186-2b160bcc0fb8"
                             },
                             "C4-S2-CCAB": {
                                 "name": "Circulo por una carretera en un día con viento"
@@ -291,7 +300,7 @@
                             },
                             "C4-S2-CCAD": {
                                 "name": "Circulo por una carretera mientras nieva",
-                                "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2F665-min.jpg?alt=media&token=5b039af2-2896-4ea5-9b16-033256e78b5d"
+                                "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2F665-min.jpg?alt=media&token=aafa624a-2965-4d9e-b90f-d256e3f7d46d"
                             }
                         }
                     },
@@ -299,7 +308,8 @@
                         "name": "Fluidez del tráfico",
                         "items": {
                             "C4-S2-FTA": {
-                                "name": "Circulo por carretera y hay poco tráfico"
+                                "name": "Circulo por carretera y hay poco tráfico",
+                                "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2F494.jpg?alt=media&token=fe0d4c49-7938-4340-b612-3fe1dcba7e14"
                             },
                             "C4-S2-FTB": {
                                 "name": "Circulo por carretera y el tráfico es fluido",
@@ -318,7 +328,7 @@
                             },
                             "C4-S2-CTB": {
                                 "name": "Circulo por carretera de noche",
-                                "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2Fws_Road_at_Night_2560x1600.jpg?alt=media&token=a4a4ae09-4fcc-4313-87b4-90c809b2f4cd"
+                                "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2Fws_Road_at_Night_2560x1600.jpg?alt=media&token=0d9dd860-f8d1-4beb-b5d0-9c718b9747ff"
                             },
                             "C4-S2-CTC": {
                                 "name": "Circulo por carretera en fin de semana"
@@ -335,7 +345,8 @@
                                 "name": "Circulo por carretera solo/a"
                             },
                             "C4-S2-OCB": {
-                                "name": "Circulo por carretera acompañado de adulto/s"
+                                "name": "Circulo por carretera acompañado de adulto/s",
+                                "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2F453003-PF1RR6-554.jpg?alt=media&token=581463a3-977b-4755-b0c7-1d61659a8be1"
                             },
                             "C4-S2-OCC": {
                                 "name": "Circulo por carretera con niños",
@@ -462,7 +473,8 @@
                                 "name": "Adelantar en una carretera de sentido único (autopista/autovía) de día"
                             },
                             "C5-S1-CTB": {
-                                "name": "Adelantar en una carretera de sentido único (autopista/autovía) de noche"
+                                "name": "Adelantar en una carretera de sentido único (autopista/autovía) de noche",
+                                "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2F17088.jpg?alt=media&token=51fef4d9-b974-4a7e-b705-350038cbf63b"
                             },
                             "C5-S1-CTC": {
                                 "name": "Adelantar en una carretera de sentido único (autopista/autovía) en fin de semana"

@@ -2,9 +2,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tfg_app/models/exercise.dart';
+import 'package:tfg_app/models/exposure_exercise.dart';
 import 'package:tfg_app/pages/exercises/exercise_progress.dart';
-import 'package:tfg_app/pages/exercises/exercise_running.dart';
+import 'package:tfg_app/pages/exercises/exercise_questionnaire.dart';
 import 'package:flutter_duration_picker/flutter_duration_picker.dart';
+import 'package:tfg_app/services/firestore.dart';
 import 'package:tfg_app/widgets/buttons.dart';
 
 class ExerciseDetails extends StatefulWidget {
@@ -17,10 +19,18 @@ class ExerciseDetails extends StatefulWidget {
 class _ExerciseDetailsState extends State<ExerciseDetails> {
   ScrollController _scrollController;
 
+  bool _isLoading = true;
+
   /// Method called when this widget is inserted into the tree.
   @override
   void initState() {
     _scrollController = ScrollController()..addListener(() => setState(() {}));
+
+    if (widget.exercise.exposures.isEmpty) {
+      _fetchExposures();
+    } else {
+      _isLoading = false;
+    }
 
     super.initState();
   }
@@ -29,6 +39,17 @@ class _ExerciseDetailsState extends State<ExerciseDetails> {
   void dispose() {
     super.dispose();
     _scrollController.dispose();
+  }
+
+  Future<void> _fetchExposures() async {
+    List<ExposureExercise> exposures =
+        await getExerciseExposures(widget.exercise.id);
+    if (this.mounted) {
+      widget.exercise.exposures = exposures;
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 
   void _start() async {
@@ -157,7 +178,7 @@ class _ExerciseDetailsState extends State<ExerciseDetails> {
               "Ansiedad inicial",
               widget.exercise.originalUsas.toString() +
                   (widget.exercise.originalUsas == 0
-                      ? 'USAs \t(Situación neutra)'
+                      ? ' USAs \t(Situación neutra)'
                       : ' USAs')),
           _buildInfo(context, "Duración", '¿?'),
           SizedBox(
@@ -219,7 +240,7 @@ class _ExerciseDetailsState extends State<ExerciseDetails> {
         },
         body: new Container(child: _buildPage(context)),
       ),
-      bottomNavigationBar: _bottonNavigationBar(context),
+      bottomNavigationBar: _isLoading ? null : _bottonNavigationBar(context),
     );
   }
 }
@@ -283,12 +304,17 @@ class _DurationDialogState extends State<DurationDialog> {
               ),
               InkWell(
                 onTap: () {
-                  Navigator.pop(context);
-                  Navigator.push(
+                  // Create ExerciseExpose object
+                  widget.exercise.currentExposure = new ExposureExercise(
+                      exerciseId: widget.exercise.id,
+                      presetDuration: _duration.inSeconds);
+
+                  // Pop dialog route
+                  Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) =>
-                          ExerciseRunningPage(widget.exercise, _duration),
+                      builder: (context) => ExerciseQuestionnaire(
+                          ExerciseQuestionnaireType.before, widget.exercise),
                     ),
                   );
                 },
