@@ -29,7 +29,7 @@ class _StressSliderDialogState extends State<StressSliderDialog> {
   var _feedbackText = "Totalmente indiferente";
   double _sliderValue = 0.0;
 
-  String imageTitle = "assets/images/stress/pain_0.png";
+  String imageTitle = "assets/images/stress/stress_0.png";
 
   void _close() {
     Navigator.pop(context, -1.0);
@@ -51,40 +51,40 @@ class _StressSliderDialogState extends State<StressSliderDialog> {
     setState(() {
       _sliderValue = newValue;
       if (_sliderValue < 5) {
-        imageTitle = "assets/images/stress/pain_0.png";
+        imageTitle = "assets/images/stress/stress_0.png";
         _feedbackText = "Totalmente indiferente";
       } else if (_sliderValue < 10.0) {
-        imageTitle = "assets/images/stress/pain_1.png";
+        imageTitle = "assets/images/stress/stress_1.png";
         _feedbackText = "";
       } else if (_sliderValue >= 10 && _sliderValue < 20) {
-        imageTitle = "assets/images/stress/pain_2.png";
+        imageTitle = "assets/images/stress/stress_2.png";
         _feedbackText = "";
       } else if (_sliderValue >= 20 && _sliderValue < 30) {
-        imageTitle = "assets/images/stress/pain_3.png";
+        imageTitle = "assets/images/stress/stress_3.png";
         _feedbackText = "Algo intranquilo";
       } else if (_sliderValue >= 30 && _sliderValue < 40) {
-        imageTitle = "assets/images/stress/pain_4.png";
+        imageTitle = "assets/images/stress/stress_4.png";
         _feedbackText = "";
       } else if (_sliderValue >= 40 && _sliderValue < 50) {
-        imageTitle = "assets/images/stress/pain_5.png";
+        imageTitle = "assets/images/stress/stress_5.png";
         _feedbackText = "Intranquilo";
       } else if (_sliderValue >= 50 && _sliderValue < 60) {
-        imageTitle = "assets/images/stress/pain_6.png";
+        imageTitle = "assets/images/stress/stress_6.png";
         _feedbackText = "";
       } else if (_sliderValue >= 60 && _sliderValue < 70) {
-        imageTitle = "assets/images/stress/pain_7.png";
+        imageTitle = "assets/images/stress/stress_7.png";
         _feedbackText = "Bastante intranquilo";
       } else if (_sliderValue >= 70 && _sliderValue < 80) {
-        imageTitle = "assets/images/stress/pain_8.png";
+        imageTitle = "assets/images/stress/stress_8.png";
         _feedbackText = "";
       } else if (_sliderValue >= 80 && _sliderValue < 90) {
-        imageTitle = "assets/images/stress/pain_9.png";
+        imageTitle = "assets/images/stress/stress_9.png";
         _feedbackText = "Muy intranquilo/a y tenso/a";
       } else if (_sliderValue >= 90 && _sliderValue < 100) {
-        imageTitle = "assets/images/stress/pain_10.png";
+        imageTitle = "assets/images/stress/stress_10.png";
         _feedbackText = "";
       } else {
-        imageTitle = "assets/images/stress/pain_10.png";
+        imageTitle = "assets/images/stress/stress_10.png";
         _feedbackText = "Tan ansioso/a que no puedo resistirlo";
       }
     });
