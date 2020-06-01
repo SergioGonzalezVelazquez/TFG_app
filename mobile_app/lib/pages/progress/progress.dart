@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tfg_app/models/exercise.dart';
+import 'package:tfg_app/models/patient.dart';
 import 'package:tfg_app/pages/progress/progress_calendar.dart';
+import 'package:tfg_app/pages/progress/progress_medals.dart';
 import 'package:tfg_app/services/auth.dart';
 
 class ProgressPage extends StatefulWidget {
@@ -8,7 +10,6 @@ class ProgressPage extends StatefulWidget {
 }
 
 class _ProgressPageState extends State<ProgressPage> {
-  bool _isLoading = false;
   AuthService _authService;
   int _daysCompleted = 0;
   int _streak = 0;
@@ -190,43 +191,44 @@ class _ProgressPageState extends State<ProgressPage> {
 
   Widget _medalItem(Exercise exercise) {
     return Container(
-        width: MediaQuery.of(context).size.width * 0.2,
-        child: new Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            new Container(
-              width: MediaQuery.of(context).size.width * 0.15,
-              height: MediaQuery.of(context).size.width * 0.15,
-              decoration: new BoxDecoration(
-                border: Border.all(color: new Color(0xff808080), width: 1.25),
-                shape: BoxShape.circle,
-                image: new DecorationImage(
-                  colorFilter: exercise.status != ExerciseStatus.completed
-                      ? ColorFilter.mode(
-                          Colors.grey,
-                          BlendMode.saturation,
-                        )
-                      : null,
-                  fit: BoxFit.fitHeight,
-                  image: exercise.image != null
-                      ? NetworkImage(exercise.image)
-                      : AssetImage("assets/images/noimage.jpg"),
-                ),
+      width: MediaQuery.of(context).size.width * 0.2,
+      child: new Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          new Container(
+            width: MediaQuery.of(context).size.width * 0.15,
+            height: MediaQuery.of(context).size.width * 0.15,
+            decoration: new BoxDecoration(
+              border: Border.all(color: new Color(0xff808080), width: 1.25),
+              shape: BoxShape.circle,
+              image: new DecorationImage(
+                colorFilter: exercise.status != ExerciseStatus.completed
+                    ? ColorFilter.mode(
+                        Colors.grey,
+                        BlendMode.saturation,
+                      )
+                    : null,
+                fit: BoxFit.fitHeight,
+                image: exercise.image != null
+                    ? NetworkImage(exercise.image)
+                    : AssetImage("assets/images/noimage.jpg"),
               ),
             ),
-            SizedBox(
-              height: 3,
-            ),
-            new Text(
-              exercise.itemStr,
-              textScaleFactor: 0.75,
-              textAlign: TextAlign.center,
-              maxLines: 3,
-              overflow: TextOverflow.ellipsis,
-            )
-          ],
-        ));
+          ),
+          SizedBox(
+            height: 3,
+          ),
+          new Text(
+            exercise.itemStr,
+            textScaleFactor: 0.75,
+            textAlign: TextAlign.center,
+            maxLines: 3,
+            overflow: TextOverflow.ellipsis,
+          )
+        ],
+      ),
+    );
   }
 
   Widget _buildMedalsList() {
@@ -256,10 +258,15 @@ class _ProgressPageState extends State<ProgressPage> {
         SizedBox(
           height: 2,
         ),
-        Text(_completedExercises.toString() +
-            " de " +
-            _authService.user.patient.exercises.length.toString() +
-            " situationes superadas"),
+        _authService.user.patient.status != PatientStatus.in_exercise
+            ? Text(
+                'Aún no tienes asignado ningún ejercicio de exposición',
+                textAlign: TextAlign.justify,
+              )
+            : Text(_completedExercises.toString() +
+                " de " +
+                _authService.user.patient.exercises.length.toString() +
+                " situationes superadas"),
         SizedBox(
           height: 15,
         ),
@@ -271,7 +278,11 @@ class _ProgressPageState extends State<ProgressPage> {
           alignment: Alignment.bottomRight,
           child: FlatButton(
             textColor: Theme.of(context).primaryColor,
-            onPressed: () => print("hola"),
+            onPressed: _authService.user.patient.exercises.isEmpty
+                ? null
+                : () {
+                    Navigator.pushNamed(context, ProgressMedals.route);
+                  },
             child: Text("Ver todos"),
             padding: EdgeInsets.zero,
           ),
@@ -305,11 +316,10 @@ class _ProgressPageState extends State<ProgressPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Progreso'),
-        actions: <Widget>[],
-      ),
-      body: _buildPage(context),
-    );
+        appBar: AppBar(
+          title: const Text('Progreso'),
+          actions: <Widget>[],
+        ),
+        body: _buildPage(context));
   }
 }

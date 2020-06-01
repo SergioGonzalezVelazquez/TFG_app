@@ -3,9 +3,12 @@ import 'package:tfg_app/models/exercise.dart';
 import 'package:tfg_app/models/exposure_exercise.dart';
 import 'package:tfg_app/models/questionnaire_item.dart';
 import 'package:tfg_app/pages/exercises/exercise_running.dart';
+import 'package:tfg_app/pages/exercises/exercises_page.dart';
 import 'package:tfg_app/pages/questionnaire/questionnaire_components.dart';
+import 'package:tfg_app/services/auth.dart';
 import 'package:tfg_app/services/firestore.dart';
 import 'package:tfg_app/widgets/custom_dialog.dart';
+import 'package:tfg_app/widgets/exercise_completed_popup.dart';
 import 'package:tfg_app/widgets/progress.dart';
 import 'package:tfg_app/widgets/stress_slider.dart';
 
@@ -46,13 +49,17 @@ class _ExerciseQuestionnaireState extends State<ExerciseQuestionnaire> {
   @override
   void dispose() {
     if (widget.type == ExerciseQuestionnaireType.before) {
-      beforeQuestions.forEach((element) {
-        element.answerValue = null;
-      });
+      beforeQuestions.forEach(
+        (element) {
+          element.answerValue = null;
+        },
+      );
     } else {
-      afterQuestions.forEach((element) {
-        element.answerValue = null;
-      });
+      afterQuestions.forEach(
+        (element) {
+          element.answerValue = null;
+        },
+      );
     }
     super.dispose();
   }
@@ -70,18 +77,64 @@ class _ExerciseQuestionnaireState extends State<ExerciseQuestionnaire> {
 
       widget.exercise.currentExposure.usasBefore = _items[0].answerValue;
       widget.exercise.currentExposure.panicBefore = _items[1].answerValue ?? [];
-      widget.exercise.currentExposure.selfEfficacyBefore = _items[2].answerValue;
+      widget.exercise.currentExposure.selfEfficacyBefore =
+          _items[2].answerValue;
     } else {
       // Cuestionario después de la exp. completado
       ExposureExercise exposure = widget.exercise.currentExposure;
       exposure.usasAfter = _items[1].answerValue;
       exposure.panicAfter = _items[0].answerValue ?? [];
+
+      setState(() {
+        _isLoading = true;
+      });
+      bool completed = await evaluateCompleted(exposure);
       await createExposureExercise(exposure);
       widget.exercise.currentExposure = null;
       widget.exercise.exposures.add(exposure);
 
       Navigator.pop(context);
+      // Pop to exercises page
+      Navigator.pop(context);
+      if (completed) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) =>
+              ExerciseCompletedDialog(widget.exercise),
+        );
+      }
     }
+  }
+
+  Future<bool> evaluateCompleted(ExposureExercise exposure) async {
+    if (widget.exercise.status == ExerciseStatus.completed) {
+      widget.exercise.afterCompleteAttempts--;
+      await updateExercise(widget.exercise.id,
+          {'afterCompleteAttempts': widget.exercise.afterCompleteAttempts});
+      return false;
+    }
+    bool anxietyCompleted = false;
+    if (widget.exercise.originalUsas > 25) {
+      anxietyCompleted = exposure.usasAfter <= 25;
+    } else {
+      anxietyCompleted = exposure.usasAfter == 0 ||
+          exposure.usasAfter <= widget.exercise.originalUsas - 10;
+    }
+    if (exposure.selfEfficacyBefore >= 75 && anxietyCompleted) {
+      AuthService().user.patient.getExercise(widget.exercise.id).status =
+          ExerciseStatus.completed;
+      exposure.completedExercise = true;
+      await updateExerciseStatus(widget.exercise.id, ExerciseStatus.completed);
+      if (widget.exercise.index <
+          AuthService().user.patient.exercises.length - 1) {
+        Exercise newExercise =
+            AuthService().user.patient.exercises[widget.exercise.index + 1];
+        newExercise.status = ExerciseStatus.in_progress;
+        await updateExerciseStatus(newExercise.id, ExerciseStatus.in_progress);
+      }
+      return true;
+    }
+    return false;
   }
 
   Future<void> _onContinue() async {
@@ -324,7 +377,7 @@ class _ExerciseQuestionnaireState extends State<ExerciseQuestionnaire> {
   Widget build(context) {
     bool continueButtonEnabled = _currentQuestionnaireItem != null
         ? (!_currentQuestionnaireItem.mandatory ||
-            _currentQuestionnaireItem.answerValue != null)
+                _currentQuestionnaireItem.answerValue != null) 
         : false;
     return WillPopScope(
       onWillPop: _willPopCallback,

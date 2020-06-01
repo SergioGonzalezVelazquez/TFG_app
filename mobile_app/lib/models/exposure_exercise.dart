@@ -8,6 +8,9 @@ class ExposureExercise {
   int _presetDuration; // seconds
   int _realDuration; // seconds
 
+  // True if this exposure complete an exercise
+  bool _completedExercise;
+
   // Respuestas al cuestionario antes
   int _usasBefore;
   int _selfEfficacyBefore;
@@ -28,6 +31,7 @@ class ExposureExercise {
       int usasBefore,
       Timestamp start,
       Timestamp end,
+      bool completedExercise,
       int presetDuration,
       int realDuration}) {
     this._exerciseId = exerciseId;
@@ -39,6 +43,7 @@ class ExposureExercise {
     this._usasBefore = usasBefore;
     this._panicBefore = panicBefore;
     this._selfEfficacyBefore = selfEfficacyBefore;
+    this._completedExercise = completedExercise;
     this._usasAfter = usasAfter;
     this._panicAfter = panicAfter;
   }
@@ -55,6 +60,7 @@ class ExposureExercise {
   List<String> get panicAfter => this._panicAfter;
   Timestamp get start => this._start;
   Timestamp get end => this._end;
+  bool get completedExercise => this._completedExercise;
 
   // Setters
   set start(Timestamp timestamp) => this._start = timestamp;
@@ -67,6 +73,7 @@ class ExposureExercise {
   set exerciseId(String execId) => this._exerciseId = execId;
   set panicAfter(List<String> panic) => this._panicAfter = panic;
   set panicBefore(List<String> panic) => this._panicBefore = panic;
+  set completedExercise(bool completed) => this._completedExercise = completed;
 
   /// Converts Firestore Document into a Situation object
   factory ExposureExercise.fromDocument(DocumentSnapshot doc) {
@@ -90,30 +97,7 @@ class ExposureExercise {
       panicBefore: panicBeforeList,
       selfEfficacyBefore: doc['selfEfficacyBefore'],
       usasBefore: doc['usasBefore'],
-    );
-  }
-
-  factory ExposureExercise.fromDS(String id, Map<String, dynamic> data) {
-    List<String> panicAfterList = [];
-    if (data['panicAfter'] != null) {
-      data['panicAfter'].forEach((item) => panicAfterList.add(item));
-    }
-    List<String> panicBeforeList = [];
-    if (data['panicBefore'] != null) {
-      data['panicBefore'].forEach((item) => panicBeforeList.add(item));
-    }
-    return ExposureExercise(
-      id: id,
-      exerciseId: data['exerciseId'],
-      start: data['start'],
-      end: data['end'],
-      presetDuration: data['presetDuration'],
-      realDuration: data['realDuration'],
-      usasAfter: data['usasAfter'],
-      panicAfter: panicAfterList,
-      panicBefore: panicBeforeList,
-      selfEfficacyBefore: data['selfEfficacyBefore'],
-      usasBefore: data['usasBefore'],
+      completedExercise: doc['completedExercise'] ?? false
     );
   }
 
@@ -129,6 +113,7 @@ class ExposureExercise {
     map['end'] = _end;
     map['presetDuration'] = _presetDuration;
     map['realDuration'] = _realDuration;
+    map['completedExercise'] = _completedExercise ?? false;
 
     return map;
   }

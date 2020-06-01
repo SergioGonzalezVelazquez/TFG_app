@@ -25,7 +25,7 @@ final signUpQuestionnaireResponseRef =
 /// Gets a CollectionReference for pretest_questionnaire_response path.
 final exposureRef = database.collection('exposure');
 
-Stream<List<ExposureExercise>> getExposures() {
+Stream<List<ExposureExercise>> getExposuresAsStream() {
   return Firestore.instance
       .collection('exposure')
       .document(_authService.user.id)
@@ -36,6 +36,29 @@ Stream<List<ExposureExercise>> getExposures() {
     try {
       return snapshot.documents
           .map((doc) => ExposureExercise.fromDocument(doc))
+          .toList();
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }).asStream();
+}
+
+Stream<List<Exercise>> getExercisesAsStream() {
+  String userId = _authService.user.id;
+  String therapyId = _authService.user.patient.currentTherapy.id;
+
+  return patientRef
+      .document(userId)
+      .collection('userTherapies')
+      .document(therapyId)
+      .collection('exercises')
+      .orderBy("index", descending: false)
+      .getDocuments()
+      .then((snapshot) {
+    try {
+      return snapshot.documents
+          .map((doc) => Exercise.fromDocument(doc))
           .toList();
     } catch (e) {
       print(e);
@@ -115,6 +138,32 @@ Future<void> createExposureExercise(ExposureExercise exposure) async {
       .collection('exposures')
       .document()
       .setData(exposure.toMap());
+}
+
+Future<void> updateExerciseStatus(String id, ExerciseStatus newStatus) async {
+  String userId = _authService.user.id;
+  String therapyId = _authService.user.patient.currentTherapy.id;
+
+  await patientRef
+      .document(userId)
+      .collection('userTherapies')
+      .document(therapyId)
+      .collection('exercises')
+      .document(id)
+      .updateData({'status': newStatus.toString().split('.')[1]});
+}
+
+Future<void> updateExercise(String id, Map<String, dynamic> data) async {
+  String userId = _authService.user.id;
+  String therapyId = _authService.user.patient.currentTherapy.id;
+
+  await patientRef
+      .document(userId)
+      .collection('userTherapies')
+      .document(therapyId)
+      .collection('exercises')
+      .document(id)
+      .updateData(data);
 }
 
 Future<List<ExposureExercise>> getExerciseExposures(String exerciseId) async {

@@ -174,18 +174,39 @@ class _ExerciseDetailsState extends State<ExerciseDetails> {
                     : ''),
           ),
           _buildInfo(
-              context,
-              "Ansiedad inicial",
-              widget.exercise.originalUsas.toString() +
-                  (widget.exercise.originalUsas == 0
-                      ? ' USAs \t(Situación neutra)'
-                      : ' USAs')),
-          _buildInfo(context, "Duración", '¿?'),
+            context,
+            "Ansiedad inicial",
+            widget.exercise.originalUsas.toString() +
+                (widget.exercise.originalUsas == 0
+                    ? ' USAs \t(Situación neutra)'
+                    : ' USAs'),
+          ),
           SizedBox(
             height: 10,
           ),
           Visibility(
-            visible: widget.exercise.audio != null,
+            visible: widget.exercise.status == ExerciseStatus.completed &&
+                widget.exercise.afterCompleteAttempts > 0,
+            child: Text(
+              "Este ejercicio ya ha sido completado. " +
+                  (widget.exercise.afterCompleteAttempts == 0
+                      ? 'Intenta afrontar la siguiente situación. '
+                      : ('Sin embargo, todavía puedes repetetir esta situación ' +
+                          (widget.exercise.afterCompleteAttempts == 1
+                              ? 'una vez más. '
+                              : widget.exercise.afterCompleteAttempts
+                                      .toString() +
+                                  ' veces más.'))),
+              textAlign: TextAlign.justify,
+            ),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Visibility(
+            visible: widget.exercise.audio != null &&
+                (widget.exercise.status == ExerciseStatus.in_progress ||
+                    widget.exercise.afterCompleteAttempts > 0),
             child: Text(
               "Durante la realización de este ejercicio se reproducirá un clip de audio para mejorar la experiencia de exposición",
               style: TextStyle(color: Theme.of(context).primaryColorDark),
@@ -223,8 +244,13 @@ class _ExerciseDetailsState extends State<ExerciseDetails> {
                   fontWeight: FontWeight.bold),
             ),
           ),
-          primaryButton(context, _start, "Comenzar",
-              width: MediaQuery.of(context).size.width * 0.45)
+          Visibility(
+            visible: widget.exercise.status == ExerciseStatus.in_progress ||
+                (widget.exercise.status == ExerciseStatus.completed &&
+                    widget.exercise.afterCompleteAttempts > 0),
+            child: primaryButton(context, _start, "Comenzar",
+                width: MediaQuery.of(context).size.width * 0.45),
+          )
         ],
       ),
     );
@@ -277,9 +303,20 @@ class _DurationDialogState extends State<DurationDialog> {
           Text("Duración de la exposición",
               style: Theme.of(context).textTheme.headline6),
           SizedBox(height: 16.0),
-          Text("description",
+          Text("Selecciona una duración orientativa de exposición.",
               textAlign: TextAlign.justify,
-              style: Theme.of(context).textTheme.bodyText2),
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyText2
+                  .apply(fontSizeFactor: 0.85)),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.015),
+          Text(
+              "Te avisaremos cuándo se alcance esa duración, pero es recomendable permacener en la situación temida hasta que experimentes una reducción significativa de la ansiedad.",
+              textAlign: TextAlign.justify,
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyText2
+                  .apply(fontSizeFactor: 0.85)),
           SizedBox(height: MediaQuery.of(context).size.height * 0.025),
           DurationPicker(
             duration: _duration,

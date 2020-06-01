@@ -38,7 +38,8 @@
                 "name": "Incorporación al tráfico desde una situación de parada",
                 "items": {
                     "C2-S2": {
-                        "name": "Incorporarme al tráfico desde una situación de parada"
+                        "name": "Incorporarme al tráfico desde una situación de parada",
+                        "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2FFormatFactory652832-POZCY7-382.jpg?alt=media&token=d755f27a-925d-4c8f-8701-d0d74c1992e0"
                     }
                 }
             },
@@ -91,7 +92,8 @@
                                 "name": "Otras personas me miran mientras realizo maniobras de estacionamiento"
                             },
                             "C3-S2-PSC": {
-                                "name": "Aparco habiendo un vehículo a la espera"
+                                "name": "Aparco habiendo un vehículo a la espera",
+                                "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2FFormatFactory338097-PA06US-634.jpg?alt=media&token=cb14d940-3f85-4cc7-90c5-10d4d80100ac"
                             },
                             "C3-S2-PSD": {
                                 "name": "Aparco habiendo una cola de vehículos a la espera",
@@ -117,7 +119,8 @@
                         "name": "¿Ruta Conocida o no?",
                         "items": {
                             "C4-S1-CONA": {
-                                "name": "Circulo por una población conocida"
+                                "name": "Circulo por una población conocida",
+                                "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2FFormatFactory21800.jpg?alt=media&token=6d90222d-acff-4090-8430-6482c3b87a1f"
                             },
                             "C4-S1-CONB": {
                                 "name": "Circulo por una población no conocida"
@@ -366,7 +369,8 @@
                                 "name": "Circulo por carretera y otros vehículos me adelantan a gran velocidad y sin avisar"
                             },
                             "C4-S2-OTC": {
-                                "name": "Circulo por carretera y llego a un cruce complicado"
+                                "name": "Circulo por carretera y llego a un cruce complicado",
+                                "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2F3181.jpg?alt=media&token=0494524a-de7e-4bbf-9fe2-0f11bb8082f0"
                             },
                             "C4-S2-OTD": {
                                 "name": "Circulo por una vía sin arcén",
@@ -534,7 +538,8 @@
                         "name": "Tipo de vehículo a adelantar",
                         "items": {
                             "C5-S2-VAA": {
-                                "name": "Adelantar en una carretera con doble sentido a un vehículo corto"
+                                "name": "Adelantar en una carretera con doble sentido a un vehículo corto",
+                                "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2F4393.jpg?alt=media&token=9d09ac52-7d28-4fe7-b0d6-704c9c63d94e"
                             },
                             "C5-S2-VAB": {
                                 "name": "Adelantar en una carretera con doble sentido a bicicletas/motos"

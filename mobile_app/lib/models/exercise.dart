@@ -15,7 +15,8 @@ class Exercise {
   final String audio;
   final int originalUsas;
   final int index;
-  final ExerciseStatus status;
+  int afterCompleteAttempts;
+  ExerciseStatus status;
 
   ExposureExercise currentExposure;
   List<ExposureExercise> exposures = [];
@@ -35,6 +36,7 @@ class Exercise {
       this.image,
       this.originalUsas,
       this.status,
+      this.afterCompleteAttempts,
       this.levelCode});
 
   /// Converts Firestore Document into a Situation object
@@ -52,6 +54,7 @@ class Exercise {
         image: doc['itemImg'],
         audio: doc['itemAudio'],
         index: doc['index'],
+        afterCompleteAttempts: doc['afterCompleteAttempts'],
         status: ExerciseStatus.values.firstWhere(
             (e) => e.toString() == 'ExerciseStatus.' + doc['status']),
         levelStr: doc['levelStr']);

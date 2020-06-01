@@ -121,6 +121,9 @@ dependencies:
   # Highly customizable, feature-packed Flutter Calendar with gestures, animations and multiple formats.
   table_calendar: ^2.2.3
 
+  # A flutter package to help you beautify your app popup, can be used in all platform
+  flutter_beautiful_popup: ^1.5.0
+
 
   # eMOVI
   rxdart: 0.22.0

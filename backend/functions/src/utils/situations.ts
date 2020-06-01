@@ -170,6 +170,7 @@ function situationsAddedMsg(added: number): string {
 
 
 function getNextSituation(availableSituations) {
+    console.log("getNextSituation")
     if (Object.keys(availableSituations).length === 0) {
         return {};
     }

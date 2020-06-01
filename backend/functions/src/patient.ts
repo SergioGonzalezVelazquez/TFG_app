@@ -82,6 +82,7 @@ export const onUpdatePatient = functions.firestore
                 hierarchy.forEach(async (situation, index) => {
                     const data = getSituationData(situation['itemCode']);
                     data['itemCode'] = situation['itemCode'];
+                    data['afterCompleteAttempts'] = 3;
 
                     Object.keys(data).forEach(key => {
                         if (data[key] === undefined) {
@@ -147,9 +148,9 @@ export const onExposureCreated = functions.firestore
             const todaysDate: Date = new Date();
 
             // Comprueba si la fecha del último ejercicio es hoy
-            if (date.setHours(0, 0, 0, 0) != todaysDate.setHours(0, 0, 0, 0)) {
+            if (date.setHours(0, 0, 0, 0) !== todaysDate.setHours(0, 0, 0, 0)) {
                 // Comprueba si la fecha del último ejercicio fue ayer
-                if (date.getFullYear() == todaysDate.getFullYear() && date.getMonth() == todaysDate.getMonth() && date.getDate() == (todaysDate.getDate() - 1))  {
+                if (date.getFullYear() === todaysDate.getFullYear() && date.getMonth() === todaysDate.getMonth() && date.getDate() === (todaysDate.getDate() - 1))  {
                     updatedDoc['currentDailyStreak'] = currentDailyStreak + 1;
                     if (updatedDoc['currentDailyStreak'] > bestDailyStreak) {
                         updatedDoc['bestDailyStreak'] = updatedDoc['currentDailyStreak'];
@@ -160,9 +161,7 @@ export const onExposureCreated = functions.firestore
                     if (updatedDoc['currentDailyStreak'] > bestDailyStreak) {
                         updatedDoc['bestDailyStreak'] = updatedDoc['currentDailyStreak'];
                     }
-
                 }
-
             }
         }
 

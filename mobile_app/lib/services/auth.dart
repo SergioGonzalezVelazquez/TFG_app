@@ -45,10 +45,12 @@ class AuthService {
 
     // Check daily streak
     DateTime lastExposure = this._user.patient.lastExerciseCompleted;
-    if (!isToday(lastExposure) && !isYesterday(lastExposure)) {
+    if (lastExposure != null &&
+        !isToday(lastExposure) &&
+        !isYesterday(lastExposure)) {
       this._user.patient.currentDailyStreak = 0;
       await this.updatePatient({"currentDailyStreak": 0});
-    } 
+    }
 
     // initialize subscription
     _patientSubscription = patientRef

@@ -53,7 +53,7 @@ class _ProgressCalendarState extends State<ProgressCalendar> {
         title: Text('Diario'),
       ),
       body: StreamBuilder<List<ExposureExercise>>(
-        stream: getExposures(),
+        stream: getExposuresAsStream(),
         builder: (BuildContext context,
             AsyncSnapshot<List<ExposureExercise>> snapshot) {
           if (snapshot.hasData) {

@@ -6,8 +6,9 @@ import 'package:tfg_app/pages/exercises/exercise_details.dart';
 
 class ExerciseItem extends StatelessWidget {
   final Exercise exercise;
+  final Function onUpdated;
 
-  ExerciseItem(this.exercise);
+  ExerciseItem(this.exercise, this.onUpdated);
 
   Widget _buildImage(BuildContext context) {
     Widget children;
@@ -33,22 +34,81 @@ class ExerciseItem extends StatelessWidget {
   }
 
   Widget _buildBlockedItem(BuildContext context) {
+    return Stack(
+      children: [
+        Container(
+          foregroundDecoration: BoxDecoration(
+            color: Colors.grey,
+            backgroundBlendMode: BlendMode.saturation,
+          ),
+          child: Card(
+            color: Colors.white,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                _buildImage(context),
+                SizedBox(
+                  height: 3,
+                ),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+                  child: Text(
+                    exercise.situationStr != null ? exercise.situationStr : '',
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyText2
+                        .apply(fontSizeFactor: 0.65),
+                    textAlign: TextAlign.justify,
+                  ),
+                ),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+                  child: Text(
+                    exercise.itemStr,
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyText2
+                        .apply(fontSizeFactor: 0.8),
+                    textAlign: TextAlign.justify,
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+              ],
+            ),
+          ),
+        ),
+        Positioned(
+          top: 8.0,
+          right: 8.0,
+          child: Container(
+            height: 25.0,
+            width: 25.0,
+            child: Image.asset("assets/images/bloquear.png"),
+          ),
+        )
+      ],
+    );
+  }
+
+  Widget _buildCompletedItem(BuildContext context) {
     return InkWell(
-      onTap: () {
-        Navigator.push(
+      onTap: () async {
+        await Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => ExerciseDetails(exercise),
           ),
         );
+        onUpdated.call();
       },
       child: Stack(
         children: [
           Container(
-            foregroundDecoration: BoxDecoration(
-              color: Colors.grey,
-              backgroundBlendMode: BlendMode.saturation,
-            ),
             child: Card(
               color: Colors.white,
               child: Column(
@@ -102,7 +162,7 @@ class ExerciseItem extends StatelessWidget {
                 color: Colors.white,
                 shape: BoxShape.circle,
               ),
-              child: Image.asset("assets/images/padlock.png"),
+              child: Image.asset("assets/images/comprobar_verde.png"),
             ),
           )
         ],
@@ -110,77 +170,16 @@ class ExerciseItem extends StatelessWidget {
     );
   }
 
-  Widget _buildCompletedItem(BuildContext context) {
-    return Stack(
-      children: [
-        Container(
-          child: Card(
-            color: Colors.white,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                _buildImage(context),
-                SizedBox(
-                  height: 3,
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
-                  child: Text(
-                    exercise.situationStr != null ? exercise.situationStr : '',
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyText2
-                        .apply(fontSizeFactor: 0.65),
-                    textAlign: TextAlign.justify,
-                  ),
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
-                  child: Text(
-                    exercise.itemStr,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyText2
-                        .apply(fontSizeFactor: 0.8),
-                    textAlign: TextAlign.justify,
-                  ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-              ],
-            ),
-          ),
-        ),
-        Positioned(
-          top: 8.0,
-          right: 8.0,
-          child: Container(
-            height: 25.0,
-            width: 25.0,
-            decoration: new BoxDecoration(
-              color: Colors.white,
-              shape: BoxShape.circle,
-            ),
-            child: Image.asset("assets/images/comprobar_verde.png"),
-          ),
-        )
-      ],
-    );
-  }
-
   Widget _buildInProgressItem(BuildContext context) {
     return InkWell(
-      onTap: () {
-        Navigator.push(
+      onTap: () async {
+        await Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => ExerciseDetails(exercise),
           ),
         );
+        onUpdated.call();
       },
       child: Container(
         child: Card(
