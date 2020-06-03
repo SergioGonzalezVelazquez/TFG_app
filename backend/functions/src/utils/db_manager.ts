@@ -7,6 +7,15 @@ const functions = require('firebase-functions');
 // regardless of Security Rules
 const db = admin.firestore();
 
+export async function writeMessage(isAgent: boolean, text: string, sessionId: string, index: number) {
+    console.log("write message: " + index);
+    console.log(text);
+    const collection = db.collection('dialogflow_sessions').doc(sessionId).collection('messages').doc();
+    // Atomically add a new message to the "messages" array field.
+    await writeInDB(collection, {
+        text: text, type: isAgent ? "bot" : "user", index: index, timestamp: admin.firestore.FieldValue.serverTimestamp()
+    });
+}
 
 export async function createTherapy(userId: string, data) {
     data['active'] = true;
@@ -29,8 +38,7 @@ export async function readUserId(sessionId: string): Promise<string> {
     return userId;
 }
 
-export async function readPatient(sessionId: string) {
-    const userId: string = await readUserId(sessionId);
+export async function readPatient(sessionId: string, userId: string) {
     const collection = db.collection('patient').doc(userId);
     const patientData = (await readFromDB(collection)).data();
     return patientData;

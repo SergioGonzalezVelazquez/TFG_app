@@ -85,6 +85,7 @@ class AuthService {
 
   /// Initialize service
   Future<void> init() async {
+    print("auth service init");
     if (!_initialized) {
       _initialized = true;
 
@@ -92,11 +93,15 @@ class AuthService {
       _firebaseAuth = FirebaseAuth.instance;
 
       // Get the currently signed-in user
+      print("await get signed in user");
       await _getSignedInUser();
+      print("fin get signed in user");
 
       if (isAuth) {
         print("isAuth");
         await _initializePatientListener(_user.id);
+      } else {
+        print("no auth");
       }
     }
   }
@@ -135,7 +140,7 @@ class AuthService {
     String status = PatientStatus.pretest_pending.toString().split(".")[1];
     await patientRef.document(userId).setData(
         {"status": status, "bestDailyStreak": 0, "currentDailyStreak": 0});
-    await _initializePatientListener(userId);
+    //await _initializePatientListener(userId);
   }
 
   Future<void> updatePatient(Map<String, dynamic> data) async {
@@ -156,6 +161,7 @@ class AuthService {
   /// https://firebase.google.com/docs/auth/android/google-signin
   /// https://fireship.io/lessons/flutter-firebase-google-oauth-firestore/
   Future<void> signInWithGoogle() async {
+    print("singInWithGoogle");
     // Step 1. Login with Google. This shows Google’s native login screen and provides
     // the idToken and accessToken
     GoogleSignIn googleSignIn = GoogleSignIn();
@@ -263,6 +269,8 @@ class AuthService {
         "name": currentUser.displayName,
         "created_at": DateTime.now()
       });
+    } else {
+      print("doc exists");
     }
 
     doc = await usersRef.document(currentUser.uid).get();
@@ -270,6 +278,7 @@ class AuthService {
     if (!exists) {
       await this._createPatientDocument(currentUser.uid);
     }
+    await _initializePatientListener(_user.id);
 
     // Save user id in shared preferences
     SharedPreferences prefs = await SharedPreferences.getInstance();

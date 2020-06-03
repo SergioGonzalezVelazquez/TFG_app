@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:tfg_app/routes.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:tfg_app/themes/style.dart';
 
 final DateFormat dateFormatter = new DateFormat('dd-MM-yyyy');
@@ -19,6 +20,14 @@ class STOPMiedo extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       routes: appRoutes,
       theme: CustomTheme.buildPurpleTheme(),
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: [
+        const Locale('es', 'ES'),
+      ],
     );
   }
 }

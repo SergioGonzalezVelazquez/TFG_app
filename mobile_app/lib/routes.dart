@@ -10,7 +10,6 @@ import 'package:tfg_app/pages/phy_activity/bluetooth_connection_page.dart';
 import 'package:tfg_app/pages/phy_activity/daily_heart_rate.dart';
 import 'package:tfg_app/pages/phy_activity/phy_activity_agreement.dart';
 import 'package:tfg_app/pages/phy_activity/phy_activity_settings.dart';
-import 'package:tfg_app/pages/chat/identify_situations.dart';
 import 'package:tfg_app/pages/home_page.dart';
 import 'package:tfg_app/pages/initial_page.dart';
 import 'package:tfg_app/pages/progress/progress_medals.dart';
@@ -69,5 +68,4 @@ final appRoutes = {
   PhyActivityAgreement.route: (BuildContext context) => PhyActivityAgreement(),
   DailyHeartRatePage.route: (BuildContext context) => DailyHeartRatePage(),
   PhyActivitySettings.route: (BuildContext context) => PhyActivitySettings(),
-  SituationsPage.route: (BuildContext context) => SituationsPage(),
 };

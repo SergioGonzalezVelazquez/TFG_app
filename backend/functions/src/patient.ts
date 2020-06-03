@@ -111,8 +111,6 @@ export const onUpdatePatient = functions.firestore
                 .collection("patient")
                 .doc(userId)
                 .update({ status: PatientStatus.in_exercise.toString(), hierarchyCompletedDate: admin.firestore.FieldValue.serverTimestamp() });
-
-
         }
         return Promise.resolve(SUCCESS_CODE);
 

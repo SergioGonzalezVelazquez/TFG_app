@@ -12,7 +12,7 @@ import * as admin from 'firebase-admin';
 
 const { WebhookClient, Payload } = require('dialogflow-fulfillment');
 
-import { readUserId, readPatient } from './utils/db_manager';
+import { readUserId, readPatient, writeMessage } from './utils/db_manager';
 import { getAnxietySuggestionsPayload, getSituationData, loopIdentitifySituations, startIdentifySituations } from './utils/situations';
 
 process.env.DEBUG = 'dialogflow:debug'; // enables lib debugging statements
@@ -33,9 +33,6 @@ export const dialogflowFulfillment = functions.https.onRequest(async (request, r
 
     // console.log(`agent properties. query: ${agent.query}; session: ${agent.session}; intent: ${agent.intent}; action: ${agent.action}; parameters: ${JSON.stringify(agent.parameters)}`);
 
-    //await writeUserMessage(session, agent.query);
-
-
     async function handleRequest(agent) {
         // El intent 'primera_sesion' es activado por la app móvil cuándo el usuario 
         // entra por primera vez en un chat con el agente. La respuesta debe ser contarle al usuario
@@ -43,113 +40,206 @@ export const dialogflowFulfillment = functions.https.onRequest(async (request, r
         console.log("intent: " + agent.intent);
         if (agent.intent === 'primera_sesion') {
 
-            addOriginalResponse();
-
             // Read patient type from db
             const session: string = agent.session.split("/").pop();
-            const patientType = (await readPatient(session))['type'];
+            const userId: string = await readUserId(session);
+            const patient = (await readPatient(session, userId));
+            const patientType = patient['type'];
+
+            // Initialize global context with patient type, messages count and userId
+            const globalParameters = {
+                userId: userId,
+                patient: patient,
+                messagesCount: 0
+            };
+
+
+            // Write bot original messages
+            const currentIndex = globalParameters.messagesCount;
+            globalParameters.messagesCount += agent.consoleMessages.length;
+            await addOriginalResponse(currentIndex);
+
 
             if (patientType.startsWith("1")) {
-                agent.add('La aplicación de la Desensibilización Sistemática requiere de unos pasos iniciales antes de empezar con las sesiones de exposición.');
-                agent.add('¿Empezamos?');
-
+                await addResponse('La aplicación de la Desensibilización Sistemática requiere de unos pasos iniciales antes de empezar con las sesiones de exposición.', ++globalParameters.messagesCount);
+                await addResponse('¿Empezamos?', ++globalParameters.messagesCount);
                 const context = { 'name': `identificar_situaciones-followup`, 'lifespan': 2 };
                 agent.context.set(context);
 
             }
             else if (patientType.startsWith("2")) {
-                agent.add('Gracias a tus respuestas en el cuestionario inicial hemos podido encontrar el tipo de terapia más apropiada');
-                agent.add('¿Empezamos?');
+                await addResponse('Gracias a tus respuestas en el cuestionario inicial hemos podido encontrar el tipo de terapia más apropiada', ++globalParameters.messagesCount);
+                await addResponse('¿Empezamos?', ++globalParameters.messagesCount);
             }
             // Pacientes de tipo 3
             else {
-                agent.add('Gracias a tus respuestas en el cuestionario inicial sabemos que conduces actualmente (o has dejado de hacerlo en un período corto de tiempo)');
-                agent.add('Sin embargo, necesitamos conocerte un poco más y saber qué situaciones te provocan ansiedad');
-                agent.add('¿Empezamos?');
+                await addResponse('Gracias a tus respuestas en el cuestionario inicial sabemos que conduces actualmente (o has dejado de hacerlo en un período corto de tiempo)', ++globalParameters.messagesCount);
+                await addResponse('Sin embargo, necesitamos conocerte un poco más y saber qué situaciones te provocan ansiedad', ++globalParameters.messagesCount);
+                await addResponse('¿Empezamos?', ++globalParameters.messagesCount);
             }
-        }
-        else if (agent.intent.startsWith("identificar_situaciones-neutra")) {
-            let situation = agent.intent.split("-")[2];
-            const confirm = agent.intent.split("-")[3];
-            addOriginalResponse();
-            if (confirm === 'yes') {
-                situation = situation.slice(0, 2) + "-" + situation.slice(2);
-                console.log("situation neutra: " + situation)
 
-                // Read itinerary from patient document
-                const session: string = agent.session.split("/").pop();
-                const itinerary = (await readPatient(session))['itinerary'];
-
-                console.log(itinerary)
-                const payload = getAnxietySuggestionsPayload(itinerary);
-                console.log(payload);
-
-                agent.add(
-                    new Payload(agent.UNSPECIFIED, payload, { rawPayload: true, sendAsMessage: true })
-                );
-                console.log("añadido")
-
-                // Custom parameters to pass with context
-                const parameters = {
-                    neutral: situation,
-                    itinerary: itinerary
-                };
-                const context = { 'name': `identificar_situaciones-ansiogena`, 'lifespan': 10, 'parameters': parameters };
-                agent.context.set(context);
-
-
-            }
-        } else if (agent.intent.startsWith("identificar_situaciones-ansiogena")) {
-            if (agent.intent === 'identificar_situaciones-ansiogena-yes') {
-                addOriginalResponse();
-                const contextParameters = agent.context.get('identificar_situaciones-ansiogena').parameters;
-                console.log("contextParameters")
-                console.log(contextParameters);
-                await startIdentifySituations(agent, contextParameters.itinerary, contextParameters.neutral, contextParameters.anxiety);
-            }
-            else {
-                const ansiogena = agent.query;
-                //await writeInDB("dialogflow_sessions", session, { ansiogena: ansiogena });
-                //let doc = (await readFromDB("dialogflow_sessions", session)).data()
-                const contextParameters = agent.context.get('identificar_situaciones-ansiogena').parameters;
-                const neutraCode = contextParameters.neutral;
-                console.log("neutraCode: " + neutraCode);
-                const neutraStr = getSituationData(neutraCode)['item'];
-                const ansiogenaStr = getSituationData(ansiogena)['item'];
-                agent.add('¡Entendido! Ya verás como con un trabajo continuo eres capaz de enfrentarte a esa situación sin ningún tipo de miedo.');
-                agent.add('Hasta ahora, hemos definido "' + neutraStr + '" cómo una situación que no te produce ansiedad.');
-                agent.add('Y, "' + ansiogenaStr + '" como la situación que mayor ansiedad te produce');
-                addOriginalResponse();
-
-                // Custom parameters to pass with context
-                const parameters = {
-                    neutral: contextParameters.neutral,
-                    itinerary: contextParameters.itinerary,
-                    anxiety: ansiogena
-                };
-                const context = { 'name': `identificar_situaciones-ansiogena`, 'lifespan': 5, 'parameters': parameters };
-                agent.context.set(context);
-                agent.context.set({ 'name': `identificar_situaciones-ansiogena-followup`, 'lifespan': 5 });
-            }
-        }
-        else if (agent.intent.startsWith("identificar_situaciones-listado")) {
-            addOriginalResponse();
-            await loopIdentitifySituations(agent);
-
+            console.log("globalParamters antes de asignarlo");
+            console.log(globalParameters)
+            const global = { 'name': `global_context`, 'lifespan': 20, 'parameters': globalParameters };
+            agent.context.set(global);
         }
         else {
-            addOriginalResponse();
+            const globalParameters = agent.context.get('global_context').parameters;
+            console.log("global Parameters en else");
+            console.log(globalParameters);
+
+            if (agent.intent.startsWith("identificar_situaciones-neutra")) {
+                let situation = agent.intent.split("-")[2];
+                const confirm = agent.intent.split("-")[3];
+
+                if (confirm === 'yes') {
+                    situation = situation.slice(0, 2) + "-" + situation.slice(2);
+                    console.log("situation neutra: " + situation)
+                    const itinerary = globalParameters.patient['itinerary'];
+
+                    console.log(itinerary)
+                    const payload = getAnxietySuggestionsPayload(itinerary);
+                    console.log(payload);
+
+                    agent.add(
+                        new Payload(agent.UNSPECIFIED, payload, { rawPayload: true, sendAsMessage: true })
+                    );
+
+                    // Custom parameters to pass with context
+                    const parameters = {
+                        neutral: situation,
+                        itinerary: itinerary
+                    };
+                    const context = { 'name': `identificar_situaciones-ansiogena`, 'lifespan': 10, 'parameters': parameters };
+                    agent.context.set(context);
+
+                }
+
+                // Write user messages
+                await writeMessage(false, agent.query, session, ++globalParameters.messagesCount);
+
+
+                // Write bot original messages
+                const currentIndex = globalParameters.messagesCount;
+                globalParameters.messagesCount += agent.consoleMessages.length;
+                await addOriginalResponse(currentIndex);
+
+                const global = { 'name': `global_context`, 'lifespan': 20, 'parameters': globalParameters };
+                agent.context.set(global);
+
+
+            } else if (agent.intent.startsWith("identificar_situaciones-ansiogena")) {
+
+                if (agent.intent === 'identificar_situaciones-ansiogena-yes') {
+                    // Write user messages
+                    await writeMessage(false, agent.query, session, ++globalParameters.messagesCount);
+
+                    // Write bot original messages
+                    const currentIndex = globalParameters.messagesCount;
+                    globalParameters.messagesCount += agent.consoleMessages.length;
+                    await addOriginalResponse(currentIndex);
+
+                    const contextParameters = agent.context.get('identificar_situaciones-ansiogena').parameters;
+                    console.log("contextParameters")
+                    console.log(contextParameters);
+                    await startIdentifySituations(agent, contextParameters.itinerary, contextParameters.neutral, contextParameters.anxiety, globalParameters);
+                }
+                else {
+                    const ansiogena = agent.query;
+                    //await writeInDB("dialogflow_sessions", session, { ansiogena: ansiogena });
+                    //let doc = (await readFromDB("dialogflow_sessions", session)).data()
+                    const contextParameters = agent.context.get('identificar_situaciones-ansiogena').parameters;
+                    const neutraCode = contextParameters.neutral;
+                    console.log("neutraCode: " + neutraCode);
+                    const neutraStr = getSituationData(neutraCode)['item'];
+                    const ansiogenaStr = getSituationData(ansiogena)['item'];
+                    await writeMessage(false, ansiogenaStr, session, ++globalParameters.messagesCount);
+                    await addResponse('¡Entendido! Ya verás como con un trabajo continuo eres capaz de enfrentarte a esa situación sin ningún tipo de miedo.', ++globalParameters.messagesCount);
+                    await addResponse('Hasta ahora, hemos definido "' + neutraStr + '" cómo una situación que no te produce ansiedad.', ++globalParameters.messagesCount);
+                    await addResponse('Y, "' + ansiogenaStr + '" como la situación que mayor ansiedad te produce', ++globalParameters.messagesCount);
+
+
+                    // Write bot original messages
+                    const currentIndex = globalParameters.messagesCount;
+                    globalParameters.messagesCount += agent.consoleMessages.length;
+                    await addOriginalResponse(currentIndex);
+
+                    // Custom parameters to pass with context
+                    const parameters = {
+                        neutral: contextParameters.neutral,
+                        itinerary: contextParameters.itinerary,
+                        anxiety: ansiogena
+                    };
+                    const context = { 'name': `identificar_situaciones-ansiogena`, 'lifespan': 5, 'parameters': parameters };
+                    agent.context.set(context);
+                    agent.context.set({ 'name': `identificar_situaciones-ansiogena-followup`, 'lifespan': 5 });
+
+                    const global = { 'name': `global_context`, 'lifespan': 20, 'parameters': globalParameters };
+                    agent.context.set(global);
+                }
+            }
+            else if (agent.intent.startsWith("identificar_situaciones-listado")) {
+                // Write user messages
+                let queryStr: string = '';
+                if (agent.query === 'indiferente') {
+                    queryStr = 'Indiferente';
+                }
+                else if (agent.query === 'poca_ansiedad') {
+                    queryStr = 'Me produce algo de ansiedad';
+                }
+                else {
+                    queryStr = 'Me produce bastante ansiedad';
+                }
+
+                // Write user messages
+                await writeMessage(false, queryStr, session, ++globalParameters.messagesCount);
+
+                // Write bot original messages
+                const currentIndex = globalParameters.messagesCount;
+                globalParameters.messagesCount += agent.consoleMessages.length;
+                await addOriginalResponse(currentIndex);
+
+                await loopIdentitifySituations(agent, globalParameters);
+
+            }
+            else {
+                // Write user messages
+                await writeMessage(false, agent.query, session, ++globalParameters.messagesCount);
+
+                // Write bot original messages
+                const currentIndex = globalParameters.messagesCount;
+                globalParameters.messagesCount += agent.consoleMessages.length;
+                await addOriginalResponse(currentIndex);
+
+                const global = { 'name': `global_context`, 'lifespan': 20, 'parameters': globalParameters };
+                agent.context.set(global);
+            }
         }
     }
 
-    function addOriginalResponse() {
-        agent.consoleMessages.forEach((message) => agent.add(message));
+    async function addResponse(message: string, index: number) {
+        agent.add(message);
+        await writeMessage(true, message, session, index);
     }
 
-    function clearOutgoingContexts() {
-        agent.contexts.forEach((context) => agent.context.set({ 'name': context.name, 'lifespan': 0 }));
+    async function addOriginalResponse(index: number) {
+        agent.consoleMessages.forEach(async (message) => {
+            await addResponse(message['text'], ++index);
+        });
     }
 
+
+    /*
+    async function writeAgentMessages() {
+        await agent.consoleMessages.forEach(async (message, index) => {
+            console.log(message['text'])
+            await writeMessage(true, message['text'], session, index)
+        });
+    }
+    */
+
+    // Write bot messages
+    //await writeAgentMessages();
 
     agent.handleRequest(handleRequest);
 

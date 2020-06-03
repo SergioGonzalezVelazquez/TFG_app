@@ -44,6 +44,7 @@ class DrivingActivityDetailsState extends State<DrivingActivityDetails> {
   }
 
   Future<void> _getHeartRate() async {
+    print("get heart rate");
     List<PhyActivity> result = [];
     Map<String, PhyActivity> timeHeartRateMap = new Map();
 
@@ -101,11 +102,15 @@ class DrivingActivityDetailsState extends State<DrivingActivityDetails> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     // Check on shared preferences if user has phyActivity enabled
+    /*
     bool phyActivity = prefs.getBool("phy_activity_enabled");
 
     if (phyActivity) {
-      await _getHeartRate();
+     await _getHeartRate();
     }
+    */
+
+     await _getHeartRate();
 
     //_locationList = await getDrivingRoutes(widget._activity.id);
     List locationData = await getDrivingRoutes(widget._activity.id);
@@ -120,9 +125,7 @@ class DrivingActivityDetailsState extends State<DrivingActivityDetails> {
 
       _polylines.add(
         Polyline(
-          color: phyActivity
-              ? _buildLocationColor(locationData[i]['timestamp'])
-              : Theme.of(context).primaryColor,
+          color:  _buildLocationColor(locationData[i]['timestamp']),
           visible: true,
           width: 4,
           geodesic: true,

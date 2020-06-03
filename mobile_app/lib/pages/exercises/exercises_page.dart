@@ -50,7 +50,7 @@ class _ExercisePageState extends State<ExercisePage> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Image.asset(
-            'assets/images/3658245.jpg',
+            'assets/images/3658240.jpg',
             height: MediaQuery.of(context).size.height * 0.3,
             fit: BoxFit.contain,
           ),
@@ -60,17 +60,16 @@ class _ExercisePageState extends State<ExercisePage> {
           RichText(
             textAlign: TextAlign.justify,
             text: TextSpan(
-              text: "La ",
+              text: "Cuando completes los pasos previos de la terepia te asignaremos un listado de  ",
               style: Theme.of(context).textTheme.bodyText2,
               children: <TextSpan>[
                 TextSpan(
-                  text: 'exposición en vivo ',
+                  text: 'ejercicios ',
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 TextSpan(
-                  text: '  ',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
+                  text: " que te ayudarán a exponerte de manera gradual a las situaciones temidas."
+                )
               ],
             ),
           ),

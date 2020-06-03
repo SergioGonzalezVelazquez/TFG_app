@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:tfg_app/models/message.dart';
 import 'package:tfg_app/models/patient.dart';
 import 'package:tfg_app/pages/chat/chat_message.dart';
-import 'package:tfg_app/pages/chat/identify_situations.dart';
 import 'package:tfg_app/services/auth.dart';
 import 'package:tfg_app/services/dialogflow.dart';
 import 'package:tfg_app/themes/custom_icon_icons.dart';
@@ -238,11 +237,13 @@ class _ChatPageState extends State<ChatPage> {
                   Visibility(
                     visible: true,
                     child: IconButton(
-                      icon: Icon(CustomIcon.list),
-                      onPressed: () =>
-                          Navigator.pushNamed(context, SituationsPage.route),
+                      icon: Icon(CustomIcon.send3),
+                      onPressed: _textController.text.isEmpty
+                          ? null
+                          : () => _handleSubmitted(_textController.text),
                     ),
                   ),
+                  /*
                   _textController.text.isEmpty
                       ? Material(
                           borderRadius: BorderRadius.circular(4),
@@ -264,7 +265,7 @@ class _ChatPageState extends State<ChatPage> {
                           icon: Icon(CustomIcon.send3),
                           onPressed: () =>
                               _handleSubmitted(_textController.text),
-                        ),
+                        ),*/
                 ],
               ),
             ),

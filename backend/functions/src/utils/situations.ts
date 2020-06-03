@@ -1,4 +1,4 @@
-import { createTherapy, readUserId, updatePatient } from "./db_manager";
+import { createTherapy, readUserId, updatePatient, writeMessage } from "./db_manager";
 import * as admin from 'firebase-admin';
 
 const { WebhookClient, Payload } = require('dialogflow-fulfillment');
@@ -9,7 +9,7 @@ function clearOutgoingContexts(agent) {
     agent.contexts.forEach((context) => agent.context.set({ 'name': context.name, 'lifespan': 0 }));
 }
 
-export async function startIdentifySituations(agent, itinerary: number, neutral: string, anxiety: string) {
+export async function startIdentifySituations(agent, itinerary: number, neutral: string, anxiety: string, globalParameters) {
     const parameters = {};
     parameters['neutral'] = neutral;
     parameters['anxiety'] = anxiety;
@@ -26,17 +26,17 @@ export async function startIdentifySituations(agent, itinerary: number, neutral:
     parameters['currentItemStr'] = firstSituationData.itemStr;
 
     if (Object.keys(parameters['available']).length > 1) {
-        agent.add('Vamos a empezar hablando sobre situaciones relacionadas con ' + firstSituationData.levelStr.toLowerCase());
+        await addResponse('Vamos a empezar hablando sobre situaciones relacionadas con ' + firstSituationData.levelStr.toLowerCase(), ++globalParameters.messagesCount, agent);
     }
     else {
-        agent.add('Nos vamos a centrar en situaciones relacionadas con ' + firstSituationData.levelStr.toLowerCase());
+        await addResponse('Nos vamos a centrar en situaciones relacionadas con ' + firstSituationData.levelStr.toLowerCase(), ++globalParameters.messagesCount, agent);
     }
 
     if (firstSituationData.level !== 'N1' && firstSituationData.level !== 'N2') {
-        agent.add('Concretamente, sobre' + firstSituationData.situationStr.toLowerCase());
+        await addResponse('Concretamente, sobre' + firstSituationData.situationStr.toLowerCase(), ++globalParameters.messagesCount, agent);
     }
 
-    agent.add('¿Qué ansiedad te provoca "' + firstSituationData.itemStr + '"?');
+    await addResponse('¿Qué ansiedad te provoca "' + firstSituationData.itemStr + '"?', ++globalParameters.messagesCount, agent);
 
     // Añadir sugerencias para repuesta rápida a la respuesta del agente
     const suggestions = [];
@@ -51,10 +51,15 @@ export async function startIdentifySituations(agent, itinerary: number, neutral:
     clearOutgoingContexts(agent);
     const context = { 'name': `identificar_situaciones-listado`, 'lifespan': 50, 'parameters': parameters };
     agent.context.set(context);
-    console.log(agent.contexts)
+    console.log(agent.contexts);
+
+    console.log("set global context desde start situations");
+    console.log(globalParameters)
+    const global = { 'name': `global_context`, 'lifespan': 20, 'parameters': globalParameters };
+    agent.context.set(global);
 }
 
-export async function loopIdentitifySituations(agent) {
+export async function loopIdentitifySituations(agent, globalParameters) {
     const contextParameters = agent.context.get('identificar_situaciones-listado').parameters;
     const newParameters = {};
     newParameters['included'] = contextParameters['included'];
@@ -72,14 +77,14 @@ export async function loopIdentitifySituations(agent) {
 
         // 16 situaciones: neutra, ansiogéna y 14 del listado
         if (newParameters['included'].length === 14) {
-            agent.add('¡Completado! Ya tenemos un listado de 16 situaciones temidas');
+            await addResponse('¡Completado! Ya tenemos un listado de 16 situaciones temidas',  ++globalParameters.messagesCount, agent);
             await endIdentifySituations(agent, contextParameters['neutral'], contextParameters['anxiety'], newParameters['included']);
             return;
         }
 
         // Cada 3 situaciones elegidas, recuerda al usuario cuántas lleva
         else if (newParameters['included'].length % 3 === 0) {
-            agent.add(situationsAddedMsg(contextParameters['included'].length));
+            await addResponse(situationsAddedMsg(contextParameters['included'].length),  ++globalParameters.messagesCount, agent);
         }
     }
 
@@ -87,7 +92,7 @@ export async function loopIdentitifySituations(agent) {
     const nextSituationData = getNextSituation(contextParameters['available']);
     if (nextSituationData['itemCode']) {
         if (contextParameters['currentLevel'] !== nextSituationData.level || contextParameters['currentSituation'] !== nextSituationData.situationCode) {
-            agent.add('Hablemos ahora sobre situaciones relacionadas con ' + nextSituationData.situationStr.toLowerCase());
+            await addResponse('Hablemos ahora sobre situaciones relacionadas con ' + nextSituationData.situationStr.toLowerCase(),  ++globalParameters.messagesCount, agent);
         }
 
         newParameters['neutral'] = contextParameters['neutral'];
@@ -98,7 +103,7 @@ export async function loopIdentitifySituations(agent) {
         newParameters['currentItemStr'] = nextSituationData.itemStr;
         newParameters['available'] = nextSituationData.available;
 
-        agent.add('¿Te produce ansiedad "' + nextSituationData.itemStr + '"?');
+        await addResponse('¿Te produce ansiedad "' + nextSituationData.itemStr + '"?',  ++globalParameters.messagesCount, agent);
         const suggestions = [];
         suggestions.push({ text: 'Indiferente', value: 'indiferente' });
         suggestions.push({ text: 'Me produce algo de ansiedad', value: 'poca_ansiedad' });
@@ -110,17 +115,20 @@ export async function loopIdentitifySituations(agent) {
         console.log(newParameters);
         const context = { 'name': `identificar_situaciones-listado`, 'lifespan': 50, 'parameters': newParameters };
         agent.context.set(context);
+
+        const global = { 'name': `global_context`, 'lifespan': 20, 'parameters': globalParameters };
+        agent.context.set(global);
     }
     // Ya se han propuesto todas las situaciones para este itinerario
     else {
         const length = newParameters['included'].length;
         // 11 situaciones, ansiógena, neutra y 9 o más del listado
         if (length >= 9) {
-            agent.add('¡Terminado! Ya tenemos un listado de ' + (length + 2) + ' situaciones temidas');
+            await addResponse('¡Terminado! Ya tenemos un listado de ' + (length + 2) + ' situaciones temidas',  ++globalParameters.messagesCount, agent);
             await endIdentifySituations(agent, contextParameters['neutral'], contextParameters['anxiety'], newParameters['included']);
         }
         else {
-            agent.add('Te has machacado todas las situaciones y sólo tenemos ' + length + ' elegidas');
+            await addResponse('He propuesto todas las situaciones todas las situaciones y sólo tenemos ' + length + ' elegidas',  ++globalParameters.messagesCount, agent);
             // TERMINAR CONVERSACIÓN
         }
     }
@@ -141,7 +149,6 @@ async function endIdentifySituations(agent, neutral: string, anxiety: string, si
         itemCode: anxiety,
         itemStr: anxietyData.item,
     }
-
 
     await createTherapy(userId, { neutra: neutralDoc, anxiety: anxietyDoc, situations: situations });
     await updatePatient(userId, { identifySituationsSessionId: session, identifySituationsDate: admin.firestore.FieldValue.serverTimestamp() });
@@ -296,14 +303,14 @@ function setInitialSituations(itinerary: number, neutralItem: string, anxietyIte
 }
 
 export function getSituationData(itemCode: string, level?: string) {
-    let situation: string = itemCode.split("-")[1];
+    const situation: string = itemCode.split("-")[1];
     let levelStr: string;
 
     if (!level) {
         level = getSituationLevel(itemCode);
     }
     levelStr = situationsTaxonomy[level]['category'];
-    let situationStr: string = situationsTaxonomy[level]['situations'][situation]['name'];
+    const situationStr: string = situationsTaxonomy[level]['situations'][situation]['name'];
 
     let itemStr: string = '';
     let itemImg;
@@ -314,7 +321,7 @@ export function getSituationData(itemCode: string, level?: string) {
     if (situationTaxonomy['variants']) {
         let variant: string = itemCode.split("-")[2];
         variant = variant.substring(0, variant.length - 1);
-        let variantStr: string = situationTaxonomy['variants'][variant]['name'];
+        const variantStr: string = situationTaxonomy['variants'][variant]['name'];
         itemStr = situationTaxonomy['variants'][variant]['items'][itemCode]['name'];
         itemImg = situationTaxonomy['variants'][variant]['items'][itemCode]['image'];
         itemAudio = situationTaxonomy['variants'][variant]['items'][itemCode]['audio'];
@@ -341,3 +348,10 @@ function getSituationLevel(itemCode: string): string {
         return (variant === "S1") ? "N6" : "N7";
     }
 }
+
+async function addResponse(message: string, index: number, agent) {
+    const session: string = agent.session.split("/").pop();
+    agent.add(message);
+    await writeMessage(true, message, session, index);
+}
+

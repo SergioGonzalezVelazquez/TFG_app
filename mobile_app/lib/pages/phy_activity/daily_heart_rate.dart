@@ -1,4 +1,6 @@
+import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
+import 'package:tfg_app/main.dart';
 import 'package:tfg_app/models/phy_activity.dart';
 import 'package:tfg_app/services/phy_activity_service.dart';
 import 'package:tfg_app/widgets/hear_rate_chart.dart';
@@ -38,6 +40,29 @@ class _DailyHeartRatePageState extends State<DailyHeartRatePage> {
   @override
   void dispose() {
     super.dispose();
+  }
+
+  ///https://github.com/jifalops/datetime_picker_formfield
+  Widget dateInput(GlobalKey<FormState> inputKey, DateTime initialValue,
+      Function onChanged) {
+    return Form(
+      key: inputKey,
+      child: DateTimeField(
+        onChanged: onChanged,
+        format: dateFormatter,
+        initialValue: initialValue,
+        onShowPicker: (context, currentValue) {
+          return showDatePicker(
+              context: context,
+              firstDate: DateTime(1900),
+              initialDate: currentValue ?? DateTime.now(),
+              lastDate: DateTime.now());
+        },
+        onSaved: (val) {
+          setState(() {});
+        },
+      ),
+    );
   }
 
   Future<void> _getPhyActivities(DateTime date) async {
@@ -105,7 +130,40 @@ class _DailyHeartRatePageState extends State<DailyHeartRatePage> {
                 });
               },
             ),
-            Text(formatter.format(_currentDate)),
+            InkWell(
+              onTap: () async {
+                DateTime date = await showDatePicker(
+                    context: context,
+                    firstDate: DateTime(1900),
+                    initialDate: DateTime.now(),
+                    helpText: "Selecciona una fecha".toUpperCase(),
+                    builder: (BuildContext context, Widget child) {
+                      return Theme(
+                        data: ThemeData.light().copyWith(
+                          primaryColor: Theme.of(context).primaryColor,
+                          accentColor:Theme.of(context).primaryColor,
+                          colorScheme: ColorScheme.light(
+                              primary: Theme.of(context).primaryColor),
+                          buttonTheme: ButtonThemeData(
+                              textTheme: ButtonTextTheme.primary),
+                        ),
+                        child: child,
+                      );
+                    },
+                    cancelText: "CANCELAR",
+                    locale: const Locale('es', 'ES'),
+                    lastDate: DateTime.now());
+                if (date != null) {
+                  setState(() {
+                    _currentDate = date;
+                    _getPhyActivities(_currentDate);
+                  });
+                }
+              },
+              child: Text(
+                formatter.format(_currentDate),
+              ),
+            ),
             IconButton(
               icon: Icon(
                 Icons.arrow_right,

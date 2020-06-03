@@ -121,8 +121,10 @@ dependencies:
   # Highly customizable, feature-packed Flutter Calendar with gestures, animations and multiple formats.
   table_calendar: ^2.2.3
 
-  # A flutter package to help you beautify your app popup, can be used in all platform
-  flutter_beautiful_popup: ^1.5.0
+  # A date time picker form field which has material
+  # design theme.
+  datetime_picker_formfield: ^1.0.0
+
 
 
   # eMOVI
@@ -130,10 +132,16 @@ dependencies:
   flutter_blue: ^0.6.3+1
   permission_handler: ^5.0.0+hotfix.5
 
+
+  # Localizations for the Flutter library
+  flutter_localizations:
+    sdk: flutter
+
 flutter_icons:
   image_path: "assets/icon/launcher_icon.png" 
   android: true
   ios: true
+
 
 
 dev_dependencies:
