@@ -2,6 +2,7 @@
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
 import 'package:tfg_app/models/exposure_exercise.dart';
+import 'package:tfg_app/themes/style.dart';
 
 class SelfEfficacyChart extends StatelessWidget {
   final List<charts.Series> seriesList;
@@ -34,10 +35,27 @@ class SelfEfficacyChart extends StatelessWidget {
             charts.TickSpec<num>(60),
             charts.TickSpec<num>(80),
             charts.TickSpec<num>(100),
-
           ],
         ),
       ),
+      behaviors: [
+        new charts.ChartTitle('Número de exposición',
+            behaviorPosition: charts.BehaviorPosition.bottom,
+            titleOutsideJustification:
+                charts.OutsideJustification.middleDrawArea,
+            titleStyleSpec: charts.TextStyleSpec(
+                fontSize: 10, fontFamily: CustomTheme.fontFamily),
+            outerPadding: 0,
+            innerPadding: 5),
+        new charts.ChartTitle('Escala de autoeficacia',
+            behaviorPosition: charts.BehaviorPosition.start,
+            titleStyleSpec: charts.TextStyleSpec(
+                fontSize: 10, fontFamily: CustomTheme.fontFamily),
+            titleOutsideJustification:
+                charts.OutsideJustification.middleDrawArea,
+            outerPadding: 0,
+            innerPadding: 5)
+      ],
     );
   }
 
@@ -49,7 +67,8 @@ class SelfEfficacyChart extends StatelessWidget {
     for (int i = 0; i < data.length; i++) {
       ExposureExercise exposure = data[i];
       selfEfficacyData.add(
-          new OrdinalData((i + 1).toString(), exposure.selfEfficacyBefore));
+        new OrdinalData((i + 1).toString(), exposure.selfEfficacyBefore),
+      );
     }
 
     return [

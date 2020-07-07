@@ -22,6 +22,8 @@ import java.util.Date;
 import java.util.HashMap;
 
 import es.uclm.esi.R;
+import es.uclm.esi.drive_detection.AutoDriveDetectionService;
+import es.uclm.esi.drive_detection.LocationDBHelper;
 import es.uclm.esi.mami.mibandlib.MiBand;
 import es.uclm.esi.stopmiedo.MainActivity;
 import io.reactivex.functions.Consumer;
@@ -292,6 +294,9 @@ public class MiBandServiceManager extends Service {
     public void onCreate() {
         Log.w(TAG, "CREATEANDO");
 
+        super.onCreate();
+        createNotificationChannel();
+
         phyActivityManager = new PhyActivityManager(new Date());
         inputOutputManager = new InputOutputManagement(this);
 
@@ -321,21 +326,12 @@ public class MiBandServiceManager extends Service {
         // A Foreground service must provide a notification for the status bar.
         Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setContentTitle("STOPMiedo")
-                .setContentText("eMOVI is active")
+                .setContentText("eMOVI se está ejecutando")
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentIntent(pendingIntent)
                 .build();
         startForeground(102, notification);
-
-        /*
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "messages").
-                setContentText("eMOVI is running in background")
-                .setContentTitle("eMOVI")
-                .setSmallIcon(R.mipmap.ic_launcher);
-        startForeground(101, builder.build());
-         */
     }
-
 
     public void createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

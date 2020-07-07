@@ -233,13 +233,17 @@ class _ProgressPageState extends State<ProgressPage> {
 
   Widget _buildMedalsList() {
     if (_authService.user.patient.exercises.isNotEmpty) {
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          _medalItem(_authService.user.patient.exercises[0]),
-          _medalItem(_authService.user.patient.exercises[1]),
-          _medalItem(_authService.user.patient.exercises[2])
-        ],
+      return Container(
+        height: MediaQuery.of(context).size.width * 0.3,
+        child: GridView.count(
+          crossAxisCount: 3,
+          mainAxisSpacing: 8.0,
+          children: [
+            ProgressMedalItem(_authService.user.patient.exercises[0]),
+            ProgressMedalItem(_authService.user.patient.exercises[1]),
+            ProgressMedalItem(_authService.user.patient.exercises[2]),
+          ],
+        ),
       );
     }
     return Text('');

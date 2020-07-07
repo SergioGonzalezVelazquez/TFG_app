@@ -82,21 +82,21 @@ class PhyActivitySettingsState extends State<PhyActivitySettings> {
             height: MediaQuery.of(context).size.height * 0.04,
           ),
           Text(
-            "Con esta función activada, STOPMiedo hace uso de los sensores de movimiento y localización para averiguar automáticamente si estás conduciendo.",
+            "Con esta función activada, STOPMiedo podrá comunicarse con una pulsera de actividad física para monitorizar tu frecuencia cardiaca. ",
             textAlign: TextAlign.justify,
           ),
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.03,
           ),
           Text(
-            "De esta forma podemos reconocer algunos eventos significativos en la conducción tales como frenazos, giros bruscos, acelerones, exceso de velocidad y distracciones con el teléfono.",
+            "De esta forma podemos generar informes de la variación del pulso cardiaco durante la conducción, determinando posibles taquicardias asociadas a situaciones generadoras de ansiedad.",
             textAlign: TextAlign.justify,
           ),
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.03,
           ),
           Text(
-            "Además, a través de la utilización de mapas, podrás hacer un seguimiento de tus rutas en coche.",
+            "Actualmente, STOPMiedo es compatible con las pulseras Xioami Mi Band 2 y Xiaomi Mi Band 3",
             textAlign: TextAlign.justify,
           ),
           SizedBox(

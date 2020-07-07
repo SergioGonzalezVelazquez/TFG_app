@@ -22,16 +22,20 @@ class DialogflowSession {
 }
 
 class DialogflowMessage {
+  final String id;
   final String type;
   final String text;
   final DateTime timestamp;
+  final int index;
 
-  DialogflowMessage({this.type, this.text, this.timestamp});
+  DialogflowMessage({this.id, this.type, this.text, this.timestamp, this.index});
 
   factory DialogflowMessage.fromDocument(DocumentSnapshot doc) {
     return DialogflowMessage(
+      id: doc.documentID,
       type: doc['type'],
       text: doc['text'],
+      index: doc['index'],
       timestamp: doc['timestamp'].toDate(),
     );
   }

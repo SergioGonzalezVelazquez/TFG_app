@@ -30,7 +30,7 @@ class DrivingActivity {
           ? LocationDetails.fromMap(doc['start_location_details'])
           : null,
       endTime: doc['end_time'],
-      endLocation: doc['start_location'],
+      endLocation: doc['end_location'],
       endLocationDetails: (doc['end_location_details'] != null)
           ? LocationDetails.fromMap(doc['end_location_details'])
           : null,

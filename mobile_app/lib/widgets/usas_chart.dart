@@ -3,6 +3,7 @@
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
 import 'package:tfg_app/models/exposure_exercise.dart';
+import 'package:tfg_app/themes/style.dart';
 
 class USAsChart extends StatelessWidget {
   final List<charts.Series> seriesList;
@@ -43,7 +44,25 @@ class USAsChart extends StatelessWidget {
           ],
         ),
       ),
-      behaviors: [new charts.SeriesLegend(), ],
+      behaviors: [
+        new charts.SeriesLegend(),
+        new charts.ChartTitle('Número de exposición',
+            behaviorPosition: charts.BehaviorPosition.bottom,
+            titleOutsideJustification:
+                charts.OutsideJustification.middleDrawArea,
+            titleStyleSpec: charts.TextStyleSpec(
+                fontSize: 10, fontFamily: CustomTheme.fontFamily),
+            outerPadding: 0,
+            innerPadding: 5),
+        new charts.ChartTitle('Ansiedad (USAs)',
+            behaviorPosition: charts.BehaviorPosition.start,
+            titleStyleSpec: charts.TextStyleSpec(
+                fontSize: 10, fontFamily: CustomTheme.fontFamily),
+            titleOutsideJustification:
+                charts.OutsideJustification.middleDrawArea,
+            outerPadding: 0,
+            innerPadding: 5),
+      ],
     );
   }
 
@@ -68,7 +87,7 @@ class USAsChart extends StatelessWidget {
         data: beforeData,
       ),
       new charts.Series<LinearData, String>(
-        id: 'Después',
+        id: 'Durante',
         colorFn: (_, __) => charts.MaterialPalette.purple.shadeDefault.lighter,
         domainFn: (LinearData sales, _) => sales.index,
         measureFn: (LinearData sales, _) => sales.usas,

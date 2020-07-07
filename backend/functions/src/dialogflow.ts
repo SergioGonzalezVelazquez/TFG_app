@@ -21,9 +21,6 @@ export const dialogflowFulfillment = functions.https.onRequest(async (request, r
     // Create an instance of the class that handles the communication 
     // with Dialogflow's webhook fulfillment 
     const agent = new WebhookClient({ request, response });
-    console.log("contexts:")
-    console.log(agent.contexts)
-
     console.log('Dialogflow Request headers: ' + JSON.stringify(request.headers));
     console.log('Dialogflow Request body: ' + JSON.stringify(request.body));
 
@@ -37,7 +34,6 @@ export const dialogflowFulfillment = functions.https.onRequest(async (request, r
         // El intent 'primera_sesion' es activado por la app móvil cuándo el usuario 
         // entra por primera vez en un chat con el agente. La respuesta debe ser contarle al usuario
         // lo que el agente es capaz de hacer, y en función del tipo de paciente, añadir un contexto u otro.
-        console.log("intent: " + agent.intent);
         if (agent.intent === 'primera_sesion') {
 
             // Read patient type from db
@@ -78,28 +74,19 @@ export const dialogflowFulfillment = functions.https.onRequest(async (request, r
                 await addResponse('¿Empezamos?', ++globalParameters.messagesCount);
             }
 
-            console.log("globalParamters antes de asignarlo");
-            console.log(globalParameters)
             const global = { 'name': `global_context`, 'lifespan': 20, 'parameters': globalParameters };
             agent.context.set(global);
         }
         else {
             const globalParameters = agent.context.get('global_context').parameters;
-            console.log("global Parameters en else");
-            console.log(globalParameters);
-
             if (agent.intent.startsWith("identificar_situaciones-neutra")) {
                 let situation = agent.intent.split("-")[2];
                 const confirm = agent.intent.split("-")[3];
 
                 if (confirm === 'yes') {
                     situation = situation.slice(0, 2) + "-" + situation.slice(2);
-                    console.log("situation neutra: " + situation)
                     const itinerary = globalParameters.patient['itinerary'];
-
-                    console.log(itinerary)
                     const payload = getAnxietySuggestionsPayload(itinerary);
-                    console.log(payload);
 
                     agent.add(
                         new Payload(agent.UNSPECIFIED, payload, { rawPayload: true, sendAsMessage: true })
@@ -140,8 +127,6 @@ export const dialogflowFulfillment = functions.https.onRequest(async (request, r
                     await addOriginalResponse(currentIndex);
 
                     const contextParameters = agent.context.get('identificar_situaciones-ansiogena').parameters;
-                    console.log("contextParameters")
-                    console.log(contextParameters);
                     await startIdentifySituations(agent, contextParameters.itinerary, contextParameters.neutral, contextParameters.anxiety, globalParameters);
                 }
                 else {
@@ -150,7 +135,6 @@ export const dialogflowFulfillment = functions.https.onRequest(async (request, r
                     //let doc = (await readFromDB("dialogflow_sessions", session)).data()
                     const contextParameters = agent.context.get('identificar_situaciones-ansiogena').parameters;
                     const neutraCode = contextParameters.neutral;
-                    console.log("neutraCode: " + neutraCode);
                     const neutraStr = getSituationData(neutraCode)['item'];
                     const ansiogenaStr = getSituationData(ansiogena)['item'];
                     await writeMessage(false, ansiogenaStr, session, ++globalParameters.messagesCount);

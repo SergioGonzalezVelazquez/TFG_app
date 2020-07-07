@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +13,7 @@ import 'package:tfg_app/services/firestore.dart';
 import 'package:tfg_app/services/phy_activity_service.dart';
 import 'package:tfg_app/widgets/hear_rate_chart.dart';
 import 'package:tfg_app/widgets/progress.dart';
+import 'dart:ui' as ui;
 
 class DrivingActivityDetails extends StatefulWidget {
   final DrivingActivity _activity;
@@ -26,6 +29,9 @@ class DrivingActivityDetailsState extends State<DrivingActivityDetails> {
   Set<Marker> _markers = {};
   bool _isLoading = true;
 
+  BitmapDescriptor _startLocationIcon;
+  BitmapDescriptor _endLocationIcon;
+
   PhyActivityService _phyActivityService = PhyActivityService();
 
   // List of phyActivities from 5 minutes before start driving until 5 minutes after finishing driving
@@ -35,6 +41,22 @@ class DrivingActivityDetailsState extends State<DrivingActivityDetails> {
   Map<String, PhyActivity> _timeHeartRate = new Map();
 
   List<DrivingEvent> _eventsData;
+  List<DrivingEvent> _hardTurnEvents = [];
+  List<DrivingEvent> _hardBrakingEvents = [];
+  List<DrivingEvent> _phoneDistractionEvents = [];
+  List<DrivingEvent> _parkingEvents = [];
+  List<DrivingEvent> _speedEvents = [];
+  List<DrivingEvent> _hardAccelerationEvents = [];
+
+  // Icons for markers
+  Uint8List _startIcon;
+  Uint8List _endIcon;
+  Uint8List _hardTurnIcon;
+  Uint8List _hardBrakingIcon;
+  Uint8List _phoneDistractionIcon;
+  Uint8List _parkingIcon;
+  Uint8List _speedIcon;
+  Uint8List _hardAccelerationIcon;
 
   @override
   void initState() {
@@ -44,7 +66,6 @@ class DrivingActivityDetailsState extends State<DrivingActivityDetails> {
   }
 
   Future<void> _getHeartRate() async {
-    print("get heart rate");
     List<PhyActivity> result = [];
     Map<String, PhyActivity> timeHeartRateMap = new Map();
 
@@ -55,7 +76,8 @@ class DrivingActivityDetailsState extends State<DrivingActivityDetails> {
       DateTime dateTo = widget._activity.endTime.toDate();
       dateTo = dateTo.add(Duration(minutes: 5));
 
-      result = await _phyActivityService.read(dateFrom, dateTo, fillWithNull: true);
+      result =
+          await _phyActivityService.read(dateFrom, dateTo, fillWithNull: true);
 
       // Build map with pair of time (hh:mm)-PhyActicity object
       result.forEach((item) {
@@ -67,15 +89,22 @@ class DrivingActivityDetailsState extends State<DrivingActivityDetails> {
 
         timeHeartRateMap[hour] = item;
       });
-
-      print("keys");
-      print(timeHeartRateMap.keys);
     }
 
     setState(() {
       _timeHeartRate = timeHeartRateMap;
       _heartRate = result;
     });
+  }
+
+  Future<Uint8List> getBytesFromAsset(String path, int width) async {
+    ByteData data = await rootBundle.load(path);
+    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(),
+        targetWidth: width);
+    ui.FrameInfo fi = await codec.getNextFrame();
+    return (await fi.image.toByteData(format: ui.ImageByteFormat.png))
+        .buffer
+        .asUint8List();
   }
 
   Color _buildLocationColor(Timestamp timestamp) {
@@ -89,13 +118,34 @@ class DrivingActivityDetailsState extends State<DrivingActivityDetails> {
     }
 
     PhyActivity activity = _timeHeartRate[hour];
-    if (activity.heartRate < 80) {
-      return Colors.green;
-    } else if (activity.heartRate < 100) {
-      return Colors.orange;
-    } else {
-      return Colors.red;
+    if (activity != null && activity.heartRate != null) {
+      if (activity.heartRate < 80) {
+        return Colors.green;
+      } else if (activity.heartRate < 100) {
+        return Colors.orange;
+      } else {
+        return Colors.red;
+      }
     }
+    return Colors.blue;
+  }
+
+  Future<void> _decodeIcons() async {
+    _startIcon = await getBytesFromAsset('assets/images/pin.png', 60);
+    _endIcon = await getBytesFromAsset('assets/images/finish.png', 60);
+
+    _hardTurnIcon =
+        await getBytesFromAsset('assets/images/ubicacion_turn.png', 60);
+    _hardBrakingIcon =
+        await getBytesFromAsset('assets/images/ubicacion_braking.png', 60);
+    _phoneDistractionIcon =
+        await getBytesFromAsset('assets/images/ubicacion_phone.png', 60);
+    _parkingIcon =
+        await getBytesFromAsset('assets/images/ubicacion_parking.png', 60);
+    _speedIcon =
+        await getBytesFromAsset('assets/images/ubicacion_speed.png', 60);
+    _hardAccelerationIcon =
+        await getBytesFromAsset('assets/images/ubicacion_acceleration.png', 60);
   }
 
   Future<void> _buildDrivingRoute() async {
@@ -109,45 +159,109 @@ class DrivingActivityDetailsState extends State<DrivingActivityDetails> {
      await _getHeartRate();
     }
     */
-
-     await _getHeartRate();
+    await _decodeIcons();
+    await _getHeartRate();
 
     //_locationList = await getDrivingRoutes(widget._activity.id);
     List locationData = await getDrivingRoutes(widget._activity.id);
+
+    // Fin Borrar
     _eventsData = await getDrivingEvents(widget._activity.id);
+    _buildEventsLists();
     int sizeLocationDataList = locationData.length - 1;
+    print("size: " + sizeLocationDataList.toString());
 
     for (int i = 0; i < sizeLocationDataList; i++) {
-      LatLng point1 = new LatLng(locationData[i]['location'].latitude,
-          locationData[i]['location'].longitude);
-      LatLng point2 = new LatLng(locationData[i + 1]['location'].latitude,
-          locationData[i + 1]['location'].longitude);
-
-      _polylines.add(
-        Polyline(
-          color:  _buildLocationColor(locationData[i]['timestamp']),
-          visible: true,
-          width: 4,
-          geodesic: true,
-          points: [point1, point2],
-          polylineId: PolylineId(locationData[i]['time'].toString()),
-        ),
-      );
+      if (locationData[i]['location'] != null &&
+          locationData[i + 1]['location'] != null) {
+        LatLng point1 = new LatLng(locationData[i]['location'].latitude,
+            locationData[i]['location'].longitude);
+        LatLng point2 = new LatLng(locationData[i + 1]['location'].latitude,
+            locationData[i + 1]['location'].longitude);
+            
+            print(i);
+        _polylines.add(
+          Polyline(
+            color: _buildLocationColor(locationData[i]['timestamp']),
+            visible: true,
+            width: 4,
+            geodesic: true,
+            points: [point1, point2],
+            polylineId: PolylineId(locationData[i]['time'].toString()),
+          ),
+        );
+      }
     }
     // Add start driving marker
     _markers.add(
       Marker(
         markerId: MarkerId("driving-start"),
+        icon: BitmapDescriptor.fromBytes(_startIcon),
         infoWindow: InfoWindow(
             title: "Comienzo de la conducción",
             snippet: widget._activity.startLocationDetails.formattedAddress),
-        position: LatLng(widget._activity.startLocation.latitude,
-            widget._activity.startLocation.longitude),
+        position: LatLng(locationData[0]['location'].latitude,
+            locationData[0]['location'].longitude),
       ),
     );
 
-    setState(() {
-      _isLoading = false;
+    // Add end driving marker
+    /*
+    _markers.add(
+      Marker(
+        markerId: MarkerId("driving-end"),
+        icon: BitmapDescriptor.fromBytes(_endIcon),
+        infoWindow: InfoWindow(
+            title: "Fin de la conducción",
+            snippet:
+                widget._activity.endLocationDetails?.formattedAddress ?? ""),
+        position: LatLng(widget._activity.endLocation.latitude,
+            widget._activity.endLocation.longitude),
+      ),
+    );
+    */
+    if (this.mounted) {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+  Marker _buildEventMarker(DrivingEvent event, Uint8List icon) {
+    return Marker(
+      markerId:
+          MarkerId(event.type.toString() + "_" + event.timestamp.toString()),
+      icon: BitmapDescriptor.fromBytes(icon),
+      position: LatLng(event.location.latitude, event.location.longitude),
+    );
+  }
+
+  void _buildEventsLists() {
+    _eventsData.forEach((event) {
+      if (event.location != null) {
+        Uint8List icon;
+        if (event.type == DrivingEventType.HARD_ACCELERATION) {
+          _hardAccelerationEvents.add(event);
+          icon = _hardAccelerationIcon;
+        } else if (event.type == DrivingEventType.HARD_BRAKING) {
+          _hardBrakingEvents.add(event);
+          icon = _hardBrakingIcon;
+        } else if (event.type == DrivingEventType.HARD_TURN) {
+          _hardTurnEvents.add(event);
+          icon = _hardTurnIcon;
+        } else if (event.type == DrivingEventType.PARKING) {
+          _parkingEvents.add(event);
+          icon = _parkingIcon;
+        } else if (event.type == DrivingEventType.PHONE_DISTRACTION) {
+          _phoneDistractionEvents.add(event);
+          icon = _phoneDistractionIcon;
+        } else if (event.type == DrivingEventType.SPEEDING) {
+          _speedEvents.add(event);
+          icon = _speedIcon;
+        }
+
+        _markers.add(_buildEventMarker(event, icon));
+      }
     });
   }
 
@@ -170,7 +284,8 @@ class DrivingActivityDetailsState extends State<DrivingActivityDetails> {
     if (_heartRate == null || _heartRate.isEmpty) {
       childs = [Text("No hay disponibles datos de frecuencia cardiaca")];
     } else {
-      Map<String, int> result = _phyActivityService.calculateMinMaxMedian(_heartRate);
+      Map<String, int> result =
+          _phyActivityService.calculateMinMaxMedian(_heartRate);
       int max = result['max'];
       int median = result['median'];
       int min = result['min'];
@@ -296,8 +411,53 @@ class DrivingActivityDetailsState extends State<DrivingActivityDetails> {
           SizedBox(
             height: 15,
           ),
+          _eventCount("Estacionamiento", "parking.png", _parkingEvents.length),
+          _eventCount("Frenazos", "brake.png", _hardBrakingEvents.length),
+          _eventCount(
+              "Acelerones", "speed.png", _hardAccelerationEvents.length),
+          _eventCount(
+              "Giros bruscos", "steering-wheel.png", _hardTurnEvents.length),
+          _eventCount("Distracciones", "smartphone.png",
+              _phoneDistractionEvents.length),
+          _eventCount("Exceso de velocidad", "fast.png", _speedEvents.length),
         ],
       ),
+    );
+  }
+
+  Widget _eventCount(String text, String image, int count) {
+    return Column(
+      children: [
+        Row(
+          children: [
+            Container(
+              width: MediaQuery.of(context).size.width * 0.4,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(text),
+                  SizedBox(
+                    height: 7,
+                  ),
+                  Image.asset(
+                    'assets/images/' + image,
+                    width: MediaQuery.of(context).size.width * 0.12,
+                    fit: BoxFit.contain,
+                  ),
+                ],
+              ),
+            ),
+            Text(
+              count.toString(),
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyText2
+                  .apply(fontSizeFactor: 1.5),
+            )
+          ],
+        ),
+        Divider(),
+      ],
     );
   }
 

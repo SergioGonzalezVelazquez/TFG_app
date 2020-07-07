@@ -40,6 +40,7 @@ class _ChatResumeState extends State<ChatResume> {
         await getDialogflowSessionById(widget.sessionId);
     if (session != null) {
       session.messages.forEach((element) {
+        print("id: " + element.id + ", text: " + element.text + " (" + element.index.toString() + ")");
         if (element.type == "user") {
           _messages.insert(
             0,

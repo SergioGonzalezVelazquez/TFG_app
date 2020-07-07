@@ -8,7 +8,7 @@ import 'package:tfg_app/widgets/buttons.dart';
 class PhyActivityAgreement extends StatefulWidget {
   static const route = "/phyActivityAgreement";
 
-  final List<String> compatibleDevices = ["Xiaomi MiBand 2", "Xiaomi MiBand 3"];
+  static List<String> compatibleDevices = ["Xiaomi MiBand 2", "Xiaomi MiBand 3"];
 
   @override
   State<PhyActivityAgreement> createState() => PhyActivityAgreementState();
@@ -77,7 +77,7 @@ class PhyActivityAgreementState extends State<PhyActivityAgreement> {
             height: MediaQuery.of(context).size.height * 0.07,
           ),
           Text(
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras molestie leo quis enim lobortis mattis. Praesent lobortis erat orci. Duis a metus ullamcorper. ",
+            "Conecta una pulsera de actividad física para obtener informes de tu pulso cardíaco durante la conducción",
             textAlign: TextAlign.justify,
           ),
           SizedBox(
@@ -105,7 +105,7 @@ class PhyActivityAgreementState extends State<PhyActivityAgreement> {
 
   List<Widget> _buildCompatibleDevicesList() {
     List<Widget> items = [];
-    widget.compatibleDevices.forEach((element) {
+    PhyActivityAgreement.compatibleDevices.forEach((element) {
       items.add(
         new Row(
           children: [

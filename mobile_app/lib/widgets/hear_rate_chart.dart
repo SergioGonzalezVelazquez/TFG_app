@@ -6,6 +6,7 @@ import 'dart:math';
 import 'package:charts_flutter/flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:tfg_app/models/phy_activity.dart';
+import 'package:tfg_app/themes/style.dart';
 
 class HeartRateChart extends StatelessWidget {
   final List<charts.Series> seriesList;
@@ -41,6 +42,22 @@ class HeartRateChart extends StatelessWidget {
     );
   }
 
+  charts.ChartTitle ylabel = new charts.ChartTitle('Tiempo',
+      behaviorPosition: charts.BehaviorPosition.bottom,
+      titleOutsideJustification: charts.OutsideJustification.endDrawArea,
+      titleStyleSpec: charts.TextStyleSpec(
+          fontSize: 11, fontFamily: CustomTheme.fontFamily),
+      outerPadding: 0,
+      innerPadding: 5);
+
+  charts.ChartTitle xlabel = new charts.ChartTitle('Latidos por minuto',
+      behaviorPosition: charts.BehaviorPosition.start,
+      titleStyleSpec: charts.TextStyleSpec(
+          fontSize: 11, fontFamily: CustomTheme.fontFamily),
+      titleOutsideJustification: charts.OutsideJustification.middleDrawArea,
+      outerPadding: 7,
+      innerPadding: 0);
+
   @override
   Widget build(BuildContext context) {
     return new charts.TimeSeriesChart(seriesList,
@@ -57,11 +74,12 @@ class HeartRateChart extends StatelessWidget {
           showAxisLine: false,
           tickProviderSpec: new charts.StaticNumericTickProviderSpec(
             <charts.TickSpec<num>>[
+              charts.TickSpec<num>(40),
               charts.TickSpec<num>(60),
               charts.TickSpec<num>(80),
               charts.TickSpec<num>(100),
               charts.TickSpec<num>(120),
-              charts.TickSpec<num>(140),
+
             ],
           ),
         ),
@@ -100,6 +118,8 @@ class HeartRateChart extends StatelessWidget {
                   ]
                 : [],
           ),
+          xlabel,
+          ylabel,
           new charts.PanAndZoomBehavior(),
           LinePointHighlighter(symbolRenderer: CustomCircleSymbolRenderer())
         ],

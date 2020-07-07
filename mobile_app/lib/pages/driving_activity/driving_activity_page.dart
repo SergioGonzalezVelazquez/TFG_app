@@ -80,14 +80,14 @@ class _DrivingActivityPageState extends State<DrivingActivityPage>
           unselectedLabelColor: Colors.black38,
           labelColor: Theme.of(context).primaryColor,
           tabs: [
+            new Tab(
+              icon: new Icon(CustomIcon.list),
+              text: "Todas",
+            ),
             new Tab(icon: new Icon(CustomIcon.month), text: "Semana"),
             new Tab(
               icon: new Icon(CustomIcon.week),
               text: "Mes",
-            ),
-            new Tab(
-              icon: new Icon(CustomIcon.list),
-              text: "Todas",
             ),
           ],
           controller: _tabController,

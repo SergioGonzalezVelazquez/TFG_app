@@ -51,10 +51,6 @@ export async function startIdentifySituations(agent, itinerary: number, neutral:
     clearOutgoingContexts(agent);
     const context = { 'name': `identificar_situaciones-listado`, 'lifespan': 50, 'parameters': parameters };
     agent.context.set(context);
-    console.log(agent.contexts);
-
-    console.log("set global context desde start situations");
-    console.log(globalParameters)
     const global = { 'name': `global_context`, 'lifespan': 20, 'parameters': globalParameters };
     agent.context.set(global);
 }
@@ -63,7 +59,6 @@ export async function loopIdentitifySituations(agent, globalParameters) {
     const contextParameters = agent.context.get('identificar_situaciones-listado').parameters;
     const newParameters = {};
     newParameters['included'] = contextParameters['included'];
-    console.log(contextParameters);
 
     const answer = agent.query;
     if (answer !== 'indiferente') {
@@ -111,8 +106,6 @@ export async function loopIdentitifySituations(agent, globalParameters) {
         agent.add(
             new Payload(agent.UNSPECIFIED, { suggestions: suggestions }, { rawPayload: true, sendAsMessage: true })
         );
-        console.log('new parameters');
-        console.log(newParameters);
         const context = { 'name': `identificar_situaciones-listado`, 'lifespan': 50, 'parameters': newParameters };
         agent.context.set(context);
 
@@ -177,7 +170,6 @@ function situationsAddedMsg(added: number): string {
 
 
 function getNextSituation(availableSituations) {
-    console.log("getNextSituation")
     if (Object.keys(availableSituations).length === 0) {
         return {};
     }

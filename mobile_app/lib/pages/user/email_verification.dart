@@ -168,7 +168,7 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
             height: MediaQuery.of(context).size.height * 0.01,
           ),
           Text(
-            "¡Haga click en el enlace que ha recibido para empezar!",
+            "¡Haz click en el enlace que has recibido para empezar!",
             textAlign: TextAlign.justify,
           ),
           SizedBox(

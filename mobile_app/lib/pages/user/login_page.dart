@@ -83,7 +83,7 @@ class _LoginPageState extends State<LoginPage> {
         break;
       case 'ERROR_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL':
         authError =
-            'Esta cuenta está asociada a . Por favor, inicie sesión con ella.';
+            'Esta cuenta de correo electrónico ya está asociada a otro método de acceso. ';
         break;
       case 'ERROR_OPERATION_NOT_ALLOWED':
         authError = 'ERROR_OPERATION_NOT_ALLOWED';

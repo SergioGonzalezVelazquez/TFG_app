@@ -97,7 +97,7 @@ class _ExerciseProgressState extends State<ExerciseProgress> {
               _tableCellHeader("Fijada"),
               _tableCellHeader("Real"),
               _tableCellHeader("Antes"),
-              _tableCellHeader("Después"),
+              _tableCellHeader("Durante"),
             ],
           ),
         ],
@@ -265,7 +265,7 @@ class _ExerciseProgressState extends State<ExerciseProgress> {
         children: [
           _tableCellHeader("#"),
           _tableCellHeader("Temores"),
-          _tableCellHeader("Sensaciones experimentadas"),
+          _tableCellHeader("Sensaciones reales"),
         ],
       ),
     ];
@@ -364,7 +364,7 @@ class _ExerciseProgressState extends State<ExerciseProgress> {
             height: MediaQuery.of(context).size.height * 0.05,
           ),
           _buildTitle(
-              "Evolución de la ansiedad antes y después de la exposición",
+              "Evolución de la ansiedad antes y durante la exposición",
               description: [
                 "Se utiliza una puntuación de 0 a 100 USAs, dónde el 0 representa ausencia de ansiedad y el 100 una ansiedad extrema."
               ]),
@@ -382,9 +382,9 @@ class _ExerciseProgressState extends State<ExerciseProgress> {
             height: MediaQuery.of(context).size.height * 0.05,
           ),
           _buildTitle(
-              "Informes referidos al pánico y sensaciones experimentadas",
+              "Informe referido al pánico y sensaciones experimentadas",
               description: [
-                "En esta tabla puedes comparar situaciones que pensabas que ibas a experimentar durante el ejercicio con las sensaciones que realmente has experimentado."
+                "En esta tabla puedes comparar sensaciones que pensabas que ibas a experimentar durante el ejercicio con las sensaciones que realmente has experimentado."
               ]),
           _buildTablePanic(),
         ],

@@ -78,7 +78,6 @@ public class AutoDriveDetectionService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        sendMessage("AutoDriveDetectionService started " + "28/04 v1");
         createNotificationChannel();
         Intent notificationIntent = new Intent(this, MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this,
@@ -87,7 +86,7 @@ public class AutoDriveDetectionService extends Service {
         // A Foreground service must provide a notification for the status bar.
         Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setContentTitle("STOPMiedo")
-                .setContentText("Auto drive detection service is active")
+                .setContentText("El servicio de detección de la condución se está ejecutando en segundo plano")
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentIntent(pendingIntent)
                 .build();

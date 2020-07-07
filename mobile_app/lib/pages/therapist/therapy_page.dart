@@ -177,26 +177,49 @@ class _TherapistPageState extends State<TherapistPage> {
 
   Widget _stepItem(int step, IconData icon, Widget info,
       {bool isLast = false, bool completed = false, bool inProgress = false}) {
-    Color color = (completed)
-        ? Colors.green
-        : (inProgress ? Theme.of(context).primaryColor : Colors.grey);
+    Color color =
+        completed || inProgress ? Theme.of(context).primaryColor : Colors.grey;
     return IntrinsicHeight(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Column(
             children: [
-              Container(
-                width: MediaQuery.of(context).size.width / 8,
-                height: MediaQuery.of(context).size.width / 8,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                    color: color,
-                    width: 2.0,
+              Stack(
+                children: [
+                  Container(
+                    width: MediaQuery.of(context).size.width / 8,
+                    height: MediaQuery.of(context).size.width / 8,
+                    decoration: BoxDecoration(
+                      color: completed ? color : Colors.white,
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: color,
+                        width: 2.0,
+                      ),
+                    ),
+                    child: Center(
+                      child:
+                          Icon(icon, color: !completed ? color : Colors.white),
+                    ),
                   ),
-                ),
-                child: Center(child: Icon(icon, color: color)),
+                  Visibility(
+                    visible: completed,
+                    child: Positioned(
+                      top: 0.0,
+                      right: 0.0,
+                      child: Container(
+                        height: 13.0,
+                        width: 13.0,
+                        decoration: new BoxDecoration(
+                          color: Colors.white,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Image.asset("assets/images/comprobar_verde.png"),
+                      ),
+                    ),
+                  )
+                ],
               ),
               // Separador vertical entre items
               Expanded(
@@ -323,7 +346,7 @@ class _TherapistPageState extends State<TherapistPage> {
               ),
               _stepItem(
                   1,
-                  CustomIcon.doctor_icon,
+                  CustomIcon.speech_bubble,
                   _itemDetails("Identificar Situaciones Temidas", contentStep1,
                       inProgress: inProgressStep1,
                       completed: completedStep1,

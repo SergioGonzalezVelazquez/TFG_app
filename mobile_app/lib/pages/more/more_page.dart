@@ -140,17 +140,11 @@ class _MorePageState extends State<MorePage> {
         SizedBox(
           height: verticalPadding,
         ),
-        _sectionHeader("Preferencias"),
-        _sectionItem("Idioma", null),
-        _sectionItem("Notificaciones", null),
-        Divider(
-          height: verticalPadding,
-        ),
-        SizedBox(
-          height: verticalPadding,
-        ),
+        //_sectionHeader("Preferencias"),
+        //_sectionItem("Idioma", null),
+        //_sectionItem("Notificaciones", null),
         _sectionHeader("Otros"),
-        _sectionItem("Términos y condiciones", null),
+        _sectionItem("Aspectos Legales", null),
         Divider(
           height: verticalPadding,
         ),

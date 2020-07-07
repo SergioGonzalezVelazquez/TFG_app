@@ -6,6 +6,8 @@ import 'package:tfg_app/services/auth.dart';
 final CollectionReference phyActivityRef =
     Firestore.instance.collection('phy_activity');
 
+final List<int> ignoreValues = [0, 1, 255];
+
 class PhyActivityService {
   // Factory constructor which returns a singleton instance
   // of the service
@@ -41,7 +43,8 @@ class PhyActivityService {
       int min;
 
       phyActivities.forEach((element) {
-        if (element.heartRate != null) {
+        if (element.heartRate != null &&
+            !ignoreValues.contains(element.heartRate)) {
           count++;
           sum += element.heartRate;
 
@@ -101,13 +104,18 @@ class PhyActivityService {
     if (fillWithNull && activities.isNotEmpty) {
       activities = _fillWithNull(activities, dateFrom, dateTo);
     }
+
+    activities.forEach((element) {
+      if (element != null && ignoreValues.contains(element.heartRate))
+        element.heartRate = null;
+    });
     return activities;
   }
 
   /// Fill missing values with a new PhyActivity object where heartRate is null
   List<PhyActivity> _fillWithNull(
       List<PhyActivity> activities, DateTime dateFrom, DateTime dateTo) {
-        print("fill with null. Habia: " + activities.length.toString());
+    print("fill with null. Habia: " + activities.length.toString());
 
     DateTime currentDate = dateFrom;
     int index = 0;
@@ -117,7 +125,11 @@ class PhyActivityService {
           .toDate()
           .isAtSameMomentAs(currentDate))) {
         activities.insert(
-            index, new PhyActivity(timestamp: Timestamp.fromDate(currentDate)));
+          index,
+          new PhyActivity(
+            timestamp: Timestamp.fromDate(currentDate),
+          ),
+        );
       } else if (index < activities.length - 1) {
         index++;
       }
@@ -146,6 +158,9 @@ class PhyActivityService {
 
       if (doc.exists) {
         doc.data['activities'].forEach((act) {
+          if (act['heartRate'] <= 1) {
+            act['heartRate'] = null;
+          }
           DateTime timestamp = act['timestamp'].toDate();
           if (timestamp.isAtSameMomentAs(dateFrom) ||
               timestamp.isAtSameMomentAs(dateTo)) {

@@ -87,13 +87,6 @@ dependencies:
   # A Flutter plugin that provides a Google Maps widget.
   google_maps_flutter: ^0.5.26+4
 
-  # A carousel slider widget.
-  carousel_slider: ^2.1.0
-
-  # A flutter plugin that decodes encoded google polyline string into list 
-  # of geo-coordinates suitable for showing route/polyline on maps
-  flutter_polyline_points: ^0.1.0
-
   # A draggable Flutter widget that makes implementing a SlidingUpPanel much easie
   sliding_up_panel: ^1.0.2
 
@@ -104,8 +97,6 @@ dependencies:
   # Material Design data visualization library written natively in Dart.
   charts_flutter: ^0.9.0
   
-  timeline_list: ^0.0.5
-
   # A Flutter staggered grid view which supports multiple columns with rows of varying sizes.
   flutter_staggered_grid_view: ^0.3.0
 
@@ -124,6 +115,8 @@ dependencies:
   # A date time picker form field which has material
   # design theme.
   datetime_picker_formfield: ^1.0.0
+
+  dependency_validator: ^1.0.0
 
 
 

@@ -3,6 +3,7 @@ import 'package:tfg_app/models/exercise.dart';
 import 'package:tfg_app/models/patient.dart';
 import 'package:tfg_app/pages/exercises/exercise_item.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:tfg_app/pages/exercises/exercises_help.dart';
 import 'package:tfg_app/services/auth.dart';
 import 'package:tfg_app/widgets/exercise_completed_popup.dart';
 
@@ -88,11 +89,7 @@ class _ExercisePageState extends State<ExercisePage> {
           IconButton(
             icon: Icon(Icons.help_outline),
             onPressed: () {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) =>
-                    ExerciseCompletedDialog(_exercises[0]),
-              );
+                Navigator.pushNamed(context, ExerciseHelp.route);
             },
           ),
         ],

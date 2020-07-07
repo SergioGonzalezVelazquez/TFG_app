@@ -165,7 +165,12 @@ class _SignUpQuestionnairePageState extends State<SignUpQuestionnairePage>
       while (index < _questionnaireItems.length && response.length > 1) {
         QuestionnaireItem item = _questionnaireItems[index];
         if (response.containsKey(item.id)) {
-          _questionnaireItems[index].answerValue = response[item.id];
+          if (item.type == QuestionnaireItemType.multiple_choice) {
+            _questionnaireItems[index].answerValue = List<String>.from(response[item.id]);
+          } else {
+            _questionnaireItems[index].answerValue = response[item.id];
+          }
+
           response.removeWhere((key, value) => key == item.id);
         }
         index++;
@@ -175,12 +180,12 @@ class _SignUpQuestionnairePageState extends State<SignUpQuestionnairePage>
         _inProgress = (index > 0);
         if (_inProgress) {
           _lastResponseDate = response['start_at'].toDate();
-          _currentQuestionnaireItem = _questionnaireItems[index - 1];
+          _currentQuestionnaireItem = _questionnaireItems[index];
           print(_currentQuestionnaireItem.linkId.toString());
           _currentGroupIndex =
-              _mapItemToGroup[_currentQuestionnaireItem.linkId];
-              print("current gorup index");
-              print(_currentGroupIndex);
+              _mapItemToGroup[_currentQuestionnaireItem.linkId] - 1;
+          print("current gorup index");
+          print(_currentGroupIndex);
 
           print(_currentGroupIndex);
         }

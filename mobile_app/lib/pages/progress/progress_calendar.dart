@@ -50,7 +50,7 @@ class _ProgressCalendarState extends State<ProgressCalendar> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Diario'),
+        title: Text('Histórico de exposiciones'),
       ),
       body: StreamBuilder<List<ExposureExercise>>(
         stream: getExposuresAsStream(),

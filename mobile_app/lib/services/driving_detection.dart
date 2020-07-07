@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tfg_app/services/auth.dart';
 
 /// Risky driving event detection service using the phone sensors.
 /// If it is active, it will work on background to capture risky driving events and report back
@@ -21,8 +20,6 @@ class DrivingDetectionService {
   static final DrivingDetectionService _instance = DrivingDetectionService._();
   factory DrivingDetectionService() => _instance;
   bool _initialized = false;
-
-  AuthService _authService;
 
   Future<void> init() async {
     if (!_initialized) {
