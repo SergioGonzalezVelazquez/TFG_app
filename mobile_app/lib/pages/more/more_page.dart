@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:tfg_app/pages/phy_activity/daily_heart_rate.dart';
 import 'package:tfg_app/pages/phy_activity/phy_activity_settings.dart';
+import 'package:tfg_app/pages/user/aviso_legal.dart';
 import 'package:tfg_app/pages/user/login_page.dart';
+import 'package:tfg_app/pages/user/privacidad.dart';
 import 'package:tfg_app/pages/user/udpate_password.dart';
 import 'package:tfg_app/widgets/buttons.dart';
 import 'package:tfg_app/services/auth.dart';
@@ -144,7 +146,19 @@ class _MorePageState extends State<MorePage> {
         //_sectionItem("Idioma", null),
         //_sectionItem("Notificaciones", null),
         _sectionHeader("Otros"),
-        _sectionItem("Aspectos Legales", null),
+        _sectionItem(
+          "Aspectos Legales",
+          () => Navigator.of(context).pushNamed(
+            AvisoLegalPage.route,
+          ),
+        ),
+        /*
+        _sectionItem(
+          "Política de Privacidad",
+          () => Navigator.of(context).pushNamed(
+            PoliticaPrivacidad.route,
+          ),
+        ),*/
         Divider(
           height: verticalPadding,
         ),

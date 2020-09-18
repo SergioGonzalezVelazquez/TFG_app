@@ -17,7 +17,9 @@ import 'package:tfg_app/pages/questionnaire/pretest/signup_questionnaire_complet
 import 'package:tfg_app/pages/questionnaire/pretest/signup_questionnaire_page.dart';
 import 'package:tfg_app/pages/root_page.dart';
 import 'package:tfg_app/pages/therapist/hierarchy_page.dart';
+import 'package:tfg_app/pages/user/aviso_legal.dart';
 import 'package:tfg_app/pages/user/login_page.dart';
+import 'package:tfg_app/pages/user/privacidad.dart';
 import 'package:tfg_app/pages/user/udpate_password.dart';
 import 'package:tfg_app/pages/user/profile.dart';
 import 'package:tfg_app/pages/user/reset_password.dart';
@@ -68,4 +70,6 @@ final appRoutes = {
   PhyActivityAgreement.route: (BuildContext context) => PhyActivityAgreement(),
   DailyHeartRatePage.route: (BuildContext context) => DailyHeartRatePage(),
   PhyActivitySettings.route: (BuildContext context) => PhyActivitySettings(),
+
+  AvisoLegalPage.route: (BuildContext context) => AvisoLegalPage(),
 };

@@ -130,6 +130,11 @@ class DrivingActivityDetailsState extends State<DrivingActivityDetails> {
     return Colors.blue;
   }
 
+  Color _buildLocationColor2(int i) {
+    if(i> 1110 && i < 1197) return Colors.red;
+    return Colors.orange;
+  }
+
   Future<void> _decodeIcons() async {
     _startIcon = await getBytesFromAsset('assets/images/pin.png', 60);
     _endIcon = await getBytesFromAsset('assets/images/finish.png', 60);
@@ -178,11 +183,11 @@ class DrivingActivityDetailsState extends State<DrivingActivityDetails> {
             locationData[i]['location'].longitude);
         LatLng point2 = new LatLng(locationData[i + 1]['location'].latitude,
             locationData[i + 1]['location'].longitude);
-            
-            print(i);
+
+        print(i);
         _polylines.add(
           Polyline(
-            color: _buildLocationColor(locationData[i]['timestamp']),
+            color: widget._activity.id == "drive_1593112415623" ? _buildLocationColor2(i) : _buildLocationColor(locationData[i]['timestamp']),
             visible: true,
             width: 4,
             geodesic: true,

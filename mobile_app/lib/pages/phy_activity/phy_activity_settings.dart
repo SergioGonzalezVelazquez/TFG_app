@@ -158,7 +158,7 @@ class PhyActivitySettingsState extends State<PhyActivitySettings> {
           _isRunning
               ? primaryButton(context, _turnOff, "Desactivar",
                   width: MediaQuery.of(context).size.width * 0.25)
-              : primaryButton(context, _turnOn, "Activar",
+              : primaryButton(context, _turnOn, "Aceptar",
                   width: MediaQuery.of(context).size.width * 0.25),
         ],
       ),

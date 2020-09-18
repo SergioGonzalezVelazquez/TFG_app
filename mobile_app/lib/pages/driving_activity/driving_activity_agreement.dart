@@ -181,7 +181,7 @@ class DrivingActivityAgreementState extends State<DrivingActivityAgreement> {
           _currentPage != items - 1
               ? primaryButton(context, _more, "Más",
                   width: MediaQuery.of(context).size.width * 0.25)
-              : primaryButton(context, _activate, "Activar",
+              : primaryButton(context, _activate, "Aceptar",
                   width: MediaQuery.of(context).size.width * 0.25),
         ],
       ),
