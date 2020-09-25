@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:tfg_app/pages/phy_activity/daily_heart_rate.dart';
+import 'package:tfg_app/pages/phy_activity/phy_activity_settings.dart';
+import 'package:tfg_app/pages/user/aviso_legal.dart';
 import 'package:tfg_app/pages/user/login_page.dart';
+import 'package:tfg_app/pages/user/privacidad.dart';
 import 'package:tfg_app/pages/user/udpate_password.dart';
 import 'package:tfg_app/widgets/buttons.dart';
 import 'package:tfg_app/services/auth.dart';
@@ -96,13 +100,13 @@ class _MorePageState extends State<MorePage> {
         _sectionHeader("Perfil"),
         _sectionItem(
           "Mi cuenta",
-          () => Navigator.of(context).pushNamedAndRemoveUntil(
-              ProfilePage.route, (Route<dynamic> route) => false),
+          () => Navigator.of(context).pushNamed(ProfilePage.route),
         ),
         _sectionItem(
           "Cambiar contraseña",
-          () => Navigator.of(context).pushNamedAndRemoveUntil(
-              UpdatePassword.route, (Route<dynamic> route) => false),
+          () => Navigator.of(context).pushNamed(
+            UpdatePassword.route,
+          ),
         ),
         Divider(
           height: verticalPadding,
@@ -119,17 +123,42 @@ class _MorePageState extends State<MorePage> {
         SizedBox(
           height: verticalPadding,
         ),
-        _sectionHeader("Preferencias"),
-        _sectionItem("Idioma", null),
-        _sectionItem("Notificaciones", null),
+        _sectionHeader("Frecuencia cardiaca"),
+        _sectionItem(
+          "Datos diarios",
+          () => Navigator.of(context).pushNamed(
+            DailyHeartRatePage.route,
+          ),
+        ),
+        _sectionItem(
+          "Configurar",
+          () => Navigator.of(context).pushNamed(
+            PhyActivitySettings.route,
+          ),
+        ),
         Divider(
           height: verticalPadding,
         ),
         SizedBox(
           height: verticalPadding,
         ),
+        //_sectionHeader("Preferencias"),
+        //_sectionItem("Idioma", null),
+        //_sectionItem("Notificaciones", null),
         _sectionHeader("Otros"),
-        _sectionItem("Términos y condiciones", null),
+        _sectionItem(
+          "Aspectos Legales",
+          () => Navigator.of(context).pushNamed(
+            AvisoLegalPage.route,
+          ),
+        ),
+        /*
+        _sectionItem(
+          "Política de Privacidad",
+          () => Navigator.of(context).pushNamed(
+            PoliticaPrivacidad.route,
+          ),
+        ),*/
         Divider(
           height: verticalPadding,
         ),

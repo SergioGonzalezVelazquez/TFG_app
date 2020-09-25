@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:tfg_app/main.dart';
 import 'package:tfg_app/models/patient.dart';
 import 'package:tfg_app/models/questionnaire_group.dart';
 import 'package:tfg_app/models/questionnaire_item.dart';
@@ -90,6 +91,38 @@ class _SignUpQuestionnairePageState extends State<SignUpQuestionnairePage>
   * Functions used to handle events in this screen 
   */
 
+  Future<void> _reset() async {
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) => CustomDialog(
+        title: "¿Seguro que quieres volver a empezar?",
+        description: "Se borrarán tus respuestas anteriores",
+        buttonText2: "Cancelar",
+        buttonFunction2: () {
+          Navigator.pop(context);
+        },
+        buttonFunction1: () async {
+          Navigator.pop(context);
+          await _cleanAnswers();
+          _startAnimation();
+        },
+        buttonText1: "Reiniciar",
+      ),
+    );
+  }
+
+  Future<void> _cleanAnswers() async {
+    await deleteSignUpResponse();
+    await createSignUpResponse();
+    _questionnaireItems.forEach((element) {
+      element.answerValue = null;
+    });
+    setState(() {
+      _currentGroupIndex = 0;
+      _currentQuestionnaireItem = _questionsGroups[0].items[0];
+    });
+  }
+
   /// Read questions and sections from Firebase
   Future<void> _loadSignupQuestionnaire() async {
     await getSignupQuestionnaire().then((response) {
@@ -132,7 +165,12 @@ class _SignUpQuestionnairePageState extends State<SignUpQuestionnairePage>
       while (index < _questionnaireItems.length && response.length > 1) {
         QuestionnaireItem item = _questionnaireItems[index];
         if (response.containsKey(item.id)) {
-          _questionnaireItems[index].answerValue = response[item.id];
+          if (item.type == QuestionnaireItemType.multiple_choice) {
+            _questionnaireItems[index].answerValue = List<String>.from(response[item.id]);
+          } else {
+            _questionnaireItems[index].answerValue = response[item.id];
+          }
+
           response.removeWhere((key, value) => key == item.id);
         }
         index++;
@@ -142,10 +180,12 @@ class _SignUpQuestionnairePageState extends State<SignUpQuestionnairePage>
         _inProgress = (index > 0);
         if (_inProgress) {
           _lastResponseDate = response['start_at'].toDate();
-          _currentQuestionnaireItem = _questionnaireItems[index - 1];
+          _currentQuestionnaireItem = _questionnaireItems[index];
           print(_currentQuestionnaireItem.linkId.toString());
           _currentGroupIndex =
-              _mapItemToGroup[_currentQuestionnaireItem.linkId];
+              _mapItemToGroup[_currentQuestionnaireItem.linkId] - 1;
+          print("current gorup index");
+          print(_currentGroupIndex);
 
           print(_currentGroupIndex);
         }
@@ -465,7 +505,10 @@ class _SignUpQuestionnairePageState extends State<SignUpQuestionnairePage>
         ),
         Text(
           "Empezaste a responder este cuestionario el " +
-              _lastResponseDate.toString(),
+              dateFormatter.format(_lastResponseDate) +
+              " a las " +
+              timeFormatter.format(_lastResponseDate) +
+              ". ",
           textAlign: TextAlign.justify,
         ),
         SizedBox(
@@ -475,6 +518,17 @@ class _SignUpQuestionnairePageState extends State<SignUpQuestionnairePage>
           "Puedes continuar respondiendo por la pregunta en que lo dejaste, o borrar tus respuestas anteriores y empezar a responder desde cero.",
           textAlign: TextAlign.justify,
         ),
+        Align(
+          alignment: Alignment.bottomRight,
+          child: FlatButton(
+            padding: EdgeInsets.all(0),
+            textColor: Theme.of(context).primaryColor,
+            onPressed: () async {
+              _reset();
+            },
+            child: Text("Empezar desde cero"),
+          ),
+        )
       ],
     );
   }

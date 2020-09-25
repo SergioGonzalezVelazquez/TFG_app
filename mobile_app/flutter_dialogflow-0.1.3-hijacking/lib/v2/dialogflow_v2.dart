@@ -22,6 +22,8 @@ class QueryResult {
   List<dynamic> fulfillmentMessages;
   Intent intent;
 
+  List<dynamic> outputContexts; // Ampliado
+
   QueryResult(Map data) {
     queryText = data["queryText"];
     action = data["action"];
@@ -29,8 +31,9 @@ class QueryResult {
     allRequiredParamsPresent = data["allRequiredParamsPresent"];
     fulfillmentText = data["fulfillmentText"];
     intent = data['intent'] != null ? new Intent(data['intent']) : null;
-
     fulfillmentMessages = data['fulfillmentMessages'];
+    outputContexts =
+        data['outputContexts'] != null ? data['outputContexts'] : [];
   }
 }
 
@@ -124,13 +127,8 @@ class Dialogflow {
     print("response:");
     print(response.statusCode);
     print(response.body.toString());
-    print("ouput contexts: ");
-    json
-        .decode(response.body)['queryResult']['outputContexts']
-        .forEach((item) => print(item));
     return AIResponse(body: json.decode(response.body));
   }
-
 
   /// Esta función sirve cómo complemento a la librería flutter_dialogflow,
   /// pues no soporta el uso de eventos de DialogFlow.

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tfg_app/pages/home_page.dart';
+import 'package:tfg_app/pages/root_page.dart';
 import 'package:tfg_app/pages/user/signup_page.dart';
 import 'package:tfg_app/pages/user/reset_password.dart';
 import 'package:tfg_app/services/auth.dart';
@@ -83,7 +83,7 @@ class _LoginPageState extends State<LoginPage> {
         break;
       case 'ERROR_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL':
         authError =
-            'Esta cuenta está asociada a . Por favor, inicie sesión con ella.';
+            'Esta cuenta de correo electrónico ya está asociada a otro método de acceso. ';
         break;
       case 'ERROR_OPERATION_NOT_ALLOWED':
         authError = 'ERROR_OPERATION_NOT_ALLOWED';
@@ -149,7 +149,7 @@ class _LoginPageState extends State<LoginPage> {
 
     if (_authService.isAuth) {
       Navigator.of(context).pushNamedAndRemoveUntil(
-          HomePage.routeAuth, (Route<dynamic> route) => false);
+          RootPage.route, (Route<dynamic> route) => false);
     }
 
     setState(() {
@@ -170,7 +170,7 @@ class _LoginPageState extends State<LoginPage> {
 
     if (_authService.isAuth) {
       Navigator.of(context).pushNamedAndRemoveUntil(
-          HomePage.routeAuth, (Route<dynamic> route) => false);
+          RootPage.route, (Route<dynamic> route) => false);
     }
     setState(() {
       _isLoading = false;
@@ -193,7 +193,7 @@ class _LoginPageState extends State<LoginPage> {
       if (_authService.isAuth) {
         if (await _authService.isEmailVerified()) {
           Navigator.of(context).pushNamedAndRemoveUntil(
-              HomePage.routeAuth, (Route<dynamic> route) => false);
+              RootPage.route, (Route<dynamic> route) => false);
         } else {
           Navigator.popUntil(context, (route) => route.isFirst);
           Navigator.pushReplacement(

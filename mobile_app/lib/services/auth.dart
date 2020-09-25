@@ -1,10 +1,16 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:tfg_app/models/exercise.dart';
+import 'package:tfg_app/models/therapy.dart';
 import 'package:tfg_app/models/user.dart';
 import 'package:tfg_app/models/patient.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tfg_app/services/firestore.dart';
+import 'package:tfg_app/utils/datetime_extensions.dart';
 
 // Gets user and patient collections references
 final usersRef = Firestore.instance.collection('users');
@@ -25,13 +31,61 @@ class AuthService {
   /// Getters.
   User get user => this._user;
   bool get isAuth => this._user != null;
-  Future<PatientStatus> get patietStatus async {
-    await this._getPatientData();
-    return this._user.patient.status;
+  PatientStatus get patietStatus => this.user?.patient?.status;
+  StreamSubscription<DocumentSnapshot> _patientSubscription;
+  StreamController<PatientStatus> _patientStatusStream =
+      StreamController<PatientStatus>.broadcast();
+  StreamController<PatientStatus> get patientStatusStream =>
+      this._patientStatusStream;
+
+  Future<void> _initializePatientListener(String userId) async {
+    // Get patient Data
+    DocumentSnapshot patientDoc = await patientRef.document(userId).get();
+    await _getPatientData(patientDoc);
+
+    // Check daily streak
+    DateTime lastExposure = this._user.patient.lastExerciseCompleted;
+    if (lastExposure != null &&
+        !isToday(lastExposure) &&
+        !isYesterday(lastExposure)) {
+      this._user.patient.currentDailyStreak = 0;
+      await this.updatePatient({"currentDailyStreak": 0});
+    }
+
+    // initialize subscription
+    _patientSubscription = patientRef
+        .document(_user.id)
+        .snapshots()
+        .listen((DocumentSnapshot doc) async {
+      print("llega un patient");
+      await _getPatientData(doc);
+    });
+  }
+
+  Future<void> _getPatientData(DocumentSnapshot doc) async {
+    this._user.patient = new Patient.fromDocument(doc);
+    _patientStatusStream.sink.add(this._user?.patient?.status);
+
+    if ([
+      PatientStatus.hierarchy_pending,
+      PatientStatus.hierarchy_completed,
+      PatientStatus.in_exercise
+    ].contains(this._user.patient.status)) {
+      Therapy therapy = await getPatientCurrentTherapy();
+      this._user.patient.currentTherapy = therapy;
+
+      // CAMBIAR PARA QUE LOS EJERCICIOS SEAN UN STREAM BUILDER
+      if (this._user.patient.status == PatientStatus.in_exercise) {
+        List<Exercise> exercises = await getPatientExercises();
+        this._user.patient.exercises = exercises;
+        print("EJERCICIOS " + exercises.length.toString());
+      }
+    }
   }
 
   /// Initialize service
   Future<void> init() async {
+    print("auth service init");
     if (!_initialized) {
       _initialized = true;
 
@@ -39,12 +93,24 @@ class AuthService {
       _firebaseAuth = FirebaseAuth.instance;
 
       // Get the currently signed-in user
+      print("await get signed in user");
       await _getSignedInUser();
+      print("fin get signed in user");
+
+      if (isAuth) {
+        print("isAuth");
+        await _initializePatientListener(_user.id);
+      } else {
+        print("no auth");
+      }
     }
   }
 
   void dispose() {
+    print("auth dispose");
     _initialized = false;
+    _patientSubscription.cancel();
+    _patientStatusStream.close();
   }
 
   /// Get the currently signed-in user
@@ -62,18 +128,9 @@ class AuthService {
         this._user = User.fromDocument(doc);
 
         // Get patient data for this user
-        await _getPatientData();
+        // await _getPatientData();
       }
     }
-  }
-
-  /// Check if there is a document for auth user auth in 'patient' collection
-  Future<void> _getPatientData() async {
-    await patientRef.document(this._user.id).get().then((doc) {
-      if (doc.exists) {
-        this._user.patient = new Patient.fromDocument(doc);
-      }
-    });
   }
 
   /// create document in 'patient' collection for current auth user
@@ -81,7 +138,13 @@ class AuthService {
   /// the type of patient based on pretest questionnaire answers
   Future<void> _createPatientDocument(String userId) async {
     String status = PatientStatus.pretest_pending.toString().split(".")[1];
-    await patientRef.document(userId).setData({"status": status});
+    await patientRef.document(userId).setData(
+        {"status": status, "bestDailyStreak": 0, "currentDailyStreak": 0});
+    //await _initializePatientListener(userId);
+  }
+
+  Future<void> updatePatient(Map<String, dynamic> data) async {
+    await patientRef.document(this._user.id).updateData(data);
   }
 
   Future<void> updatePatientStatus(PatientStatus status) async {
@@ -89,7 +152,7 @@ class AuthService {
     await patientRef
         .document(this._user.id)
         .updateData({"status": strStatus}).then((value) async {
-      await this._getPatientData();
+      //await this._getPatientData();
     });
   }
 
@@ -98,6 +161,7 @@ class AuthService {
   /// https://firebase.google.com/docs/auth/android/google-signin
   /// https://fireship.io/lessons/flutter-firebase-google-oauth-firestore/
   Future<void> signInWithGoogle() async {
+    print("singInWithGoogle");
     // Step 1. Login with Google. This shows Google’s native login screen and provides
     // the idToken and accessToken
     GoogleSignIn googleSignIn = GoogleSignIn();
@@ -191,7 +255,10 @@ class AuthService {
     print("create user document");
     FirebaseUser currentUser = await _firebaseAuth.currentUser();
 
+    print("currentUser Id: " + currentUser.uid);
+
     DocumentSnapshot doc = await usersRef.document(currentUser.uid).get();
+    bool exists = doc.exists;
     // Firt time user is logged-in
     if (!doc.exists) {
       print("doc exists");
@@ -201,14 +268,17 @@ class AuthService {
         "email": currentUser.email,
         "name": currentUser.displayName,
         "created_at": DateTime.now()
-      }).then((value) async {
-        await this._createPatientDocument(currentUser.uid);
       });
+    } else {
+      print("doc exists");
     }
 
     doc = await usersRef.document(currentUser.uid).get();
     this._user = User.fromDocument(doc);
-    await this._getPatientData();
+    if (!exists) {
+      await this._createPatientDocument(currentUser.uid);
+    }
+    await _initializePatientListener(_user.id);
 
     // Save user id in shared preferences
     SharedPreferences prefs = await SharedPreferences.getInstance();

@@ -8,6 +8,8 @@
     "start": "npm run shell",
     "deploy": "firebase deploy --only functions",
     "deploy:patient": "firebase deploy --only functions:patient",
+    "deploy:driving": "firebase deploy --only functions:driving_event_detection",
+    "deploy:dialogflow": "firebase deploy --only functions:dialogflow",
     "logs": "firebase functions:log"
   },
   "engines": {
@@ -15,6 +17,9 @@
   },
   "main": "lib/functions/src/index.js",
   "dependencies": {
+    "actions-on-google": "^2.12.0",
+    "dialogflow": "^1.2.0",
+    "dialogflow-fulfillment": "^0.6.1",
     "firebase-admin": "^8.6.0",
     "firebase-functions": "^3.3.0",
     "geolib": "^3.2.1",

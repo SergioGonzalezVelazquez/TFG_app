@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:android_intent/android_intent.dart';
+// import 'package:android_intent/android_intent.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:tfg_app/pages/questionnaire/pretest/signup_questionnaire_page.dart';
@@ -79,6 +79,7 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
   }
 
   /// Open default email app
+  /*
   void _openEmailApp() {
     final snackBar = customSnackbar(
         context, "No se pudo abrir ninguna aplicación de correo electrónico");
@@ -101,6 +102,7 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
       );
     }
   }
+  */
 
   /**
    * Widgets (ui components) used in this screen 
@@ -166,13 +168,13 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
             height: MediaQuery.of(context).size.height * 0.01,
           ),
           Text(
-            "¡Haga click en el enlace que ha recibido para empezar!",
+            "¡Haz click en el enlace que has recibido para empezar!",
             textAlign: TextAlign.justify,
           ),
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.05,
           ),
-          primaryButton(context, _openEmailApp, "Abrir correo electónico"),
+          primaryButton(context, () => print(""), "Abrir correo electónico"),
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.02,
           ),

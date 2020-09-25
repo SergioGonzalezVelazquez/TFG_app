@@ -21,7 +21,7 @@ class User {
   /// Converts Firestore Document into a User object
   factory User.fromDocument(DocumentSnapshot doc) {
     return User(
-        id: doc['id'],
+        id: doc.documentID,
         email: doc['email'],
         photoUrl: doc['photo'],
         name: doc['name'],

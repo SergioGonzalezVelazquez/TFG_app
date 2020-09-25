@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:tfg_app/pages/home_page.dart';
+import 'package:intl/intl.dart';
 import 'package:tfg_app/routes.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:tfg_app/themes/style.dart';
 
-void main() => runApp(MyApp());
+final DateFormat dateFormatter = new DateFormat('dd-MM-yyyy');
+final DateFormat timeFormatter = DateFormat(DateFormat.HOUR24_MINUTE);
 
-class MyApp extends StatelessWidget {
+void main() {
+  runApp(STOPMiedo());
+}
+
+class STOPMiedo extends StatelessWidget {
   // This widget is the root of the application.
   @override
   Widget build(BuildContext context) {
@@ -14,7 +20,14 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       routes: appRoutes,
       theme: CustomTheme.buildPurpleTheme(),
-      home: HomePage(),
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: [
+        const Locale('es', 'ES'),
+      ],
     );
   }
 }

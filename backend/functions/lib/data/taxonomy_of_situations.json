@@ -1,0 +1,633 @@
+{
+    "N1": {
+        "category": "Aproximación al vehículo y puesta en marcha",
+        "situations": {
+            "S1": {
+                "name": "Sentarme en el vehículo",
+                "items": {
+                    "C1-S1": {
+                        "name": "Sentarme en el vehículo",
+                        "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2F457249-PFCNAN-360-min.jpg?alt=media&token=2d6dc65c-81ee-4c23-9775-286daafe6e9a"
+                    }
+                }
+            },
+            "S2": {
+                "name": "Arrancar el vehículo",
+                "items": {
+                    "C1-S2": {
+                        "name": "Arrancar el vehículo",
+                        "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2F742028-PSISG9-899-min.jpg?alt=media&token=14aacd89-7be0-4db6-98f4-34e8cddb6ed0"
+                    }
+                }
+            }
+        }
+    },
+    "N2": {
+        "category": "Inicio o reanudación de la marcha",
+        "situations": {
+            "S1": {
+                "name": "Salir de la cochera",
+                "items": {
+                    "C2-S1": {
+                        "name": "Salir de la cochera",
+                        "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2Fretro-house-wall-1083480.jpg?alt=media&token=599cd3e9-5dce-4990-9b34-87e4b11dcdc1"
+                    }
+                }
+            },
+            "S2": {
+                "name": "Incorporación al tráfico desde una situación de parada",
+                "items": {
+                    "C2-S2": {
+                        "name": "Incorporarme al tráfico desde una situación de parada",
+                        "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2FFormatFactory652832-POZCY7-382.jpg?alt=media&token=d755f27a-925d-4c8f-8701-d0d74c1992e0"
+                    }
+                }
+            },
+            "S3": {
+                "name": "Incorporación al tráfico desde otra vía",
+                "items": {
+                    "C2-S3": {
+                        "name": "Incorporarme al tráfico desde otra vía (p.ej incorporación a una autovía desde una vía convencional)"
+                    }
+                }
+            }
+        }
+    },
+    "N3": {
+        "category": "Estacionamiento",
+        "situations": {
+            "S1": {
+                "name": "Decidir un sitio en el que aparcar",
+                "variants": {
+                    "PC": {
+                        "name": "Presión de otros conductores",
+                        "items": {
+                            "C3-S1-PCA": {
+                                "name": "Decidir dónde aparcar sin que venga ningún vehículo detrás",
+                                "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2F2697868.jpg?alt=media&token=45b7f63c-d186-4459-9762-d652e82c409a"
+                            },
+                            "C3-S1-PCB": {
+                                "name": "Decidir dónde aparcar viniendo uno o varios vehículos detrás"
+                            },
+                            "C3-S1-PCC": {
+                                "name": "Otros conductores hacen sonar el claxon mientras busco un sitio en el que aparcar",
+                                "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2Fhorn.jpg?alt=media&token=e9e1c1d3-5b4a-48c3-a9a7-a3403a17c8dc",
+                                "audio": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/audio%2F144137_car-horns.mp3?alt=media&token=88482810-456b-43f2-aa63-60c1bb9e2994"
+                            }
+                        }
+                    }
+                }
+            },
+            "S2": {
+                "name": "Realizar maniobras de estacionamiento",
+                "variants": {
+                    "PS": {
+                        "name": "Presión social",
+                        "items": {
+                            "C3-S2-PSA": {
+                                "name": "Aparco sin que haya vehículos esperando",
+                                "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2F1069786.jpg?alt=media&token=c8e559fb-a585-4b1d-8390-e37a2cca8190"
+                            },
+                            "C3-S2-PSB": {
+                                "name": "Otras personas me miran mientras realizo maniobras de estacionamiento"
+                            },
+                            "C3-S2-PSC": {
+                                "name": "Aparco habiendo un vehículo a la espera",
+                                "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2FFormatFactory338097-PA06US-634.jpg?alt=media&token=cb14d940-3f85-4cc7-90c5-10d4d80100ac"
+                            },
+                            "C3-S2-PSD": {
+                                "name": "Aparco habiendo una cola de vehículos a la espera",
+                                "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2F338095-PA06UI-85.jpg?alt=media&token=7497492e-3f27-4d08-94e8-d265605c9fac"
+                            },
+                            "C3-S2-PSE": {
+                                "name": "Otros conductores hacen sonar el claxon mientras realizo maniobras para aparcar",
+                                "audio": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/audio%2F144137_car-horns.mp3?alt=media&token=88482810-456b-43f2-aa63-60c1bb9e2994"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "N4": {
+        "category": "Circulación",
+        "situations": {
+            "S1": {
+                "name": "Circulación por población",
+                "variants": {
+                    "CON": {
+                        "name": "¿Ruta Conocida o no?",
+                        "items": {
+                            "C4-S1-CONA": {
+                                "name": "Circulo por una población conocida",
+                                "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2FFormatFactory21800.jpg?alt=media&token=6d90222d-acff-4090-8430-6482c3b87a1f"
+                            },
+                            "C4-S1-CONB": {
+                                "name": "Circulo por una población no conocida"
+                            }
+                        }
+                    },
+                    "CC": {
+                        "name": "Condiciones del conductor",
+                        "items": {
+                            "C4-S1-CCA": {
+                                "name": "Circulo por una población cuando me encuentro mal físicamente",
+                                "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2F3740529.jpg?alt=media&token=ed5554fa-25d5-4e6c-9ff4-215d0c07f3c2"
+                            },
+                            "C4-S1-CCB": {
+                                "name": "Circulo por una población cuando me encuentro mal psiquicamente/emocionalmente",
+                                "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2F3740486.jpg?alt=media&token=57ae088d-d602-4d23-a670-422b063f2794"
+                            }
+                        }
+                    },
+                    "TAM": {
+                        "name": "Tamaño población",
+                        "items": {
+                            "C4-S1-TAMA": {
+                                "name": "Circulo por una población pequeña"
+                            },
+                            "C4-S1-TAMB": {
+                                "name": "Circulo por una gran población"
+                            }
+                        }
+                    },
+                    "CCA": {
+                        "name": "Condiciones climatológicas adversas",
+                        "items": {
+                            "C4-S1-CCAA": {
+                                "name": "Circulo por una población en un día soleado"
+                            },
+                            "C4-S1-CCAB": {
+                                "name": "Circulo por una población mientras llueve",
+                                "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2F42983-min.jpg?alt=media&token=45a926a4-6699-49d3-8f25-cc87a06063cd",
+                                "audio": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/audio%2F367008_rain.mp3?alt=media&token=0c558ba0-2425-4891-a810-90dc6dda583c"
+                            },
+                            "C4-S1-CCAC": {
+                                "name": "Circulo por una población mientras nieva",
+                                "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2F752-min.jpg?alt=media&token=7bec7640-0ac0-46cd-9df5-5f063d61b27a"
+                            }
+                        }
+                    },
+                    "FT": {
+                        "name": "Fluidez del tráfico",
+                        "items": {
+                            "C4-S1-FTA": {
+                                "name": "Circulo por población y hay poco tráfico"
+                            },
+                            "C4-S1-FTB": {
+                                "name": "Circulo por población y el tráfico es fluido"
+                            },
+                            "C4-S1-FTC": {
+                                "name": "Circulo por población y hay mucho tráfico",
+                                "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2F652731-POZCO2-551-min.jpg?alt=media&token=abc9805e-248c-4dd6-a26c-698e81ea8236"
+                            }
+                        }
+                    },
+                    "CT": {
+                        "name": "Condiciones temporales",
+                        "items": {
+                            "C4-S1-CTA": {
+                                "name": "Circulo por población de día"
+                            },
+                            "C4-S1-CTB": {
+                                "name": "Circulo por población de noche",
+                                "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2F170921-conducir-de-noche.jpg?alt=media&token=7e5e460f-d293-49f4-839e-cb1cb690c239"
+                            },
+                            "C4-S1-CTC": {
+                                "name": "Circulo por población en fin de semana"
+                            },
+                            "C4-S1-CTD": {
+                                "name": "Circulo por población entre semana"
+                            }
+                        }
+                    },
+                    "OC": {
+                        "name": "Ocupantes",
+                        "items": {
+                            "C4-S1-OCA": {
+                                "name": "Circulo por población solo/a",
+                                "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2F4190.jpg?alt=media&token=9e88eec9-e8e6-494d-82e2-e0e483b1bf83"
+                            },
+                            "C4-S1-OCB": {
+                                "name": "Circulo por población acompañado de adulto/s",
+                                "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2F389135-PC5XSZ-70.jpg?alt=media&token=ca432f79-cce4-4aa3-94b5-8b9decdd159a"
+                            },
+                            "C4-S1-OCC": {
+                                "name": "Circulo por población con niños",
+                                "images": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2FFamily-driving-a-car-700x467.jpg?alt=media&token=721103a2-8ce9-4806-9131-9c6ff8c6ac77"
+                            }
+                        }
+                    },
+                    "OT": {
+                        "name": "Otros",
+                        "items": {
+                            "C4-S1-OTA": {
+                                "name": "Circulo por población con circulación densa y oigo que se acerca una ambulancia, coche de bomberos, policía, ...",
+                                "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2F37010530044.jpg?alt=media&token=39ffafe4-9dfb-45b7-80d2-2116f033c6e3",
+                                "audio": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/audio%2F135718__ikbenraar__police.mp3?alt=media&token=a24be9d8-3bc8-420c-a325-62442f54c0a7"
+                            },
+                            "C4-S1-OTB": {
+                                "name": "Circulo por población y llego a un cruce complicado"
+                            },
+                            "C4-S1-OTC": {
+                                "name": "Circulo por población y mis acompañantes critican mi forma de conducir"
+                            },
+                            "C4-S1-OTD": {
+                                "name": "Circulo por población y otros conductores o los peatones me increpan"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "N5": {
+        "category": "Circulación",
+        "situations": {
+            "S2": {
+                "name": "Circulación por carretera",
+                "variants": {
+                    "CON": {
+                        "name": "¿Ruta Conocida o no?",
+                        "items": {
+                            "C4-S2-CONA": {
+                                "name": "Circulo por una carretera conocida",
+                                "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2F3005819.jpg?alt=media&token=81b26f39-c563-4685-92de-3b88ba3ad6d3"
+                            },
+                            "C4-S2-CONB": {
+                                "name": "Circulo por una carretera no conocida"
+                            }
+                        }
+                    },
+                    "CC": {
+                        "name": "Condiciones del conductor",
+                        "items": {
+                            "C4-S2-CCA": {
+                                "name": "Circulo por una carretera cuando me encuentro mal físicamente"
+                            },
+                            "C4-S2-CCB": {
+                                "name": "Circulo por una carretera cuando me encuentro mal psiquicamente/emocionalmente"
+                            }
+                        }
+                    },
+                    "TV": {
+                        "name": "Tipo de vía",
+                        "items": {
+                            "C4-S2-TVA": {
+                                "name": "Circulo por una carretera nacional",
+                                "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2Fnacional.jpg?alt=media&token=29e96d41-7a99-48b2-8503-dbe8e7081cb6"
+                            },
+                            "C4-S2-TVB": {
+                                "name": "Circulo por una autovía/autopista",
+                                "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2Fautovia.jpg?alt=media&token=0613bded-1d3c-4096-872a-954a44112e3c"
+                            },
+                            "C4-S2-TVC": {
+                                "name": "Circulo por una carretera regional/comarcal",
+                                "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2F525998-PIYGFW-536.jpg?alt=media&token=ab77b99c-b041-4636-a998-a0bae51fa075"
+                            }
+                        }
+                    },
+                    "CCA": {
+                        "name": "Condiciones climatológicas adversas",
+                        "items": {
+                            "C4-S2-CCAA": {
+                                "name": "Circulo por una carretera en un día soleado",
+                                "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2F3067-min.jpg?alt=media&token=5e803f45-e5e6-4807-8186-2b160bcc0fb8"
+                            },
+                            "C4-S2-CCAB": {
+                                "name": "Circulo por una carretera en un día con viento"
+                            },
+                            "C4-S2-CCAC": {
+                                "name": "Circulo por una carretera mientras llueve",
+                                "audio": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/audio%2F367008_rain.mp3?alt=media&token=0c558ba0-2425-4891-a810-90dc6dda583c"
+                            },
+                            "C4-S2-CCAD": {
+                                "name": "Circulo por una carretera mientras nieva",
+                                "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2F665-min.jpg?alt=media&token=aafa624a-2965-4d9e-b90f-d256e3f7d46d"
+                            }
+                        }
+                    },
+                    "FT": {
+                        "name": "Fluidez del tráfico",
+                        "items": {
+                            "C4-S2-FTA": {
+                                "name": "Circulo por carretera y hay poco tráfico",
+                                "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2F494.jpg?alt=media&token=fe0d4c49-7938-4340-b612-3fe1dcba7e14"
+                            },
+                            "C4-S2-FTB": {
+                                "name": "Circulo por carretera y el tráfico es fluido",
+                                "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2Fcar-highway-driving-1216881.jpg?alt=media&token=46e8b3fe-f895-419e-87ad-6d3a61833404"
+                            },
+                            "C4-S2-FTC": {
+                                "name": "Circulo por carretera y hay mucho tráfico"
+                            }
+                        }
+                    },
+                    "CT": {
+                        "name": "Condiciones temporales",
+                        "items": {
+                            "C4-S2-CTA": {
+                                "name": "Circulo por carretera de día"
+                            },
+                            "C4-S2-CTB": {
+                                "name": "Circulo por carretera de noche",
+                                "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2Fws_Road_at_Night_2560x1600.jpg?alt=media&token=0d9dd860-f8d1-4beb-b5d0-9c718b9747ff"
+                            },
+                            "C4-S2-CTC": {
+                                "name": "Circulo por carretera en fin de semana"
+                            },
+                            "C4-S2-CTD": {
+                                "name": "Circulo por carretera entre semana"
+                            }
+                        }
+                    },
+                    "OC": {
+                        "name": "Ocupantes",
+                        "items": {
+                            "C4-S2-OCA": {
+                                "name": "Circulo por carretera solo/a"
+                            },
+                            "C4-S2-OCB": {
+                                "name": "Circulo por carretera acompañado de adulto/s",
+                                "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2F453003-PF1RR6-554.jpg?alt=media&token=581463a3-977b-4755-b0c7-1d61659a8be1"
+                            },
+                            "C4-S2-OCC": {
+                                "name": "Circulo por carretera con niños",
+                                "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2FGettyImages1030960660.jpg?alt=media&token=e4dc6f44-0e44-4bd0-a16e-350a697b694a"
+                            }
+                        }
+                    },
+                    "OT": {
+                        "name": "Otros",
+                        "items": {
+                            "C4-S2-OTA": {
+                                "name": "Circulo por carretera con circulación densa y oigo que se acerca una ambulancia, coche de bomberos, policía, ...",
+                                "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2Fambulancia.jpg?alt=media&token=26007fb5-8b20-4821-a7e7-de2b6f86e879",
+                                "audio": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/audio%2F135718__ikbenraar__police.mp3?alt=media&token=a24be9d8-3bc8-420c-a325-62442f54c0a7"
+                            },
+                            "C4-S2-OTB": {
+                                "name": "Circulo por carretera y otros vehículos me adelantan a gran velocidad y sin avisar"
+                            },
+                            "C4-S2-OTC": {
+                                "name": "Circulo por carretera y llego a un cruce complicado",
+                                "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2F3181.jpg?alt=media&token=0494524a-de7e-4bbf-9fe2-0f11bb8082f0"
+                            },
+                            "C4-S2-OTD": {
+                                "name": "Circulo por una vía sin arcén",
+                                "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2Fsin_arcen.jpg?alt=media&token=d4994908-9fab-4801-aa2f-fdbca5121576"
+                            },
+                            "C4-S2-OTE": {
+                                "name": "Circulo por una vía en la que es díficil detenerse o dar la vuelta"
+                            },
+                            "C4-S2-OTF": {
+                                "name": "Tengo que realizar un trayecto largo por carretera"
+                            },
+                            "C4-S2-OTG": {
+                                "name": "Circulo por carretera y detrás hay un vehículo muy pegado al mio",
+                                "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2F205471240_1ac32ae261_c.jpg?alt=media&token=8942aa39-2312-446c-9eed-d056e05dfd97"
+                            },
+                            "C4-S2-OTH": {
+                                "name": "Circulo por carretera y los acompañantes critican mi forma de conducir"
+                            },
+                            "C4-S2-OTI": {
+                                "name": "Circulo por carretera y veo durante el viaje indicios de un accidente reciente"
+                            },
+                            "C4-S2-OTJ": {
+                                "name": "Circulo por carretera y otros conductores me increpan"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "N6": {
+        "category": "Adelantamiento",
+        "situations": {
+            "S1": {
+                "name": "Carretera de un único sentido del tráfico en la misma calzada",
+                "variants": {
+                    "CC": {
+                        "name": "Condiciones del conductor",
+                        "items": {
+                            "C5-S1-CCA": {
+                                "name": "Adelantar en una carretera de sentido único (autopista/autovía) cuando me encuentro mal físicamente"
+                            },
+                            "C5-S1-CCB": {
+                                "name": "Adelantar en una carretera de sentido único (autopista/autovía) cuando me encuentro mal psiquicamente/emocionalmente"
+                            }
+                        }
+                    },
+                    "VA": {
+                        "name": "Tipo de vehículo a adelantar",
+                        "items": {
+                            "C5-S1-VAA": {
+                                "name": "Adelantar en una carretera de sentido único (autopista/autovía) a un vehículo corto"
+                            },
+                            "C5-S1-VAB": {
+                                "name": "Adelantar en una carretera de sentido único (autopista/autovía) a bicicletas/motos"
+                            },
+                            "C5-S1-VAC": {
+                                "name": "Adelantar en una carretera de sentido único (autopista/autovía) a un vehículo largo (camión o autobus)"
+                            },
+                            "C5-S1-VAD": {
+                                "name": "Adelantar en una carretera de sentido único (autopista/autovía) a un vehículo lento (tractor)"
+                            },
+                            "C5-S1-VAE": {
+                                "name": "Adelantar en una carretera de sentido único (autopista/autovía) a varios vehículos"
+                            }
+                        }
+                    },
+                    "CCA": {
+                        "name": "Condiciones climatológicas adversas",
+                        "items": {
+                            "C5-S1-CCAA": {
+                                "name": "Adelantar en una carretera de sentido único (autopista/autovía) en un día soleado"
+                            },
+                            "C5-S1-CCAB": {
+                                "name": "Adelantar en una carretera de sentido único (autopista/autovía) en un día con viento"
+                            },
+                            "C5-S1-CCAC": {
+                                "name": "Adelantar en una carretera de sentido único (autopista/autovía) mientras llueve",
+                                "audio": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/audio%2F367008_rain.mp3?alt=media&token=0c558ba0-2425-4891-a810-90dc6dda583c"
+                            },
+                            "C5-S1-CCAD": {
+                                "name": "Adelantar en una carretera de sentido único (autopista/autovía) mientras nieva"
+                            }
+                        }
+                    },
+                    "FT": {
+                        "name": "Fluidez del tráfico",
+                        "items": {
+                            "C5-S1-FTA": {
+                                "name": "Adelantar en una carretera de sentido único (autopista/autovía) y hay poco tráfico"
+                            },
+                            "C5-S1-FTB": {
+                                "name": "Adelantar en una carretera de sentido único (autopista/autovía) y el tráfico es fluido"
+                            },
+                            "C5-S1-FTC": {
+                                "name": "Adelantar en una carretera de sentido único (autopista/autovía) y hay mucho tráfico"
+                            }
+                        }
+                    },
+                    "CT": {
+                        "name": "Condiciones temporales",
+                        "items": {
+                            "C5-S1-CTA": {
+                                "name": "Adelantar en una carretera de sentido único (autopista/autovía) de día"
+                            },
+                            "C5-S1-CTB": {
+                                "name": "Adelantar en una carretera de sentido único (autopista/autovía) de noche",
+                                "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2F17088.jpg?alt=media&token=51fef4d9-b974-4a7e-b705-350038cbf63b"
+                            },
+                            "C5-S1-CTC": {
+                                "name": "Adelantar en una carretera de sentido único (autopista/autovía) en fin de semana"
+                            },
+                            "C5-S1-CTD": {
+                                "name": "Adelantar en una carretera de sentido único (autopista/autovía) entre semana"
+                            }
+                        }
+                    },
+                    "OC": {
+                        "name": "Ocupantes",
+                        "items": {
+                            "C5-S1-OCA": {
+                                "name": "Adelantar en una carretera de sentido único (autopista/autovía) solo/a"
+                            },
+                            "C5-S1-OCB": {
+                                "name": "Adelantar en una carretera de sentido único (autopista/autovía) acompañado de adulto/s"
+                            },
+                            "C5-S1-OCC": {
+                                "name": "Adelantar en una carretera de sentido único (autopista/autovía) con niños"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "N7": {
+        "category": "Adelantamiento",
+        "situations": {
+            "S2": {
+                "name": "Carretera con doble sentido del tráfico en la misma calzada",
+                "variants": {
+                    "CC": {
+                        "name": "Condiciones del conductor",
+                        "items": {
+                            "C5-S2-CCA": {
+                                "name": "Adelantar en una carretera con doble sentido cuando me encuentro mal físicamente"
+                            },
+                            "C5-S2-CCB": {
+                                "name": "Adelantar en una carretera con doble sentido cuando me encuentro mal psiquicamente/emocionalmente"
+                            }
+                        }
+                    },
+                    "TV": {
+                        "name": "Tipo de vía",
+                        "items": {
+                            "C5-S2-TVA": {
+                                "name": "Adelantar en una carretera nacional (con doble sentido)"
+                            },
+                            "C5-S2-TVB": {
+                                "name": "Adelantar en una carretera regional/comarcal (con doble sentido)"
+                            }
+                        }
+                    },
+                    "VA": {
+                        "name": "Tipo de vehículo a adelantar",
+                        "items": {
+                            "C5-S2-VAA": {
+                                "name": "Adelantar en una carretera con doble sentido a un vehículo corto",
+                                "image": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/images%2F4393.jpg?alt=media&token=9d09ac52-7d28-4fe7-b0d6-704c9c63d94e"
+                            },
+                            "C5-S2-VAB": {
+                                "name": "Adelantar en una carretera con doble sentido a bicicletas/motos"
+                            },
+                            "C5-S2-VAC": {
+                                "name": "Adelantar en una carretera con doble sentido a un vehículo largo (camión o autobus)"
+                            },
+                            "C5-S2-VAD": {
+                                "name": "Adelantar en una carretera con doble sentido a un vehículo lento (tractor)"
+                            },
+                            "C5-S2-VAE": {
+                                "name": "Adelantar en una carretera con doble sentido a varios vehículos"
+                            }
+                        }
+                    },
+                    "CCA": {
+                        "name": "Condiciones climatológicas adversas",
+                        "items": {
+                            "C5-S2-CCAA": {
+                                "name": "Adelantar en una carretera con doble sentido en un día soleado"
+                            },
+                            "C5-S2-CCAB": {
+                                "name": "Adelantar en una carretera con doble sentido en un día con viento"
+                            },
+                            "C5-S2-CCAC": {
+                                "name": "Adelantar en una carretera con doble sentido mientras llueve",
+                                "audio": "https://firebasestorage.googleapis.com/v0/b/stopmiedo-ikiqvp.appspot.com/o/audio%2F367008_rain.mp3?alt=media&token=0c558ba0-2425-4891-a810-90dc6dda583c"
+                            },
+                            "C5-S2-CCAD": {
+                                "name": "Adelantar en una carretera con doble sentido mientras nieva"
+                            }
+                        }
+                    },
+                    "FT": {
+                        "name": "Fluidez del tráfico",
+                        "items": {
+                            "C5-S2-FTA": {
+                                "name": "Adelantar en una carretera con doble sentido y hay poco tráfico"
+                            },
+                            "C5-S2-FTB": {
+                                "name": "Adelantar en una carretera con doble sentido y el tráfico es fluido"
+                            },
+                            "C5-S2-FTC": {
+                                "name": "Adelantar en una carretera con doble sentido y hay mucho tráfico"
+                            }
+                        }
+                    },
+                    "CT": {
+                        "name": "Condiciones temporales",
+                        "items": {
+                            "C5-S2-CTA": {
+                                "name": "Adelantar en una carretera con doble sentido de día"
+                            },
+                            "C5-S2-CTB": {
+                                "name": "Adelantar en una carretera con doble sentido de noche"
+                            },
+                            "C5-S2-CTC": {
+                                "name": "Adelantar en una carretera con doble sentido en fin de semana"
+                            },
+                            "C5-S2-CTD": {
+                                "name": "Adelantar en una carretera con doble sentido entre semana"
+                            }
+                        }
+                    },
+                    "OC": {
+                        "name": "Ocupantes",
+                        "items": {
+                            "C5-S2-OCA": {
+                                "name": "Adelantar en una carretera con doble sentido solo/a"
+                            },
+                            "C5-S2-OCB": {
+                                "name": "Adelantar en una carretera con doble sentido acompañado de adulto/s"
+                            },
+                            "C5-S2-OCC": {
+                                "name": "Adelantar en una carretera con doble sentido con niños"
+                            }
+                        }
+                    },
+                    "OT": {
+                        "name": "Otros",
+                        "items": {
+                            "C5-S2-OTA": {
+                                "name": "Adelantar en una carretera con doble sentido, creo que no me dará tiempo a acabar el adelantar y viene un coche de frente"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

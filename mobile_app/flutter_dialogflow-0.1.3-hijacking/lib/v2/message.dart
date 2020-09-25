@@ -4,8 +4,10 @@ class TextDialogflow {
   DateTime timestamp;
 
   TextDialogflow(Map response) {
-    this.text = response['text'][0];
-    this.timestamp = DateTime.now();
+    if (response != null) {
+      this.text = response['text'][0];
+      this.timestamp = DateTime.now();
+    }
   }
 }
 
@@ -159,7 +161,7 @@ class TypeMessage {
   TypeMessage(Map message) {
     this.platform = message['platform'];
     //Extendido para soportar todos los tipos de dialogFlow
-    if(message.containsKey('payload')){
+    if (message.containsKey('payload')) {
       message = message['payload'];
     }
 

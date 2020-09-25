@@ -14,7 +14,7 @@ description: A tool to help patients suffering from amaxophobia
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.2.2 <3.0.0"
 
 dependencies:
   flutter:
@@ -24,17 +24,20 @@ dependencies:
   cupertino_icons: ^0.1.2
 
   # Add the dependency for the Firebase Core Flutter SDK
-  firebase_core: ^0.4.0+9
+  firebase_core: ^0.4.3+1
 
   # Add the dependency for the FlutterFire plugin for Google Analytics
   firebase_analytics: ^5.0.2
 
   # A Flutter plugin to use the Firebase Authentication API and Cloud Firestore.
-  firebase_auth: ^0.15.5+2
-  cloud_firestore: ^0.13.4+2
+  firebase_auth: ^0.15.3
+  cloud_firestore: ^0.13.0+1
+
+  # A Flutter plugin to use the Firebase Cloud Storage API.
+  firebase_storage: ^3.1.5
 
   # A Flutter plugins for Google and Facebook Sign In
-  google_sign_in: ^4.1.4
+  google_sign_in: ^4.0.1+1
   flutter_facebook_login: ^3.0.0
 
   # Integrate dialogflow and support dialogflow v2
@@ -51,7 +54,7 @@ dependencies:
 
   # This plugin allows Flutter apps to launch arbitrary intents when the 
   # platform is Android. 
-  android_intent: ^0.3.6+1
+  # android_intent: ^0.3.6+1
 
   # String validation and sanitization for Dart
   validators: ^2.0.0+1
@@ -81,14 +84,57 @@ dependencies:
   # from the image library, and taking new pictures with the camera.
   image_picker: ^0.6.4
 
+  # A Flutter plugin that provides a Google Maps widget.
+  google_maps_flutter: ^0.5.26+4
+
+  # A draggable Flutter widget that makes implementing a SlidingUpPanel much easie
+  sliding_up_panel: ^1.0.2
+
   # Command-line tool which simplifies the task 
   # of updating your Flutter app's launcher icon
   flutter_launcher_icons: ^0.7.4
+
+  # Material Design data visualization library written natively in Dart.
+  charts_flutter: ^0.9.0
+  
+  # A Flutter staggered grid view which supports multiple columns with rows of varying sizes.
+  flutter_staggered_grid_view: ^0.3.0
+
+  # A Flutter plugin to play multiple simultaneously audio files, works for Android, iOS, macOS and web (WIP).
+  audioplayers: ^0.15.1
+
+  # A flutter text to speech plugin (Swift,Java)
+  flutter_tts: ^1.2.0
+
+  # A little widget for picking durations. Heavily inspired from the Material Design time picker widget.
+  flutter_duration_picker: ^1.0.4
+
+  # Highly customizable, feature-packed Flutter Calendar with gestures, animations and multiple formats.
+  table_calendar: ^2.2.3
+
+  # A date time picker form field which has material
+  # design theme.
+  datetime_picker_formfield: ^1.0.0
+
+  dependency_validator: ^1.0.0
+
+
+
+  # eMOVI
+  rxdart: 0.22.0
+  flutter_blue: ^0.6.3+1
+  permission_handler: ^5.0.0+hotfix.5
+
+
+  # Localizations for the Flutter library
+  flutter_localizations:
+    sdk: flutter
 
 flutter_icons:
   image_path: "assets/icon/launcher_icon.png" 
   android: true
   ios: true
+
 
 
 dev_dependencies:
@@ -111,6 +157,7 @@ flutter:
   assets:
     - assets/credentials.json
     - assets/images/  
+    - assets/images/stress/ 
 
   # Fonts section 
   fonts:

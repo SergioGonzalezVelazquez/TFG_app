@@ -1,29 +1,67 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:tfg_app/models/exercise.dart';
+import 'package:tfg_app/models/therapy.dart';
 
 class Patient {
   final String id;
   final String type;
-  final Timestamp createdAt;
   final PatientStatus status;
+  final DateTime identifySituationsDate;
+  final DateTime hierarchyCompletedDate;
+  final String identifySituationsSessionId;
+  final DateTime lastExerciseCompleted;
+  final int bestDailyStreak;
+  int currentDailyStreak;
+  Therapy currentTherapy;
+  List<Exercise> exercises;
 
   /// Default class constructor
-  Patient({this.id, this.type, this.createdAt, this.status});
+  Patient(
+      {this.id,
+      this.type,
+      this.status,
+      this.currentTherapy,
+      this.exercises,
+      this.hierarchyCompletedDate,
+      this.identifySituationsDate,
+      this.lastExerciseCompleted,
+      this.bestDailyStreak,
+      this.currentDailyStreak,
+      this.identifySituationsSessionId});
 
   /// Converts Firestore Document into a User object
   factory Patient.fromDocument(DocumentSnapshot doc) {
     return Patient(
-      id: doc['id'],
-      type: doc['type'],
-      createdAt: doc['created_at'],
-      status: PatientStatus.values
-          .firstWhere((e) => e.toString() == 'PatientStatus.' + doc['status']),
-    );
+        id: doc['id'],
+        type: doc['type'],
+        identifySituationsDate: doc['identifySituationsDate']?.toDate(),
+        hierarchyCompletedDate: doc['hierarchyCompletedDate']?.toDate(),
+        lastExerciseCompleted: doc['lastExerciseCompleted']?.toDate(),
+        bestDailyStreak: doc['bestDailyStreak'],
+        currentDailyStreak: doc['currentDailyStreak'],
+        identifySituationsSessionId: doc['identifySituationsSessionId'],
+        status: PatientStatus.values.firstWhere(
+            (e) => e.toString() == 'PatientStatus.' + doc['status']),
+        exercises: []);
+  }
+
+  Exercise getExercise(String id) {
+    print("get Exercise " + id);
+    return this
+        .exercises
+        .firstWhere((element) => element.id == id, orElse: null);
+  }
+
+  int get completedExercises {
+    int completed = 0;
+    this.exercises.forEach((element) {completed+= element.status == ExerciseStatus.completed ? 1 : 0;});
+    return completed;
   }
 
   /// Returns a string representation of this object.
   @override
   String toString() {
-    return 'id: $id, type: $type, createdAt: ${createdAt.toDate().toIso8601String()}';
+    return 'id: $id, type: $type, status: ${status.toString().split(".")[1]}';
   }
 }
 
@@ -33,7 +71,8 @@ enum PatientStatus {
   pretest_in_progress,
   pretest_completed,
   identify_categories_pending,
-  identify_categories_in_progress,
   identify_situations_pending,
-  identify_situations_in_progress
+  hierarchy_pending,
+  hierarchy_completed,
+  in_exercise
 }

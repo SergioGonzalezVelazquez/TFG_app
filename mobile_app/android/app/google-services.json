@@ -15,6 +15,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "188310375168-33enpvn1enuirn9rjlqopds43mbmnees.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.stopmiedo.android.app",
+            "certificate_hash": "ac2c27d19d4c08bee4bdc1ed79bc1ed7de197cd0"
+          }
+        },
+        {
+          "client_id": "188310375168-lal1s3a1fle5bqnh1thll1f9gfa2sd1l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.stopmiedo.android.app",
+            "certificate_hash": "c1426e44ac95c22b42ecd0d21c245b9f87f7b7ed"
+          }
+        },
+        {
           "client_id": "188310375168-8v5fk62i1re5ca6to7bg1pb0dajt9udv.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -28,7 +44,7 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "188310375168-8v5fk62i1re5ca6to7bg1pb0dajt9udv.apps.googleusercontent.com",
+              "client_id": "188310375168-f8vk6629915tmofrkm918tlicf4d3nea.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

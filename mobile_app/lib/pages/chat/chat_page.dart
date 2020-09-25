@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:tfg_app/models/message.dart';
 import 'package:tfg_app/models/patient.dart';
 import 'package:tfg_app/pages/chat/chat_message.dart';
-import 'package:tfg_app/pages/chat/identify_situations.dart';
 import 'package:tfg_app/services/auth.dart';
 import 'package:tfg_app/services/dialogflow.dart';
 import 'package:tfg_app/themes/custom_icon_icons.dart';
 import 'package:flutter_dialogflow/dialogflow_v2.dart';
+import 'package:tfg_app/widgets/custom_dialog.dart';
 
 ///
 /// References:
@@ -36,6 +36,7 @@ class _ChatPageState extends State<ChatPage> {
   bool _showBotWritingAnimation = true;
   bool _showTextInput = false;
   bool _showChipInput = false;
+  bool _conversationEnd = false;
 
   @override
   void initState() {
@@ -47,6 +48,35 @@ class _ChatPageState extends State<ChatPage> {
   /**
    * Functions used to handle events in this screen 
    */
+
+  /// Method used to used handle the system back button.
+  /// Return true if the route to be popped
+  Future<bool> _willPopCallback() async {
+    bool close = false;
+    if (_conversationEnd) {
+      Navigator.pop(context, true);
+      return false;
+    } else {
+      await showDialog(
+        context: context,
+        builder: (BuildContext context) => CustomDialog(
+          title: "¿Seguro que quieres volver?",
+          description: "Se perderá el estado actual de la conversación",
+          buttonText2: "Salir",
+          buttonFunction2: () {
+            close = true;
+            Navigator.pop(context);
+          },
+          buttonFunction1: () {
+            close = false;
+            Navigator.pop(context);
+          },
+          buttonText1: "Continuar",
+        ),
+      );
+    }
+    return close;
+  }
 
   /// Trigger the initial intent using dialogflow events.
   /// Send auth user name as parameter
@@ -100,10 +130,12 @@ class _ChatPageState extends State<ChatPage> {
 
   /// Handle Agent response
   void _handleAgentResponse(AIResponse responses) async {
-    setState(() {
-      _showTextInput = false;
-      _showChipInput = false;
-    });
+    if (this.mounted) {
+      setState(() {
+        _showTextInput = false;
+        _showChipInput = false;
+      });
+    }
 
     List messages = responses.getListMessage();
     print("messages:");
@@ -117,10 +149,12 @@ class _ChatPageState extends State<ChatPage> {
       print(typeMessage.type);
 
       if (typeMessage.type == 'text') {
-        setState(() {
-          _showBotWritingAnimation = true;
-          _showTextInput = true;
-        });
+        if (this.mounted) {
+          setState(() {
+            _showBotWritingAnimation = true;
+            _showTextInput = true;
+          });
+        }
         ChatMessage message = new ChatMessage(
           botTextResponse: TextDialogflow(messages[i]['text']),
           showInfo: i == 0,
@@ -134,24 +168,37 @@ class _ChatPageState extends State<ChatPage> {
             milliseconds: (300 * messageLength),
           ),
         );
-        print("lo añades");
-        print(message);
-        setState(
-          () {
-            _showBotWritingAnimation = false;
-            _messages.insert(0, message);
-          },
-        );
+        if (this.mounted) {
+          setState(
+            () {
+              _showBotWritingAnimation = false;
+              _messages.insert(0, message);
+            },
+          );
+        }
       } else if (typeMessage.type == 'suggestion') {
-        print("no lo añades");
-        setState(
-          () {
-            _suggestions = ListSuggestionDialogflow(messages[i]['payload']);
-            _showBotWritingAnimation = false;
-            _showChipInput = true;
-          },
-        );
+        if (this.mounted) {
+          setState(
+            () {
+              _suggestions = ListSuggestionDialogflow(messages[i]['payload']);
+              _showBotWritingAnimation = false;
+              _showChipInput = true;
+            },
+          );
+        }
       }
+    }
+
+    print("outputContexts: " +
+        responses.queryResult.outputContexts.length.toString());
+    // End of conversation
+    if (responses.queryResult.outputContexts.isEmpty && this.mounted) {
+      setState(() {
+        _showTextInput = false;
+        _showChipInput = false;
+        _showBotWritingAnimation = false;
+        _conversationEnd = true;
+      });
     }
   }
 
@@ -190,11 +237,13 @@ class _ChatPageState extends State<ChatPage> {
                   Visibility(
                     visible: true,
                     child: IconButton(
-                      icon: Icon(CustomIcon.list),
-                      onPressed: () =>
-                          Navigator.pushNamed(context, SituationsPage.route),
+                      icon: Icon(CustomIcon.send3),
+                      onPressed: _textController.text.isEmpty
+                          ? null
+                          : () => _handleSubmitted(_textController.text),
                     ),
                   ),
+                  /*
                   _textController.text.isEmpty
                       ? Material(
                           borderRadius: BorderRadius.circular(4),
@@ -216,7 +265,7 @@ class _ChatPageState extends State<ChatPage> {
                           icon: Icon(CustomIcon.send3),
                           onPressed: () =>
                               _handleSubmitted(_textController.text),
-                        ),
+                        ),*/
                 ],
               ),
             ),
@@ -244,31 +293,47 @@ class _ChatPageState extends State<ChatPage> {
             _sendMessage(suggestion.value);
           },
           child: Align(
-              alignment: Alignment.topRight,
-              child: Container(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                decoration: BoxDecoration(
-                  //color: Color(0xffE4DFFD),
-                  color: Colors.white,  
-                  border: Border.all(
-                    color: Theme.of(context).primaryColor,
-                  ),
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
+            alignment: Alignment.topRight,
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+              decoration: BoxDecoration(
+                //color: Color(0xffE4DFFD),
+                color: Colors.white,
+                border: Border.all(
+                  color: Theme.of(context).primaryColor,
                 ),
-                child: Text(
-                  suggestion.text,
-                  style: Theme.of(context).textTheme.bodyText2.apply(
-                      color: Theme.of(context).primaryColor,
-                      fontSizeFactor: .75),
-                ),
-              )),
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+              ),
+              child: Text(
+                suggestion.text,
+                style: Theme.of(context).textTheme.bodyText2.apply(
+                    color: Theme.of(context).primaryColor, fontSizeFactor: .75),
+              ),
+            ),
+          ),
         ),
       );
       chips.add(chip);
     });
 
-    return Column(crossAxisAlignment: CrossAxisAlignment.end, children: chips);
+    return Container(
+      constraints: BoxConstraints(
+          maxHeight: MediaQuery.of(context).size.height * 0.6, minHeight: 0),
+      child: SingleChildScrollView(
+        child: Column(mainAxisSize: MainAxisSize.min, children: chips),
+      ),
+    );
+  }
+
+  Widget _endComposer() {
+    return Column(
+      children: <Widget>[
+        Divider(
+          height: 1.0,
+        ),
+        Text("Fin de la conversación")
+      ],
+    );
   }
 
   Widget _answerComposer() {
@@ -277,6 +342,8 @@ class _ChatPageState extends State<ChatPage> {
       composer = _suggestionsComposer();
     } else if (_showTextInput) {
       composer = _textComposer();
+    } else if (_conversationEnd) {
+      composer = _endComposer();
     }
     return composer;
   }
@@ -351,7 +418,9 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   Widget _chatPage() {
-    return new Scaffold(
+    return WillPopScope(
+      onWillPop: _willPopCallback,
+      child: new Scaffold(
         bottomNavigationBar: null,
         body: SafeArea(
           child: Column(
@@ -368,7 +437,9 @@ class _ChatPageState extends State<ChatPage> {
                   : _answerComposer(),
             ],
           ),
-        ));
+        ),
+      ),
+    );
   }
 
   @override
