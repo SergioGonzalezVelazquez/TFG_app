@@ -4,7 +4,7 @@ import 'package:tfg_app/models/phy_activity.dart';
 import 'package:tfg_app/services/auth.dart';
 
 final CollectionReference phyActivityRef =
-    Firestore.instance.collection('phy_activity');
+    FirebaseFirestore.instance.collection('phy_activity');
 
 final List<int> ignoreValues = [0, 1, 255];
 
@@ -151,13 +151,13 @@ class PhyActivityService {
     for (int i = hourFrom; i <= hourTo; i++) {
       String strHour = _hourAsString(i);
       DocumentSnapshot doc = await phyActivityRef
-          .document(_authService.user.id)
+          .doc(_authService.user.id)
           .collection(strDate)
-          .document(strHour)
+          .doc(strHour)
           .get();
 
       if (doc.exists) {
-        doc.data['activities'].forEach((act) {
+        doc.data()['activities'].forEach((act) {
           if (act['heartRate'] <= 1) {
             act['heartRate'] = null;
           }
@@ -180,12 +180,12 @@ class PhyActivityService {
     String strDate = _dateAsString(date);
 
     QuerySnapshot docs = await phyActivityRef
-        .document(_authService.user.id)
+        .doc(_authService.user.id)
         .collection(strDate)
-        .getDocuments();
+        .get();
 
-    docs.documents.forEach((doc) {
-      doc.data['activities'].forEach((act) {
+    docs.docs.forEach((doc) {
+      doc.data()['activities'].forEach((act) {
         activities.add(PhyActivity.fromMap(act));
       });
     });

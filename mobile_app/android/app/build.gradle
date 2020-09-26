@@ -80,12 +80,13 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.6'
 
     // library required for activity recognition.
-    implementation 'com.google.android.gms:play-services-location:17.0.0'
+    implementation 'com.google.android.gms:play-services-location:17.1.0'
 
     // eMOVI
     implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0'
     implementation project(path: ':mibandlib')
     implementation project(path: ':doctorautomaton')
     implementation files('libs\\EasyFSM.jar')
+    implementation 'com.google.firebase:firebase-firestore:20.0.0'
 }
 apply plugin: 'com.google.gms.google-services'

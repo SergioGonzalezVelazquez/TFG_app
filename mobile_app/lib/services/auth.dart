@@ -13,14 +13,14 @@ import 'package:tfg_app/services/firestore.dart';
 import 'package:tfg_app/utils/datetime_extensions.dart';
 
 // Gets user and patient collections references
-final usersRef = Firestore.instance.collection('users');
-final patientRef = Firestore.instance.collection('patient');
+final usersRef = FirebaseFirestore.instance.collection('users');
+final patientRef = FirebaseFirestore.instance.collection('patient');
 
 class AuthService {
   /// Entry point of the Firebase Authentication SDK.
   FirebaseAuth _firebaseAuth;
 
-  User _user;
+  MUser _user;
 
   /// Factory constructor which returns a singleton instance of the service
   AuthService._();
@@ -29,7 +29,7 @@ class AuthService {
   bool _initialized = false;
 
   /// Getters.
-  User get user => this._user;
+  MUser get user => this._user;
   bool get isAuth => this._user != null;
   PatientStatus get patietStatus => this.user?.patient?.status;
   StreamSubscription<DocumentSnapshot> _patientSubscription;
@@ -40,7 +40,7 @@ class AuthService {
 
   Future<void> _initializePatientListener(String userId) async {
     // Get patient Data
-    DocumentSnapshot patientDoc = await patientRef.document(userId).get();
+    DocumentSnapshot patientDoc = await patientRef.doc(userId).get();
     await _getPatientData(patientDoc);
 
     // Check daily streak
@@ -54,10 +54,9 @@ class AuthService {
 
     // initialize subscription
     _patientSubscription = patientRef
-        .document(_user.id)
+        .doc(_user.id)
         .snapshots()
         .listen((DocumentSnapshot doc) async {
-      print("llega un patient");
       await _getPatientData(doc);
     });
   }
@@ -78,14 +77,12 @@ class AuthService {
       if (this._user.patient.status == PatientStatus.in_exercise) {
         List<Exercise> exercises = await getPatientExercises();
         this._user.patient.exercises = exercises;
-        print("EJERCICIOS " + exercises.length.toString());
       }
     }
   }
 
   /// Initialize service
   Future<void> init() async {
-    print("auth service init");
     if (!_initialized) {
       _initialized = true;
 
@@ -93,9 +90,7 @@ class AuthService {
       _firebaseAuth = FirebaseAuth.instance;
 
       // Get the currently signed-in user
-      print("await get signed in user");
       await _getSignedInUser();
-      print("fin get signed in user");
 
       if (isAuth) {
         print("isAuth");
@@ -118,14 +113,14 @@ class AuthService {
   /// the current user is by calling the getCurrentUser method.
   /// If no user is signed in, getCurrentUser returns null
   Future<void> _getSignedInUser() async {
-    FirebaseUser currentUser = await this._firebaseAuth.currentUser();
+    User currentUser =  this._firebaseAuth.currentUser;
 
     if (currentUser != null) {
-      // User is signed in
-      DocumentSnapshot doc = await usersRef.document(currentUser.uid).get();
+      // MUser is signed in
+      DocumentSnapshot doc = await usersRef.doc(currentUser.uid).get();
 
       if (doc.exists) {
-        this._user = User.fromDocument(doc);
+        this._user = MUser.fromDocument(doc);
 
         // Get patient data for this user
         // await _getPatientData();
@@ -133,31 +128,31 @@ class AuthService {
     }
   }
 
-  /// create document in 'patient' collection for current auth user
+  /// create doc in 'patient' collection for current auth user
   /// firebase cloud functions trigger this event and will calculate
   /// the type of patient based on pretest questionnaire answers
   Future<void> _createPatientDocument(String userId) async {
     String status = PatientStatus.pretest_pending.toString().split(".")[1];
-    await patientRef.document(userId).setData(
+    await patientRef.doc(userId).set(
         {"status": status, "bestDailyStreak": 0, "currentDailyStreak": 0});
     //await _initializePatientListener(userId);
   }
 
   Future<void> updatePatient(Map<String, dynamic> data) async {
-    await patientRef.document(this._user.id).updateData(data);
+    await patientRef.doc(this._user.id).update(data);
   }
 
   Future<void> updatePatientStatus(PatientStatus status) async {
     String strStatus = status.toString().split(".")[1];
     await patientRef
-        .document(this._user.id)
-        .updateData({"status": strStatus}).then((value) async {
+        .doc(this._user.id)
+        .update({"status": strStatus}).then((value) async {
       //await this._getPatientData();
     });
   }
 
   /// Use the Google sign in data to authenticate a
-  /// FirebaseUser and then return that user.
+  /// User and then return that user.
   /// https://firebase.google.com/docs/auth/android/google-signin
   /// https://fireship.io/lessons/flutter-firebase-google-oauth-firestore/
   Future<void> signInWithGoogle() async {
@@ -172,24 +167,24 @@ class AuthService {
       /// exchange it for a Firebase credential, and authenticate with Firebase
       /// using the Firebase credential
       GoogleSignInAuthentication googleAuth = await googleUser.authentication;
-      AuthCredential credential = GoogleAuthProvider.getCredential(
+      AuthCredential credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
       await _firebaseAuth.signInWithCredential(credential);
 
-      FirebaseUser currentUser = await _firebaseAuth.currentUser();
+      User currentUser = _firebaseAuth.currentUser;
       assert(currentUser.email != null);
       assert(!currentUser.isAnonymous);
       assert(await currentUser.getIdToken() != null);
 
-      /// Step 3: Create Firestore if user document does not exists.
+      /// Step 3: Create Firestore if user doc does not exists.
       await this.createUserDocument();
     }
   }
 
   /// Use the Facebook sign in data to authenticate a
-  /// FirebaseUser and then return that user.
+  /// User and then return that user.
   Future<void> signInWithFacebook() async {
     // Step 1. Login with Facebook. This shows Facebook native login screen and provides
     // the idToken and accessToken
@@ -201,17 +196,17 @@ class AuthService {
     /// Step 2. Login to Firebase. Get an ID token from the FacebookLogin object,
     /// exchange it for a Firebase credential, and authenticate with Firebase
     /// using the Firebase credential
-    AuthCredential credential = FacebookAuthProvider.getCredential(
-        accessToken: facebookAuth.accessToken.token);
+    AuthCredential credential =
+        FacebookAuthProvider.credential(facebookAuth.accessToken.token);
 
     await _firebaseAuth.signInWithCredential(credential);
 
-    final FirebaseUser currentUser = await _firebaseAuth.currentUser();
+    final User currentUser = _firebaseAuth.currentUser;
     assert(currentUser.email != null);
     assert(!currentUser.isAnonymous);
     assert(await currentUser.getIdToken() != null);
 
-    /// Step 3: Create Firestore if user document does not exists.
+    /// Step 3: Create Firestore if user doc does not exists.
     await this.createUserDocument();
   }
 
@@ -223,7 +218,7 @@ class AuthService {
     await _firebaseAuth.signInWithEmailAndPassword(
         email: email, password: password);
 
-    FirebaseUser currentUser = await _firebaseAuth.currentUser();
+    User currentUser =  _firebaseAuth.currentUser;
     assert(currentUser.email != null);
     assert(!currentUser.isAnonymous);
 
@@ -237,34 +232,32 @@ class AuthService {
     await _firebaseAuth.createUserWithEmailAndPassword(
         email: email, password: password);
 
-    final FirebaseUser currentUser = await _firebaseAuth.currentUser();
+    final User currentUser =  _firebaseAuth.currentUser;
     assert(currentUser.email != null);
     assert(!currentUser.isAnonymous);
     await currentUser.sendEmailVerification();
 
     // Update the name field of the user
-    UserUpdateInfo userUpdateInfo = new UserUpdateInfo();
-    userUpdateInfo.displayName = name;
-    currentUser.updateProfile(userUpdateInfo);
+    currentUser.updateProfile(displayName: name);
 
-    // User document will be created when email is verified
+    // MUser doc will be created when email is verified
     return true;
   }
 
   Future<void> createUserDocument() async {
-    print("create user document");
-    FirebaseUser currentUser = await _firebaseAuth.currentUser();
+    print("create user doc");
+    User currentUser =  _firebaseAuth.currentUser;
 
     print("currentUser Id: " + currentUser.uid);
 
-    DocumentSnapshot doc = await usersRef.document(currentUser.uid).get();
+    DocumentSnapshot doc = await usersRef.doc(currentUser.uid).get();
     bool exists = doc.exists;
     // Firt time user is logged-in
     if (!doc.exists) {
       print("doc exists");
-      await usersRef.document(currentUser.uid).setData({
+      await usersRef.doc(currentUser.uid).set({
         "id": currentUser.uid,
-        "photo": currentUser.photoUrl,
+        "photo": currentUser.photoURL,
         "email": currentUser.email,
         "name": currentUser.displayName,
         "created_at": DateTime.now()
@@ -273,8 +266,8 @@ class AuthService {
       print("doc exists");
     }
 
-    doc = await usersRef.document(currentUser.uid).get();
-    this._user = User.fromDocument(doc);
+    doc = await usersRef.doc(currentUser.uid).get();
+    this._user = MUser.fromDocument(doc);
     if (!exists) {
       await this._createPatientDocument(currentUser.uid);
     }
@@ -287,13 +280,13 @@ class AuthService {
 
   /// Returns true if the user's email is verified.
   Future<bool> isEmailVerified() async {
-    FirebaseUser user = await _firebaseAuth.currentUser();
-    return user.isEmailVerified;
+    User user =  _firebaseAuth.currentUser;
+    return user.emailVerified;
   }
 
   /// Send email to the user for verification after they have signed up
   Future<void> sendEmailVerification() async {
-    FirebaseUser user = await _firebaseAuth.currentUser();
+    User user =  _firebaseAuth.currentUser;
     user.sendEmailVerification();
   }
 
@@ -305,15 +298,15 @@ class AuthService {
   /// Update a user's basic profile information—the user's
   /// display name and profile photo URL—with the Firebase updateProfile method
   Future<void> updateProfile({String name, String photo}) async {
-    final FirebaseUser currentUser = await _firebaseAuth.currentUser();
+    final User currentUser = await _firebaseAuth.currentUser;
 
     Map<String, dynamic> updatedData = {};
     if (name != null) updatedData['name'] = name;
 
-    usersRef.document(currentUser.uid).updateData(updatedData);
+    usersRef.doc(currentUser.uid).update(updatedData);
 
-    DocumentSnapshot doc = await usersRef.document(currentUser.uid).get();
-    this._user = User.fromDocument(doc);
+    DocumentSnapshot doc = await usersRef.doc(currentUser.uid).get();
+    this._user = MUser.fromDocument(doc);
   }
 
   /// Signs out the current user

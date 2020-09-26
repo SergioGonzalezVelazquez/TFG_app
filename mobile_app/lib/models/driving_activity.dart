@@ -22,17 +22,17 @@ class DrivingActivity {
 
   factory DrivingActivity.fromDocument(DocumentSnapshot doc) {
     return DrivingActivity(
-      id: doc.documentID,
-      distance: doc['distance'] ?? 0,
-      startTime: doc['start_time'],
-      startLocation: doc['start_location'],
-      startLocationDetails: (doc['start_location_details'] != null)
-          ? LocationDetails.fromMap(doc['start_location_details'])
+      id: doc.id,
+      distance: doc.data()['distance'] ?? 0,
+      startTime: doc.data()['start_time'],
+      startLocation: doc.data()['start_location'],
+      startLocationDetails: (doc.data()['start_location_details'] != null)
+          ? LocationDetails.fromMap(doc.data()['start_location_details'])
           : null,
-      endTime: doc['end_time'],
-      endLocation: doc['end_location'],
-      endLocationDetails: (doc['end_location_details'] != null)
-          ? LocationDetails.fromMap(doc['end_location_details'])
+      endTime: doc.data()['end_time'],
+      endLocation: doc.data()['end_location'],
+      endLocationDetails: (doc.data()['end_location_details'] != null)
+          ? LocationDetails.fromMap(doc.data()['end_location_details'])
           : null,
     );
   }
@@ -61,15 +61,15 @@ class LocationDetails {
       this.latitude,
       this.longitude});
 
-  factory LocationDetails.fromMap(Map doc) {
+  factory LocationDetails.fromMap(Map map) {
     return LocationDetails(
-      city: doc['city'],
-      country: doc['country'],
-      countryCode: doc['countryCode'],
-      formattedAddress: doc['formattedAddress'],
-      provider: doc['provider'],
-      latitude: doc['latitude'],
-      longitude: doc['longitude'],
+      city: map['city'],
+      country: map['country'],
+      countryCode: map['countryCode'],
+      formattedAddress: map['formattedAddress'],
+      provider: map['provider'],
+      latitude: map['latitude'],
+      longitude: map['longitude'],
     );
   }
 }

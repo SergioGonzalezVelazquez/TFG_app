@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:table_calendar/table_calendar.dart';
 import 'package:tfg_app/main.dart';
 import 'package:tfg_app/models/exercise.dart';
 import 'package:tfg_app/models/exposure_exercise.dart';
@@ -18,7 +17,7 @@ class ProgressCalendar extends StatefulWidget {
 }
 
 class _ProgressCalendarState extends State<ProgressCalendar> {
-  CalendarController _controller;
+  //CalendarController _controller;
   Map<DateTime, List<dynamic>> _events;
   List<dynamic> _selectedEvents;
   AuthService _authService;
@@ -28,7 +27,7 @@ class _ProgressCalendarState extends State<ProgressCalendar> {
     super.initState();
     _authService = AuthService();
 
-    _controller = CalendarController();
+    //_controller = CalendarController();
     _events = {};
     _selectedEvents = [];
   }
@@ -69,6 +68,7 @@ class _ProgressCalendarState extends State<ProgressCalendar> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
+                /*
                 TableCalendar(
                   events: _events,
                   locale: "es_ES",
@@ -133,6 +133,7 @@ class _ProgressCalendarState extends State<ProgressCalendar> {
                     _authService.user.patient.getExercise(exposure.exerciseId),
                   ),
                 ),
+                */
               ],
             ),
           );

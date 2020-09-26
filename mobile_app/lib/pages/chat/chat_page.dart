@@ -370,7 +370,7 @@ class _ChatPageState extends State<ChatPage> {
                 Animator(
                   duration: Duration(milliseconds: 1000),
                   cycles: 0,
-                  builder: (anim) => Container(
+                  builder: (context, anim, child) => Container(
                     width: 10 * anim.value,
                     height: 10 * anim.value,
                     decoration: BoxDecoration(
@@ -385,7 +385,7 @@ class _ChatPageState extends State<ChatPage> {
                 Animator(
                   duration: Duration(milliseconds: 1100),
                   cycles: 0,
-                  builder: (anim) => Container(
+                  builder: (context, anim, child) => Container(
                     width: 10 * anim.value,
                     height: 10 * anim.value,
                     decoration: BoxDecoration(
@@ -400,7 +400,7 @@ class _ChatPageState extends State<ChatPage> {
                 Animator(
                   duration: Duration(milliseconds: 1200),
                   cycles: 0,
-                  builder: (anim) => Container(
+                  builder: (context, anim, child) => Container(
                     width: 10 * anim.value,
                     height: 10 * anim.value,
                     decoration: BoxDecoration(

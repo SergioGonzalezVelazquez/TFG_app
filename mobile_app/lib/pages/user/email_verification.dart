@@ -61,10 +61,9 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
     _timer = Timer.periodic(
       Duration(seconds: 5),
       (timer) async {
-        await FirebaseAuth.instance.currentUser()
-          ..reload();
-        var user = await FirebaseAuth.instance.currentUser();
-        if (user.isEmailVerified) {
+        FirebaseAuth.instance.currentUser..reload();
+        var user = FirebaseAuth.instance.currentUser;
+        if (user.emailVerified) {
           setState(() {
             _isLoading = true;
             timer.cancel();

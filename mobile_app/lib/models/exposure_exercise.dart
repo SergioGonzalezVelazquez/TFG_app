@@ -78,26 +78,26 @@ class ExposureExercise {
   /// Converts Firestore Document into a Situation object
   factory ExposureExercise.fromDocument(DocumentSnapshot doc) {
     List<String> panicAfterList = [];
-    if (doc['panicAfter'] != null) {
-      doc['panicAfter'].forEach((item) => panicAfterList.add(item));
+    if (doc.data()['panicAfter'] != null) {
+      doc.data()['panicAfter'].forEach((item) => panicAfterList.add(item));
     }
     List<String> panicBeforeList = [];
-    if (doc['panicBefore'] != null) {
-      doc['panicBefore'].forEach((item) => panicBeforeList.add(item));
+    if (doc.data()['panicBefore'] != null) {
+      doc.data()['panicBefore'].forEach((item) => panicBeforeList.add(item));
     }
     return ExposureExercise(
-      id: doc.documentID,
-      exerciseId: doc['exerciseId'],
-      start: doc['start'],
-      end: doc['end'],
-      presetDuration: doc['presetDuration'],
-      realDuration: doc['realDuration'],
-      usasAfter: doc['usasAfter'],
+      id: doc.id,
+      exerciseId: doc.data()['exerciseId'],
+      start: doc.data()['start'],
+      end: doc.data()['end'],
+      presetDuration: doc.data()['presetDuration'],
+      realDuration: doc.data()['realDuration'],
+      usasAfter: doc.data()['usasAfter'],
       panicAfter: panicAfterList,
       panicBefore: panicBeforeList,
-      selfEfficacyBefore: doc['selfEfficacyBefore'],
-      usasBefore: doc['usasBefore'],
-      completedExercise: doc['completedExercise'] ?? false
+      selfEfficacyBefore: doc.data()['selfEfficacyBefore'],
+      usasBefore: doc.data()['usasBefore'],
+      completedExercise: doc.data()['completedExercise'] ?? false
     );
   }
 

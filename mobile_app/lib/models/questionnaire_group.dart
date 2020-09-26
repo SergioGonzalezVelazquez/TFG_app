@@ -16,9 +16,9 @@ class QuestionnaireItemGroup {
 
   factory QuestionnaireItemGroup.fromDocument(DocumentSnapshot doc) {
     return QuestionnaireItemGroup(
-      id: doc.documentID,
-      index: doc['index'],
-      name: doc['name'],
+      id: doc.id,
+      index: doc.data()['index'],
+      name: doc.data()['name'],
       items: [],
     );
   }

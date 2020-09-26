@@ -18,10 +18,10 @@ class Therapy {
   /// Converts Firestore Document into a Therapy object
   factory Therapy.fromDocument(DocumentSnapshot doc) {
     return Therapy(
-        id: doc.documentID,
-        neutral: Situation.fromMap(doc['neutra']),
-        anxiety: Situation.fromMap(doc['anxiety']),
-        situations: doc['situations']
+        id: doc.id,
+        neutral: Situation.fromMap(doc.data()['neutra']),
+        anxiety: Situation.fromMap(doc.data()['anxiety']),
+        situations: doc.data()['situations']
             .map((situation) => Situation.fromMap(situation))
             .toList()
             .cast<Situation>());

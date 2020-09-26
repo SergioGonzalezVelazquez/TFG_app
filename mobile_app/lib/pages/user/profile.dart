@@ -29,7 +29,7 @@ class _ProfilePageState extends State<ProfilePage> {
   File _file;
 
   //Auth user
-  User _user;
+  MUser _user;
 
   // Create a global key that uniquely identifies the Form widget
   // and allows validation of the form.

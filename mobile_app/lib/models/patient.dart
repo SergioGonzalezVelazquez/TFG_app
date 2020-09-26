@@ -32,16 +32,16 @@ class Patient {
   /// Converts Firestore Document into a User object
   factory Patient.fromDocument(DocumentSnapshot doc) {
     return Patient(
-        id: doc['id'],
-        type: doc['type'],
-        identifySituationsDate: doc['identifySituationsDate']?.toDate(),
-        hierarchyCompletedDate: doc['hierarchyCompletedDate']?.toDate(),
-        lastExerciseCompleted: doc['lastExerciseCompleted']?.toDate(),
-        bestDailyStreak: doc['bestDailyStreak'],
-        currentDailyStreak: doc['currentDailyStreak'],
-        identifySituationsSessionId: doc['identifySituationsSessionId'],
+        id: doc.data()['id'],
+        type: doc.data()['type'],
+        identifySituationsDate: doc.data()['identifySituationsDate']?.toDate(),
+        hierarchyCompletedDate: doc.data()['hierarchyCompletedDate']?.toDate(),
+        lastExerciseCompleted: doc.data()['lastExerciseCompleted']?.toDate(),
+        bestDailyStreak: doc.data()['bestDailyStreak'],
+        currentDailyStreak: doc.data()['currentDailyStreak'],
+        identifySituationsSessionId: doc.data()['identifySituationsSessionId'],
         status: PatientStatus.values.firstWhere(
-            (e) => e.toString() == 'PatientStatus.' + doc['status']),
+            (e) => e.toString() == 'PatientStatus.' + doc.data()['status']),
         exercises: []);
   }
 

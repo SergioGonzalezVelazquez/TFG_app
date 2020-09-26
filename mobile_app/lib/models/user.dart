@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tfg_app/models/patient.dart';
 
-class User {
+class MUser {
   final String id;
   final String email;
   final String photoUrl;
@@ -16,16 +16,16 @@ class User {
   set patient(Patient patient) => this._patient = patient;
 
   /// Default class constructor
-  User({this.id, this.email, this.photoUrl, this.name, this.createdAt});
+  MUser({this.id, this.email, this.photoUrl, this.name, this.createdAt});
 
   /// Converts Firestore Document into a User object
-  factory User.fromDocument(DocumentSnapshot doc) {
-    return User(
-        id: doc.documentID,
-        email: doc['email'],
-        photoUrl: doc['photo'],
-        name: doc['name'],
-        createdAt: doc['created_at']);
+  factory MUser.fromDocument(DocumentSnapshot doc) {
+    return MUser(
+        id: doc.id,
+        email: doc.data()['email'],
+        photoUrl: doc.data()['photo'],
+        name: doc.data()['name'],
+        createdAt: doc.data()['created_at']);
   }
 
   /// Returns a string representation of this object.

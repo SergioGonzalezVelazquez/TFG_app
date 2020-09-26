@@ -42,22 +42,22 @@ class Exercise {
   /// Converts Firestore Document into a Situation object
   factory Exercise.fromDocument(DocumentSnapshot doc) {
     return Exercise(
-        id: doc.documentID,
-        itemCode: doc['itemCode'],
-        itemStr: doc['item'],
-        situationCode: doc['situation'],
-        situationStr: doc['situationStr'],
-        levelCode: doc['level'],
-        variantStr: doc['variantStr'],
-        variantCode: doc['variant'],
-        originalUsas: doc['originalUSAs'],
-        image: doc['itemImg'],
-        audio: doc['itemAudio'],
-        index: doc['index'],
-        afterCompleteAttempts: doc['afterCompleteAttempts'],
+        id: doc.id,
+        itemCode: doc.data()['itemCode'],
+        itemStr: doc.data()['item'],
+        situationCode: doc.data()['situation'],
+        situationStr: doc.data()['situationStr'],
+        levelCode: doc.data()['level'],
+        variantStr: doc.data()['variantStr'],
+        variantCode: doc.data()['variant'],
+        originalUsas: doc.data()['originalUSAs'],
+        image: doc.data()['itemImg'],
+        audio: doc.data()['itemAudio'],
+        index: doc.data()['index'],
+        afterCompleteAttempts: doc.data()['afterCompleteAttempts'],
         status: ExerciseStatus.values.firstWhere(
-            (e) => e.toString() == 'ExerciseStatus.' + doc['status']),
-        levelStr: doc['levelStr']);
+            (e) => e.toString() == 'ExerciseStatus.' + doc.data()['status']),
+        levelStr: doc.data()['levelStr']);
   }
 
   /// Returns a string representation of this object.

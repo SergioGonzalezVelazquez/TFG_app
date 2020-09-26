@@ -9,8 +9,8 @@ class DialogflowSession {
 
   factory DialogflowSession.fromDocument(DocumentSnapshot doc) {
     return DialogflowSession(
-      id: doc['id'],
-      startAt: doc['start_at'].toDate(),
+      id: doc.data()['id'],
+      startAt: doc.data()['start_at'].toDate(),
       messages: [],
     );
   }
@@ -32,11 +32,11 @@ class DialogflowMessage {
 
   factory DialogflowMessage.fromDocument(DocumentSnapshot doc) {
     return DialogflowMessage(
-      id: doc.documentID,
-      type: doc['type'],
-      text: doc['text'],
-      index: doc['index'],
-      timestamp: doc['timestamp'].toDate(),
+      id: doc.id,
+      type: doc.data()['type'],
+      text: doc.data()['text'],
+      index: doc.data()['index'],
+      timestamp: doc.data()['timestamp'].toDate(),
     );
   }
 }

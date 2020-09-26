@@ -60,20 +60,20 @@ class QuestionnaireItem {
   /// Converts Firestore Document into a QuestionnaireItem object
   factory QuestionnaireItem.fromDocument(DocumentSnapshot doc) {
     return QuestionnaireItem(
-      id: doc.documentID,
-      linkId: doc['linkId'],
+      id: doc.id,
+      linkId: doc.data()['linkId'],
       type: QuestionnaireItemType.values.firstWhere(
-          (e) => e.toString() == 'QuestionnaireItemType.' + doc['type']),
-      text: doc['text'],
-      mandatory: doc['mandatory'] ?? false,
-      enableWhenClauses: doc['enableWhen'] != null
-          ? doc['enableWhen']
+          (e) => e.toString() == 'QuestionnaireItemType.' + doc.data()['type']),
+      text: doc.data()['text'],
+      mandatory: doc.data()['mandatory'] ?? false,
+      enableWhenClauses: doc.data()['enableWhen'] != null
+          ? doc.data()['enableWhen']
               .map((answerValue) => EnableWhen.fromMap(answerValue))
               .toList()
               .cast<EnableWhen>()
           : [],
-      answerValueSet: doc['answerValueSet'] != null
-          ? doc['answerValueSet']
+      answerValueSet: doc.data()['answerValueSet'] != null
+          ? doc.data()['answerValueSet']
               .map((answerValue) => AnswerValue.fromMap(answerValue))
               .toList()
               .cast<AnswerValue>()

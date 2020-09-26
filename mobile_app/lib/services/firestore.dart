@@ -13,7 +13,7 @@ import 'package:tfg_app/services/auth.dart';
 
 /// Entry point for accesing firestore.
 /// Gets the instance of Firestore for the default Firebase app
-Firestore database = Firestore.instance;
+FirebaseFirestore database = FirebaseFirestore.instance;
 
 /// Gets a CollectionReference for pretest_questionnaire path.
 final signUpQuestionnaireRef = database.collection('pretest_questionnaire');
@@ -26,15 +26,15 @@ final signUpQuestionnaireResponseRef =
 final exposureRef = database.collection('exposure');
 
 Stream<List<ExposureExercise>> getExposuresAsStream() {
-  return Firestore.instance
+  return FirebaseFirestore.instance
       .collection('exposure')
-      .document(_authService.user.id)
+      .doc(_authService.user.id)
       .collection('exposures')
       .orderBy("start", descending: false)
-      .getDocuments()
+      .get()
       .then((snapshot) {
     try {
-      return snapshot.documents
+      return snapshot.docs
           .map((doc) => ExposureExercise.fromDocument(doc))
           .toList();
     } catch (e) {
@@ -49,17 +49,15 @@ Stream<List<Exercise>> getExercisesAsStream() {
   String therapyId = _authService.user.patient.currentTherapy.id;
 
   return patientRef
-      .document(userId)
+      .doc(userId)
       .collection('userTherapies')
-      .document(therapyId)
+      .doc(therapyId)
       .collection('exercises')
       .orderBy("index", descending: false)
-      .getDocuments()
+      .get()
       .then((snapshot) {
     try {
-      return snapshot.documents
-          .map((doc) => Exercise.fromDocument(doc))
-          .toList();
+      return snapshot.docs.map((doc) => Exercise.fromDocument(doc)).toList();
     } catch (e) {
       print(e);
       return null;
@@ -80,64 +78,62 @@ AuthService _authService = AuthService();
 /// Get pretest questions
 Future<List<QuestionnaireItemGroup>> getSignupQuestionnaire() async {
   // Get groups of questions
-  QuerySnapshot snapshot = await signUpQuestionnaireRef
-      .orderBy('index', descending: false)
-      .getDocuments();
+  QuerySnapshot snapshot =
+      await signUpQuestionnaireRef.orderBy('index', descending: false).get();
 
-  List<QuestionnaireItemGroup> questionGroups = snapshot.documents
+  List<QuestionnaireItemGroup> questionGroups = snapshot.docs
       .map((doc) => QuestionnaireItemGroup.fromDocument(doc))
       .toList();
   for (int i = 0; i < questionGroups.length; i++) {
     QuerySnapshot items = await signUpQuestionnaireRef
-        .document(questionGroups[i].id.toString())
+        .doc(questionGroups[i].id.toString())
         .collection('questions')
         .orderBy("linkId", descending: false)
-        .getDocuments();
-    questionGroups[i].items = items.documents
-        .map((item) => QuestionnaireItem.fromDocument(item))
-        .toList();
+        .get();
+    questionGroups[i].items =
+        items.docs.map((item) => QuestionnaireItem.fromDocument(item)).toList();
   }
 
   return questionGroups;
 }
 
-/// create document on pretest_questionnaire_response collection for
+/// create doc on pretest_questionnaire_response collection for
 /// current auth user
 Future<void> createSignUpResponse() async {
   await signUpQuestionnaireResponseRef
-      .document(_authService.user.id)
-      .setData({"start_at": DateTime.now()});
+      .doc(_authService.user.id)
+      .set({"start_at": DateTime.now()});
 }
 
-/// delete document on pretest_questionnaire_response collection for
+/// delete doc on pretest_questionnaire_response collection for
 /// current auth user
 Future<void> deleteSignUpResponse() async {
-  await signUpQuestionnaireResponseRef.document(_authService.user.id).delete();
+  await signUpQuestionnaireResponseRef.doc(_authService.user.id).delete();
 }
 
-/// add question response for current user document at
+/// add question response for current user doc at
 /// pretest_questionnaire_response collection
 Future<void> addSignUpResponse(QuestionnaireItem item) async {
   await signUpQuestionnaireResponseRef
-      .document(_authService.user.id)
-      .updateData({item.id: item.answerValue});
+      .doc(_authService.user.id)
+      .update({item.id: item.answerValue});
 }
 
-/// delete question response in current user document at
+/// delete question response in current user doc at
 /// pretest_questionnaire_response collection
 Future<void> deleteSignUpResponseItem(QuestionnaireItem item) async {
   print("delete response para " + item.id);
   await signUpQuestionnaireResponseRef
-      .document(_authService.user.id)
-      .updateData({item.id: FieldValue.delete()});
+      .doc(_authService.user.id)
+      .update({item.id: FieldValue.delete()});
 }
 
 Future<void> createExposureExercise(ExposureExercise exposure) async {
   await exposureRef
-      .document(_authService.user.id)
+      .doc(_authService.user.id)
       .collection('exposures')
-      .document()
-      .setData(exposure.toMap());
+      .doc()
+      .set(exposure.toMap());
 }
 
 Future<void> updateExerciseStatus(String id, ExerciseStatus newStatus) async {
@@ -145,12 +141,12 @@ Future<void> updateExerciseStatus(String id, ExerciseStatus newStatus) async {
   String therapyId = _authService.user.patient.currentTherapy.id;
 
   await patientRef
-      .document(userId)
+      .doc(userId)
       .collection('userTherapies')
-      .document(therapyId)
+      .doc(therapyId)
       .collection('exercises')
-      .document(id)
-      .updateData({'status': newStatus.toString().split('.')[1]});
+      .doc(id)
+      .update({'status': newStatus.toString().split('.')[1]});
 }
 
 Future<void> updateExercise(String id, Map<String, dynamic> data) async {
@@ -158,26 +154,25 @@ Future<void> updateExercise(String id, Map<String, dynamic> data) async {
   String therapyId = _authService.user.patient.currentTherapy.id;
 
   await patientRef
-      .document(userId)
+      .doc(userId)
       .collection('userTherapies')
-      .document(therapyId)
+      .doc(therapyId)
       .collection('exercises')
-      .document(id)
-      .updateData(data);
+      .doc(id)
+      .update(data);
 }
 
 Future<List<ExposureExercise>> getExerciseExposures(String exerciseId) async {
   List<ExposureExercise> exposures = [];
   QuerySnapshot snapshot = await exposureRef
-      .document(_authService.user.id)
+      .doc(_authService.user.id)
       .collection('exposures')
       .where("exerciseId", isEqualTo: exerciseId)
       .orderBy("start", descending: false)
-      .getDocuments();
+      .get();
 
-  exposures = snapshot.documents
-      .map((doc) => ExposureExercise.fromDocument(doc))
-      .toList();
+  exposures =
+      snapshot.docs.map((doc) => ExposureExercise.fromDocument(doc)).toList();
 
   return exposures;
 }
@@ -185,12 +180,12 @@ Future<List<ExposureExercise>> getExerciseExposures(String exerciseId) async {
 Future<Therapy> getPatientCurrentTherapy() async {
   String userId = _authService.user.id;
   QuerySnapshot docs = await patientRef
-      .document(userId)
+      .doc(userId)
       .collection('userTherapies')
       .where("active", isEqualTo: true)
-      .getDocuments();
+      .get();
 
-  return Therapy.fromDocument(docs.documents[0]);
+  return Therapy.fromDocument(docs.docs[0]);
 }
 
 Future<List<Exercise>> getPatientExercises() async {
@@ -199,16 +194,15 @@ Future<List<Exercise>> getPatientExercises() async {
   List<Exercise> exercises = [];
 
   QuerySnapshot docs = await patientRef
-      .document(userId)
+      .doc(userId)
       .collection('userTherapies')
-      .document(therapyId)
+      .doc(therapyId)
       .collection('exercises')
       .orderBy('index')
-      .getDocuments();
+      .get();
 
-  if (docs.documents.isNotEmpty) {
-    exercises =
-        docs.documents.map((doc) => Exercise.fromDocument(doc)).toList();
+  if (docs.docs.isNotEmpty) {
+    exercises = docs.docs.map((doc) => Exercise.fromDocument(doc)).toList();
   }
   return exercises;
 }
@@ -223,10 +217,10 @@ Future<void> setHierarchy(List<Situation> situation) async {
   String userId = _authService.user.id;
   String therapyId = _authService.user.patient.currentTherapy.id;
   await patientRef
-      .document(userId)
+      .doc(userId)
       .collection('userTherapies')
-      .document(therapyId)
-      .updateData({'situations': hierarchy});
+      .doc(therapyId)
+      .update({'situations': hierarchy});
 
   await _authService.updatePatientStatus(PatientStatus.hierarchy_completed);
 }
@@ -235,36 +229,36 @@ Future<void> setHierarchy(List<Situation> situation) async {
 /// It is used when user has a questionnaire in progress
 Future<Map<String, dynamic>> getQuestionnaireResponses() async {
   DocumentSnapshot doc =
-      await signUpQuestionnaireResponseRef.document(_authService.user.id).get();
+      await signUpQuestionnaireResponseRef.doc(_authService.user.id).get();
 
-  return doc.exists ? doc.data : null;
+  return doc.exists ? doc.data() : null;
 }
 
 Future<List<DrivingActivity>> getDrivingActivities() async {
   QuerySnapshot activitiesDocs = await drivingActivityRef
-      .document(_authService.user.id)
+      .doc(_authService.user.id)
       .collection('user_driving_activity')
-      .getDocuments();
+      .get();
 
-  return activitiesDocs.documents
+  return activitiesDocs.docs
       .map((doc) => DrivingActivity.fromDocument(doc))
       .toList();
 }
 
 Future<List<dynamic>> getDrivingRoutes(String driveId) async {
-  DocumentSnapshot doc = await drivingRoutesRef.document(driveId).get();
+  DocumentSnapshot doc = await drivingRoutesRef.doc(driveId).get();
   List<dynamic> list = [];
   if (doc.exists) {
-    return doc.data['route'];
+    return doc.data()['route'];
   }
   return list;
 }
 
 Future<List<DrivingEvent>> getDrivingEvents(String driveId) async {
-  DocumentSnapshot doc = await drivingEventRef.document(driveId).get();
+  DocumentSnapshot doc = await drivingEventRef.doc(driveId).get();
   List<DrivingEvent> list = [];
   if (doc.exists) {
-    doc.data['events'].forEach((event) {
+    doc.data()['events'].forEach((event) {
       print(event);
       list.add(DrivingEvent.fromMap(event));
     });
