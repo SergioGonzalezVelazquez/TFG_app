@@ -16,6 +16,27 @@ final Color facebookDark = Color(0xff2f477a);
 final Color google = Color(0xffdb4a39);
 final Color googleDark = Color(0xffbb3222);
 
+/*
+   * Functions used to handle events in this screen 
+   */
+String msgPassword(PasswordValidationResult result) {
+  String msg;
+
+  switch (result) {
+    case PasswordValidationResult.VALID:
+      msg = null;
+      break;
+    case PasswordValidationResult.TOO_SHORT:
+      msg = "Tu contraseña debe tener al menos 6 caracteres";
+      break;
+    case PasswordValidationResult.EMPTY_PASSWORD:
+      msg = "Introduce tu contraseña";
+      break;
+  }
+
+  return msg;
+}
+
 class LoginPage extends StatefulWidget {
   /// Name use for navigate to this screen
   static const route = "/login";
@@ -63,10 +84,6 @@ class _LoginPageState extends State<LoginPage> {
     _passController.dispose();
     super.dispose();
   }
-
-  /*
-   * Functions used to handle events in this screen 
-   */
 
   /// Display a message to the user when social sign
   /// in failed
@@ -356,7 +373,9 @@ class _LoginPageState extends State<LoginPage> {
             "Contraseña",
             CustomIcon.lock,
             controller: _passController,
-            validator: (val) => Validator.passwordPresent(val),
+            validator: (pwd) => msgPassword(
+              Validator.validatePassword(pwd),
+            ),
             visible: _showPassword,
             visibleController: () {
               setState(

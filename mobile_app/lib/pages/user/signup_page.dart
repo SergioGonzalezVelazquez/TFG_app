@@ -126,10 +126,7 @@ class _SignUpPageState extends State<SignUpPage> {
     }
   }
 
-  /**
-   * Widgets (ui components) used in this screen 
-   */
-
+  /// Widgets (ui components) used in this screen
   Widget _linkToLogin() {
     return InkWell(
       onTap: () => Navigator.of(context).pushNamedAndRemoveUntil(
@@ -173,7 +170,9 @@ class _SignUpPageState extends State<SignUpPage> {
           ),
           customPasswordInput("Contraseña", CustomIcon.lock,
               controller: _passController,
-              validator: (val) => Validator.validPassword(val),
+              validator: (pwd) => msgPassword(
+                    Validator.validatePassword(pwd),
+                  ),
               visible: _showPassword1,
               visibleController: () {
                 setState(() {

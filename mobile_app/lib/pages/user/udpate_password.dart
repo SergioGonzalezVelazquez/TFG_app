@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tfg_app/pages/user/login_page.dart';
 import 'package:tfg_app/themes/custom_icon_icons.dart';
 import 'package:tfg_app/utils/validators.dart';
 import 'package:tfg_app/widgets/buttons.dart';
@@ -76,7 +77,9 @@ class _UpdatePasswordState extends State<UpdatePassword> {
               "Contraseña actual",
               CustomIcon.lock,
               controller: _oldPwdController,
-              validator: (val) => Validator.passwordPresent(val),
+              validator: (pwd) => msgPassword(
+                Validator.validatePassword(pwd),
+              ),
               visible: _showPasswordOld,
               visibleController: () {
                 setState(
@@ -106,7 +109,9 @@ class _UpdatePasswordState extends State<UpdatePassword> {
             SizedBox(height: MediaQuery.of(context).size.height / 40),
             customPasswordInput("Nueva contraseña", CustomIcon.lock,
                 controller: _newPwd1Controller,
-                validator: (val) => Validator.validPassword(val),
+                validator: (pwd) => msgPassword(
+                      Validator.validatePassword(pwd),
+                    ),
                 visible: _showPasswordNew,
                 visibleController: () {
                   setState(() {
