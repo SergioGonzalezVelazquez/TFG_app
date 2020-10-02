@@ -9,7 +9,9 @@ STOPMiedo es una herramienta que pretende ayudar a las personas que sufren amaxo
     <a href="https://github.com/SergioGonzalezVelazquez/TFG_app/commits/" title="Last Commit"><img src="https://img.shields.io/github/last-commit/SergioGonzalezVelazquez/TFG_app?style=plastic"></a>
     <a href="https://github.com/SergioGonzalezVelazquez/TFG_app/issues" title="Open Issues"><img src="https://img.shields.io/github/issues/SergioGonzalezVelazquez/TFG_app?style=plastic"></a>
 </p>
+
 ## Descripción
+
 El sistema está formado por una plataforma _backend_ en __Firebase__ y una aplicación cliente para _smartphone_ desarrollada con __Flutter__, que guia al usuario en las diferentes fases de la terapia. 
 
 Durante las primeras sesiones de uso de la app, la persona que sufre amaxofobia tendrá que responder a un cuestionario previo y, mantener una serie de conversaciones con un terapeuta virtual (__agente conversacional__). Esta primera fase permite conocer el contexto o situación de origen de la amaxofobia en cada paciente concreto, lo cual es necesario para, después, poder elegir el tratamiento más apropiado para cada usuario.
