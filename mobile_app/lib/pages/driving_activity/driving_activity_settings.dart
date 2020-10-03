@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:tfg_app/services/driving_detection.dart';
-import 'package:tfg_app/widgets/progress.dart';
-import 'package:tfg_app/widgets/buttons.dart';
+
+import '../../services/driving_detection.dart';
+import '../../widgets/buttons.dart';
+import '../../widgets/progress.dart';
 
 class DrivingActivitySettings extends StatefulWidget {
-  static const route = "/drivingActivitySettings";
+  static const route = """/drivingActivitySettings""";
 
   @override
   State<DrivingActivitySettings> createState() =>
@@ -30,9 +31,7 @@ class DrivingActivitySettingsState extends State<DrivingActivitySettings> {
     super.dispose();
   }
 
-  /**
-  * Functions used to handle events in this screen 
-  */
+  /// Functions used to handle events in this screen
   Future<void> _checkIsRunning() async {
     bool running = await _service.isRunning();
     setState(() {
@@ -46,7 +45,7 @@ class DrivingActivitySettingsState extends State<DrivingActivitySettings> {
       _isLoading = true;
     });
     bool enabled = await _service.startBackgroundService();
-    if(enabled){
+    if (enabled) {
       enabled = await _service.isRunning();
     }
     setState(() {
@@ -66,9 +65,7 @@ class DrivingActivitySettingsState extends State<DrivingActivitySettings> {
     });
   }
 
-  /**
-  * Widgets (ui components) used in this screen 
-  */
+  ///  Widgets (ui components) used in this screen
 
   Widget _buildPage(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -82,7 +79,7 @@ class DrivingActivitySettingsState extends State<DrivingActivitySettings> {
             height: MediaQuery.of(context).size.height * 0.02,
           ),
           Text(
-            "Detección automática de la conducción",
+            """Detección automática de la conducción""",
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.headline6,
           ),
@@ -90,28 +87,28 @@ class DrivingActivitySettingsState extends State<DrivingActivitySettings> {
             height: MediaQuery.of(context).size.height * 0.04,
           ),
           Text(
-            "Con esta función activada, STOPMiedo hace uso de los sensores de movimiento y localización para averiguar automáticamente si estás conduciendo.",
+            """Con esta función activada, STOPMiedo hace uso de los sensores de movimiento y localización para averiguar automáticamente si estás conduciendo.""",
             textAlign: TextAlign.justify,
           ),
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.03,
           ),
           Text(
-            "De esta forma podemos reconocer algunos eventos significativos en la conducción tales como frenazos, giros bruscos, acelerones, exceso de velocidad y distracciones con el teléfono.",
+            """De esta forma podemos reconocer algunos eventos significativos en la conducción tales como frenazos, giros bruscos, acelerones, exceso de velocidad y distracciones con el teléfono.""",
             textAlign: TextAlign.justify,
           ),
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.03,
           ),
           Text(
-            "Además, a través de la utilización de mapas, podrás hacer un seguimiento de tus rutas en coche.",
+            """Además, a través de la utilización de mapas, podrás hacer un seguimiento de tus rutas en coche.""",
             textAlign: TextAlign.justify,
           ),
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.05,
           ),
           Text(
-            "Estado: ",
+            """Estado: """,
             textAlign: TextAlign.justify,
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
@@ -121,7 +118,7 @@ class DrivingActivitySettingsState extends State<DrivingActivitySettings> {
               Container(
                 width: 7.0,
                 height: 7.0,
-                decoration: new BoxDecoration(
+                decoration: BoxDecoration(
                   color: _isRunning ? Colors.green : Colors.red,
                   shape: BoxShape.circle,
                 ),
@@ -130,7 +127,7 @@ class DrivingActivitySettingsState extends State<DrivingActivitySettings> {
                 width: 10,
               ),
               Text(
-                _isRunning ? "En ejecución" : "Desactivado",
+                _isRunning ? """En ejecución""" : """Desactivado""",
                 style: TextStyle(
                   color: _isRunning ? Colors.green : Colors.red,
                 ),
@@ -157,16 +154,16 @@ class DrivingActivitySettingsState extends State<DrivingActivitySettings> {
               Navigator.pop(context);
             },
             child: Text(
-              "Salir",
+              """Salir""",
               style: TextStyle(
                   color: Theme.of(context).primaryColor,
                   fontWeight: FontWeight.bold),
             ),
           ),
           _isRunning
-              ? primaryButton(context, _turnOff, "Desactivar",
+              ? primaryButton(context, _turnOff, """Desactivar""",
                   width: MediaQuery.of(context).size.width * 0.25)
-              : primaryButton(context, _turnOn, "Aceptar",
+              : primaryButton(context, _turnOn, """Aceptar""",
                   width: MediaQuery.of(context).size.width * 0.25),
         ],
       ),
@@ -177,7 +174,7 @@ class DrivingActivitySettingsState extends State<DrivingActivitySettings> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Configuración"),
+        title: Text("""Configuración"""),
       ),
       body: SafeArea(
         child: _isLoading ? circularProgress(context) : _buildPage(context),

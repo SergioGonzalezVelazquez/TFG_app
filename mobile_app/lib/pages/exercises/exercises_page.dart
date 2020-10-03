@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:tfg_app/models/exercise.dart';
-import 'package:tfg_app/models/patient.dart';
-import 'package:tfg_app/pages/exercises/exercise_item.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:tfg_app/pages/exercises/exercises_help.dart';
-import 'package:tfg_app/services/auth.dart';
-import 'package:tfg_app/widgets/exercise_completed_popup.dart';
+
+import '../../models/exercise.dart';
+import '../../models/patient.dart';
+import '../../services/auth.dart';
+import 'exercise_item.dart';
+import 'exercises_help.dart';
 
 class ExercisePage extends StatefulWidget {
   _ExercisePageState createState() => _ExercisePageState();
@@ -30,8 +30,8 @@ class _ExercisePageState extends State<ExercisePage> {
         crossAxisCount: 4,
         mainAxisSpacing: 8.0,
         crossAxisSpacing: 8.0,
-        staggeredTileBuilder: (int index) => StaggeredTile.fit(2),
-        itemBuilder: (BuildContext context, int index) {
+        staggeredTileBuilder: (index) => StaggeredTile.fit(2),
+        itemBuilder: (context, index) {
           return ExerciseItem(_exercises[index], () {
             setState(() {});
           });
@@ -61,7 +61,8 @@ class _ExercisePageState extends State<ExercisePage> {
           RichText(
             textAlign: TextAlign.justify,
             text: TextSpan(
-              text: "Cuando completes los pasos previos de la terepia te asignaremos un listado de  ",
+              text:
+                  "Cuando completes los pasos previos de la terepia te asignaremos un listado de  ",
               style: Theme.of(context).textTheme.bodyText2,
               children: <TextSpan>[
                 TextSpan(
@@ -69,8 +70,8 @@ class _ExercisePageState extends State<ExercisePage> {
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 TextSpan(
-                  text: " que te ayudarán a exponerte de manera gradual a las situaciones temidas."
-                )
+                    text:
+                        " que te ayudarán a exponerte de manera gradual a las situaciones temidas.")
               ],
             ),
           ),
@@ -81,7 +82,7 @@ class _ExercisePageState extends State<ExercisePage> {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
+    return Scaffold(
       // new
       appBar: AppBar(
         title: Text('Ejercicios'),
@@ -89,7 +90,7 @@ class _ExercisePageState extends State<ExercisePage> {
           IconButton(
             icon: Icon(Icons.help_outline),
             onPressed: () {
-                Navigator.pushNamed(context, ExerciseHelp.route);
+              Navigator.pushNamed(context, ExerciseHelp.route);
             },
           ),
         ],

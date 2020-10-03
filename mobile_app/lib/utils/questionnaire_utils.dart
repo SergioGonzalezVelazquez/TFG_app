@@ -1,5 +1,5 @@
-import 'package:tfg_app/models/questionnaire_item.dart';
-import 'package:tfg_app/services/firestore.dart';
+import '../models/questionnaire_item.dart';
+import '../services/firestore.dart';
 
 // Calculate next enable question in a list of questions,
 // based on its enableWhen clauses and it current answer.
@@ -8,7 +8,7 @@ int getNextEnableQuestion(List<QuestionnaireItem> items, int currentIndex) {
   for (int i = currentIndex + 1; i < items.length; i++) {
     if (evaluteItemEnableWhen(items[i], items)) {
       return items[i].linkId;
-    } 
+    }
   }
 
   return -1;
@@ -21,7 +21,7 @@ int getPreviousEnableQuestion(List<QuestionnaireItem> items, int currentIndex) {
   for (int i = currentIndex - 1; i >= 0; i--) {
     if (evaluteItemEnableWhen(items[i], items)) {
       return items[i].linkId;
-    } 
+    }
   }
   return -1;
 }
@@ -90,6 +90,6 @@ void evaluateAndDeleteAnswers(
           }
         }
       }
-    } 
+    }
   });
 }

@@ -1,17 +1,19 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:tfg_app/main.dart';
-import 'package:tfg_app/models/patient.dart';
-import 'package:tfg_app/models/questionnaire_group.dart';
-import 'package:tfg_app/models/questionnaire_item.dart';
-import 'package:tfg_app/pages/questionnaire/questionnaire_initial_page.dart';
-import 'package:tfg_app/pages/questionnaire/pretest/signup_questionnaire_completed_page.dart';
-import 'package:tfg_app/pages/questionnaire/questionnaire_components.dart';
-import 'package:tfg_app/services/auth.dart';
-import 'package:tfg_app/services/firestore.dart';
-import 'package:tfg_app/widgets/progress.dart';
-import 'package:tfg_app/widgets/custom_dialog.dart';
-import 'package:tfg_app/utils/questionnaire_utils.dart';
+
+import '../../../main.dart';
+import '../../../models/patient.dart';
+import '../../../models/questionnaire_group.dart';
+import '../../../models/questionnaire_item.dart';
+import '../../../services/auth.dart';
+import '../../../services/firestore.dart';
+import '../../../utils/questionnaire_utils.dart';
+import '../../../widgets/custom_dialog.dart';
+import '../../../widgets/progress.dart';
+import '../questionnaire_components.dart';
+import '../questionnaire_initial_page.dart';
+import 'signup_questionnaire_completed_page.dart';
 
 class SignUpQuestionnairePage extends StatefulWidget {
   /// Name use for navigate to this screen
@@ -21,9 +23,7 @@ class SignUpQuestionnairePage extends StatefulWidget {
   // in progress or not
   bool inProgress;
 
-  SignUpQuestionnairePage({bool inProgress = false}) {
-    this.inProgress = inProgress;
-  }
+  SignUpQuestionnairePage({bool inProgress = false});
 
   ///Creates a StatelessElement to manage this widget's location in the tree.
   _SignUpQuestionnairePageState createState() =>
@@ -46,7 +46,7 @@ class _SignUpQuestionnairePageState extends State<SignUpQuestionnairePage>
   /// List of sections within the Questionnaire
   List<QuestionnaireItem> _questionnaireItems = [];
 
-  Map _mapItemToGroup = new Map();
+  final Map _mapItemToGroup = {};
 
   int _currentGroupIndex = 0;
 
@@ -66,7 +66,7 @@ class _SignUpQuestionnairePageState extends State<SignUpQuestionnairePage>
 
   /// Create a global key that uniquely identifies the Scaffold widget,
   /// and allows to display snackbars.
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   /// Method called when this widget is inserted into the tree.
   /// Initialize animation controller and fecht questionnaire items
@@ -87,14 +87,12 @@ class _SignUpQuestionnairePageState extends State<SignUpQuestionnairePage>
     super.dispose();
   }
 
-  /**
-  * Functions used to handle events in this screen 
-  */
+  /// Functions used to handle events in this screen
 
   Future<void> _reset() async {
     await showDialog(
       context: context,
-      builder: (BuildContext context) => CustomDialog(
+      builder: (context) => CustomDialog(
         title: "¿Seguro que quieres volver a empezar?",
         description: "Se borrarán tus respuestas anteriores",
         buttonText2: "Cancelar",
@@ -129,8 +127,9 @@ class _SignUpQuestionnairePageState extends State<SignUpQuestionnairePage>
       setState(
         () {
           _questionsGroups = response;
-          if (response.length > 0)
+          if (response.length > 0) {
             _currentQuestionnaireItem = _questionsGroups[0].items[0];
+          }
           for (QuestionnaireItemGroup group in _questionsGroups) {
             _questionnaireItems = _questionnaireItems + group.items;
             for (QuestionnaireItem item in group.items) {
@@ -166,7 +165,8 @@ class _SignUpQuestionnairePageState extends State<SignUpQuestionnairePage>
         QuestionnaireItem item = _questionnaireItems[index];
         if (response.containsKey(item.id)) {
           if (item.type == QuestionnaireItemType.multiple_choice) {
-            _questionnaireItems[index].answerValue = List<String>.from(response[item.id]);
+            _questionnaireItems[index].answerValue =
+                List<String>.from(response[item.id]);
           } else {
             _questionnaireItems[index].answerValue = response[item.id];
           }
@@ -205,7 +205,7 @@ class _SignUpQuestionnairePageState extends State<SignUpQuestionnairePage>
     bool close = false;
     await showDialog(
       context: context,
-      builder: (BuildContext context) => CustomDialog(
+      builder: (context) => CustomDialog(
         title: "¿Seguro que quieres salir?",
         description:
             "Cuando vuelvas podrás continuar respondiendo desde la última pregunta en que lo dejaste.",
@@ -298,23 +298,24 @@ class _SignUpQuestionnairePageState extends State<SignUpQuestionnairePage>
     List<String> _selectedValues = _multipleChoiceInputSelected;
     int index = _selectedValues.lastIndexOf(value);
 
-    if (index >= 0)
+    if (index >= 0) {
       _selectedValues.removeAt(index);
-    else
+    } else {
       _selectedValues.add(value);
+    }
 
     setState(() {
       _multipleChoiceInputSelected = _selectedValues;
-      if (_selectedValues.length > 0)
+      if (_selectedValues.length > 0) {
         _currentQuestionnaireItem.answerValue = _selectedValues;
-      else
+      } else {
         _currentQuestionnaireItem.answerValue = null;
+      }
     });
   }
 
-  /**
-  * Widgets (ui components) used in this screen 
-  */
+  ///  Widgets (ui components) used in this screen
+
   Widget _buildPage(BuildContext context) {
     QuestionnaireItemGroup currentGroup = _questionsGroups[_currentGroupIndex];
     return ListView(
@@ -394,15 +395,17 @@ class _SignUpQuestionnairePageState extends State<SignUpQuestionnairePage>
 
     switch (_currentQuestionnaireItem.type) {
       case QuestionnaireItemType.choice:
-        if (_currentQuestionnaireItem.answerValue != null)
+        if (_currentQuestionnaireItem.answerValue != null) {
           _choiceInputSelected = _currentQuestionnaireItem.answerValue;
+        }
         input = choiceInput(context, _currentQuestionnaireItem.answerValueSet,
             _choiceInputSelected, _onChoiceInputTap);
         break;
 
       case QuestionnaireItemType.multiple_choice:
-        if (_currentQuestionnaireItem.answerValue != null)
+        if (_currentQuestionnaireItem.answerValue != null) {
           _multipleChoiceInputSelected = _currentQuestionnaireItem.answerValue;
+        }
 
         input = multipleChoiceInput(
             context,
@@ -413,8 +416,8 @@ class _SignUpQuestionnairePageState extends State<SignUpQuestionnairePage>
 
       case QuestionnaireItemType.boolean:
         _booleanInputSelected = _currentQuestionnaireItem.answerValue;
-        input =
-            booleanInput(context, _booleanInputSelected, _onBooleanInputTap);
+        input = booleanInput(context, _onBooleanInputTap,
+            selectedValue: _booleanInputSelected);
         break;
 
       default:
@@ -515,7 +518,8 @@ class _SignUpQuestionnairePageState extends State<SignUpQuestionnairePage>
           height: MediaQuery.of(context).size.height * 0.02,
         ),
         Text(
-          "Puedes continuar respondiendo por la pregunta en que lo dejaste, o borrar tus respuestas anteriores y empezar a responder desde cero.",
+          """Puedes continuar respondiendo por la pregunta en que lo dejaste,
+           o borrar tus respuestas anteriores y empezar a responder desde cero.""",
           textAlign: TextAlign.justify,
         ),
         Align(
@@ -584,7 +588,8 @@ class _SignUpQuestionnairePageState extends State<SignUpQuestionnairePage>
                 ),
               ),
         bottomNavigationBar: _animateController.isCompleted && !_isLoading
-            ? continueButton(context, continueButtonEnabled ?? false, _continue)
+            ? continueButton(context, _continue,
+                enabled: continueButtonEnabled ?? false)
             : null,
       ),
     );

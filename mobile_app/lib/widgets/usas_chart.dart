@@ -2,8 +2,9 @@
 /// third rendered as a line.
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
-import 'package:tfg_app/models/exposure_exercise.dart';
-import 'package:tfg_app/themes/style.dart';
+
+import '../models/exposure_exercise.dart';
+import '../themes/style.dart';
 
 class USAsChart extends StatelessWidget {
   final List<charts.Series> seriesList;
@@ -16,7 +17,7 @@ class USAsChart extends StatelessWidget {
   factory USAsChart.withExerciseData(
       List<ExposureExercise> data, int originalUsas,
       {bool animate = true}) {
-    return new USAsChart(
+    return USAsChart(
       _createWithData(data),
       originalUsas,
       // Disable animations for image tests.
@@ -26,14 +27,14 @@ class USAsChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new charts.BarChart(
+    return charts.BarChart(
       seriesList,
       animate: animate,
       // Configure the default renderer as a line renderer. This will be used
       // for any series that does not define a rendererIdKey.
       barGroupingType: charts.BarGroupingType.grouped,
-      primaryMeasureAxis: new charts.NumericAxisSpec(
-        tickProviderSpec: new charts.StaticNumericTickProviderSpec(
+      primaryMeasureAxis: charts.NumericAxisSpec(
+        tickProviderSpec: charts.StaticNumericTickProviderSpec(
           <charts.TickSpec<num>>[
             charts.TickSpec<num>(0),
             charts.TickSpec<num>(20),
@@ -45,8 +46,8 @@ class USAsChart extends StatelessWidget {
         ),
       ),
       behaviors: [
-        new charts.SeriesLegend(),
-        new charts.ChartTitle('Número de exposición',
+        charts.SeriesLegend(),
+        charts.ChartTitle('Número de exposición',
             behaviorPosition: charts.BehaviorPosition.bottom,
             titleOutsideJustification:
                 charts.OutsideJustification.middleDrawArea,
@@ -54,7 +55,7 @@ class USAsChart extends StatelessWidget {
                 fontSize: 10, fontFamily: CustomTheme.fontFamily),
             outerPadding: 0,
             innerPadding: 5),
-        new charts.ChartTitle('Ansiedad (USAs)',
+        charts.ChartTitle('Ansiedad (USAs)',
             behaviorPosition: charts.BehaviorPosition.start,
             titleStyleSpec: charts.TextStyleSpec(
                 fontSize: 10, fontFamily: CustomTheme.fontFamily),
@@ -74,23 +75,23 @@ class USAsChart extends StatelessWidget {
 
     for (int i = 0; i < data.length; i++) {
       ExposureExercise exposure = data[i];
-      beforeData.add(new LinearData((i + 1).toString(), exposure.usasBefore));
-      afterData.add(new LinearData((i + 1).toString(), exposure.usasAfter));
+      beforeData.add(LinearData((i + 1).toString(), exposure.usasBefore));
+      afterData.add(LinearData((i + 1).toString(), exposure.usasAfter));
     }
 
     return [
-      new charts.Series<LinearData, String>(
+      charts.Series<LinearData, String>(
         id: 'Antes',
         colorFn: (_, __) => charts.MaterialPalette.purple.shadeDefault.darker,
-        domainFn: (LinearData sales, _) => sales.index,
-        measureFn: (LinearData sales, _) => sales.usas,
+        domainFn: (sales, _) => sales.index,
+        measureFn: (sales, _) => sales.usas,
         data: beforeData,
       ),
-      new charts.Series<LinearData, String>(
+      charts.Series<LinearData, String>(
         id: 'Durante',
         colorFn: (_, __) => charts.MaterialPalette.purple.shadeDefault.lighter,
-        domainFn: (LinearData sales, _) => sales.index,
-        measureFn: (LinearData sales, _) => sales.usas,
+        domainFn: (sales, _) => sales.index,
+        measureFn: (sales, _) => sales.usas,
         data: afterData,
       )
       // Set the 'Los Angeles Revenue' series to use the secondary measure axis.

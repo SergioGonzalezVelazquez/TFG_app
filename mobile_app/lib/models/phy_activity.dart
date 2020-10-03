@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:equatable/equatable.dart';
 
-class PhyActivity {
+class PhyActivity extends Equatable {
   int heartRate;
   int intensity;
   Timestamp timestamp;
@@ -21,7 +22,9 @@ class PhyActivity {
   }
 
   @override
-  String toString() {
-    return 'heartRate: $heartRate,  intensity:$intensity, timestamp: ${timestamp.toDate().toString()}';
-  }
+  List<Object> get props => [heartRate, intensity, timestamp];
+
+  /// Returns a string representation of this object.
+  @override
+  bool get stringify => true;
 }

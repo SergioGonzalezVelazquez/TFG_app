@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:tfg_app/models/exercise.dart';
+
+import '../models/exercise.dart';
 
 class ExerciseCompletedDialog extends StatelessWidget {
   final Exercise exercise;
   ExerciseCompletedDialog(this.exercise);
 
-  dialogContent(BuildContext context) {
+  Widget dialogContent(BuildContext context) {
     return Stack(
       children: <Widget>[
         //...bottom card part,
@@ -17,7 +18,7 @@ class ExerciseCompletedDialog extends StatelessWidget {
             right: 16,
           ),
           margin: EdgeInsets.only(top: 66),
-          decoration: new BoxDecoration(
+          decoration: BoxDecoration(
             color: Colors.white,
             shape: BoxShape.rectangle,
             borderRadius: BorderRadius.circular(16),
@@ -53,7 +54,9 @@ class ExerciseCompletedDialog extends StatelessWidget {
                       text: exercise.itemStr,
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    TextSpan(text: '" y sientes la suficiente confianza para afrontar el siguiente paso.'),
+                    TextSpan(
+                        text:
+                            '" y sientes la suficiente confianza para afrontar el siguiente paso.'),
                   ],
                 ),
               ),
@@ -65,7 +68,7 @@ class ExerciseCompletedDialog extends StatelessWidget {
                   textColor: Theme.of(context).primaryColor,
                   onPressed: () {
                     // To close the dialog
-                    Navigator.of(context).pop(); 
+                    Navigator.of(context).pop();
                   },
                   child: Text("Aceptar"),
                 ),

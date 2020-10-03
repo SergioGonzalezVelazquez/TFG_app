@@ -1,8 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:tfg_app/models/exercise.dart';
-import 'package:tfg_app/pages/exercises/exercise_details.dart';
+
+import '../../models/exercise.dart';
+import 'exercise_details.dart';
 
 class ExerciseItem extends StatelessWidget {
   final Exercise exercise;
@@ -158,7 +159,7 @@ class ExerciseItem extends StatelessWidget {
             child: Container(
               height: 25.0,
               width: 25.0,
-              decoration: new BoxDecoration(
+              decoration: BoxDecoration(
                 color: Colors.white,
                 shape: BoxShape.circle,
               ),
@@ -227,12 +228,13 @@ class ExerciseItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget child;
-    if (exercise.status == ExerciseStatus.waiting)
+    if (exercise.status == ExerciseStatus.waiting) {
       child = _buildBlockedItem(context);
-    else if (exercise.status == ExerciseStatus.completed)
+    } else if (exercise.status == ExerciseStatus.completed) {
       child = _buildCompletedItem(context);
-    else
+    } else {
       child = _buildInProgressItem(context);
+    }
 
     return child;
   }

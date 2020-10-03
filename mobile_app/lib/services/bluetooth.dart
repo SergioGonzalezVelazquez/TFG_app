@@ -2,10 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 
-
 class BluetoothService {
   /// Flutter platform client used to invoke native Android code
-  MethodChannel _methodChannel =
+  final MethodChannel _methodChannel =
       const MethodChannel('driving_detection/methodChannel');
 
   // Factory constructor which returns a singleton instance

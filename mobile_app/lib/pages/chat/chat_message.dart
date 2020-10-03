@@ -1,8 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:tfg_app/main.dart';
-import 'package:tfg_app/models/message.dart';
 import 'package:flutter_dialogflow/dialogflow_v2.dart';
+
+import '../../main.dart';
+import '../../models/message.dart';
 
 class ChatMessage extends StatelessWidget {
   final UserMessage userMessage;
@@ -31,10 +32,10 @@ class ChatMessage extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: Opacity(
                   opacity: showInfo ? 1 : 0,
-                  child: new Container(
+                  child: Container(
                     margin: const EdgeInsets.only(right: 16.0),
                     child: Center(
-                      child: new CircleAvatar(
+                      child: CircleAvatar(
                         backgroundImage: botImage,
                         backgroundColor: Colors.transparent,
                       ),
@@ -131,10 +132,11 @@ class ChatMessage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget widget;
-    if (userMessage != null)
+    if (userMessage != null) {
       widget = buildUserMessage(context);
-    else
+    } else {
       widget = buildBotTextResponse(context);
+    }
     return widget;
   }
 }

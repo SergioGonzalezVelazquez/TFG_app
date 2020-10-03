@@ -1,15 +1,13 @@
 import 'dart:async';
-import 'dart:io';
-// import 'package:android_intent/android_intent.dart';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:tfg_app/pages/questionnaire/pretest/signup_questionnaire_page.dart';
-import 'package:tfg_app/pages/user/login_page.dart';
-import 'package:tfg_app/services/auth.dart';
-import 'package:tfg_app/widgets/buttons.dart';
-import 'package:tfg_app/widgets/progress.dart';
-import 'package:tfg_app/widgets/snackbar.dart';
-import 'package:url_launcher/url_launcher.dart';
+
+import '../../services/auth.dart';
+import '../../widgets/buttons.dart';
+import '../../widgets/progress.dart';
+import '../questionnaire/pretest/signup_questionnaire_page.dart';
+import 'login_page.dart';
 
 class EmailVerificationPage extends StatefulWidget {
   /// Creates a StatelessElement to manage this widget's location in the tree.
@@ -24,7 +22,7 @@ class EmailVerificationPage extends StatefulWidget {
 /// State object for EmailVerificationPage that contains fields that affect
 /// how it looks.
 class _EmailVerificationPageState extends State<EmailVerificationPage> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   // Flags to render loading spinner UI.
   bool _isLoading = false;
@@ -49,9 +47,7 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
     }
   }
 
-  /**
-   * Functions used to handle events in this screen 
-   */
+  /// Functions used to handle events in this screen
 
   /// Use a periodic timer to hold de app until the e-mail is verified.
   /// Reference:
@@ -71,7 +67,7 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
 
           await AuthService().createUserDocument();
           Navigator.of(context).pushNamedAndRemoveUntil(
-              SignUpQuestionnairePage.route, (Route<dynamic> route) => false);
+              SignUpQuestionnairePage.route, (route) => false);
         }
       },
     );
@@ -103,9 +99,7 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
   }
   */
 
-  /**
-   * Widgets (ui components) used in this screen 
-   */
+  /// Widgets (ui components) used in this screen
 
   Widget _linkToLogin() {
     return InkWell(

@@ -6,8 +6,8 @@ buildscript {
 
     dependencies {
         classpath 'com.android.tools.build:gradle:3.6.3'
-        classpath 'com.google.gms:google-services:4.2.0'
-        classpath: 'com.google.firebase:firebase-firestore:20.0.0'
+        classpath 'com.google.gms:google-services:4.3.4'
+        classpath: 'com.google.firebase:firebase-firestore:21.7.0'
     }
 }
 

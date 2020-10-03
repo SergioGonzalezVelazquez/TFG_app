@@ -23,7 +23,7 @@ class CustomDialog extends StatelessWidget {
       padding: EdgeInsets.all(
         16.0,
       ),
-      decoration: new BoxDecoration(
+      decoration: BoxDecoration(
         color: Colors.white,
         shape: BoxShape.rectangle,
         borderRadius: BorderRadius.circular(16.0),

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dialogflow/dialogflow_v2.dart';
-import 'package:tfg_app/main.dart';
-import 'package:tfg_app/models/dialogflow_session.dart';
-import 'package:tfg_app/models/message.dart';
-import 'package:tfg_app/pages/chat/chat_message.dart';
-import 'package:tfg_app/services/auth.dart';
-import 'package:tfg_app/services/dialogflow.dart';
-import 'package:tfg_app/widgets/progress.dart';
+
+import '../../main.dart';
+import '../../models/dialogflow_session.dart';
+import '../../models/message.dart';
+import '../../services/dialogflow.dart';
+import '../../widgets/progress.dart';
+import 'chat_message.dart';
 
 class ChatResume extends StatefulWidget {
   final String sessionId;
@@ -28,9 +28,7 @@ class _ChatResumeState extends State<ChatResume> {
     _fetchMessages();
   }
 
-  /**
-   * Functions used to handle events in this screen 
-   */
+  /// Functions used to handle events in this screen
 
   Future<void> _fetchMessages() async {
     setState(() {
@@ -40,12 +38,12 @@ class _ChatResumeState extends State<ChatResume> {
         await getDialogflowSessionById(widget.sessionId);
     if (session != null) {
       session.messages.forEach((element) {
-        print("id: " + element.id + ", text: " + element.text + " (" + element.index.toString() + ")");
         if (element.type == "user") {
           _messages.insert(
             0,
-            new ChatMessage(
-              userMessage: UserMessage(element.text, timestamp: element.timestamp),
+            ChatMessage(
+              userMessage:
+                  UserMessage(element.text, timestamp: element.timestamp),
             ),
           );
         } else {
@@ -54,8 +52,9 @@ class _ChatResumeState extends State<ChatResume> {
           textDialogflow.text = element.text;
           _messages.insert(
             0,
-            new ChatMessage(
-              botTextResponse: textDialogflow, padding: false,
+            ChatMessage(
+              botTextResponse: textDialogflow,
+              padding: false,
             ),
           );
         }
@@ -70,9 +69,7 @@ class _ChatResumeState extends State<ChatResume> {
     }
   }
 
-  /**
-   * Widgets (ui components) used in this screen 
-   */
+  /// Widgets (ui components) used in this screen
 
   Widget _buildPage(BuildContext context) {
     return Column(
@@ -81,7 +78,7 @@ class _ChatResumeState extends State<ChatResume> {
           child: ListView.builder(
               padding: EdgeInsets.all(8.0),
               reverse: true,
-              itemBuilder: (_, int index) => _messages[index],
+              itemBuilder: (_, index) => _messages[index],
               itemCount: _messages.length),
         ),
       ],
@@ -103,7 +100,7 @@ class _ChatResumeState extends State<ChatResume> {
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                   child: CircleAvatar(
-                    backgroundColor: new Color(0xffE8E1ED),
+                    backgroundColor: Color(0xffE8E1ED),
                     backgroundImage: AssetImage("assets/images/doctor.png"),
                   ),
                 )

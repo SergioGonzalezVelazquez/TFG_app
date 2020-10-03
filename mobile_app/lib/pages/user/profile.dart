@@ -1,14 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:tfg_app/utils/validators.dart';
-import 'package:tfg_app/widgets/buttons.dart';
-import 'package:tfg_app/widgets/inputs.dart';
-import 'package:tfg_app/widgets/progress.dart';
-import 'package:tfg_app/services/auth.dart';
-import 'package:tfg_app/themes/custom_icon_icons.dart';
-import 'package:tfg_app/models/user.dart';
-import 'dart:io';
+
+import '../../models/user.dart';
+import '../../services/auth.dart';
+import '../../themes/custom_icon_icons.dart';
+import '../../utils/validators.dart';
+import '../../widgets/buttons.dart';
+import '../../widgets/inputs.dart';
+import '../../widgets/progress.dart';
 
 class ProfilePage extends StatefulWidget {
   /// Name use for navigate to this screen
@@ -25,8 +24,7 @@ class _ProfilePageState extends State<ProfilePage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
 
-  // new profile image uploaded from camera or gallery
-  File _file;
+  // profile image uploaded from camera or gallery
 
   //Auth user
   MUser _user;
@@ -36,14 +34,14 @@ class _ProfilePageState extends State<ProfilePage> {
   final _formKey = GlobalKey<FormState>();
 
   // Flags to render loading spinner UI.
-  bool _isLoading = false;
+  final bool _isLoading = false;
   bool _editable = false;
 
   AuthService _authService;
 
   // Create a global key that uniquely identifies the Scaffold widget,
   // and allows to display snackbars.
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   /// Method called when this widget is inserted into the tree.
   @override
@@ -64,15 +62,13 @@ class _ProfilePageState extends State<ProfilePage> {
     super.dispose();
   }
 
-  /**
-  * Functions used to handle events in this screen 
-  */
+  /// Functions used to handle events in this screen
   bool _updated() {
     return (_nameController.text.trim() != _user.name) ||
         (_emailController.text.trim() != _user.email);
   }
 
-  /// Dialog to select image from gallery or take new photo with camera
+  /// Dialog to select image from gallery or take photo with camera
   _selectImage(BuildContext parentContext) {
     return showDialog(
         context: parentContext,
@@ -116,32 +112,15 @@ class _ProfilePageState extends State<ProfilePage> {
   _handleTakePhoto() async {
     Navigator.pop(context);
 
-    File file = await ImagePicker.pickImage(
-        source: ImageSource.camera, maxHeight: 675, maxWidth: 960);
-
-    setState(() {
-      this._file = file;
-    });
+    setState(() {});
   }
 
   _handleChooseFromGallery() async {
     Navigator.pop(context);
-    File file = await ImagePicker.pickImage(
-        source: ImageSource.gallery, maxHeight: 675, maxWidth: 960);
-    setState(() {
-      this._file = file;
-    });
+    setState(() {});
   }
 
-  clearImage() {
-    setState(() {
-      _file = null;
-    });
-  }
-
-  /**
-  * Widgets (ui components) used in this screen 
-  */
+  ///  Widgets (ui components) used in this screen
 
   Widget _updateProfilePage(BuildContext context) {
     return ListView(
@@ -163,7 +142,7 @@ class _ProfilePageState extends State<ProfilePage> {
       child: Column(
         children: <Widget>[
           customTextInput("Nombre y apellidos", CustomIcon.user,
-              validator: (val) => Validator.username(val),
+              validator: Validator.username,
               controller: _nameController,
               enabled: _editable),
           SizedBox(
@@ -171,7 +150,7 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
           customTextInput("Correo Electrónico", CustomIcon.mail,
               controller: _emailController,
-              validator: (val) => Validator.email(val),
+              validator: Validator.email,
               keyboardType: TextInputType.emailAddress,
               enabled: false),
           SizedBox(
@@ -218,9 +197,9 @@ class _ProfilePageState extends State<ProfilePage> {
         child: Stack(
           children: <Widget>[
             Container(
-              decoration: new BoxDecoration(
+              decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                image: new DecorationImage(
+                image: DecorationImage(
                   fit: BoxFit.cover,
                   image: _user.photoUrl != null
                       ? CachedNetworkImageProvider(_user.photoUrl)
@@ -253,7 +232,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
+    return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
         title: Text('Mi cuenta'),

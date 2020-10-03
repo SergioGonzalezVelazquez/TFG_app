@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:tfg_app/pages/user/privacidad.dart';
 
 class PoliticaPrivacidad extends StatefulWidget {
   static const route = "/avisoLegal";
@@ -22,7 +21,7 @@ class _PoliticaPrivacidadState extends State<PoliticaPrivacidad> {
   }
 
   Widget listItem(String title, String content) {
-    return new Row(
+    return Row(
       children: [
         Icon(
           Icons.donut_large,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:tfg_app/pages/user/privacidad.dart';
+
+import 'privacidad.dart';
 
 class AvisoLegalPage extends StatefulWidget {
   static const route = "/avisoLegal";
@@ -30,7 +31,19 @@ class _AvisoLegalPageState extends State<AvisoLegalPage> {
       child: ListView(
         children: <Widget>[
           Text(
-            "En este espacio, el USUARIO, podrá encontrar toda la información relativa a los términos y condiciones legales que definen las relaciones entre los usuarios y nosotros como responsables de esta plataforma. Como usuario, es importante que conozcas estos términos antes de continuar tu navegación. Sergio González Velázquez.Como responsable de esta plataforma, asume el compromiso de procesar la información de nuestros usuarios y clientes con plenas garantías y cumplir con los requisitos nacionales y europeos que regulan la recopilación y uso de los datos personales de nuestros usuarios. Esta aplicación, por tanto, cumple rigurosamente con el RGPD (REGLAMENTO (UE) 2016/679 de protección de datos) y la LSSI-CE la Ley 34/2002, de 11 de julio, de servicios de la sociedad de la información y de comercio electrónico.",
+            """En este espacio, el USUARIO, podrá encontrar toda la información 
+            relativa a los términos y condiciones legales que definen las 
+            relaciones entre los usuarios y nosotros como responsables de esta
+            plataforma. Como usuario, es importante que conozcas estos términos 
+            antes de continuar tu navegación. Sergio González Velázquez. Como 
+            responsable de esta plataforma, asume el compromiso de procesar la 
+            información de nuestros usuarios y clientes con plenas garantías y 
+            cumplir con los requisitos nacionales y europeos que regulan la 
+            recopilación y uso de los datos personales de nuestros usuarios. 
+            Esta aplicación, por tanto, cumple rigurosamente con el RGPD 
+            (REGLAMENTO (UE) 2016/679 de protección de datos) y la LSSI-CE la 
+            Ley 34/2002, de 11 de julio, de servicios de la sociedad de la 
+            información y de comercio electrónico.""",
             textAlign: TextAlign.justify,
             style: Theme.of(context)
                 .textTheme
@@ -49,7 +62,13 @@ class _AvisoLegalPageState extends State<AvisoLegalPage> {
                 .apply(fontSizeFactor: 0.7),
           ),
           Text(
-            "Las presentes Condiciones Generales regulan el uso (incluyendo el mero acceso) de las páginas de la aplicación, integrantes de la herramienta de STOPMiedo incluidos los contenidos y servicios puestos a disposición en ellas. Toda persona que acceda a la aplicación, STOPMiedo (“Usuario”) acepta someterse a las Condiciones Generales vigentes en cada momento del portal STOPMiedo.",
+            """Las presentes Condiciones Generales regulan el uso (incluyendo 
+            el mero acceso) de las páginas de la aplicación, integrantes de la 
+            herramienta de STOPMiedo incluidos los contenidos y servicios 
+            puestos a disposición en ellas. Toda persona que acceda a la 
+            aplicación, STOPMiedo (“Usuario”) acepta someterse a las 
+            Condiciones Generales vigentes en cada momento del portal 
+            STOPMiedo.""",
             textAlign: TextAlign.justify,
             style: Theme.of(context)
                 .textTheme
@@ -95,7 +114,19 @@ class _AvisoLegalPageState extends State<AvisoLegalPage> {
                 .apply(fontSizeFactor: 0.7),
           ),
           Text(
-            "El Usuario queda informado, y acepta, que el acceso a la presente web no supone, en modo alguno, el inicio de una relación comercial con STOPMiedo. De esta forma, el usuario se compromete a utilizar el sitio Web, sus servicios y contenidos sin contravenir la legislación vigente, la buena fe y el orden público. Queda prohibido el uso de la web, con fines ilícitos o lesivos, o que, de cualquier forma, puedan causar perjuicio o impedir el normal funcionamiento del sitio web. Respecto de los contenidos de esta web, se prohíbe:Su reproducción, distribución o modificación, total o parcial, a menos que se cuente con la autorización de sus legítimos titulares;Cualquier vulneración de los derechos del prestador o de los legítimos titulares;Su utilización para fines comerciales o publicitarios.",
+            """El Usuario queda informado, y acepta, que el acceso a la presente
+            web no supone, en modo alguno, el inicio de una relación comercial 
+            con STOPMiedo. De esta forma, el usuario se compromete a utilizar el
+            sitio Web, sus servicios y contenidos sin contravenir la legislación
+            vigente, la buena fe y el orden público. Queda prohibido el uso de 
+            la web, con fines ilícitos o lesivos, o que, de cualquier forma, 
+            puedan causar perjuicio o impedir el normal funcionamiento del sitio
+            web. Respecto de los contenidos de esta web, se prohíbe:Su 
+            reproducción, distribución o modificación, total o parcial, a menos 
+            que se cuente con la autorización de sus legítimos titulares;
+            Cualquier vulneración de los derechos del prestador o de los 
+            legítimos titulares;Su utilización para fines comerciales o 
+            publicitarios.""",
             textAlign: TextAlign.justify,
             style: Theme.of(context)
                 .textTheme
@@ -213,7 +244,9 @@ class _AvisoLegalPageState extends State<AvisoLegalPage> {
                 .apply(fontSizeFactor: 0.7),
           ),
           Text(
-            "En cumplimiento de lo dispuesto en el Reglamento Europeo 2016/679 General de Protección de Datos, te informamos de que trataremos los datos que nos facilitas para:",
+            """En cumplimiento de lo dispuesto en el Reglamento Europeo 2016/679
+            General de Protección de Datos, te informamos de que trataremos los
+            datos que nos facilitas para:""",
             textAlign: TextAlign.justify,
             style: Theme.of(context)
                 .textTheme
@@ -224,9 +257,13 @@ class _AvisoLegalPageState extends State<AvisoLegalPage> {
             height: MediaQuery.of(context).size.height * 0.005,
           ),
           listItem2(
-              "Dar cumplimiento a las obligaciones legalmente establecidas, así como verificar el cumplimiento de las obligaciones contractuales, incluía la prevención de fraude."),
+              """Dar cumplimiento a las obligaciones legalmente establecidas, 
+              así como verificar el cumplimiento de las obligaciones 
+              contractuales, incluía la prevención de fraude."""),
           listItem2(
-              "Cesión de datos a organismos y autoridades, siempre y cuando sean requeridos de conformidad con las disposiciones legales y reglamentarias."),
+              """Cesión de datos a organismos y autoridades, siempre y cuando 
+              sean requeridos de conformidad con las disposiciones legales y 
+              reglamentarias."""),
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.02,
           ),
@@ -239,7 +276,8 @@ class _AvisoLegalPageState extends State<AvisoLegalPage> {
                 .apply(fontSizeFactor: 0.7),
           ),
           Text(
-            "Derivada de las finalidades antes mencionadas, en STOPMiedo gestionamos las siguientes categorías de datos:",
+            """Derivada de las finalidades antes mencionadas, en STOPMiedo 
+            gestionamos las siguientes categorías de datos:""",
             textAlign: TextAlign.justify,
             style: Theme.of(context)
                 .textTheme
@@ -283,7 +321,11 @@ class _AvisoLegalPageState extends State<AvisoLegalPage> {
                 .apply(fontSizeFactor: 0.7),
           ),
           Text(
-            "Tus datos podrán ser accedidos por aquellos proveedores que prestan servicios a STOPMiedo, tales como servicios de alojamiento, herramientas de marketing y sistemas de contenido u otros profesionales, cuando dicha comunicación sea necesaria normativamente, o para la ejecución de los servicios contratados.",
+            """Tus datos podrán ser accedidos por aquellos proveedores que 
+            prestan servicios a STOPMiedo, tales como servicios de alojamiento, 
+            herramientas de marketing y sistemas de contenido u otros 
+            profesionales, cuando dicha comunicación sea necesaria 
+            normativamente, o para la ejecución de los servicios contratados.""",
             textAlign: TextAlign.justify,
             style: Theme.of(context)
                 .textTheme
@@ -294,7 +336,11 @@ class _AvisoLegalPageState extends State<AvisoLegalPage> {
             height: MediaQuery.of(context).size.height * 0.01,
           ),
           Text(
-            "STOPMiedo, ha suscrito los correspondientes contratos de encargo de tratamiento con cada uno de los proveedores que prestan servicios a STOPMiedo, con el objetivo de garantizar que dichos proveedores tratarán tus datos de conformidad con lo establecido en la legislación vigente.",
+            """STOPMiedo, ha suscrito los correspondientes contratos de encargo 
+            de tratamiento con cada uno de los proveedores que prestan servicios
+            a STOPMiedo, con el objetivo de garantizar que dichos proveedores 
+            tratarán tus datos de conformidad con lo establecido en la 
+            legislación vigente.""",
             textAlign: TextAlign.justify,
             style: Theme.of(context)
                 .textTheme
@@ -305,7 +351,8 @@ class _AvisoLegalPageState extends State<AvisoLegalPage> {
             height: MediaQuery.of(context).size.height * 0.01,
           ),
           Text(
-            "También podrán ser cedidos a las Fuerzas y Cuerpos de Seguridad del Estado en los casos que exista una obligación legal.",
+            """También podrán ser cedidos a las Fuerzas y Cuerpos de Seguridad 
+            del Estado en los casos que exista una obligación legal.""",
             textAlign: TextAlign.justify,
             style: Theme.of(context)
                 .textTheme
@@ -321,7 +368,7 @@ class _AvisoLegalPageState extends State<AvisoLegalPage> {
   }
 
   Widget listItem(String title, String content) {
-    return new Row(
+    return Row(
       children: [
         Icon(
           Icons.donut_large,
@@ -348,7 +395,7 @@ class _AvisoLegalPageState extends State<AvisoLegalPage> {
   }
 
   Widget listItem2(String content) {
-    return new Row(
+    return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(

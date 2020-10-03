@@ -1,12 +1,13 @@
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
-import 'package:tfg_app/main.dart';
-import 'package:tfg_app/models/phy_activity.dart';
-import 'package:tfg_app/services/phy_activity_service.dart';
-import 'package:tfg_app/widgets/hear_rate_chart.dart';
-import 'package:tfg_app/widgets/progress.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
+
+import '../../main.dart';
+import '../../models/phy_activity.dart';
+import '../../services/phy_activity_service.dart';
+import '../../widgets/hear_rate_chart.dart';
+import '../../widgets/progress.dart';
 
 class DailyHeartRatePage extends StatefulWidget {
   static const route = "/dailyHeartRate";
@@ -30,9 +31,9 @@ class _DailyHeartRatePageState extends State<DailyHeartRatePage> {
   @override
   void initState() {
     super.initState();
-    _currentDate = new DateTime.now().toLocal();
+    _currentDate = DateTime.now().toLocal();
     initializeDateFormatting();
-    formatter = new DateFormat('EEEE, dd-MM-yyyy', 'es');
+    formatter = DateFormat('EEEE, dd-MM-yyyy', 'es');
     _phyActivityService = PhyActivityService();
     _getPhyActivities(_currentDate);
   }
@@ -70,9 +71,9 @@ class _DailyHeartRatePageState extends State<DailyHeartRatePage> {
       _isLoading = true;
       _currentDate = date;
     });
-    DateTime currentDateTimeStart = new DateTime(
+    DateTime currentDateTimeStart = DateTime(
         _currentDate.year, _currentDate.month, _currentDate.day, 0, 0, 0);
-    DateTime currentDateTimeEnd = new DateTime(
+    DateTime currentDateTimeEnd = DateTime(
         _currentDate.year, _currentDate.month, _currentDate.day, 23, 59, 59);
 
     List<PhyActivity> listActivities = await _phyActivityService
@@ -84,7 +85,7 @@ class _DailyHeartRatePageState extends State<DailyHeartRatePage> {
     int median = result['median'];
     int min = result['min'];
 
-    if (this.mounted) {
+    if (mounted) {
       setState(() {
         _bpmMax = max.toString();
         _bpmMedian = median.toString();
@@ -137,11 +138,11 @@ class _DailyHeartRatePageState extends State<DailyHeartRatePage> {
                     firstDate: DateTime(1900),
                     initialDate: DateTime.now(),
                     helpText: "Selecciona una fecha".toUpperCase(),
-                    builder: (BuildContext context, Widget child) {
+                    builder: (context, child) {
                       return Theme(
                         data: ThemeData.light().copyWith(
                           primaryColor: Theme.of(context).primaryColor,
-                          accentColor:Theme.of(context).primaryColor,
+                          accentColor: Theme.of(context).primaryColor,
                           colorScheme: ColorScheme.light(
                               primary: Theme.of(context).primaryColor),
                           buttonTheme: ButtonThemeData(

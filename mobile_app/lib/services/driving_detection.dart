@@ -1,6 +1,7 @@
 import 'dart:async';
-import 'package:permission_handler/permission_handler.dart';
+
 import 'package:flutter/services.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Risky driving event detection service using the phone sensors.
@@ -11,7 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 /// without user intervention or input. It also provide accurately the vehicle`s las parked location.
 class DrivingDetectionService {
   /// Flutter platform client used to invoke native Android code
-  MethodChannel _methodChannel =
+  final MethodChannel _methodChannel =
       const MethodChannel('driving_detection/methodChannel');
 
   // Factory constructor which returns a singleton instance
@@ -47,7 +48,7 @@ class DrivingDetectionService {
 
   /// Start AutoDriveDetection service in background
   Future<bool> startBackgroundService() async {
-    bool permissions = await this._askPermission();
+    bool permissions = await _askPermission();
     if (permissions) {
       await _methodChannel.invokeMethod('startDrivingDetectionService');
     }

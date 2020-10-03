@@ -1,8 +1,9 @@
 /// Bar chart example
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
-import 'package:tfg_app/models/exposure_exercise.dart';
-import 'package:tfg_app/themes/style.dart';
+
+import '../models/exposure_exercise.dart';
+import '../themes/style.dart';
 
 class SelfEfficacyChart extends StatelessWidget {
   final List<charts.Series> seriesList;
@@ -13,7 +14,7 @@ class SelfEfficacyChart extends StatelessWidget {
   /// Creates a [BarChart] with sample data and no transition.
   factory SelfEfficacyChart.withExerciseData(List<ExposureExercise> data,
       {bool animate = true}) {
-    return new SelfEfficacyChart(
+    return SelfEfficacyChart(
       _createWithData(data),
       // Disable animations for image tests.
       animate: animate,
@@ -22,12 +23,12 @@ class SelfEfficacyChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new charts.BarChart(
+    return charts.BarChart(
       seriesList,
       animate: animate,
       barGroupingType: charts.BarGroupingType.grouped,
-      primaryMeasureAxis: new charts.NumericAxisSpec(
-        tickProviderSpec: new charts.StaticNumericTickProviderSpec(
+      primaryMeasureAxis: charts.NumericAxisSpec(
+        tickProviderSpec: charts.StaticNumericTickProviderSpec(
           <charts.TickSpec<num>>[
             charts.TickSpec<num>(0),
             charts.TickSpec<num>(20),
@@ -39,7 +40,7 @@ class SelfEfficacyChart extends StatelessWidget {
         ),
       ),
       behaviors: [
-        new charts.ChartTitle('Número de exposición',
+        charts.ChartTitle('Número de exposición',
             behaviorPosition: charts.BehaviorPosition.bottom,
             titleOutsideJustification:
                 charts.OutsideJustification.middleDrawArea,
@@ -47,7 +48,7 @@ class SelfEfficacyChart extends StatelessWidget {
                 fontSize: 10, fontFamily: CustomTheme.fontFamily),
             outerPadding: 0,
             innerPadding: 5),
-        new charts.ChartTitle('Escala de autoeficacia',
+        charts.ChartTitle('Escala de autoeficacia',
             behaviorPosition: charts.BehaviorPosition.start,
             titleStyleSpec: charts.TextStyleSpec(
                 fontSize: 10, fontFamily: CustomTheme.fontFamily),
@@ -67,16 +68,16 @@ class SelfEfficacyChart extends StatelessWidget {
     for (int i = 0; i < data.length; i++) {
       ExposureExercise exposure = data[i];
       selfEfficacyData.add(
-        new OrdinalData((i + 1).toString(), exposure.selfEfficacyBefore),
+        OrdinalData((i + 1).toString(), exposure.selfEfficacyBefore),
       );
     }
 
     return [
-      new charts.Series<OrdinalData, String>(
+      charts.Series<OrdinalData, String>(
         id: 'selfEfficacy',
         colorFn: (_, __) => charts.MaterialPalette.purple.shadeDefault.darker,
-        domainFn: (OrdinalData sales, _) => sales.index,
-        measureFn: (OrdinalData sales, _) => sales.efficacy,
+        domainFn: (sales, _) => sales.index,
+        measureFn: (sales, _) => sales.efficacy,
         data: selfEfficacyData,
       )
     ];

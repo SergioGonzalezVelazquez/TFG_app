@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:equatable/equatable.dart';
 
-class DialogflowSession {
+class DialogflowSession extends Equatable {
   final String id;
   final DateTime startAt;
   List<DialogflowMessage> messages;
@@ -19,16 +20,27 @@ class DialogflowSession {
   String toString() {
     return 'id: $id, startAt: ${startAt.toString()}';
   }
+
+  @override
+  List<Object> get props => [
+        id,
+        startAt,
+      ];
+
+  /// Returns a string representation of this object.
+  @override
+  bool get stringify => true;
 }
 
-class DialogflowMessage {
+class DialogflowMessage extends Equatable {
   final String id;
   final String type;
   final String text;
   final DateTime timestamp;
   final int index;
 
-  DialogflowMessage({this.id, this.type, this.text, this.timestamp, this.index});
+  DialogflowMessage(
+      {this.id, this.type, this.text, this.timestamp, this.index});
 
   factory DialogflowMessage.fromDocument(DocumentSnapshot doc) {
     return DialogflowMessage(
@@ -39,4 +51,11 @@ class DialogflowMessage {
       timestamp: doc.data()['timestamp'].toDate(),
     );
   }
+
+  @override
+  List<Object> get props => [id, type, text, timestamp, index];
+
+  /// Returns a string representation of this object.
+  @override
+  bool get stringify => true;
 }

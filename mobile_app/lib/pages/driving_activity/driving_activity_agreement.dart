@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tfg_app/pages/home_page.dart';
-import 'package:tfg_app/pages/root_page.dart';
-import 'package:tfg_app/services/driving_detection.dart';
-import 'package:tfg_app/widgets/progress.dart';
-import 'package:tfg_app/widgets/buttons.dart';
-import 'package:tfg_app/widgets/slide_dots.dart';
+
+import '../../services/driving_detection.dart';
+import '../../widgets/buttons.dart';
+import '../../widgets/progress.dart';
+import '../../widgets/slide_dots.dart';
+import '../root_page.dart';
 
 class DrivingActivityAgreement extends StatefulWidget {
   static const route = "/drivingActivityAgreement";
@@ -17,7 +17,7 @@ class DrivingActivityAgreement extends StatefulWidget {
 
 class DrivingActivityAgreementState extends State<DrivingActivityAgreement> {
   // Controller to manipulate which page is visible in a PageView
-  PageController _pageController = PageController();
+  final PageController _pageController = PageController();
 
   bool _isLoading = false;
   int _currentPage = 0;
@@ -33,16 +33,14 @@ class DrivingActivityAgreementState extends State<DrivingActivityAgreement> {
     _pageController.dispose();
   }
 
-  /**
-  * Functions used to handle events in this screen 
-  */
+  /// Functions used to handle events in this screen
   Future<void> _activate() async {
     setState(() {
       _isLoading = true;
     });
     await DrivingDetectionService().startBackgroundService();
-    Navigator.of(context).pushNamedAndRemoveUntil(
-        RootPage.route, (Route<dynamic> route) => false);
+    Navigator.of(context)
+        .pushNamedAndRemoveUntil(RootPage.route, (route) => false);
   }
 
   Future<void> _cancel() async {
@@ -51,8 +49,8 @@ class DrivingActivityAgreementState extends State<DrivingActivityAgreement> {
     });
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool("drive_detection_enabled", false);
-    Navigator.of(context).pushNamedAndRemoveUntil(
-        RootPage.route, (Route<dynamic> route) => false);
+    Navigator.of(context)
+        .pushNamedAndRemoveUntil(RootPage.route, (route) => false);
   }
 
   void _more() {
@@ -62,9 +60,7 @@ class DrivingActivityAgreementState extends State<DrivingActivityAgreement> {
     });
   }
 
-  /**
-  * Widgets (ui components) used in this screen 
-  */
+  ///  Widgets (ui components) used in this screen
 
   Widget _infoPage() {
     double width = MediaQuery.of(context).size.width;
@@ -86,21 +82,21 @@ class DrivingActivityAgreementState extends State<DrivingActivityAgreement> {
             height: MediaQuery.of(context).size.height * 0.07,
           ),
           Text(
-            "STOPMiedo puede detectar y registrar automáticamente en segundo plano eventos relacionados con la conducción.",
+            """STOPMiedo puede detectar y registrar automáticamente en segundo plano eventos relacionados con la conducción.""",
             textAlign: TextAlign.justify,
           ),
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.03,
           ),
           Text(
-            "Conocer en qué lugares inicias y terminas las conducción, junto con algunos eventos cómo giros bruscos, distracciones con el móvil, acelerones, frenazos o aparcamientos",
+            """Conocer en qué lugares inicias y terminas las conducción, junto con algunos eventos cómo giros bruscos, distracciones con el móvil, acelerones, frenazos o aparcamientos""",
             textAlign: TextAlign.justify,
           ),
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.03,
           ),
           Text(
-            "Además, tendrás la posibilidad de ver sobre un mapa todas las rutas que has hecho conduciendo junto con sus eventos más significativos.",
+            """Además, tendrás la posibilidad de ver sobre un mapa todas las rutas que has hecho conduciendo junto con sus eventos más significativos.""",
             textAlign: TextAlign.justify,
           ),
         ],
@@ -136,15 +132,16 @@ class DrivingActivityAgreementState extends State<DrivingActivityAgreement> {
             height: MediaQuery.of(context).size.height * 0.07,
           ),
           Text(
-            "Para poder detectar eventos relacionados con la conducción, permite que STOPMiedo pueda conocer tu ubicación en todo momento.",
-            textAlign: TextAlign.center,
+            """Para poder detectar eventos relacionados con la conducción, permite que STOPMiedo pueda conocer tu ubicación en todo momento.
+            """,
+            textAlign: TextAlign.justify,
           ),
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.03,
           ),
           Text(
-            "Podrás desactivar esta característica en cualquier momento desde la pantalla de ajustes de la aplicación.",
-            textAlign: TextAlign.center,
+            """Podrás desactivar esta característica en cualquier momento desde la pantalla de ajustes de la aplicación.""",
+            textAlign: TextAlign.justify,
           ),
         ],
       ),
@@ -191,7 +188,11 @@ class DrivingActivityAgreementState extends State<DrivingActivityAgreement> {
   Widget _buildSlideDots(BuildContext parentContext, int items) {
     List<Widget> dots = [];
     for (int i = 0; i < items; i++) {
-      dots.add(SlideDots(i == _currentPage));
+      dots.add(
+        SlideDots(
+          isActive: i == _currentPage,
+        ),
+      );
     }
     return Row(children: dots);
   }
@@ -204,7 +205,7 @@ class DrivingActivityAgreementState extends State<DrivingActivityAgreement> {
         child: _isLoading
             ? circularProgress(context)
             : PageView(
-                onPageChanged: (int page) {
+                onPageChanged: (page) {
                   setState(() {
                     _currentPage = page;
                   });

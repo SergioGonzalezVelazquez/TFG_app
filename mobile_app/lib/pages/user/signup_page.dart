@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:tfg_app/pages/user/login_page.dart';
-import 'package:tfg_app/pages/user/email_verification.dart';
-import 'package:tfg_app/services/auth.dart';
-import 'package:tfg_app/themes/custom_icon_icons.dart';
-import 'package:tfg_app/utils/validators.dart';
-import 'package:tfg_app/widgets/buttons.dart';
-import 'package:tfg_app/widgets/inputs.dart';
-import 'package:tfg_app/widgets/password_strength.dart';
-import 'package:tfg_app/widgets/progress.dart';
-import 'package:tfg_app/widgets/snackbar.dart';
+
+import '../../services/auth.dart';
+import '../../themes/custom_icon_icons.dart';
+import '../../utils/validators.dart';
+import '../../widgets/buttons.dart';
+import '../../widgets/inputs.dart';
+import '../../widgets/password_strength.dart';
+import '../../widgets/progress.dart';
+import '../../widgets/snackbar.dart';
+import 'email_verification.dart';
+import 'login_page.dart';
 
 class SignUpPage extends StatefulWidget {
   /// Name use for navigate to this screen
@@ -29,7 +30,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
   // Create a global key that uniquely identifies the Scaffold widget,
   // and allows to display snackbars.
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   // Create a global key that uniquely identifies the Form widget
   // and allows validation of the form.
@@ -65,9 +66,7 @@ class _SignUpPageState extends State<SignUpPage> {
     super.dispose();
   }
 
-  /**
-   * Functions used to handle events in this screen 
-   */
+  /// Functions used to handle events in this screen
 
   /// Display a message to the user when sign up
   /// failed
@@ -100,7 +99,7 @@ class _SignUpPageState extends State<SignUpPage> {
     _scaffoldKey.currentState.showSnackBar(snackBar);
   }
 
-  /// Sign up new users
+  /// Sign up users
   Future<void> _signUp(BuildContext context) async {
     if (_formKey.currentState.validate()) {
       setState(() {
@@ -113,8 +112,8 @@ class _SignUpPageState extends State<SignUpPage> {
           .catchError((error) => _onSignUpError(context, error));
 
       if (register) {
-        Route route = new MaterialPageRoute(
-          builder: (context) => new EmailVerificationPage(
+        Route route = MaterialPageRoute(
+          builder: (context) => EmailVerificationPage(
             _emailController.text.trim(),
           ),
         );
@@ -126,14 +125,12 @@ class _SignUpPageState extends State<SignUpPage> {
     }
   }
 
-  /**
-   * Widgets (ui components) used in this screen 
-   */
+  /// Widgets (ui components) used in this screen
 
   Widget _linkToLogin() {
     return InkWell(
-      onTap: () => Navigator.of(context).pushNamedAndRemoveUntil(
-          LoginPage.route, (Route<dynamic> route) => false),
+      onTap: () => Navigator.of(context)
+          .pushNamedAndRemoveUntil(LoginPage.route, (route) => false),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
@@ -152,39 +149,36 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
-  /// Adds a form to sign up new users their email and password
+  /// Adds a form to sign up users their email and password
   Form _signUpForm(BuildContext context, double verticalPadding) {
     return Form(
       key: _formKey,
       child: Column(
         children: <Widget>[
           customTextInput("Nombre y apellidos", CustomIcon.user,
-              validator: (val) => Validator.username(val),
-              controller: _nameController),
+              validator: Validator.username, controller: _nameController),
           SizedBox(
             height: verticalPadding,
           ),
           customTextInput("Correo Electrónico", CustomIcon.mail,
               controller: _emailController,
-              validator: (val) => Validator.email(val),
+              validator: Validator.email,
               keyboardType: TextInputType.emailAddress),
           SizedBox(
             height: verticalPadding,
           ),
           customPasswordInput("Contraseña", CustomIcon.lock,
               controller: _passController,
-              validator: (val) => Validator.validPassword(val),
-              visible: _showPassword1,
-              visibleController: () {
-                setState(() {
-                  _showPassword1 = !_showPassword1;
-                });
-              },
-              onChanged: (val) {
-                setState(() {
-                  _passwordStrength = Validator.passwordStrength(val);
-                });
-              }),
+              validator: Validator.validPassword,
+              visible: _showPassword1, visibleController: () {
+            setState(() {
+              _showPassword1 = !_showPassword1;
+            });
+          }, onChanged: (val) {
+            setState(() {
+              _passwordStrength = Validator.passwordStrength(val);
+            });
+          }),
           Visibility(
             child: passwordStrengthPercent(context, _passwordStrength),
             visible:

@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tfg_app/pages/phy_activity/bluetooth_connection_page.dart';
-import 'package:tfg_app/pages/root_page.dart';
-import 'package:tfg_app/widgets/progress.dart';
-import 'package:tfg_app/widgets/buttons.dart';
+
+import '../../widgets/buttons.dart';
+import '../../widgets/progress.dart';
+import '../root_page.dart';
+import 'bluetooth_connection_page.dart';
 
 class PhyActivityAgreement extends StatefulWidget {
   static const route = "/phyActivityAgreement";
 
-  static List<String> compatibleDevices = ["Xiaomi MiBand 2", "Xiaomi MiBand 3"];
+  static List<String> compatibleDevices = [
+    "Xiaomi MiBand 2",
+    "Xiaomi MiBand 3"
+  ];
 
   @override
   State<PhyActivityAgreement> createState() => PhyActivityAgreementState();
@@ -16,7 +20,7 @@ class PhyActivityAgreement extends StatefulWidget {
 
 class PhyActivityAgreementState extends State<PhyActivityAgreement> {
   // Controller to manipulate which page is visible in a PageView
-  PageController _pageController = PageController();
+  final PageController _pageController = PageController();
   bool _isLoading = false;
 
   @override
@@ -34,17 +38,15 @@ class PhyActivityAgreementState extends State<PhyActivityAgreement> {
     setState(() {
       _isLoading = true;
     });
-    
+
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool("phy_activity_enabled", false);
 
-    Navigator.of(context).pushNamedAndRemoveUntil(
-        RootPage.route, (Route<dynamic> route) => false);
+    Navigator.of(context)
+        .pushNamedAndRemoveUntil(RootPage.route, (route) => false);
   }
 
-  /**
-  * Widgets (ui components) used in this screen 
-  */
+  ///  Widgets (ui components) used in this screen
 
   Widget _buildPage(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -107,7 +109,7 @@ class PhyActivityAgreementState extends State<PhyActivityAgreement> {
     List<Widget> items = [];
     PhyActivityAgreement.compatibleDevices.forEach((element) {
       items.add(
-        new Row(
+        Row(
           children: [
             Icon(
               Icons.donut_large,

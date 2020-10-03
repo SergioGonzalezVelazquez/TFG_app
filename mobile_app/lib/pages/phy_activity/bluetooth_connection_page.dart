@@ -3,12 +3,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tfg_app/pages/home_page.dart';
-import 'package:tfg_app/pages/root_page.dart';
-import 'package:tfg_app/services/auth.dart';
-import 'package:tfg_app/widgets/buttons.dart';
-import 'package:tfg_app/widgets/progress.dart';
-import 'package:tfg_app/widgets/snackbar.dart';
+
+import '../../widgets/buttons.dart';
+import '../../widgets/progress.dart';
+import '../../widgets/snackbar.dart';
+import '../root_page.dart';
 
 class BluetoothConnectionInterface extends StatefulWidget {
   static const route = "/bluetoothConnectionPage";
@@ -21,11 +20,10 @@ class _BluetoothConnectionInterfaceState
     extends State<BluetoothConnectionInterface> {
   // Create a global key that uniquely identifies the Scaffold widget,
   // and allows to display snackbars.
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-  AuthService _authService;
-  List<BluetoothDevice> _devicesList = new List<BluetoothDevice>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final List<BluetoothDevice> _devicesList = <BluetoothDevice>[];
   FlutterBlue _flutterBlue;
-  bool _blueNotAvailable = false;
+  final bool _blueNotAvailable = false;
   bool _isLoading = false;
 
   @override
@@ -34,7 +32,7 @@ class _BluetoothConnectionInterfaceState
     try {
       _flutterBlue = FlutterBlue.instance;
       _askPermission();
-    } catch (error) {
+    } on Exception catch (_) {
       Navigator.pop(context, -1);
     }
   }
@@ -45,8 +43,8 @@ class _BluetoothConnectionInterfaceState
     });
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool("phy_activity_enabled", true);
-    Navigator.of(context).pushNamedAndRemoveUntil(
-        RootPage.route, (Route<dynamic> route) => false);
+    Navigator.of(context)
+        .pushNamedAndRemoveUntil(RootPage.route, (route) => false);
   }
 
   Future<void> _cancel() async {
@@ -57,8 +55,8 @@ class _BluetoothConnectionInterfaceState
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool("phy_activity_enabled", false);
 
-    Navigator.of(context).pushNamedAndRemoveUntil(
-        RootPage.route, (Route<dynamic> route) => false);
+    Navigator.of(context)
+        .pushNamedAndRemoveUntil(RootPage.route, (route) => false);
   }
 
   /// Request location permissions
@@ -88,14 +86,12 @@ class _BluetoothConnectionInterfaceState
       } else if (state == BluetoothState.on) {
         // if bluetooth is enabled then go ahead.
         // Make sure user's device gps is on.
-        _flutterBlue.connectedDevices
-            .asStream()
-            .listen((List<BluetoothDevice> devices) {
+        _flutterBlue.connectedDevices.asStream().listen((devices) {
           for (BluetoothDevice device in devices) {
             _addDeviceTolist(device);
           }
         });
-        _flutterBlue.scanResults.listen((List<ScanResult> results) {
+        _flutterBlue.scanResults.listen((results) {
           for (ScanResult result in results) {
             _addDeviceTolist(result.device);
           }
@@ -152,7 +148,7 @@ class _BluetoothConnectionInterfaceState
   Widget _buildListViewOfDevices() {
     return ListView.builder(
         padding: EdgeInsets.all(8.0),
-        itemBuilder: (_, int index) => _deviceItem(_devicesList[index]),
+        itemBuilder: (_, index) => _deviceItem(_devicesList[index]),
         itemCount: _devicesList.length);
   }
 

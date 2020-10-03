@@ -68,20 +68,6 @@ public class MainActivity extends FlutterActivity {
                 boolean isRunning = isServiceRunning(EventDetectionService.class);
                 result.success(isRunning);
               }
-                    /*
-                    // ONLY FOR TESTING PURPOSE
-                    else if (call.method.equals("getLogger")) {
-                        Log.d("MAIN ACTIVITY SHARED", "RESUME");
-                        SharedPreferences mPreferences = getSharedPreferences("AndroidLogger", Context.MODE_PRIVATE);
-                        Map<String, ?> prefsMap = mPreferences.getAll();
-                        for (Map.Entry<String, ?> entry : prefsMap.entrySet()) {
-                            Log.d("MAIN ACTIVITY SHARED", entry.getKey() + ":" +
-                                    entry.getValue().toString());
-                        }
-                        String logger = mPreferences.getString("logger", null);
-                        result.success(logger);
-                    }
-                    */
             }
     );
     // EMOVI METHOD CHANNEL

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:equatable/equatable.dart';
 
-class DrivingActivity {
+class DrivingActivity extends Equatable {
   final String id;
   final Timestamp startTime;
   final Timestamp endTime;
@@ -41,9 +42,16 @@ class DrivingActivity {
   String toString() {
     return 'id: $id, startAt: ${startTime.toDate().toIso8601String()}';
   }
+
+  @override
+  List<Object> get props => [id, startTime, endTime, distance];
+
+  /// Returns a string representation of this object.
+  @override
+  bool get stringify => true;
 }
 
-class LocationDetails {
+class LocationDetails extends Equatable {
   final String city;
   final String country;
   final String countryCode;
@@ -72,4 +80,19 @@ class LocationDetails {
       longitude: map['longitude'],
     );
   }
+
+  @override
+  List<Object> get props => [
+        city,
+        country,
+        countryCode,
+        formattedAddress,
+        provider,
+        latitude,
+        longitude
+      ];
+
+  /// Returns a string representation of this object.
+  @override
+  bool get stringify => true;
 }

@@ -175,7 +175,7 @@ public class LocationDBHelper {
         sendMessage("db updateDrivingRoute with " + mLocationDataList.size() + " locations");
         String driveId = getCurrentDriveID();
         sendMessage("updateDrivingRoute driveId: " + driveId);
-        ArrayList<Map<String, Object>> items = new ArrayList();
+        ArrayList<Map<String, Object>> items = new ArrayList<>();
         for(int i=0; i < mLocationDataList.size(); i++){
             Location mLocationData = mLocationDataList.get(i);
             Map<String, Object> itemData = new HashMap<>();
@@ -206,7 +206,7 @@ public class LocationDBHelper {
         sendMessage("db updateEventDetails with size " + mEventDataList.size());
         String driveId = getCurrentDriveID();
 
-        ArrayList<Map<String, Object>> items = new ArrayList();
+        ArrayList<Map<String, Object>> items = new ArrayList<>();
         for (int i = 0; i < mEventDataList.size(); i++){
             EventData mEventData = mEventDataList.get(i);
             Map<String, Object> data = new HashMap<>();

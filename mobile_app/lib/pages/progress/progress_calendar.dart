@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:tfg_app/main.dart';
-import 'package:tfg_app/models/exercise.dart';
-import 'package:tfg_app/models/exposure_exercise.dart';
-import 'package:tfg_app/pages/exercises/exercise_details.dart';
-import 'package:tfg_app/services/auth.dart';
-import 'package:tfg_app/services/firestore.dart';
+
+import '../../main.dart';
+import '../../models/exercise.dart';
+import '../../models/exposure_exercise.dart';
+import '../../services/firestore.dart';
+import '../exercises/exercise_details.dart';
 
 /// Code from:
 /// https://github.com/lohanidamodar/flutter_calendar/blob/part3/lib/main.dart
@@ -18,31 +18,12 @@ class ProgressCalendar extends StatefulWidget {
 
 class _ProgressCalendarState extends State<ProgressCalendar> {
   //CalendarController _controller;
-  Map<DateTime, List<dynamic>> _events;
-  List<dynamic> _selectedEvents;
-  AuthService _authService;
 
   @override
   void initState() {
     super.initState();
-    _authService = AuthService();
 
     //_controller = CalendarController();
-    _events = {};
-    _selectedEvents = [];
-  }
-
-  Map<DateTime, List<dynamic>> _groupEvents(List<ExposureExercise> allEvents) {
-    Map<DateTime, List<dynamic>> data = {};
-    allEvents.forEach((event) {
-      DateTime eventDate = event.start.toDate();
-      DateTime globalDate = new DateTime(
-          eventDate.year, eventDate.month, eventDate.day, 0, 0, 0, 0);
-
-      if (data[globalDate] == null) data[globalDate] = [];
-      data[globalDate].add(event);
-    });
-    return data;
   }
 
   @override
@@ -53,16 +34,11 @@ class _ProgressCalendarState extends State<ProgressCalendar> {
       ),
       body: StreamBuilder<List<ExposureExercise>>(
         stream: getExposuresAsStream(),
-        builder: (BuildContext context,
-            AsyncSnapshot<List<ExposureExercise>> snapshot) {
+        builder: (context, snapshot) {
           if (snapshot.hasData) {
             print("snapshot has data");
             if (snapshot.data.isNotEmpty) {
-              _events = _groupEvents(snapshot.data);
-            } else {
-              _events = {};
-              _selectedEvents = [];
-            }
+            } else {}
           }
           return SingleChildScrollView(
             child: Column(
@@ -148,7 +124,7 @@ class ExposureItem extends StatelessWidget {
   final Exercise exercise;
 
   String getDuration() {
-    Duration duration = new Duration(seconds: exposure.realDuration);
+    Duration duration = Duration(seconds: exposure.realDuration);
     int minutes = duration.inMinutes % 60;
     int hours = duration.inHours % 60;
     int seconds = exposure.realDuration;

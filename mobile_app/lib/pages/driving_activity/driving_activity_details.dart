@@ -1,19 +1,20 @@
 import 'dart:async';
 import 'dart:typed_data';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/services.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'package:flutter/material.dart';
-import 'package:tfg_app/models/driving_activity.dart';
-import 'package:tfg_app/models/driving_event.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:tfg_app/models/phy_activity.dart';
-import 'package:tfg_app/services/firestore.dart';
-import 'package:tfg_app/services/phy_activity_service.dart';
-import 'package:tfg_app/widgets/hear_rate_chart.dart';
-import 'package:tfg_app/widgets/progress.dart';
 import 'dart:ui' as ui;
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
+
+import '../../models/driving_activity.dart';
+import '../../models/driving_event.dart';
+import '../../models/phy_activity.dart';
+import '../../services/firestore.dart';
+import '../../services/phy_activity_service.dart';
+import '../../widgets/hear_rate_chart.dart';
+import '../../widgets/progress.dart';
 
 class DrivingActivityDetails extends StatefulWidget {
   final DrivingActivity _activity;
@@ -25,32 +26,29 @@ class DrivingActivityDetails extends StatefulWidget {
 
 class DrivingActivityDetailsState extends State<DrivingActivityDetails> {
   /// GoogleMaps camera
-  Set<Polyline> _polylines = {};
-  Set<Marker> _markers = {};
+  final Set<Polyline> _polylines = {};
+  final Set<Marker> _markers = {};
   bool _isLoading = true;
 
-  BitmapDescriptor _startLocationIcon;
-  BitmapDescriptor _endLocationIcon;
+  final PhyActivityService _phyActivityService = PhyActivityService();
 
-  PhyActivityService _phyActivityService = PhyActivityService();
-
-  // List of phyActivities from 5 minutes before start driving until 5 minutes after finishing driving
+  // List of phyActivities from 5 minutes before start driving
+  // until 5 minutes after finishing driving
   List<PhyActivity> _heartRate;
 
   // key/value pair used to map each PhyActivity object with it hh:mm time (key)
-  Map<String, PhyActivity> _timeHeartRate = new Map();
+  Map<String, PhyActivity> _timeHeartRate = {};
 
   List<DrivingEvent> _eventsData;
-  List<DrivingEvent> _hardTurnEvents = [];
-  List<DrivingEvent> _hardBrakingEvents = [];
-  List<DrivingEvent> _phoneDistractionEvents = [];
-  List<DrivingEvent> _parkingEvents = [];
-  List<DrivingEvent> _speedEvents = [];
-  List<DrivingEvent> _hardAccelerationEvents = [];
+  final List<DrivingEvent> _hardTurnEvents = [];
+  final List<DrivingEvent> _hardBrakingEvents = [];
+  final List<DrivingEvent> _phoneDistractionEvents = [];
+  final List<DrivingEvent> _parkingEvents = [];
+  final List<DrivingEvent> _speedEvents = [];
+  final List<DrivingEvent> _hardAccelerationEvents = [];
 
   // Icons for markers
   Uint8List _startIcon;
-  Uint8List _endIcon;
   Uint8List _hardTurnIcon;
   Uint8List _hardBrakingIcon;
   Uint8List _phoneDistractionIcon;
@@ -67,7 +65,7 @@ class DrivingActivityDetailsState extends State<DrivingActivityDetails> {
 
   Future<void> _getHeartRate() async {
     List<PhyActivity> result = [];
-    Map<String, PhyActivity> timeHeartRateMap = new Map();
+    Map<String, PhyActivity> timeHeartRateMap = {};
 
     if (widget._activity.endTime != null) {
       // Get heart rate 5 minutes before start driving, and 5 minutes after.
@@ -131,13 +129,12 @@ class DrivingActivityDetailsState extends State<DrivingActivityDetails> {
   }
 
   Color _buildLocationColor2(int i) {
-    if(i> 1110 && i < 1197) return Colors.red;
+    if (i > 1110 && i < 1197) return Colors.red;
     return Colors.orange;
   }
 
   Future<void> _decodeIcons() async {
     _startIcon = await getBytesFromAsset('assets/images/pin.png', 60);
-    _endIcon = await getBytesFromAsset('assets/images/finish.png', 60);
 
     _hardTurnIcon =
         await getBytesFromAsset('assets/images/ubicacion_turn.png', 60);
@@ -154,8 +151,6 @@ class DrivingActivityDetailsState extends State<DrivingActivityDetails> {
   }
 
   Future<void> _buildDrivingRoute() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-
     // Check on shared preferences if user has phyActivity enabled
     /*
     bool phyActivity = prefs.getBool("phy_activity_enabled");
@@ -179,15 +174,17 @@ class DrivingActivityDetailsState extends State<DrivingActivityDetails> {
     for (int i = 0; i < sizeLocationDataList; i++) {
       if (locationData[i]['location'] != null &&
           locationData[i + 1]['location'] != null) {
-        LatLng point1 = new LatLng(locationData[i]['location'].latitude,
+        LatLng point1 = LatLng(locationData[i]['location'].latitude,
             locationData[i]['location'].longitude);
-        LatLng point2 = new LatLng(locationData[i + 1]['location'].latitude,
+        LatLng point2 = LatLng(locationData[i + 1]['location'].latitude,
             locationData[i + 1]['location'].longitude);
 
         print(i);
         _polylines.add(
           Polyline(
-            color: widget._activity.id == "drive_1593112415623" ? _buildLocationColor2(i) : _buildLocationColor(locationData[i]['timestamp']),
+            color: widget._activity.id == "drive_1593112415623"
+                ? _buildLocationColor2(i)
+                : _buildLocationColor(locationData[i]['timestamp']),
             visible: true,
             width: 4,
             geodesic: true,
@@ -225,7 +222,7 @@ class DrivingActivityDetailsState extends State<DrivingActivityDetails> {
       ),
     );
     */
-    if (this.mounted) {
+    if (mounted) {
       setState(() {
         _isLoading = false;
       });
@@ -350,7 +347,7 @@ class DrivingActivityDetailsState extends State<DrivingActivityDetails> {
       borderRadius: BorderRadius.only(
           topLeft: const Radius.circular(10.0),
           topRight: const Radius.circular(10.0)),
-      panelBuilder: (ScrollController sc) => _buildDetails(context, sc),
+      panelBuilder: (sc) => _buildDetails(context, sc),
       body: GoogleMap(
         padding:
             EdgeInsets.only(bottom: MediaQuery.of(context).size.height * 0.2),
@@ -488,10 +485,10 @@ class DrivingActivityDetailsState extends State<DrivingActivityDetails> {
                 ? Center(
                     child: circularProgress(context, text: "Recuperando ruta"))
                 : _buildMap(),
-            new Positioned(
+            Positioned(
               top: 0.0,
               left: 0.0,
-              child: new IconButton(
+              child: IconButton(
                   icon: Icon(
                     Icons.arrow_back,
                     color: Theme.of(context).primaryColor,

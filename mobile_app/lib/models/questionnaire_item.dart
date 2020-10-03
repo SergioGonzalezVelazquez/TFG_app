@@ -1,7 +1,9 @@
+// ignore_for_file: constant_identifier_names
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:equatable/equatable.dart';
 
 /// Question within a Questionnaire
-class QuestionnaireItem {
+class QuestionnaireItem extends Equatable {
   /// Document id in firestore
   final String id;
 
@@ -14,13 +16,15 @@ class QuestionnaireItem {
   /// Whether the item must be included in data results
   final bool mandatory;
 
-  /// List of AND clauses that determine whether the question should be displayed or not
+  /// List of AND clauses that determine whether the question should be
+  /// displayed or not
   final List enableWhenClauses;
 
   /// Indicates data type for questions.
   final QuestionnaireItemType type;
 
-  /// Permitted answers. Only 'choice' and 'multiple-choice' items can have answerValueSet
+  /// Permitted answers. Only 'choice' and 'multiple-choice' items can have
+  /// answerValueSet
   final List<AnswerValue> answerValueSet;
 
   /// Captures the response of the user to a questionnaire item
@@ -31,19 +35,19 @@ class QuestionnaireItem {
   bool _updated = false;
 
   /// Getters used to retrieve the values of class fields
-  dynamic get answerValue => this._answerValue;
-  bool get updated => this._updated;
+  dynamic get answerValue => _answerValue;
+  bool get updated => _updated;
 
   /// Setters used to initialize the values of class fields
   set answerValue(dynamic value) {
-    this._updated = this._answerValue != null && this._answerValue != value;
-    this._answerValue = value;
+    _updated = _answerValue != null && _answerValue != value;
+    _answerValue = value;
   }
 
   /// Mark question answer as deleted (null)
   void deleteAnswer() {
-    this._answerValue = null;
-    this._updated = false;
+    _answerValue = null;
+    _updated = false;
   }
 
   /// Default class constructor
@@ -67,13 +71,15 @@ class QuestionnaireItem {
       text: doc.data()['text'],
       mandatory: doc.data()['mandatory'] ?? false,
       enableWhenClauses: doc.data()['enableWhen'] != null
-          ? doc.data()['enableWhen']
+          ? doc
+              .data()['enableWhen']
               .map((answerValue) => EnableWhen.fromMap(answerValue))
               .toList()
               .cast<EnableWhen>()
           : [],
       answerValueSet: doc.data()['answerValueSet'] != null
-          ? doc.data()['answerValueSet']
+          ? doc
+              .data()['answerValueSet']
               .map((answerValue) => AnswerValue.fromMap(answerValue))
               .toList()
               .cast<AnswerValue>()
@@ -81,20 +87,24 @@ class QuestionnaireItem {
     );
   }
 
+  @override
+  List<Object> get props => [
+        id,
+        linkId,
+        text,
+        type,
+        mandatory,
+        enableWhenClauses,
+        answerValueSet,
+      ];
+
   /// Returns a string representation of this object.
   @override
-  String toString() {
-    return 'id: $id, type: $type, text: $text, mandatory: $mandatory';
-  }
+  bool get stringify => true;
 }
 
 /// Type of questionnaire item
-enum QuestionnaireItemType {
-  boolean,
-  choice,
-  multiple_choice,
-  slider
-}
+enum QuestionnaireItemType { boolean, choice, multiple_choice, slider }
 
 /// Permitted answers for a questionnaire item
 class AnswerValue {
