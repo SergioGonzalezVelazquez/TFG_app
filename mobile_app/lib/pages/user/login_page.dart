@@ -79,13 +79,12 @@ class _LoginPageState extends State<LoginPage> {
     String authError;
     switch (error.code.toString().toUpperCase()) {
       case 'NETWORK_ERROR':
-        authError = """No se pudo conectar. Compruebe su conexión a Internet e 
-            intentelo de nuevo más tarde.""";
+        authError =
+            """No se pudo conectar. Compruebe su conexión a Internet e intentelo de nuevo más tarde.""";
         break;
       case 'ERROR_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL':
         authError =
-            """Esta cuenta de correo electrónico ya está asociada a otro método
-            de acceso. """;
+            """Esta cuenta de correo electrónico ya está asociada a otro método de acceso. """;
         break;
       case 'ERROR_OPERATION_NOT_ALLOWED':
         authError = 'ERROR_OPERATION_NOT_ALLOWED';
@@ -94,8 +93,8 @@ class _LoginPageState extends State<LoginPage> {
         authError = 'ERROR_INVALID_ACTION_CODE';
         break;
       default:
-        authError = """No se pudo iniciar sesión. Inténtelo de nuevo más 
-        tarde""";
+        authError =
+            """No se pudo iniciar sesión. Inténtelo de nuevo más tarde""";
         break;
     }
 
@@ -113,8 +112,8 @@ class _LoginPageState extends State<LoginPage> {
     String authError;
     switch (error.code.toString().toUpperCase()) {
       case 'ERROR_NETWORK_REQUEST_FAILED':
-        authError = """No se pudo conectar. Compruebe su conexión a Internet e 
-            intentelo de nuevo más tarde.""";
+        authError =
+            """No se pudo conectar. Compruebe su conexión a Internet e intentelo de nuevo más tarde.""";
         break;
       case 'ERROR_INVALID_EMAIL':
         authError = 'Introduce una cuenta de correo electrónico válida';
@@ -124,8 +123,7 @@ class _LoginPageState extends State<LoginPage> {
         break;
       case 'ERROR_USER_NOT_FOUND':
         authError =
-            """El correo electrónico que has introducido no coincide con ninguna 
-            cuenta""";
+            """El correo electrónico que has introducido no coincide con ninguna cuenta""";
         break;
       case 'ERROR_USER_DISABLED':
         authError =

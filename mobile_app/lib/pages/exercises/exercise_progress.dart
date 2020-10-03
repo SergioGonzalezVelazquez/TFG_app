@@ -356,8 +356,7 @@ class _ExerciseProgressState extends State<ExerciseProgress> {
 
           // Tabla de seguimiento
           _buildTitle("Historial de exposiciones", description: [
-            """Esta información puede ser útil para plantearte el próximo 
-            objetivo de tiempo basándote en tus ejercicios pasados. """
+            """Esta información puede ser útil para plantearte el próximo objetivo de tiempo basándote en tus ejercicios pasados. """
           ]),
           _buildTableResumeHeader1(),
           _buildTableResumeHeader2(),
@@ -365,23 +364,18 @@ class _ExerciseProgressState extends State<ExerciseProgress> {
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.05,
           ),
-          _buildTitle("""Evolución de la ansiedad antes y durante la 
-          exposición""", description: [
-            """Se utiliza una puntuación de 0 a 100 USAs, dónde el 0 representa 
-            ausencia de ansiedad y el 100 una ansiedad extrema."""
-          ]),
+          _buildTitle("""Evolución de la ansiedad antes y durante la exposición""",
+              description: [
+                """Se utiliza una puntuación de 0 a 100 USAs, dónde el 0 representa ausencia de ansiedad y el 100 una ansiedad extrema."""
+              ]),
           _buildUSAsChart(),
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.05,
           ),
           _buildTitle("""Evolución de las respuestas de autoeficacia""",
               description: [
-                """La siguiente gráfica representa cómo de seguro estabas de 
-                poder realizar el ejercicio justo antes de las diferentes 
-                exposiciones.""",
-                """Se utiliza una escala de 0 a 100 dónde 0 significa 
-                "No puedo hacerlo" y 100 "Totalmente seguro de poder 
-                hacerlo" """
+                """La siguiente gráfica representa cómo de seguro estabas de poder realizar el ejercicio justo antes de las diferentes exposiciones.""",
+                """Se utiliza una escala de 0 a 100 dónde 0 significa "No puedo hacerlo" y 100 "Totalmente seguro de poder hacerlo" """
               ]),
           _buildSelfEfficacyChart(),
           SizedBox(
@@ -389,9 +383,7 @@ class _ExerciseProgressState extends State<ExerciseProgress> {
           ),
           _buildTitle("Informe referido al pánico y sensaciones experimentadas",
               description: [
-                """En esta tabla puedes comparar sensaciones que pensabas que 
-                ibas a experimentar durante el ejercicio con las sensaciones 
-                que realmente has experimentado."""
+                """En esta tabla puedes comparar sensaciones que pensabas que ibas a experimentar durante el ejercicio con las sensaciones que realmente has experimentado."""
               ]),
           _buildTablePanic(),
         ],

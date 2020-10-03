@@ -397,16 +397,14 @@ enum ExerciseQuestionnaireType { before, after }
 // List of questions before exercise
 List<QuestionnaireItem> beforeQuestions = [
   QuestionnaireItem(
-      text: """En una escala de 0 a 100 (siendo 0 "nada de ansiedad" y 100 
-          "un gran nivel de ansiedad"), ¿qué ansiedad te provoca la situación 
-          a la que te vas a exponer? """,
+      text:
+          """En una escala de 0 a 100 (siendo 0 "nada de ansiedad" y 100 "un gran nivel de ansiedad"), ¿qué ansiedad te provoca la situación a la que te vas a exponer? """,
       mandatory: true,
       type: QuestionnaireItemType.slider,
       id: "usasBefore"),
   QuestionnaireItem(
       text:
-          """Durante el ejercicio de exposición, ¿crees que ocurrirá alguna de 
-          las siguientes situaciones?""",
+          """Durante el ejercicio de exposición, ¿crees que ocurrirá alguna de las siguientes situaciones?""",
       mandatory: false,
       type: QuestionnaireItemType.multiple_choice,
       answerValueSet: [
@@ -426,17 +424,15 @@ List<QuestionnaireItem> beforeQuestions = [
       id: "panicBefore"),
   QuestionnaireItem(
       text:
-          """En una escala de 0 a 100, dónde 0 equivale a "no puedo hacerlo” y 
-          100 “me considero totalmente seguro de poder hacerlo”, evalúa cómo de 
-          seguro estás de poder completar el ejercicio.""",
+          """En una escala de 0 a 100, dónde 0 equivale a "no puedo hacerlo” y 100 “me considero totalmente seguro de poder hacerlo”, evalúa cómo de seguro estás de poder completar el ejercicio.""",
       mandatory: true,
       type: QuestionnaireItemType.slider,
       id: "selfBefore"),
 ];
 List<QuestionnaireItem> afterQuestions = [
   QuestionnaireItem(
-      text: """Indica si durante el ejercicio de exposición has experimentado 
-          alguna de las siguientes sensaciones.""",
+      text:
+          """Indica si durante el ejercicio de exposición has experimentado alguna de las siguientes sensaciones.""",
       mandatory: false,
       type: QuestionnaireItemType.multiple_choice,
       answerValueSet: [
@@ -456,9 +452,8 @@ List<QuestionnaireItem> afterQuestions = [
       ],
       id: "panicAfter"),
   QuestionnaireItem(
-      text: """En una escala de 0 a 100 (siendo 0 "nada de ansiedad" y 100 
-          "un gran nivel de ansiedad") ¿qué nivel de ansiedad consideras que 
-          te ha provocado la situación una vez que te has expuesto a ella?""",
+      text:
+          """En una escala de 0 a 100 (siendo 0 "nada de ansiedad" y 100 "un gran nivel de ansiedad") ¿qué nivel de ansiedad consideras que te ha provocado la situación una vez que te has expuesto a ella?""",
       mandatory: true,
       type: QuestionnaireItemType.slider,
       id: "usasAfter"),

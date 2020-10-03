@@ -209,7 +209,10 @@ class _SignUpPageState extends State<SignUpPage> {
 
   /// Build signup screen widgets
   Widget _signUpPage() {
-    double verticalPadding = MediaQuery.of(context).size.height * 0.02;
+    final double witdth = MediaQuery.of(context).size.width;
+    final double verticalPadding = MediaQuery.of(context).size.height * 0.02;
+    final double horizontalPadding = witdth * 0.1;
+    final double imageWidth = witdth * 0.49;
     return SafeArea(
       child: ListView(
         padding: EdgeInsets.symmetric(
@@ -223,7 +226,7 @@ class _SignUpPageState extends State<SignUpPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Container(
-                  width: MediaQuery.of(context).size.width * 0.45,
+                  width: witdth - horizontalPadding - imageWidth,
                   child: Text(
                     "Supera la ansiedad al volante",
                     style: Theme.of(context).textTheme.headline6.copyWith(

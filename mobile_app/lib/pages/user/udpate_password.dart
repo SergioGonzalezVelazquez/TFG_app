@@ -91,20 +91,18 @@ class _UpdatePasswordState extends State<UpdatePassword> {
             Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                """Elige una contraseña segura y no la utilices en otras 
-                cuentas.""",
+                """Elige una contraseña segura y no la utilices en otras cuentas.""",
                 textAlign: TextAlign.justify,
               ),
             ),
             SizedBox(height: MediaQuery.of(context).size.height / 40),
             Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  """Si cambias la contraseña, cerrarás sesión en todos los 
-                  dispositivos, incluido tu teléfono. Será necesario que 
-                  introduzcas la nueva contraseña en todos tus dispositivos.""",
-                  textAlign: TextAlign.justify,
-                )),
+              alignment: Alignment.centerLeft,
+              child: Text(
+                """Si cambias la contraseña, cerrarás sesión en todos los dispositivos, incluido tu teléfono. Será necesario que introduzcas la nueva contraseña en todos tus dispositivos.""",
+                textAlign: TextAlign.justify,
+              ),
+            ),
             SizedBox(height: MediaQuery.of(context).size.height / 40),
             customPasswordInput("Nueva contraseña", CustomIcon.lock,
                 controller: _newPwd1Controller,

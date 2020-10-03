@@ -518,8 +518,7 @@ class _SignUpQuestionnairePageState extends State<SignUpQuestionnairePage>
           height: MediaQuery.of(context).size.height * 0.02,
         ),
         Text(
-          """Puedes continuar respondiendo por la pregunta en que lo dejaste,
-           o borrar tus respuestas anteriores y empezar a responder desde cero.""",
+          """Puedes continuar respondiendo por la pregunta en que lo dejaste, o borrar tus respuestas anteriores y empezar a responder desde cero.""",
           textAlign: TextAlign.justify,
         ),
         Align(

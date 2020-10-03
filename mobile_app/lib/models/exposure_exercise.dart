@@ -2,8 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
 class ExposureExercise extends Equatable {
-  String _exerciseId;
-  String _id;
+  String exerciseId;
+  String id;
   Timestamp start;
   Timestamp end;
   int presetDuration; // seconds
@@ -22,34 +22,20 @@ class ExposureExercise extends Equatable {
   List<String> panicAfter = [];
 
   /// Default class constructor
-  ExposureExercise(
-      {String exerciseId,
-      String id,
-      int usasAfter,
-      int selfEfficacyBefore,
-      List<String> panicBefore,
-      List<String> panicAfter,
-      int usasBefore,
-      Timestamp start,
-      Timestamp end,
-      bool completedExercise,
-      int presetDuration,
-      int realDuration}) {
-    this.start;
-    this.end;
-    _exerciseId = exerciseId;
-    _id = id;
-    this.presetDuration;
-    this.realDuration;
-    this.usasBefore;
-    this.panicBefore;
-    this.selfEfficacyBefore;
-    this.completedExercise;
-    this.usasAfter;
-    this.panicAfter;
-  }
-
-  // Getters
+  ExposureExercise({
+    this.start,
+    this.end,
+    this.exerciseId,
+    this.id,
+    this.presetDuration,
+    this.realDuration,
+    this.usasBefore,
+    this.panicBefore,
+    this.selfEfficacyBefore,
+    this.completedExercise,
+    this.usasAfter,
+    this.panicAfter,
+  });
 
   /// Converts Firestore Document into a Situation object
   factory ExposureExercise.fromDocument(DocumentSnapshot doc) {
@@ -80,7 +66,7 @@ class ExposureExercise extends Equatable {
 
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = {};
-    map['exerciseId'] = _exerciseId;
+    map['exerciseId'] = exerciseId;
     map['usasAfter'] = usasAfter;
     map['usasBefore'] = usasBefore;
     map['selfEfficacyBefore'] = selfEfficacyBefore;
@@ -97,8 +83,8 @@ class ExposureExercise extends Equatable {
 
   @override
   List<Object> get props => [
-        _exerciseId,
-        _id,
+        exerciseId,
+        id,
         start,
         end,
         presetDuration,
