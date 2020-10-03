@@ -1,10 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:tfg_app/main.dart';
-import 'package:tfg_app/models/exercise.dart';
-import 'package:tfg_app/widgets/progress.dart';
-import 'package:tfg_app/widgets/self_efficacy_chart.dart';
-import 'package:tfg_app/widgets/usas_chart.dart';
+
+import '../../main.dart';
+import '../../models/exercise.dart';
+import '../../widgets/progress.dart';
+import '../../widgets/self_efficacy_chart.dart';
+import '../../widgets/usas_chart.dart';
 
 class ExerciseProgress extends StatefulWidget {
   final Exercise exercise;
@@ -14,7 +15,7 @@ class ExerciseProgress extends StatefulWidget {
 }
 
 class _ExerciseProgressState extends State<ExerciseProgress> {
-  bool _isLoading = false;
+  final bool _isLoading = false;
 
   /// Method called when this widget is inserted into the tree.
   @override
@@ -28,7 +29,7 @@ class _ExerciseProgressState extends State<ExerciseProgress> {
   }
 
   String getDurationString(int seconds) {
-    Duration duration = new Duration(seconds: seconds);
+    Duration duration = Duration(seconds: seconds);
     int minutes = duration.inMinutes % 60;
     int hours = duration.inHours % 60;
     seconds = seconds % 60;
@@ -56,14 +57,14 @@ class _ExerciseProgressState extends State<ExerciseProgress> {
         children: [
           TableRow(
             decoration: BoxDecoration(
-              color: new Color(0xffE0D5F1),
+              color: Color(0xffE0D5F1),
             ),
             children: [
-              _tableCellHeader(""),
-              _tableCellHeader(""),
-              _tableCellHeader("Hora"),
-              _tableCellHeader("Duración"),
-              _tableCellHeader("Ansiedad (USAs)"),
+              _tableCellHeader(""""""),
+              _tableCellHeader(""""""),
+              _tableCellHeader("""Hora"""),
+              _tableCellHeader("""Duración"""),
+              _tableCellHeader("""Ansiedad (USAs)"""),
             ],
           ),
         ],
@@ -88,16 +89,16 @@ class _ExerciseProgressState extends State<ExerciseProgress> {
         border: TableBorder.all(color: Colors.black45),
         children: [
           TableRow(
-            decoration: BoxDecoration(color: new Color(0xffE0D5F1)),
+            decoration: BoxDecoration(color: Color(0xffE0D5F1)),
             children: [
-              _tableCellHeader("#"),
-              _tableCellHeader("Día"),
-              _tableCellHeader("Empieza"),
-              _tableCellHeader("Acaba"),
-              _tableCellHeader("Fijada"),
-              _tableCellHeader("Real"),
-              _tableCellHeader("Antes"),
-              _tableCellHeader("Durante"),
+              _tableCellHeader("""#"""),
+              _tableCellHeader("""Día"""),
+              _tableCellHeader("""Empieza"""),
+              _tableCellHeader("""Acaba"""),
+              _tableCellHeader("""Fijada"""),
+              _tableCellHeader("""Real"""),
+              _tableCellHeader("""Antes"""),
+              _tableCellHeader("""Durante"""),
             ],
           ),
         ],
@@ -131,14 +132,14 @@ class _ExerciseProgressState extends State<ExerciseProgress> {
     if (widget.exercise.exposures.isEmpty) {
       rows.add(
         TableRow(children: [
-          _tableCell(""),
-          _tableCell(""),
-          _tableCell(""),
-          _tableCell(""),
-          _tableCell(""),
-          _tableCell(""),
-          _tableCell(""),
-          _tableCell(""),
+          _tableCell(""""""),
+          _tableCell(""""""),
+          _tableCell(""""""),
+          _tableCell(""""""),
+          _tableCell(""""""),
+          _tableCell(""""""),
+          _tableCell(""""""),
+          _tableCell(""""""),
         ]),
       );
     }
@@ -198,26 +199,26 @@ class _ExerciseProgressState extends State<ExerciseProgress> {
   String _getPanicBeforeText(String value) {
     String text = '';
     switch (value) {
-      case "ataque_ansiedad":
-        text = "-\tTener un ataque de ansiedad";
+      case """ataque_ansiedad""":
+        text = """-\tTener un ataque de ansiedad""";
         break;
-      case "bloqueo":
-        text = "-\tBloquearme y no saber cómo reaccionar";
+      case """bloqueo""":
+        text = """-\tBloquearme y no saber cómo reaccionar""";
         break;
-      case "ataque_corazon":
-        text = "-\tTener un ataque al corazón";
+      case """ataque_corazon""":
+        text = """-\tTener un ataque al corazón""";
         break;
-      case "desmayo":
-        text = "-\tDesmayarme";
+      case """desmayo""":
+        text = """-\tDesmayarme""";
         break;
-      case "ridiculo":
-        text = "-\tLlamar la atención o hacer el ridículo";
+      case """ridiculo""":
+        text = """-\tLlamar la atención o hacer el ridículo""";
         break;
-      case "perder_control":
-        text = "-\tPerder el control del vehículo";
+      case """perder_control""":
+        text = """-\tPerder el control del vehículo""";
         break;
-      case "embarazosa":
-        text = "-\tSerá una situación embarazosa";
+      case """embarazosa""":
+        text = """-\tSerá una situación embarazosa""";
         break;
     }
 
@@ -227,29 +228,29 @@ class _ExerciseProgressState extends State<ExerciseProgress> {
   String _getPanicAfterText(String value) {
     String text = '';
     switch (value) {
-      case "ataque_corazon":
-        text = "-\tLatidos rápidos o fuertes del corazón";
+      case """ataque_corazon""":
+        text = """-\tLatidos rápidos o fuertes del corazón""";
         break;
-      case "sudor":
-        text = "-\tSudores";
+      case """sudor""":
+        text = """-\tSudores""";
         break;
-      case "falta_aire":
-        text = "-\tFalta de aire";
+      case """falta_aire""":
+        text = """-\tFalta de aire""";
         break;
-      case "escalofrio":
-        text = "-\tEscalofríos";
+      case """escalofrio""":
+        text = """-\tEscalofríos""";
         break;
-      case "mareo":
-        text = "-\tVértigos, mareos, inestabilidad";
+      case """mareo""":
+        text = """-\tVértigos, mareos, inestabilidad""";
         break;
-      case "perder_control":
-        text = "-\tMiedo a perder el control del vehículo";
+      case """perder_control""":
+        text = """-\tMiedo a perder el control del vehículo""";
         break;
-      case "pecho":
-        text = "-\tDolor o malestar en el pecho";
+      case """pecho""":
+        text = """-\tDolor o malestar en el pecho""";
         break;
-      case "estomago":
-        text = "-\tVómitos o malestar en el estómago";
+      case """estomago""":
+        text = """-\tVómitos o malestar en el estómago""";
         break;
     }
 
@@ -260,12 +261,12 @@ class _ExerciseProgressState extends State<ExerciseProgress> {
     List<TableRow> rows = [
       TableRow(
         decoration: BoxDecoration(
-          color: new Color(0xffE0D5F1),
+          color: Color(0xffE0D5F1),
         ),
         children: [
-          _tableCellHeader("#"),
-          _tableCellHeader("Temores"),
-          _tableCellHeader("Sensaciones reales"),
+          _tableCellHeader("""#"""),
+          _tableCellHeader("""Temores"""),
+          _tableCellHeader("""Sensaciones reales"""),
         ],
       ),
     ];
@@ -273,7 +274,7 @@ class _ExerciseProgressState extends State<ExerciseProgress> {
     widget.exercise.exposures.forEach((exposure) {
       String before = '';
       exposure.panicBefore.forEach((element) {
-        before += _getPanicBeforeText(element) + "\n";
+        before += _getPanicBeforeText(element) + """\n""";
       });
       if (before.isNotEmpty) {
         before = before.substring(0, before.length - 1);
@@ -281,7 +282,7 @@ class _ExerciseProgressState extends State<ExerciseProgress> {
 
       String after = '';
       exposure.panicAfter.forEach((element) {
-        after += _getPanicAfterText(element) + "\n";
+        after += _getPanicAfterText(element) + """\n""";
       });
       if (after.isNotEmpty) {
         after = after.substring(0, after.length - 1);
@@ -298,9 +299,9 @@ class _ExerciseProgressState extends State<ExerciseProgress> {
     if (widget.exercise.exposures.isEmpty) {
       rows.add(
         TableRow(children: [
-          _tableCell(""),
-          _tableCell(""),
-          _tableCell(""),
+          _tableCell(""""""),
+          _tableCell(""""""),
+          _tableCell(""""""),
         ]),
       );
     }
@@ -355,7 +356,7 @@ class _ExerciseProgressState extends State<ExerciseProgress> {
 
           // Tabla de seguimiento
           _buildTitle("Historial de exposiciones", description: [
-            "Esta información puede ser útil para plantearte el próximo objetivo de tiempo basándote en tus ejercicios pasados. "
+            """Esta información puede ser útil para plantearte el próximo objetivo de tiempo basándote en tus ejercicios pasados. """
           ]),
           _buildTableResumeHeader1(),
           _buildTableResumeHeader2(),
@@ -363,28 +364,26 @@ class _ExerciseProgressState extends State<ExerciseProgress> {
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.05,
           ),
-          _buildTitle(
-              "Evolución de la ansiedad antes y durante la exposición",
+          _buildTitle("""Evolución de la ansiedad antes y durante la exposición""",
               description: [
-                "Se utiliza una puntuación de 0 a 100 USAs, dónde el 0 representa ausencia de ansiedad y el 100 una ansiedad extrema."
+                """Se utiliza una puntuación de 0 a 100 USAs, dónde el 0 representa ausencia de ansiedad y el 100 una ansiedad extrema."""
               ]),
           _buildUSAsChart(),
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.05,
           ),
-          _buildTitle("Evolución de las respuestas de autoeficacia",
+          _buildTitle("""Evolución de las respuestas de autoeficacia""",
               description: [
-                "La siguiente gráfica representa cómo de seguro estabas de poder realizar el ejercicio justo antes de las diferentes exposiciones.",
-                'Se utiliza una escala de 0 a 100 dónde 0 significa "No puedo hacerlo" y 100 "Totalmente seguro de poder hacerlo"'
+                """La siguiente gráfica representa cómo de seguro estabas de poder realizar el ejercicio justo antes de las diferentes exposiciones.""",
+                """Se utiliza una escala de 0 a 100 dónde 0 significa "No puedo hacerlo" y 100 "Totalmente seguro de poder hacerlo" """
               ]),
           _buildSelfEfficacyChart(),
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.05,
           ),
-          _buildTitle(
-              "Informe referido al pánico y sensaciones experimentadas",
+          _buildTitle("Informe referido al pánico y sensaciones experimentadas",
               description: [
-                "En esta tabla puedes comparar sensaciones que pensabas que ibas a experimentar durante el ejercicio con las sensaciones que realmente has experimentado."
+                """En esta tabla puedes comparar sensaciones que pensabas que ibas a experimentar durante el ejercicio con las sensaciones que realmente has experimentado."""
               ]),
           _buildTablePanic(),
         ],
@@ -438,7 +437,7 @@ class _ExerciseProgressState extends State<ExerciseProgress> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Registro de exposición"),
+        title: Text("""Registro de exposición"""),
       ),
       //backgroundColor:  Color(0xffe8eaf6),
       body: _isLoading ? circularProgress(context) : _buildPage(context),

@@ -1,15 +1,17 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:tfg_app/models/driving_activity.dart';
-import 'package:tfg_app/models/driving_event.dart';
-import 'package:tfg_app/models/exercise.dart';
-import 'package:tfg_app/models/exposure_exercise.dart';
-import 'package:tfg_app/models/patient.dart';
-import 'package:tfg_app/models/questionnaire_group.dart';
-import 'package:tfg_app/models/questionnaire_item.dart';
-import 'package:tfg_app/models/situation.dart';
-import 'package:tfg_app/models/therapy.dart';
 import 'dart:async';
-import 'package:tfg_app/services/auth.dart';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+import '../models/driving_activity.dart';
+import '../models/driving_event.dart';
+import '../models/exercise.dart';
+import '../models/exposure_exercise.dart';
+import '../models/patient.dart';
+import '../models/questionnaire_group.dart';
+import '../models/questionnaire_item.dart';
+import '../models/situation.dart';
+import '../models/therapy.dart';
+import 'auth.dart';
 
 /// Entry point for accesing firestore.
 /// Gets the instance of Firestore for the default Firebase app
@@ -37,7 +39,7 @@ Stream<List<ExposureExercise>> getExposuresAsStream() {
       return snapshot.docs
           .map((doc) => ExposureExercise.fromDocument(doc))
           .toList();
-    } catch (e) {
+    } on Exception catch (e) {
       print(e);
       return null;
     }
@@ -58,7 +60,7 @@ Stream<List<Exercise>> getExercisesAsStream() {
       .then((snapshot) {
     try {
       return snapshot.docs.map((doc) => Exercise.fromDocument(doc)).toList();
-    } catch (e) {
+    } on Exception catch (e) {
       print(e);
       return null;
     }

@@ -1,6 +1,8 @@
+// ignore_for_file: constant_identifier_names
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:equatable/equatable.dart';
 
-class DrivingEvent {
+class DrivingEvent extends Equatable {
   final Timestamp timestamp;
   final GeoPoint location;
   final bool isFused;
@@ -22,20 +24,24 @@ class DrivingEvent {
       location: map['location'],
       isFused: map['isFused'],
       type: DrivingEventType.values
-          .firstWhere((e) => e.toString() == 'DrivingEventType.' + map['type']),
-/*
-                acceleration:
-          map['acceleration'] != null ? double.parse(map['acceleration']) : 0,
-      drivingSpeed:
-          map['driving_speed'] != null ? double.parse(map['driving_speed']) : 0,
-*/
+          .firstWhere((e) => e.toString() == 'DrivingEventType.${map['type']}'),
     );
   }
 
   @override
   String toString() {
-    return 'type: ${type.toString()}, latitude: ${location.latitude}, longitude: ${location.longitude}, time: ${timestamp.toDate().toIso8601String()}';
+    return """type: ${type.toString()}, latitude: ${location.latitude}, 
+      longitude: ${location.longitude}, 
+      time: ${timestamp.toDate().toIso8601String()}""";
   }
+
+  @override
+  List<Object> get props =>
+      [type, location.latitude, location.longitude, timestamp];
+
+  /// Returns a string representation of this object.
+  @override
+  bool get stringify => true;
 }
 
 enum DrivingEventType {

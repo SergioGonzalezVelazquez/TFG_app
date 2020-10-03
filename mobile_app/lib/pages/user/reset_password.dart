@@ -1,15 +1,13 @@
-import 'dart:io';
-import 'package:tfg_app/services/auth.dart';
 // import 'package:android_intent/android_intent.dart';
 import 'package:flutter/material.dart';
-import 'package:tfg_app/pages/user/login_page.dart';
-import 'package:tfg_app/themes/custom_icon_icons.dart';
-import 'package:tfg_app/widgets/buttons.dart';
-import 'package:tfg_app/widgets/inputs.dart';
-import 'package:tfg_app/widgets/progress.dart';
-import 'package:tfg_app/widgets/snackbar.dart';
-import 'package:tfg_app/utils/validators.dart';
-import 'package:url_launcher/url_launcher.dart';
+
+import '../../services/auth.dart';
+import '../../themes/custom_icon_icons.dart';
+import '../../utils/validators.dart';
+import '../../widgets/buttons.dart';
+import '../../widgets/inputs.dart';
+import '../../widgets/progress.dart';
+import 'login_page.dart';
 
 class ResetPasswordPage extends StatefulWidget {
   /// Name use for navigate to this screen
@@ -21,11 +19,11 @@ class ResetPasswordPage extends StatefulWidget {
 
 class _ResetPasswordPageState extends State<ResetPasswordPage> {
   // Create controller for handle changes in email field
-  TextEditingController _emailController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
 
   // Create a global key that uniquely identifies the Scaffold widget,
   // and allows to display snackbars.
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   // Create a global key that uniquely identifies the Form widget
   // and allows validation of the form.
@@ -52,9 +50,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
     super.dispose();
   }
 
-  /**
-   * Functions used to handle events in this screen 
-   */
+  /// Functions used to handle events in this screen
 
   Future<void> _sendResetPasswordEmail() async {
     if (_formKey.currentState.validate()) {
@@ -84,9 +80,10 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
 
   /// Open default email app
   void _openEmailApp() {
+    /*
     final snackBar = customSnackbar(
         context, "No se pudo abrir ninguna aplicación de correo electrónico");
-    /*
+   
     if (Platform.isAndroid) {
       AndroidIntent intent = AndroidIntent(
         action: 'android.intent.action.MAIN',
@@ -111,8 +108,8 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
 
   Widget _linkToLogin() {
     return InkWell(
-      onTap: () => Navigator.of(context).pushNamedAndRemoveUntil(
-          LoginPage.route, (Route<dynamic> route) => false),
+      onTap: () => Navigator.of(context)
+          .pushNamedAndRemoveUntil(LoginPage.route, (route) => false),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
@@ -174,7 +171,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
       key: _formKey,
       child: customTextInput("Correo Electrónico", CustomIcon.mail,
           controller: _emailController,
-          validator: (val) => Validator.email(val),
+          validator: Validator.email,
           keyboardType: TextInputType.emailAddress),
     );
   }
@@ -224,20 +221,19 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
     );
   }
 
-  /**
-   * Widgets (ui components) used in this screen 
-   */
+  /// Widgets (ui components) used in this screen
 
   @override
   Widget build(BuildContext context) {
     Widget children;
 
-    if (_isLoading)
+    if (_isLoading) {
       children = circularProgress(context, text: 'Enviando correo electrónico');
-    else if (_emailSent)
+    } else if (_emailSent) {
       children = _emailSentPage();
-    else
+    } else {
       children = _resetPwdPage();
+    }
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(

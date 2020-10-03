@@ -1,19 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:tfg_app/models/patient.dart';
+import 'package:equatable/equatable.dart';
 
-class MUser {
+import 'patient.dart';
+
+class MUser extends Equatable {
   final String id;
   final String email;
   final String photoUrl;
   final String name;
   final Timestamp createdAt;
-  Patient _patient;
-
-  /// Getters used to retrieve the values of class fields
-  Patient get patient => this._patient;
-
-  /// Setters used to initialize the values of class fields
-  set patient(Patient patient) => this._patient = patient;
+  Patient patient;
 
   /// Default class constructor
   MUser({this.id, this.email, this.photoUrl, this.name, this.createdAt});
@@ -28,9 +24,10 @@ class MUser {
         createdAt: doc.data()['created_at']);
   }
 
+  @override
+  List<Object> get props => [id, email, photoUrl, name, createdAt, patient];
+
   /// Returns a string representation of this object.
   @override
-  String toString() {
-    return 'id: $id, email: $email, photoUrl: $photoUrl, name: $name, createdAt: ${createdAt.toDate().toIso8601String()}';
-  }
+  bool get stringify => true;
 }

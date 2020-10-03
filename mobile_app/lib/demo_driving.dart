@@ -1,13 +1,13 @@
-import 'dart:io';
 import 'dart:async';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/services.dart';
-import 'package:tfg_app/pages/driving_activity/driving_activity_page.dart';
-import 'package:tfg_app/widgets/buttons.dart';
-import 'package:tfg_app/services/auth.dart';
 import 'dart:convert';
+import 'dart:io';
+
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'pages/driving_activity/driving_activity_page.dart';
+import 'widgets/buttons.dart';
 
 class DemoDrivingPage extends StatefulWidget {
   DemoDrivingPage({Key key}) : super(key: key);
@@ -17,15 +17,14 @@ class DemoDrivingPage extends StatefulWidget {
 }
 
 class _DemoDrivingPageState extends State<DemoDrivingPage> {
-  StreamController _activityStreamController = StreamController();
   StreamSubscription _activityUpdateStreamSubscription;
   Duration oneSec = const Duration(seconds: 1);
 
   static const MethodChannel _methodChannel =
-      const MethodChannel('driving_detection/methodChannel');
+      MethodChannel('driving_detection/methodChannel');
 
   static const EventChannel _eventChannel =
-      const EventChannel('driving_detection/activityUpdates');
+      EventChannel('driving_detection/activityUpdates');
   List messages = [];
   bool enabledAutoDetectionService = false;
   bool enabledEventDetectionService = false;
@@ -37,12 +36,13 @@ class _DemoDrivingPageState extends State<DemoDrivingPage> {
     _activityUpdateStreamSubscription = _eventChannel
         .receiveBroadcastStream()
         .listen(_onActivityUpdateReceived);
-    timer = Timer.periodic(Duration(seconds: 60), (Timer t) => _isRunning());
+    timer = Timer.periodic(Duration(seconds: 60), (t) => _isRunning());
   }
 
   @override
   void dispose() {
     timer?.cancel();
+    _activityUpdateStreamSubscription.cancel();
     super.dispose();
   }
 
@@ -128,7 +128,7 @@ class _DemoDrivingPageState extends State<DemoDrivingPage> {
   }
 
   Widget _buildPage() {
-    return new Scaffold(
+    return Scaffold(
       bottomNavigationBar: null,
       body: SafeArea(
         child: Padding(
@@ -141,7 +141,7 @@ class _DemoDrivingPageState extends State<DemoDrivingPage> {
                   child: ListView.builder(
                       padding: EdgeInsets.all(8.0),
                       reverse: true,
-                      itemBuilder: (_, int index) => messages[index],
+                      itemBuilder: (_, index) => messages[index],
                       itemCount: messages.length),
                 ),
                 Row(
@@ -189,10 +189,7 @@ class _DemoDrivingPageState extends State<DemoDrivingPage> {
                     Column(
                       children: <Widget>[
                         Text(
-                          "AutoDriveService: " +
-                              (enabledAutoDetectionService
-                                  ? 'running'
-                                  : 'stopped'),
+                          """AutoDriveService: ${enabledAutoDetectionService ? 'running' : 'stopped'}""",
                           style: TextStyle(
                               fontSize: 11,
                               color: enabledAutoDetectionService
@@ -200,10 +197,8 @@ class _DemoDrivingPageState extends State<DemoDrivingPage> {
                                   : Colors.red),
                         ),
                         Text(
-                          "EventDetectionService: " +
-                              (enabledEventDetectionService
-                                  ? 'running'
-                                  : 'stopped'),
+                          """EventDetectionService: 
+                              ${enabledEventDetectionService ? 'running' : 'stopped'}""",
                           style: TextStyle(
                               fontSize: 11,
                               color: enabledEventDetectionService
@@ -223,8 +218,7 @@ class _DemoDrivingPageState extends State<DemoDrivingPage> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) =>
-                                    DrivingActivityPage()));
+                                builder: (context) => DrivingActivityPage()));
                       }, "View activities"),
                     ),
                   ],

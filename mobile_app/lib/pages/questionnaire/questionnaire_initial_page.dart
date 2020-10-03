@@ -140,7 +140,7 @@ class QuestionnaireInitialPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: animateController,
-      builder: (BuildContext context, Widget child) {
+      builder: (context, child) {
         return Stack(
           alignment: alignment.value,
           children: <Widget>[

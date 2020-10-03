@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:tfg_app/models/patient.dart';
-import 'package:tfg_app/pages/root_page.dart';
-import 'package:tfg_app/widgets/buttons.dart';
-import 'package:tfg_app/widgets/progress.dart';
-import 'package:tfg_app/services/auth.dart';
+
+import '../../../models/patient.dart';
+import '../../../services/auth.dart';
+import '../../../widgets/buttons.dart';
+import '../../../widgets/progress.dart';
+import '../../root_page.dart';
 
 class SignUpQuestionnaireCompleted extends StatefulWidget {
   /// Name use for navigate to this screen
@@ -21,7 +22,7 @@ class _SignUpQuestionnaireCompletedState
 
   // Create a global key that uniquely identifies the Scaffold widget,
   // and allows to display snackbars.
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   AuthService _authService;
 
@@ -39,9 +40,7 @@ class _SignUpQuestionnaireCompletedState
     super.dispose();
   }
 
-  /**
-  * Functions used to handle events in this screen 
-  */
+  /// Functions used to handle events in this screen
 
   /// Creates document in 'patient' collection for current auth user
   Future<void> _createPatient() async {
@@ -51,9 +50,8 @@ class _SignUpQuestionnaireCompletedState
     });
   }
 
-  /**
-  * Widgets (ui components) used in this screen 
-  */
+  ///  Widgets (ui components) used in this screen
+
   Widget _buildPage(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
@@ -110,8 +108,8 @@ class _SignUpQuestionnaireCompletedState
         children: <Widget>[
           primaryButton(
               context,
-              () => Navigator.of(context).pushNamedAndRemoveUntil(
-                  RootPage.route, (Route<dynamic> route) => false),
+              () => Navigator.of(context)
+                  .pushNamedAndRemoveUntil(RootPage.route, (route) => false),
               "Continuar",
               width: MediaQuery.of(context).size.width * 0.25),
         ],

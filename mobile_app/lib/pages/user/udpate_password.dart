@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:tfg_app/themes/custom_icon_icons.dart';
-import 'package:tfg_app/utils/validators.dart';
-import 'package:tfg_app/widgets/buttons.dart';
-import 'package:tfg_app/widgets/inputs.dart';
-import 'package:tfg_app/widgets/password_strength.dart';
-import 'package:tfg_app/widgets/progress.dart';
+
+import '../../themes/custom_icon_icons.dart';
+import '../../utils/validators.dart';
+import '../../widgets/buttons.dart';
+import '../../widgets/inputs.dart';
+import '../../widgets/password_strength.dart';
+import '../../widgets/progress.dart';
 
 class UpdatePassword extends StatefulWidget {
   /// Name use for navigate to this screen
@@ -32,11 +33,11 @@ class _UpdatePasswordState extends State<UpdatePassword> {
   // password strength estimator
   double _passwordStrength = 0;
 
-  bool _isLoading = false;
+  final bool _isLoading = false;
 
   // Create a global key that uniquely identifies the Scaffold widget,
   // and allows to display snackbars.
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -53,16 +54,14 @@ class _UpdatePasswordState extends State<UpdatePassword> {
     super.dispose();
   }
 
-  /**
-  * Functions used to handle events in this screen 
-  */
+  /// Functions used to handle events in this screen
+
   void _changePassword() {
     if (_formKey.currentState.validate()) {}
   }
 
-  /**
-  * Widgets (ui components) used in this screen 
-  */
+  /// Widgets (ui components) used in this screen
+
   Widget _changePasswordPage(BuildContext context) {
     double verticalPadding = MediaQuery.of(context).size.height * 0.02;
     return Form(
@@ -76,7 +75,7 @@ class _UpdatePasswordState extends State<UpdatePassword> {
               "Contraseña actual",
               CustomIcon.lock,
               controller: _oldPwdController,
-              validator: (val) => Validator.passwordPresent(val),
+              validator: Validator.passwordPresent,
               visible: _showPasswordOld,
               visibleController: () {
                 setState(
@@ -92,32 +91,31 @@ class _UpdatePasswordState extends State<UpdatePassword> {
             Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                "Elige una contraseña segura y no la utilices en otras cuentas.",
+                """Elige una contraseña segura y no la utilices en otras cuentas.""",
                 textAlign: TextAlign.justify,
               ),
             ),
             SizedBox(height: MediaQuery.of(context).size.height / 40),
             Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  "Si cambias la contraseña, cerrarás sesión en todos los dispositivos, incluido tu teléfono. Será necesario que introduzcas la nueva contraseña en todos tus dispositivos.",
-                  textAlign: TextAlign.justify,
-                )),
+              alignment: Alignment.centerLeft,
+              child: Text(
+                """Si cambias la contraseña, cerrarás sesión en todos los dispositivos, incluido tu teléfono. Será necesario que introduzcas la nueva contraseña en todos tus dispositivos.""",
+                textAlign: TextAlign.justify,
+              ),
+            ),
             SizedBox(height: MediaQuery.of(context).size.height / 40),
             customPasswordInput("Nueva contraseña", CustomIcon.lock,
                 controller: _newPwd1Controller,
-                validator: (val) => Validator.validPassword(val),
-                visible: _showPasswordNew,
-                visibleController: () {
-                  setState(() {
-                    _showPasswordNew = !_showPasswordNew;
-                  });
-                },
-                onChanged: (val) {
-                  setState(() {
-                    _passwordStrength = Validator.passwordStrength(val);
-                  });
-                }),
+                validator: Validator.validPassword,
+                visible: _showPasswordNew, visibleController: () {
+              setState(() {
+                _showPasswordNew = !_showPasswordNew;
+              });
+            }, onChanged: (val) {
+              setState(() {
+                _passwordStrength = Validator.passwordStrength(val);
+              });
+            }),
             Visibility(
               child: passwordStrengthPercent(context, _passwordStrength),
               visible: _newPwd1Controller.text != null &&
@@ -151,7 +149,7 @@ class _UpdatePasswordState extends State<UpdatePassword> {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
+    return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
         title: Text('Cambiar contraseña'),

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:tfg_app/models/exercise.dart';
-import 'package:tfg_app/models/patient.dart';
-import 'package:tfg_app/pages/progress/progress_calendar.dart';
-import 'package:tfg_app/pages/progress/progress_medals.dart';
-import 'package:tfg_app/services/auth.dart';
+
+import '../../models/patient.dart';
+import '../../services/auth.dart';
+import 'progress_calendar.dart';
+import 'progress_medals.dart';
 
 class ProgressPage extends StatefulWidget {
   _ProgressPageState createState() => _ProgressPageState();
@@ -80,7 +80,7 @@ class _ProgressPageState extends State<ProgressPage> {
     List<Widget> daily = [];
     for (int i = 1; i <= 7; i++) {
       daily.add(
-        new Row(
+        Row(
           children: [
             _dailyCircle(_daysCompleted >= i, i),
           ],
@@ -186,48 +186,6 @@ class _ProgressPageState extends State<ProgressPage> {
           ),
         )
       ],
-    );
-  }
-
-  Widget _medalItem(Exercise exercise) {
-    return Container(
-      width: MediaQuery.of(context).size.width * 0.2,
-      child: new Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          new Container(
-            width: MediaQuery.of(context).size.width * 0.15,
-            height: MediaQuery.of(context).size.width * 0.15,
-            decoration: new BoxDecoration(
-              border: Border.all(color: new Color(0xff808080), width: 1.25),
-              shape: BoxShape.circle,
-              image: new DecorationImage(
-                colorFilter: exercise.status != ExerciseStatus.completed
-                    ? ColorFilter.mode(
-                        Colors.grey,
-                        BlendMode.saturation,
-                      )
-                    : null,
-                fit: BoxFit.fitHeight,
-                image: exercise.image != null
-                    ? NetworkImage(exercise.image)
-                    : AssetImage("assets/images/noimage.jpg"),
-              ),
-            ),
-          ),
-          SizedBox(
-            height: 3,
-          ),
-          new Text(
-            exercise.itemStr,
-            textScaleFactor: 0.75,
-            textAlign: TextAlign.center,
-            maxLines: 3,
-            overflow: TextOverflow.ellipsis,
-          )
-        ],
-      ),
     );
   }
 

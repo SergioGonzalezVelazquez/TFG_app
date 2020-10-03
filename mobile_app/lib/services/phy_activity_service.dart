@@ -1,7 +1,9 @@
 import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:tfg_app/models/phy_activity.dart';
-import 'package:tfg_app/services/auth.dart';
+
+import '../models/phy_activity.dart';
+import 'auth.dart';
 
 final CollectionReference phyActivityRef =
     FirebaseFirestore.instance.collection('phy_activity');
@@ -16,7 +18,7 @@ class PhyActivityService {
   factory PhyActivityService() => _instance;
   bool _initialized = false;
 
-  AuthService _authService = AuthService();
+  final AuthService _authService = AuthService();
 
   Future<void> init() async {
     if (!_initialized) {
@@ -31,7 +33,7 @@ class PhyActivityService {
   /// Given a list of phyActivity object, return a Map with keys for
   /// min, max and median BPM values
   Map<String, int> calculateMinMaxMedian(List<PhyActivity> phyActivities) {
-    Map<String, int> result = new Map();
+    Map<String, int> result = {};
     result['median'] = 0;
     result['max'] = 0;
     result['min'] = 0;
@@ -67,7 +69,7 @@ class PhyActivityService {
   }
 
   /// Read phyActivities between dateFrom and dateTo
-  /// If fillWithNull is true, then fill missing  values with a new PhyActivity where heartRate is null
+  /// If fillWithNull is true, then fill missing  values with a PhyActivity where heartRate is null
   Future<List<PhyActivity>> read(DateTime dateFrom, DateTime dateTo,
       {bool fillWithNull = false}) async {
     List<PhyActivity> activities = [];
@@ -79,7 +81,7 @@ class PhyActivityService {
       if (_isSameDay(_currentDateFrom, dateTo)) {
         List<PhyActivity> newActivities =
             await _addPartialDay(_currentDateFrom, dateTo);
-        activities = new List.from(activities)..addAll(newActivities);
+        activities = List.from(activities)..addAll(newActivities);
       }
       // For first day..
       else if (_isSameDay(_currentDateFrom, dateFrom)) {
@@ -88,17 +90,17 @@ class PhyActivityService {
                 .toLocal();
         List<PhyActivity> newActivities =
             await _addPartialDay(dateFrom, limitDate);
-        activities = new List.from(activities)..addAll(newActivities);
+        activities = List.from(activities)..addAll(newActivities);
       }
       // For any day between dateTo and dateFrom
       else {
         List<PhyActivity> newActivities = await _addAllDay(_currentDateFrom);
-        activities = new List.from(activities)..addAll(newActivities);
+        activities = List.from(activities)..addAll(newActivities);
       }
 
       // Step to next day at 00:00
-      _currentDateFrom = new DateTime(_currentDateFrom.year,
-          _currentDateFrom.month, _currentDateFrom.day + 1, 0, 0);
+      _currentDateFrom = DateTime(_currentDateFrom.year, _currentDateFrom.month,
+          _currentDateFrom.day + 1, 0, 0);
     }
 
     if (fillWithNull && activities.isNotEmpty) {
@@ -106,13 +108,14 @@ class PhyActivityService {
     }
 
     activities.forEach((element) {
-      if (element != null && ignoreValues.contains(element.heartRate))
+      if (element != null && ignoreValues.contains(element.heartRate)) {
         element.heartRate = null;
+      }
     });
     return activities;
   }
 
-  /// Fill missing values with a new PhyActivity object where heartRate is null
+  /// Fill missing values with a PhyActivity object where heartRate is null
   List<PhyActivity> _fillWithNull(
       List<PhyActivity> activities, DateTime dateFrom, DateTime dateTo) {
     print("fill with null. Habia: " + activities.length.toString());
@@ -126,7 +129,7 @@ class PhyActivityService {
           .isAtSameMomentAs(currentDate))) {
         activities.insert(
           index,
-          new PhyActivity(
+          PhyActivity(
             timestamp: Timestamp.fromDate(currentDate),
           ),
         );

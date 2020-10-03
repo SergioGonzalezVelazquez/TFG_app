@@ -1,0 +1,39 @@
+include: package:effective_dart/analysis_options.yaml
+
+# Customizing static analysis
+# 
+# https://dart.dev/guides/language/analysis-options
+# Static analysis allows you to find problems before executing a single line of code. 
+# It’s a powerful tool used to prevent bugs and ensure that code conforms to style guidelines.
+
+
+
+# Use the analyzer: entry to customize static analysis
+analyzer:
+  exclude: ["lib/themes/custom_icon_icons.dart"]
+  strong-mode:
+    # A value of false ensures that the type inference engine never implicitly casts to a more specific type. 
+    implicit-casts: true
+    implicit-dynamic: true
+  errors:
+    public_member_api_docs: false
+    omit_local_variable_types: false
+    avoid_function_literals_in_foreach_calls: false
+    must_be_immutable: false
+
+    prefer_interpolation_to_compose_strings: false
+    lines_longer_than_80_chars: false
+    
+
+
+# The analyzer package also provides a code linter. A wide variety of linter rules are available:
+# https://dart-lang.github.io/linter/lints/
+# 
+# Linters tend to be nondenominational—rules don’t have to agree with each other. 
+# For example, some rules are more appropriate for library packages and others are designed for 
+# Flutter apps. Note that linter rules can have false positives, unlike static analysis.
+# https://dart.dev/guides/language/analysis-options#enabling-linter-rules
+linter:
+  rules:
+    - camel_case_types
+

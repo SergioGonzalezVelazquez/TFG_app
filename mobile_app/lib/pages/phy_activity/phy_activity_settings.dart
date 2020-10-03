@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:tfg_app/pages/phy_activity/bluetooth_connection_page.dart';
-import 'package:tfg_app/widgets/progress.dart';
-import 'package:tfg_app/widgets/buttons.dart';
+
+import '../../widgets/buttons.dart';
+import '../../widgets/progress.dart';
+import 'bluetooth_connection_page.dart';
 
 class PhyActivitySettings extends StatefulWidget {
   static const route = "/phyActivitySettings";
@@ -29,9 +30,7 @@ class PhyActivitySettingsState extends State<PhyActivitySettings> {
     super.dispose();
   }
 
-  /**
-  * Functions used to handle events in this screen 
-  */
+  /// Functions used to handle events in this screen
   Future<void> _checkIsRunning() async {
     bool running = await methodChannel.invokeMethod("isServiceRunning");
     setState(() {
@@ -58,9 +57,7 @@ class PhyActivitySettingsState extends State<PhyActivitySettings> {
     });
   }
 
-  /**
-  * Widgets (ui components) used in this screen 
-  */
+  ///  Widgets (ui components) used in this screen
 
   Widget _buildPage(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -113,7 +110,7 @@ class PhyActivitySettingsState extends State<PhyActivitySettings> {
               Container(
                 width: 7.0,
                 height: 7.0,
-                decoration: new BoxDecoration(
+                decoration: BoxDecoration(
                   color: _isRunning ? Colors.green : Colors.red,
                   shape: BoxShape.circle,
                 ),

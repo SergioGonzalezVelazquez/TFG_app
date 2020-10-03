@@ -1,12 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_dialogflow/dialogflow_v2.dart';
-import 'package:tfg_app/models/dialogflow_session.dart';
-import 'package:tfg_app/services/auth.dart';
 import 'package:uuid/uuid.dart';
+
+import '../models/dialogflow_session.dart';
+import 'auth.dart';
 
 // Gets dialogflow-sessions collection reference
 final dialogflowSessionsRef =
-    Firestore.instance.collection('dialogflow_sessions');
+    FirebaseFirestore.instance.collection('dialogflow_sessions');
 
 AuthService _authService = AuthService();
 
@@ -15,8 +16,8 @@ List<DialogflowSession> therapySessions = [];
 // Write 'dialogflow_session' document in firestore.
 Future<void> _createDialogflowSession(String uuid) async {
   await dialogflowSessionsRef
-      .document(uuid)
-      .setData({"user_id": _authService.user.id, "start_at": DateTime.now()});
+      .doc(uuid)
+      .set({"user_id": _authService.user.id, "start_at": DateTime.now()});
 }
 
 Future<Dialogflow> initializeSession(
@@ -37,10 +38,10 @@ Future<Dialogflow> initializeSession(
 Future<List<DialogflowSession>> getSessions() async {
   QuerySnapshot snapshot = await dialogflowSessionsRef
       .where("user_id", isEqualTo: _authService.user.id)
-      .getDocuments();
+      .get();
 
   therapySessions = [];
-  snapshot.documents.forEach((doc) {
+  snapshot.docs.forEach((doc) {
     therapySessions.add(DialogflowSession.fromDocument(doc));
   });
 
@@ -49,20 +50,20 @@ Future<List<DialogflowSession>> getSessions() async {
 
 // Read 'dialogflow_session' documents for current user
 Future<DialogflowSession> getDialogflowSessionById(String id) async {
-  DocumentSnapshot doc = await dialogflowSessionsRef.document(id).get();
+  DocumentSnapshot doc = await dialogflowSessionsRef.doc(id).get();
   if (doc.exists) {
     DialogflowSession session = DialogflowSession.fromDocument(doc);
 
     // Get messages
     QuerySnapshot snapshot = await dialogflowSessionsRef
-        .document(id) 
+        .doc(id)
         .collection('messages')
         .orderBy("index")
         .orderBy("timestamp")
-        .getDocuments();
+        .get();
 
     List<DialogflowMessage> messages = [];
-    snapshot.documents.forEach((msgDoc) {
+    snapshot.docs.forEach((msgDoc) {
       messages.add(DialogflowMessage.fromDocument(msgDoc));
     });
 

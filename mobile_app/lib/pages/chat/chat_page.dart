@@ -1,13 +1,14 @@
 import 'package:animator/animator.dart';
 import 'package:flutter/material.dart';
-import 'package:tfg_app/models/message.dart';
-import 'package:tfg_app/models/patient.dart';
-import 'package:tfg_app/pages/chat/chat_message.dart';
-import 'package:tfg_app/services/auth.dart';
-import 'package:tfg_app/services/dialogflow.dart';
-import 'package:tfg_app/themes/custom_icon_icons.dart';
 import 'package:flutter_dialogflow/dialogflow_v2.dart';
-import 'package:tfg_app/widgets/custom_dialog.dart';
+
+import '../../models/message.dart';
+import '../../models/patient.dart';
+import '../../services/auth.dart';
+import '../../services/dialogflow.dart';
+import '../../themes/custom_icon_icons.dart';
+import '../../widgets/custom_dialog.dart';
+import 'chat_message.dart';
 
 ///
 /// References:
@@ -25,7 +26,7 @@ class ChatPage extends StatefulWidget {
 
 class _ChatPageState extends State<ChatPage> {
   // Create controllers for handle changes in text fields
-  final TextEditingController _textController = new TextEditingController();
+  final TextEditingController _textController = TextEditingController();
 
   AuthService _authService;
 
@@ -45,9 +46,7 @@ class _ChatPageState extends State<ChatPage> {
     _initializeChat();
   }
 
-  /**
-   * Functions used to handle events in this screen 
-   */
+  /// Functions used to handle events in this screen
 
   /// Method used to used handle the system back button.
   /// Return true if the route to be popped
@@ -59,7 +58,7 @@ class _ChatPageState extends State<ChatPage> {
     } else {
       await showDialog(
         context: context,
-        builder: (BuildContext context) => CustomDialog(
+        builder: (context) => CustomDialog(
           title: "¿Seguro que quieres volver?",
           description: "Se perderá el estado actual de la conversación",
           buttonText2: "Salir",
@@ -108,7 +107,7 @@ class _ChatPageState extends State<ChatPage> {
 
   void _handleSubmitted(String text) {
     _textController.clear();
-    ChatMessage message = new ChatMessage(userMessage: UserMessage(text));
+    ChatMessage message = ChatMessage(userMessage: UserMessage(text));
     setState(
       () {
         _messages.insert(0, message);
@@ -130,7 +129,7 @@ class _ChatPageState extends State<ChatPage> {
 
   /// Handle Agent response
   void _handleAgentResponse(AIResponse responses) async {
-    if (this.mounted) {
+    if (mounted) {
       setState(() {
         _showTextInput = false;
         _showChipInput = false;
@@ -149,13 +148,13 @@ class _ChatPageState extends State<ChatPage> {
       print(typeMessage.type);
 
       if (typeMessage.type == 'text') {
-        if (this.mounted) {
+        if (mounted) {
           setState(() {
             _showBotWritingAnimation = true;
             _showTextInput = true;
           });
         }
-        ChatMessage message = new ChatMessage(
+        ChatMessage message = ChatMessage(
           botTextResponse: TextDialogflow(messages[i]['text']),
           showInfo: i == 0,
         );
@@ -163,12 +162,12 @@ class _ChatPageState extends State<ChatPage> {
         // Nº of words in this message
         int messageLength = message.botTextResponse.text.split(' ').length;
 
-        await new Future.delayed(
+        await Future.delayed(
           Duration(
             milliseconds: (300 * messageLength),
           ),
         );
-        if (this.mounted) {
+        if (mounted) {
           setState(
             () {
               _showBotWritingAnimation = false;
@@ -177,7 +176,7 @@ class _ChatPageState extends State<ChatPage> {
           );
         }
       } else if (typeMessage.type == 'suggestion') {
-        if (this.mounted) {
+        if (mounted) {
           setState(
             () {
               _suggestions = ListSuggestionDialogflow(messages[i]['payload']);
@@ -192,7 +191,7 @@ class _ChatPageState extends State<ChatPage> {
     print("outputContexts: " +
         responses.queryResult.outputContexts.length.toString());
     // End of conversation
-    if (responses.queryResult.outputContexts.isEmpty && this.mounted) {
+    if (responses.queryResult.outputContexts.isEmpty && mounted) {
       setState(() {
         _showTextInput = false;
         _showChipInput = false;
@@ -202,9 +201,7 @@ class _ChatPageState extends State<ChatPage> {
     }
   }
 
-  /**
-   * Widgets (ui components) used in this screen 
-   */
+  /// Widgets (ui components) used in this screen
 
   Widget _textComposer() {
     return Column(
@@ -216,9 +213,9 @@ class _ChatPageState extends State<ChatPage> {
           decoration: BoxDecoration(color: Theme.of(context).cardColor),
           child: IconTheme(
             data: IconThemeData(color: Theme.of(context).primaryColor),
-            child: new Container(
+            child: Container(
               margin: EdgeInsets.symmetric(horizontal: 8.0),
-              child: new Row(
+              child: Row(
                 children: <Widget>[
                   Flexible(
                     child: TextField(
@@ -284,12 +281,12 @@ class _ChatPageState extends State<ChatPage> {
       height: 8.0,
     ));
     _suggestions.listSuggestions.forEach((suggestion) {
-      Widget chip = new Padding(
+      Widget chip = Padding(
         padding: const EdgeInsets.only(bottom: 8.0, right: 10, left: 20),
         child: InkWell(
           onTap: () {
             _messages.insert(
-                0, new ChatMessage(userMessage: UserMessage(suggestion.text)));
+                0, ChatMessage(userMessage: UserMessage(suggestion.text)));
             _sendMessage(suggestion.value);
           },
           child: Align(
@@ -359,7 +356,7 @@ class _ChatPageState extends State<ChatPage> {
             Container(
               margin: const EdgeInsets.only(right: 16.0),
               child: Center(
-                child: new CircleAvatar(
+                child: CircleAvatar(
                   backgroundImage: ExactAssetImage("assets/images/doctor.png"),
                   backgroundColor: Colors.transparent,
                 ),
@@ -420,7 +417,7 @@ class _ChatPageState extends State<ChatPage> {
   Widget _chatPage() {
     return WillPopScope(
       onWillPop: _willPopCallback,
-      child: new Scaffold(
+      child: Scaffold(
         bottomNavigationBar: null,
         body: SafeArea(
           child: Column(
@@ -429,7 +426,7 @@ class _ChatPageState extends State<ChatPage> {
                 child: ListView.builder(
                     padding: EdgeInsets.all(8.0),
                     reverse: true,
-                    itemBuilder: (_, int index) => _messages[index],
+                    itemBuilder: (_, index) => _messages[index],
                     itemCount: _messages.length),
               ),
               _showBotWritingAnimation

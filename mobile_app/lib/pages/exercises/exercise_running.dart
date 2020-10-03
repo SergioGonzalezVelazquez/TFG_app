@@ -1,15 +1,14 @@
 import 'dart:async';
+import 'dart:math' as math;
 
-import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
-import 'package:tfg_app/models/exercise.dart';
-import 'package:tfg_app/pages/exercises/exercise_questionnaire.dart';
-import 'dart:math' as math;
 
-import 'package:tfg_app/widgets/custom_dialog.dart';
+import '../../models/exercise.dart';
+import '../../widgets/custom_dialog.dart';
+import 'exercise_questionnaire.dart';
 
 class ExerciseRunningPage extends StatefulWidget {
   final Exercise exercise;
@@ -24,7 +23,7 @@ class _ExerciseRunningPageState extends State<ExerciseRunningPage>
   // https://stackoverflow.com/questions/44302588/flutter-create-a-countdown-widget
   AnimationController _initialCountDownController;
   AnimationController _timerController;
-  FlutterTts _flutterTts = new FlutterTts();
+  final FlutterTts _flutterTts = FlutterTts();
 
   bool _initialCountDownCompleted = false;
   bool _timerCompleted = false;
@@ -35,24 +34,22 @@ class _ExerciseRunningPageState extends State<ExerciseRunningPage>
   Stopwatch _stopwatch;
 
   /// Instantiate an AudioPlayer instance
-  AudioCache _audioCache;
   AudioPlayer _audioPlayer;
 
   @override
   void initState() {
     super.initState();
     _exerciseDuration =
-        new Duration(seconds: widget.exercise.currentExposure.presetDuration);
+        Duration(seconds: widget.exercise.currentExposure.presetDuration);
     _hasAudio = widget.exercise.audio != null;
     if (_hasAudio) {
-      _audioCache = AudioCache();
       _audioPlayer = AudioPlayer();
     }
 
     // Controller for initial countdown
-    _initialCountDownController = new AnimationController(
+    _initialCountDownController = AnimationController(
       vsync: this,
-      duration: new Duration(seconds: _initialCountDownDuration),
+      duration: Duration(seconds: _initialCountDownDuration),
     );
     _initialCountDownController.forward(from: 0.0);
     _initialCountDownController
@@ -66,7 +63,7 @@ class _ExerciseRunningPageState extends State<ExerciseRunningPage>
     _timerController.addStatusListener(_timerStatusListener);
 
     // Controller for stopwatch
-    _stopwatch = new Stopwatch();
+    _stopwatch = Stopwatch();
   }
 
   void _initialCountDownStatusListener(AnimationStatus status) async {
@@ -91,7 +88,7 @@ class _ExerciseRunningPageState extends State<ExerciseRunningPage>
     bool close = false;
     await showDialog(
       context: context,
-      builder: (BuildContext context) => CustomDialog(
+      builder: (context) => CustomDialog(
         title: "¿Seguro que quieres salir?",
         description: "No se guardará nada sobre la exposición actual",
         buttonText2: "Salir",
@@ -288,11 +285,11 @@ class _ExerciseRunningPageState extends State<ExerciseRunningPage>
   }
 
   Widget _buildCountDown() {
-    return new Container(
+    return Container(
       color: Theme.of(context).primaryColor,
-      child: new Center(
-        child: new Countdown(
-          animation: new StepTween(
+      child: Center(
+        child: Countdown(
+          animation: StepTween(
             begin: _initialCountDownDuration,
             end: 0,
           ).animate(_initialCountDownController),
@@ -412,7 +409,7 @@ class _ExerciseRunningPageState extends State<ExerciseRunningPage>
     return WillPopScope(
       onWillPop: _willPopCallback,
       child: SafeArea(
-        child: new Scaffold(
+        child: Scaffold(
           body: _buildPage(),
         ),
       ),
@@ -425,10 +422,10 @@ class Countdown extends AnimatedWidget {
   Animation<int> animation;
 
   @override
-  build(BuildContext context) {
-    return new Text(
+  Widget build(BuildContext context) {
+    return Text(
       animation.value.toString(),
-      style: new TextStyle(fontSize: 150.0, color: Colors.white),
+      style: TextStyle(fontSize: 150.0, color: Colors.white),
     );
   }
 }
@@ -473,7 +470,7 @@ class TimerText extends StatefulWidget {
   TimerText({this.stopwatch});
   final Stopwatch stopwatch;
 
-  TimerTextState createState() => new TimerTextState(stopwatch: stopwatch);
+  TimerTextState createState() => TimerTextState(stopwatch: stopwatch);
 }
 
 class TimerTextState extends State<TimerText> {
@@ -481,7 +478,7 @@ class TimerTextState extends State<TimerText> {
   final Stopwatch stopwatch;
 
   TimerTextState({this.stopwatch}) {
-    timer = new Timer.periodic(new Duration(seconds: 1), callback);
+    timer = Timer.periodic(Duration(seconds: 1), callback);
   }
 
   String get stopWatchMMSSString {
@@ -507,14 +504,14 @@ class TimerTextState extends State<TimerText> {
   }
 
   void callback(Timer timer) {
-    if (stopwatch.isRunning && this.mounted) {
+    if (stopwatch.isRunning && mounted) {
       setState(() {});
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return new RichText(
+    return RichText(
       textAlign: TextAlign.center,
       text: TextSpan(
         text: stopWatchHHString + "\n",

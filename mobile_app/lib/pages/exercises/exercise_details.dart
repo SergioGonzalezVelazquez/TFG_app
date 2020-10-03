@@ -1,13 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:tfg_app/models/exercise.dart';
-import 'package:tfg_app/models/exposure_exercise.dart';
-import 'package:tfg_app/pages/exercises/exercise_progress.dart';
-import 'package:tfg_app/pages/exercises/exercise_questionnaire.dart';
 import 'package:flutter_duration_picker/flutter_duration_picker.dart';
-import 'package:tfg_app/services/firestore.dart';
-import 'package:tfg_app/widgets/buttons.dart';
+
+import '../../models/exercise.dart';
+import '../../models/exposure_exercise.dart';
+import '../../services/firestore.dart';
+import '../../widgets/buttons.dart';
+import 'exercise_progress.dart';
+import 'exercise_questionnaire.dart';
 
 class ExerciseDetails extends StatefulWidget {
   final Exercise exercise;
@@ -44,7 +45,7 @@ class _ExerciseDetailsState extends State<ExerciseDetails> {
   Future<void> _fetchExposures() async {
     List<ExposureExercise> exposures =
         await getExerciseExposures(widget.exercise.id);
-    if (this.mounted) {
+    if (mounted) {
       widget.exercise.exposures = exposures;
       setState(() {
         _isLoading = false;
@@ -56,7 +57,7 @@ class _ExerciseDetailsState extends State<ExerciseDetails> {
     // Obtener la duración de la exposición
     await showDialog(
       context: context,
-      builder: (BuildContext context) => DurationDialog(widget.exercise),
+      builder: (context) => DurationDialog(widget.exercise),
     );
   }
 
@@ -85,6 +86,7 @@ class _ExerciseDetailsState extends State<ExerciseDetails> {
 
   double _getAppBarCollapsePercent() {
     if (!_scrollController.hasClients ||
+        // ignore: invalid_use_of_protected_member
         _scrollController.positions.length > 1) {
       return 0.0;
     }
@@ -191,7 +193,7 @@ class _ExerciseDetailsState extends State<ExerciseDetails> {
               "Este ejercicio ya ha sido completado. " +
                   (widget.exercise.afterCompleteAttempts == 0
                       ? 'Intenta afrontar la siguiente situación. '
-                      : ('Sin embargo, todavía puedes repetetir esta situación ' +
+                      : ("""Sin embargo, todavía puedes repetetir esta situación """ +
                           (widget.exercise.afterCompleteAttempts == 1
                               ? 'una vez más. '
                               : widget.exercise.afterCompleteAttempts
@@ -208,7 +210,7 @@ class _ExerciseDetailsState extends State<ExerciseDetails> {
                 (widget.exercise.status == ExerciseStatus.in_progress ||
                     widget.exercise.afterCompleteAttempts > 0),
             child: Text(
-              "Durante la realización de este ejercicio se reproducirá un clip de audio para mejorar la experiencia de exposición",
+              """Durante la realización de este ejercicio se reproducirá un clip de audio para mejorar la experiencia de exposición""",
               style: TextStyle(color: Theme.of(context).primaryColorDark),
               textAlign: TextAlign.justify,
             ),
@@ -261,10 +263,10 @@ class _ExerciseDetailsState extends State<ExerciseDetails> {
     return Scaffold(
       body: NestedScrollView(
         controller: _scrollController,
-        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+        headerSliverBuilder: (context, innerBoxIsScrolled) {
           return <Widget>[_buildAppBar()];
         },
-        body: new Container(child: _buildPage(context)),
+        body: Container(child: _buildPage(context)),
       ),
       bottomNavigationBar: _isLoading ? null : _bottonNavigationBar(context),
     );
@@ -285,7 +287,7 @@ class _DurationDialogState extends State<DurationDialog> {
       padding: EdgeInsets.all(
         16.0,
       ),
-      decoration: new BoxDecoration(
+      decoration: BoxDecoration(
         color: Colors.white,
         shape: BoxShape.rectangle,
         borderRadius: BorderRadius.circular(16.0),
@@ -311,7 +313,7 @@ class _DurationDialogState extends State<DurationDialog> {
                   .apply(fontSizeFactor: 0.85)),
           SizedBox(height: MediaQuery.of(context).size.height * 0.015),
           Text(
-              "Te avisaremos cuándo se alcance esa duración, pero es recomendable permacener en la situación temida hasta que experimentes una reducción significativa de la ansiedad.",
+              """Te avisaremos cuándo se alcance esa duración, pero es recomendable permacener en la situación temida hasta que experimentes una reducción significativa de la ansiedad.""",
               textAlign: TextAlign.justify,
               style: Theme.of(context)
                   .textTheme
@@ -321,7 +323,7 @@ class _DurationDialogState extends State<DurationDialog> {
           DurationPicker(
             duration: _duration,
             onChange: (val) {
-              this.setState(() => _duration = val);
+              setState(() => _duration = val);
             },
             snapToMins: 1,
           ),
@@ -342,7 +344,7 @@ class _DurationDialogState extends State<DurationDialog> {
               InkWell(
                 onTap: () {
                   // Create ExerciseExpose object
-                  widget.exercise.currentExposure = new ExposureExercise(
+                  widget.exercise.currentExposure = ExposureExercise(
                       exerciseId: widget.exercise.id,
                       presetDuration: _duration.inSeconds);
 

@@ -34,14 +34,6 @@ class _StressSliderState extends State<StressSlider> {
 
   String imageTitle = "assets/images/stress/stress_0.png";
 
-  void _close() {
-    Navigator.pop(context, -1.0);
-  }
-
-  void _save() {
-    Navigator.pop(context, _sliderValue);
-  }
-
   @override
   void initState() {
     super.initState();
@@ -160,7 +152,7 @@ class _StressSliderState extends State<StressSlider> {
 
   void onSliderChanged(double newValue) {
     widget.onUpdate(newValue);
-    if (this.mounted) {
+    if (mounted) {
       setState(() {
         _sliderValue = newValue;
         _feedbackText = getText();

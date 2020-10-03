@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:tfg_app/pages/chat/chat_page.dart';
-import 'package:tfg_app/pages/home_page.dart';
-import 'package:tfg_app/widgets/buttons.dart';
-import 'package:tfg_app/widgets/progress.dart';
-import 'package:tfg_app/services/auth.dart';
-import 'package:tfg_app/widgets/slide_dots.dart';
+
+import '../widgets/buttons.dart';
+import '../widgets/progress.dart';
+import '../widgets/slide_dots.dart';
+import 'chat/chat_page.dart';
+import 'home_page.dart';
 
 class InitialPage extends StatefulWidget {
   /// Name use for navigate to this screen
@@ -16,24 +16,21 @@ class InitialPage extends StatefulWidget {
 
 class _InitialPageState extends State<InitialPage> {
   // Controller to manipulate which page is visible in a PageView
-  PageController _pageController = PageController();
+  final PageController _pageController = PageController();
 
   /// Flag to render loading spinner UI.
-  bool _isLoading = false;
+  final bool _isLoading = false;
 
   int _currentPage = 0;
 
   // Create a global key that uniquely identifies the Scaffold widget,
   // and allows to display snackbars.
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-
-  AuthService _authService;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   /// Method called when this widget is inserted into the tree.
   @override
   void initState() {
     super.initState();
-    _authService = AuthService();
   }
 
   /// Returns a string representation of this object.
@@ -43,13 +40,10 @@ class _InitialPageState extends State<InitialPage> {
     super.dispose();
   }
 
-  /**
-  * Functions used to handle events in this screen 
-  */
+  /// Functions used to handle events in this screen
 
-  /**
-  * Widgets (ui components) used in this screen 
-  */
+  ///  Widgets (ui components) used in this screen
+
   Widget _chatPage(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
@@ -194,8 +188,8 @@ class _InitialPageState extends State<InitialPage> {
         children: <Widget>[
           FlatButton(
             padding: EdgeInsets.all(0),
-            onPressed: () => Navigator.of(context).pushNamedAndRemoveUntil(
-                HomePage.route, (Route<dynamic> route) => false),
+            onPressed: () => Navigator.of(context)
+                .pushNamedAndRemoveUntil(HomePage.route, (route) => false),
             child: Text(
               "Más tarde",
               style: TextStyle(
@@ -205,8 +199,8 @@ class _InitialPageState extends State<InitialPage> {
           ),
           _buildSlideDots(context, items),
           primaryButton(context, () {
-            Navigator.of(context).pushNamedAndRemoveUntil(
-                HomePage.route, (Route<dynamic> route) => false);
+            Navigator.of(context)
+                .pushNamedAndRemoveUntil(HomePage.route, (route) => false);
             Navigator.of(context).pushNamed(ChatPage.route);
           }, "Empezar", width: MediaQuery.of(context).size.width * 0.25)
         ],
@@ -249,7 +243,11 @@ class _InitialPageState extends State<InitialPage> {
   Widget _buildSlideDots(BuildContext parentContext, int items) {
     List<Widget> dots = [];
     for (int i = 0; i < items; i++) {
-      dots.add(SlideDots(i == _currentPage));
+      dots.add(
+        SlideDots(
+          isActive: i == _currentPage,
+        ),
+      );
     }
     return Row(children: dots);
   }
@@ -265,7 +263,7 @@ class _InitialPageState extends State<InitialPage> {
           child: _isLoading
               ? circularProgress(context)
               : PageView(
-                  onPageChanged: (int page) {
+                  onPageChanged: (page) {
                     setState(() {
                       _currentPage = page;
                     });

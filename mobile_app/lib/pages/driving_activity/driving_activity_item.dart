@@ -1,37 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:tfg_app/main.dart';
-import 'package:tfg_app/models/driving_activity.dart';
-import 'package:tfg_app/pages/driving_activity/driving_activity_details.dart';
-import 'package:tfg_app/themes/custom_icon_icons.dart';
+
+import '../../main.dart';
+import '../../models/driving_activity.dart';
+import '../../themes/custom_icon_icons.dart';
+import 'driving_activity_details.dart';
 
 class DrivingActivityItem extends StatelessWidget {
   final DrivingActivity _activity;
   DrivingActivityItem(this._activity);
 
-
-  String _buildTitle() {
-    if (_activity.endLocationDetails == null ||
-        _activity.endLocationDetails.city ==
-            _activity.startLocationDetails.city) {
-      return "Por " + _activity.startLocationDetails.city;
-    }
-
-    return "De " +
-        _activity.startLocationDetails.city +
-        " a " +
-        _activity.endLocationDetails.city;
-  }
-
   Widget _buildStepper(BuildContext context) {
     return IconTheme(
-      data: new IconThemeData(
+      data: IconThemeData(
         color: Theme.of(context).primaryColor,
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Icon(CustomIcon.ui, size: 12),
-          new Expanded(
+          Expanded(
               child:
                   Container(width: 1.0, color: Theme.of(context).primaryColor)),
           Icon(CustomIcon.pin, size: 18)

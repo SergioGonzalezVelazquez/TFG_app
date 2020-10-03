@@ -1,7 +1,10 @@
+// ignore_for_file: constant_identifier_names
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:tfg_app/models/exposure_exercise.dart';
+import 'package:equatable/equatable.dart';
 
-class Exercise {
+import 'exposure_exercise.dart';
+
+class Exercise extends Equatable {
   final String id;
   final String itemCode;
   final String itemStr;
@@ -63,8 +66,21 @@ class Exercise {
   /// Returns a string representation of this object.
   @override
   String toString() {
-    return 'itemCode: $itemCode, itemStr: $itemStr, situationCode: $situationCode, situationStr: $situationStr';
+    return """itemCode: $itemCode, itemStr: $itemStr, 
+    situationCode: $situationCode, situationStr: $situationStr""";
   }
+
+  @override
+  List<Object> get props => [
+        itemCode,
+        itemStr,
+        situationCode,
+        situationStr,
+      ];
+
+  /// Returns a string representation of this object.
+  @override
+  bool get stringify => true;
 }
 
 enum ExerciseStatus { in_progress, waiting, completed }

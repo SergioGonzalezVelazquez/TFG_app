@@ -2,8 +2,9 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:tfg_app/models/exercise.dart';
-import 'package:tfg_app/services/auth.dart';
+
+import '../../models/exercise.dart';
+import '../../services/auth.dart';
 
 class ProgressMedalItem extends StatelessWidget {
   final Exercise exercise;
@@ -13,7 +14,7 @@ class ProgressMedalItem extends StatelessWidget {
   Widget _buildIncompleteMedal(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width * 0.2,
-      child: new Column(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
@@ -27,10 +28,10 @@ class ProgressMedalItem extends StatelessWidget {
                     color: Colors.white,
                     backgroundBlendMode: BlendMode.saturation,
                   ),
-                  decoration: new BoxDecoration(
+                  decoration: BoxDecoration(
                     border: Border.all(color: Color(0xff808080), width: 1.55),
                     shape: BoxShape.circle,
-                    image: new DecorationImage(
+                    image: DecorationImage(
                       fit: BoxFit.fitHeight,
                       image: exercise.image != null
                           ? NetworkImage(exercise.image)
@@ -40,16 +41,16 @@ class ProgressMedalItem extends StatelessWidget {
                 ),
               ),
               Center(
-                child: new ClipOval(
-                  child: new SizedBox(
+                child: ClipOval(
+                  child: SizedBox(
                     width: MediaQuery.of(context).size.width * 0.18,
                     height: MediaQuery.of(context).size.width * 0.18,
-                    child: new BackdropFilter(
-                      filter: new ImageFilter.blur(
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(
                         sigmaX: 2,
                         sigmaY: 2,
                       ),
-                      child: new Container(
+                      child: Container(
                         color: Colors.black.withOpacity(0),
                       ),
                     ),
@@ -61,7 +62,7 @@ class ProgressMedalItem extends StatelessWidget {
           SizedBox(
             height: 3,
           ),
-          new Text(
+          Text(
             exercise.itemStr,
             textScaleFactor: 0.75,
             textAlign: TextAlign.center,
@@ -80,7 +81,7 @@ class ProgressMedalItem extends StatelessWidget {
   Widget _buildCompletedMedal(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width * 0.2,
-      child: new Column(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
@@ -90,10 +91,10 @@ class ProgressMedalItem extends StatelessWidget {
                 child: Container(
                   width: MediaQuery.of(context).size.width * 0.18,
                   height: MediaQuery.of(context).size.width * 0.18,
-                  decoration: new BoxDecoration(
+                  decoration: BoxDecoration(
                     border: Border.all(color: Color(0xffDAA520), width: 1.55),
                     shape: BoxShape.circle,
-                    image: new DecorationImage(
+                    image: DecorationImage(
                       fit: BoxFit.fitHeight,
                       image: exercise.image != null
                           ? NetworkImage(exercise.image)
@@ -115,7 +116,7 @@ class ProgressMedalItem extends StatelessWidget {
           SizedBox(
             height: 3,
           ),
-          new Text(
+          Text(
             exercise.itemStr,
             textScaleFactor: 0.75,
             textAlign: TextAlign.center,

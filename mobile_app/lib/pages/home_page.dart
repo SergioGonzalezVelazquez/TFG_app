@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:tfg_app/pages/driving_activity/driving_activity_page.dart';
-import 'package:tfg_app/pages/exercises/exercises_page.dart';
-import 'package:tfg_app/pages/more/more_page.dart';
-import 'package:tfg_app/pages/progress/progress.dart';
-import 'package:tfg_app/pages/therapist/hierarchy_page.dart';
-import 'package:tfg_app/pages/therapist/therapy_page.dart';
-import 'package:tfg_app/themes/custom_icon_icons.dart';
+
+import '../themes/custom_icon_icons.dart';
+import 'driving_activity/driving_activity_page.dart';
+import 'exercises/exercises_page.dart';
+import 'more/more_page.dart';
+import 'progress/progress.dart';
+import 'therapist/therapy_page.dart';
 
 /// This widget is the home page of the application,
 /// this is the route that is displayed first when the application is started normally.
@@ -32,7 +32,7 @@ class _HomePageState extends State<HomePage> {
 
   /// Create a global key that uniquely identifies the Scaffold widget,
   /// and allows to display snackbars.
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   /// Method called when this widget is inserted into the tree.
   @override
@@ -66,7 +66,6 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       key: _scaffoldKey,
       body: PageView(
-
         children: <Widget>[
           ExercisePage(),
           ProgressPage(),
@@ -86,29 +85,27 @@ class _HomePageState extends State<HomePage> {
         items: [
           BottomNavigationBarItem(
             icon: Icon(CustomIcon.ejercicios),
-            title: Text('Ejercicios'),
+            label: 'Ejercicios',
           ),
           BottomNavigationBarItem(
             icon: Icon(
-             // CustomIcon.line_chart2,
-             CustomIcon.goal
-            ),
-            title: Text('Progreso'),
+                // CustomIcon.line_chart2,
+                CustomIcon.goal),
+            label: 'Progreso',
           ),
           BottomNavigationBarItem(
             icon: Icon(
-              //CustomIcon.speech_bubble
-              CustomIcon.meditacion
-            ),
-            title: Text('Terapia'),
+                //CustomIcon.speech_bubble
+                CustomIcon.meditacion),
+            label: 'Terapia',
           ),
           BottomNavigationBarItem(
             icon: Icon(CustomIcon.car2),
-            title: Text('Rutas'),
+            label: 'Rutas',
           ),
           BottomNavigationBarItem(
             icon: Icon(CustomIcon.more),
-            title: Text('Más'),
+            label: 'Más',
           ),
         ],
       ),

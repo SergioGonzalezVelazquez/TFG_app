@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:tfg_app/pages/root_page.dart';
-import 'package:tfg_app/pages/user/signup_page.dart';
-import 'package:tfg_app/pages/user/reset_password.dart';
-import 'package:tfg_app/services/auth.dart';
-import 'package:tfg_app/themes/custom_icon_icons.dart';
-import 'package:tfg_app/widgets/buttons.dart';
-import 'package:tfg_app/widgets/inputs.dart';
-import 'package:tfg_app/utils/validators.dart';
-import 'package:tfg_app/widgets/progress.dart';
-import 'package:tfg_app/pages/user/email_verification.dart';
-import 'package:tfg_app/widgets/snackbar.dart';
+
+import '../../services/auth.dart';
+import '../../themes/custom_icon_icons.dart';
+import '../../utils/validators.dart';
+import '../../widgets/buttons.dart';
+import '../../widgets/inputs.dart';
+import '../../widgets/progress.dart';
+import '../../widgets/snackbar.dart';
+import '../root_page.dart';
+import 'email_verification.dart';
+import 'reset_password.dart';
+import 'signup_page.dart';
 
 final Color facebook = Color(0xff3b5998);
 final Color facebookDark = Color(0xff2f477a);
@@ -33,7 +34,7 @@ class _LoginPageState extends State<LoginPage> {
 
   // Create a global key that uniquely identifies the Scaffold widget,
   // and allows to display snackbars.
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   // Create a global key that uniquely identifies the Form widget
   // and allows validation of the form.
@@ -79,11 +80,11 @@ class _LoginPageState extends State<LoginPage> {
     switch (error.code.toString().toUpperCase()) {
       case 'NETWORK_ERROR':
         authError =
-            'No se pudo conectar. Compruebe su conexión a Internet e intentelo de nuevo más tarde.';
+            """No se pudo conectar. Compruebe su conexión a Internet e intentelo de nuevo más tarde.""";
         break;
       case 'ERROR_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL':
         authError =
-            'Esta cuenta de correo electrónico ya está asociada a otro método de acceso. ';
+            """Esta cuenta de correo electrónico ya está asociada a otro método de acceso. """;
         break;
       case 'ERROR_OPERATION_NOT_ALLOWED':
         authError = 'ERROR_OPERATION_NOT_ALLOWED';
@@ -92,7 +93,8 @@ class _LoginPageState extends State<LoginPage> {
         authError = 'ERROR_INVALID_ACTION_CODE';
         break;
       default:
-        authError = 'No se pudo iniciar sesión. Inténtelo de nuevo más tarde';
+        authError =
+            """No se pudo iniciar sesión. Inténtelo de nuevo más tarde""";
         break;
     }
 
@@ -111,7 +113,7 @@ class _LoginPageState extends State<LoginPage> {
     switch (error.code.toString().toUpperCase()) {
       case 'ERROR_NETWORK_REQUEST_FAILED':
         authError =
-            'No se pudo conectar. Compruebe su conexión a Internet e intentelo de nuevo más tarde.';
+            """No se pudo conectar. Compruebe su conexión a Internet e intentelo de nuevo más tarde.""";
         break;
       case 'ERROR_INVALID_EMAIL':
         authError = 'Introduce una cuenta de correo electrónico válida';
@@ -121,7 +123,7 @@ class _LoginPageState extends State<LoginPage> {
         break;
       case 'ERROR_USER_NOT_FOUND':
         authError =
-            'El correo electrónico que has introducido no coincide con ninguna cuenta';
+            """El correo electrónico que has introducido no coincide con ninguna cuenta""";
         break;
       case 'ERROR_USER_DISABLED':
         authError =
@@ -148,8 +150,8 @@ class _LoginPageState extends State<LoginPage> {
         );
 
     if (_authService.isAuth) {
-      Navigator.of(context).pushNamedAndRemoveUntil(
-          RootPage.route, (Route<dynamic> route) => false);
+      Navigator.of(context)
+          .pushNamedAndRemoveUntil(RootPage.route, (route) => false);
     }
 
     setState(() {
@@ -169,8 +171,8 @@ class _LoginPageState extends State<LoginPage> {
         .catchError((error) => _onSignInSocialError(context, error));
 
     if (_authService.isAuth) {
-      Navigator.of(context).pushNamedAndRemoveUntil(
-          RootPage.route, (Route<dynamic> route) => false);
+      Navigator.of(context)
+          .pushNamedAndRemoveUntil(RootPage.route, (route) => false);
     }
     setState(() {
       _isLoading = false;
@@ -192,14 +194,14 @@ class _LoginPageState extends State<LoginPage> {
 
       if (_authService.isAuth) {
         if (await _authService.isEmailVerified()) {
-          Navigator.of(context).pushNamedAndRemoveUntil(
-              RootPage.route, (Route<dynamic> route) => false);
+          Navigator.of(context)
+              .pushNamedAndRemoveUntil(RootPage.route, (route) => false);
         } else {
           Navigator.popUntil(context, (route) => route.isFirst);
           Navigator.pushReplacement(
             context,
-            new MaterialPageRoute(
-              builder: (context) => new EmailVerificationPage(
+            MaterialPageRoute(
+              builder: (context) => EmailVerificationPage(
                 _emailController.text.trim(),
               ),
             ),
@@ -214,9 +216,8 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  /**
-   * Widgets (ui components) used in this screen 
-   */
+  /// Widgets (ui components) used in this screen
+
   Widget _linkToSignUp() {
     return InkWell(
       onTap: () => Navigator.of(context).pushNamed(SignUpPage.route),
@@ -347,7 +348,7 @@ class _LoginPageState extends State<LoginPage> {
         children: <Widget>[
           customTextInput("Correo Electrónico", CustomIcon.mail,
               controller: _emailController,
-              validator: (val) => Validator.email(val),
+              validator: Validator.email,
               keyboardType: TextInputType.emailAddress),
           SizedBox(
             height: verticalPadding,
@@ -356,7 +357,7 @@ class _LoginPageState extends State<LoginPage> {
             "Contraseña",
             CustomIcon.lock,
             controller: _passController,
-            validator: (val) => Validator.passwordPresent(val),
+            validator: Validator.passwordPresent,
             visible: _showPassword,
             visibleController: () {
               setState(
@@ -373,11 +374,13 @@ class _LoginPageState extends State<LoginPage> {
 
   /// Build login screen widgets
   Widget _loginPage() {
-    double verticalPadding = MediaQuery.of(context).size.height * 0.02;
+    final double witdth = MediaQuery.of(context).size.width;
+    final double verticalPadding = MediaQuery.of(context).size.height * 0.02;
+    final double horizontalPadding = witdth * 0.1;
+    final double imageWidth = witdth * 0.49;
     return SafeArea(
       child: ListView(
-        padding: EdgeInsets.symmetric(
-            horizontal: MediaQuery.of(context).size.width * 0.1),
+        padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
         children: <Widget>[
           Container(
             height: MediaQuery.of(context).size.height * 0.3,
@@ -387,7 +390,7 @@ class _LoginPageState extends State<LoginPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Container(
-                  width: MediaQuery.of(context).size.width * 0.45,
+                  width: witdth - horizontalPadding - imageWidth,
                   child: Text(
                     "Supera la ansiedad al volante",
                     style: Theme.of(context).textTheme.headline6.copyWith(

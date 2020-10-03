@@ -1,12 +1,15 @@
-/// Line chart example
-import 'package:charts_flutter/flutter.dart' as charts;
-import 'package:charts_flutter/src/text_style.dart' as ChartStyle;
-import 'package:charts_flutter/src/text_element.dart' as ChartText;
 import 'dart:math';
+
+import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:charts_flutter/flutter.dart';
+// ignore: implementation_imports
+import 'package:charts_flutter/src/text_element.dart' as chart_text;
+// ignore: implementation_imports
+import 'package:charts_flutter/src/text_style.dart' as chart_style;
 import 'package:flutter/material.dart';
-import 'package:tfg_app/models/phy_activity.dart';
-import 'package:tfg_app/themes/style.dart';
+
+import '../models/phy_activity.dart';
+import '../themes/style.dart';
 
 class HeartRateChart extends StatelessWidget {
   final List<charts.Series> seriesList;
@@ -32,7 +35,7 @@ class HeartRateChart extends StatelessWidget {
       {DateTime rangeAnnotationStart,
       DateTime rangeAnnotationEnd,
       bool animate = true}) {
-    return new HeartRateChart(
+    return HeartRateChart(
       _createWithHeartRate(data),
       seriesStart, seriesEnd,
       rangeAnnotationStart: rangeAnnotationStart,
@@ -42,7 +45,7 @@ class HeartRateChart extends StatelessWidget {
     );
   }
 
-  charts.ChartTitle ylabel = new charts.ChartTitle('Tiempo',
+  charts.ChartTitle ylabel = charts.ChartTitle('Tiempo',
       behaviorPosition: charts.BehaviorPosition.bottom,
       titleOutsideJustification: charts.OutsideJustification.endDrawArea,
       titleStyleSpec: charts.TextStyleSpec(
@@ -50,7 +53,7 @@ class HeartRateChart extends StatelessWidget {
       outerPadding: 0,
       innerPadding: 5);
 
-  charts.ChartTitle xlabel = new charts.ChartTitle('Latidos por minuto',
+  charts.ChartTitle xlabel = charts.ChartTitle('Latidos por minuto',
       behaviorPosition: charts.BehaviorPosition.start,
       titleStyleSpec: charts.TextStyleSpec(
           fontSize: 11, fontFamily: CustomTheme.fontFamily),
@@ -60,50 +63,49 @@ class HeartRateChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new charts.TimeSeriesChart(seriesList,
+    return charts.TimeSeriesChart(seriesList,
         animate: animate,
         customSeriesRenderers: [
-          new charts.LineRendererConfig(
+          charts.LineRendererConfig(
               // ID used to link series to this renderer.
               customRendererId: 'customArea',
               //includePoints: true,
               roundEndCaps: true,
               includeArea: true),
         ],
-        primaryMeasureAxis: new charts.NumericAxisSpec(
+        primaryMeasureAxis: charts.NumericAxisSpec(
           showAxisLine: false,
-          tickProviderSpec: new charts.StaticNumericTickProviderSpec(
+          tickProviderSpec: charts.StaticNumericTickProviderSpec(
             <charts.TickSpec<num>>[
               charts.TickSpec<num>(40),
               charts.TickSpec<num>(60),
               charts.TickSpec<num>(80),
               charts.TickSpec<num>(100),
               charts.TickSpec<num>(120),
-
             ],
           ),
         ),
-        domainAxis: new charts.DateTimeAxisSpec(
-          tickFormatterSpec: new charts.AutoDateTimeTickFormatterSpec(
-            day: new charts.TimeFormatterSpec(
+        domainAxis: charts.DateTimeAxisSpec(
+          tickFormatterSpec: charts.AutoDateTimeTickFormatterSpec(
+            day: charts.TimeFormatterSpec(
               format: 'dd',
               transitionFormat: 'dd',
             ),
-            hour: new charts.TimeFormatterSpec(
+            hour: charts.TimeFormatterSpec(
               format: 'HH:mm',
               transitionFormat: 'HH:mm',
             ),
-            minute: new charts.TimeFormatterSpec(
+            minute: charts.TimeFormatterSpec(
               format: 'HH:mm',
               transitionFormat: 'HH:mm',
             ),
           ),
         ),
         behaviors: [
-          new charts.RangeAnnotation(
+          charts.RangeAnnotation(
             (rangeAnnotationStart != null && rangeAnnotationEnd != null)
                 ? [
-                    new charts.RangeAnnotationSegment(
+                    charts.RangeAnnotationSegment(
                       rangeAnnotationStart,
                       rangeAnnotationEnd,
                       charts.RangeAnnotationAxisType.domain,
@@ -120,15 +122,16 @@ class HeartRateChart extends StatelessWidget {
           ),
           xlabel,
           ylabel,
-          new charts.PanAndZoomBehavior(),
+          charts.PanAndZoomBehavior(),
           LinePointHighlighter(symbolRenderer: CustomCircleSymbolRenderer())
         ],
         selectionModels: [
-          SelectionModelConfig(changedListener: (SelectionModel model) {
-            if (model.hasDatumSelection)
+          SelectionModelConfig(changedListener: (model) {
+            if (model.hasDatumSelection) {
               pointerValue = model.selectedSeries[0]
                   .measureFn(model.selectedDatum[0].index)
                   .toString();
+            }
           })
         ]);
   }
@@ -171,79 +174,79 @@ class HeartRateChart extends StatelessWidget {
     DateTime date32 = DateTime.parse("2020-05-20 20:49:00Z");
 
     final data = [
-      new PhyActivity(
+      PhyActivity(
           heartRate: 70, intensity: 5, timestamp: Timestamp.fromDate(date1)),
-      new PhyActivity(
+      PhyActivity(
           heartRate: 90, intensity: 10, timestamp: Timestamp.fromDate(date2)),
-      new PhyActivity(
+      PhyActivity(
           heartRate: 91, intensity: 5, timestamp: Timestamp.fromDate(date3)),
-      new PhyActivity(
+      PhyActivity(
           heartRate: 80, intensity: 10, timestamp: Timestamp.fromDate(date4)),
-      new PhyActivity(
+      PhyActivity(
           heartRate: 86, intensity: 5, timestamp: Timestamp.fromDate(date5)),
-      new PhyActivity(
+      PhyActivity(
           heartRate: 90, intensity: 10, timestamp: Timestamp.fromDate(date6)),
-      new PhyActivity(
+      PhyActivity(
           heartRate: 120, intensity: 5, timestamp: Timestamp.fromDate(date7)),
-      new PhyActivity(
+      PhyActivity(
           heartRate: 121, intensity: 10, timestamp: Timestamp.fromDate(date8)),
-      new PhyActivity(
+      PhyActivity(
           heartRate: 115, intensity: 5, timestamp: Timestamp.fromDate(date9)),
-      new PhyActivity(
+      PhyActivity(
           heartRate: 116, intensity: 10, timestamp: Timestamp.fromDate(date10)),
-      new PhyActivity(
+      PhyActivity(
           heartRate: 114, intensity: 5, timestamp: Timestamp.fromDate(date11)),
-      new PhyActivity(
+      PhyActivity(
           heartRate: 111, intensity: 10, timestamp: Timestamp.fromDate(date12)),
-      new PhyActivity(
+      PhyActivity(
           heartRate: 100, intensity: 5, timestamp: Timestamp.fromDate(date13)),
-      new PhyActivity(
+      PhyActivity(
           heartRate: 90, intensity: 10, timestamp: Timestamp.fromDate(date14)),
-      new PhyActivity(
+      PhyActivity(
           heartRate: 90, intensity: 5, timestamp: Timestamp.fromDate(date15)),
-      new PhyActivity(
+      PhyActivity(
           heartRate: 98, intensity: 10, timestamp: Timestamp.fromDate(date16)),
-      new PhyActivity(
+      PhyActivity(
           heartRate: 90, intensity: 5, timestamp: Timestamp.fromDate(date17)),
-      new PhyActivity(
+      PhyActivity(
           heartRate: 87, intensity: 10, timestamp: Timestamp.fromDate(date18)),
-      new PhyActivity(
+      PhyActivity(
           heartRate: 85, intensity: 5, timestamp: Timestamp.fromDate(date19)),
-      new PhyActivity(
+      PhyActivity(
           heartRate: 80, intensity: 10, timestamp: Timestamp.fromDate(date20)),
-      new PhyActivity(
+      PhyActivity(
           heartRate: 76, intensity: 5, timestamp: Timestamp.fromDate(date21)),
-      new PhyActivity(
+      PhyActivity(
           heartRate: 76, intensity: 10, timestamp: Timestamp.fromDate(date22)),
-      new PhyActivity(
+      PhyActivity(
           heartRate: 76, intensity: 5, timestamp: Timestamp.fromDate(date23)),
-      new PhyActivity(
+      PhyActivity(
           heartRate: 73, intensity: 10, timestamp: Timestamp.fromDate(date24)),
-      new PhyActivity(
+      PhyActivity(
           heartRate: 79, intensity: 5, timestamp: Timestamp.fromDate(date25)),
-      new PhyActivity(
+      PhyActivity(
           heartRate: 80, intensity: 10, timestamp: Timestamp.fromDate(date26)),
-      new PhyActivity(
+      PhyActivity(
           heartRate: 91, intensity: 5, timestamp: Timestamp.fromDate(date27)),
-      new PhyActivity(
+      PhyActivity(
           heartRate: 72, intensity: 10, timestamp: Timestamp.fromDate(date28)),
-      new PhyActivity(
+      PhyActivity(
           heartRate: 74, intensity: 10, timestamp: Timestamp.fromDate(date29)),
-      new PhyActivity(
+      PhyActivity(
           heartRate: 72, intensity: 10, timestamp: Timestamp.fromDate(date30)),
-      new PhyActivity(
+      PhyActivity(
           heartRate: 80, intensity: 10, timestamp: Timestamp.fromDate(date31)),
-      new PhyActivity(
+      PhyActivity(
           heartRate: 80, intensity: 10, timestamp: Timestamp.fromDate(date32)),
     ];
     */
 
     return [
-      new charts.Series<PhyActivity, DateTime>(
+      charts.Series<PhyActivity, DateTime>(
         id: 'HeartRate',
         colorFn: (_, __) => charts.MaterialPalette.red.shadeDefault,
-        domainFn: (PhyActivity activity, _) => activity.timestamp.toDate(),
-        measureFn: (PhyActivity activity, _) => activity.heartRate,
+        domainFn: (activity, _) => activity.timestamp.toDate(),
+        measureFn: (activity, _) => activity.heartRate,
         data: data,
       )
         // Configure our custom bar target renderer for this series.
@@ -270,11 +273,11 @@ class CustomCircleSymbolRenderer extends CircleSymbolRenderer {
         Rectangle(bounds.left - 5, bounds.top - 60, bounds.width + 13,
             bounds.height + 10),
         fill: Color.fromHex(code: '#f2f2f2'));
-    var textStyle = ChartStyle.TextStyle();
+    var textStyle = chart_style.TextStyle();
     textStyle.color = Color.black;
     textStyle.fontSize = 13;
     canvas.drawText(
-        ChartText.TextElement(HeartRateChart.pointerValue, style: textStyle),
+        chart_text.TextElement(HeartRateChart.pointerValue, style: textStyle),
         (bounds.left - 2).round(),
         (bounds.top - 58).round());
   }

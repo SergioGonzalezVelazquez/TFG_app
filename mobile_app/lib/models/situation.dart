@@ -5,11 +5,7 @@ class Situation implements Comparable {
   int usas;
 
   /// Default class constructor
-  Situation({
-    this.itemCode,
-    this.itemStr,
-    this.usas
-  });
+  Situation({this.itemCode, this.itemStr, this.usas});
 
   /// Converts Firestore Document into a Situation object
   factory Situation.fromMap(Map<String, dynamic> map) {
@@ -21,7 +17,7 @@ class Situation implements Comparable {
   }
 
   Map<String, dynamic> toMap() {
-    Map<String, dynamic> map = new Map();
+    Map<String, dynamic> map = {};
     map['itemCode'] = itemCode;
     map['itemStr'] = itemStr;
     map['usas'] = usas;
@@ -36,18 +32,18 @@ class Situation implements Comparable {
   }
 
   @override
-  int compareTo(other) {
-    if (this.usas == null || other == null || other.usas == null) {
+  int compareTo(dynamic other) {
+    if (usas == null || other == null || other.usas == null) {
       return -1;
     }
-    if (this.usas == other.usas) {
+    if (usas == other.usas) {
       return 0;
     }
-    if (this.usas < other.usas) {
+    if (usas < other.usas) {
       return -1;
     }
 
-    if (this.usas > other.usas) {
+    if (usas > other.usas) {
       return 1;
     }
     return 0;

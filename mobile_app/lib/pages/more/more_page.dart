@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:tfg_app/pages/phy_activity/daily_heart_rate.dart';
-import 'package:tfg_app/pages/phy_activity/phy_activity_settings.dart';
-import 'package:tfg_app/pages/user/aviso_legal.dart';
-import 'package:tfg_app/pages/user/login_page.dart';
-import 'package:tfg_app/pages/user/privacidad.dart';
-import 'package:tfg_app/pages/user/udpate_password.dart';
-import 'package:tfg_app/widgets/buttons.dart';
-import 'package:tfg_app/services/auth.dart';
-import 'package:tfg_app/widgets/progress.dart';
-import 'package:tfg_app/pages/user/profile.dart';
+
+import '../../services/auth.dart';
+import '../../widgets/buttons.dart';
+import '../../widgets/progress.dart';
+import '../phy_activity/daily_heart_rate.dart';
+import '../phy_activity/phy_activity_settings.dart';
+import '../user/aviso_legal.dart';
+import '../user/login_page.dart';
+import '../user/profile.dart';
+import '../user/udpate_password.dart';
 
 class MorePage extends StatefulWidget {
   ///Creates a StatelessElement to manage this widget's location in the tree
@@ -35,9 +35,8 @@ class _MorePageState extends State<MorePage> {
   void dispose() {
     super.dispose();
   }
-  /**
-   * Functions used to handle events in this screen 
-   */
+
+  /// Functions used to handle events in this screen
 
   Future<void> _logout() async {
     setState(() {
@@ -46,8 +45,8 @@ class _MorePageState extends State<MorePage> {
 
     await _authService.signOut();
 
-    Navigator.of(context).pushNamedAndRemoveUntil(
-        LoginPage.route, (Route<dynamic> route) => false);
+    Navigator.of(context)
+        .pushNamedAndRemoveUntil(LoginPage.route, (route) => false);
   }
 
   Widget _sectionHeader(
@@ -175,7 +174,7 @@ class _MorePageState extends State<MorePage> {
   ///Describes the part of the user interface represented by this widget.
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
+    return Scaffold(
       appBar: AppBar(
         title: Text('Más'),
         actions: <Widget>[],

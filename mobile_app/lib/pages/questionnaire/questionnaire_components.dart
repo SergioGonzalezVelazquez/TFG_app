@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tfg_app/models/questionnaire_item.dart';
+
+import '../../models/questionnaire_item.dart';
 
 Widget questionnaireStepper(
     BuildContext context, double screenWidth, int size, int currentIndex,
@@ -11,7 +12,7 @@ Widget questionnaireStepper(
     mainAxisAlignment: MainAxisAlignment.center,
     children: List.generate(
       size + 1,
-      (int index) {
+      (index) {
         return index == 0
             ? Visibility(
                 visible: backArrowVisible,
@@ -48,8 +49,8 @@ Widget questionnaireStepper(
   );
 }
 
-BottomAppBar continueButton(
-    BuildContext context, bool enabled, void Function() onTap) {
+BottomAppBar continueButton(BuildContext context, void Function() onTap,
+    {bool enabled}) {
   return BottomAppBar(
     child: Opacity(
       opacity: enabled ? 1 : 0,
@@ -86,7 +87,7 @@ Widget choiceInput(BuildContext context, List<AnswerValue> answerValueSet,
     child: Container(
       child: Card(
         child: Column(
-          children: List.generate(answerValueSet.length, (int index) {
+          children: List.generate(answerValueSet.length, (index) {
             final answerValue = answerValueSet[index];
             return GestureDetector(
               onTapUp: (detail) {
@@ -104,13 +105,14 @@ Widget choiceInput(BuildContext context, List<AnswerValue> answerValueSet,
                           activeColor: Theme.of(context).primaryColorDark,
                           value: answerValue.value,
                           groupValue: selectedValue,
-                          onChanged: (String value) {
+                          onChanged: (value) {
                             onRadioTap(value);
                           },
                         ),
                         Flexible(
                           child: Padding(
-                            padding: EdgeInsets.only(right: 15, top: 5, bottom: 10),
+                            padding:
+                                EdgeInsets.only(right: 15, top: 5, bottom: 10),
                             child: Text(
                               answerValue.text,
                               style: TextStyle(
@@ -147,7 +149,7 @@ Widget multipleChoiceInput(
         child: Column(
           children: List.generate(
             answerValueSet.length,
-            (int index) {
+            (index) {
               final answerValue = answerValueSet[index];
               bool selected = selectedValues.contains(answerValue.value);
               return Column(
@@ -165,7 +167,7 @@ Widget multipleChoiceInput(
                           Checkbox(
                             activeColor: Theme.of(context).primaryColorDark,
                             value: selected,
-                            onChanged: (bool value) {
+                            onChanged: (value) {
                               onChoiceTap(answerValue.value);
                             },
                           ),
@@ -199,13 +201,13 @@ Widget multipleChoiceInput(
   );
 }
 
-Widget booleanInput(
-    BuildContext context, bool selectedValue, Function onRadioTap) {
+Widget booleanInput(BuildContext context, Function onRadioTap,
+    {bool selectedValue}) {
   return Center(
     child: Container(
       child: Card(
         child: Column(
-          children: List.generate(2, (int index) {
+          children: List.generate(2, (index) {
             final bool radioOption = index == 0;
             return GestureDetector(
               onTapUp: (detail) {
@@ -224,7 +226,7 @@ Widget booleanInput(
                           activeColor: Theme.of(context).primaryColorDark,
                           value: radioOption,
                           groupValue: selectedValue,
-                          onChanged: (bool value) {
+                          onChanged: (value) {
                             onRadioTap(value);
                           },
                         ),

@@ -1,16 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tfg_app/models/patient.dart';
-import 'package:tfg_app/pages/driving_activity/driving_activity_agreement.dart';
-import 'package:tfg_app/pages/home_page.dart';
-import 'package:tfg_app/pages/initial_page.dart';
-import 'package:tfg_app/pages/phy_activity/phy_activity_agreement.dart';
-import 'package:tfg_app/pages/questionnaire/pretest/signup_questionnaire_page.dart';
-import 'package:tfg_app/pages/user/login_page.dart';
-import 'package:tfg_app/widgets/progress.dart';
-import 'package:tfg_app/services/auth.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../models/patient.dart';
+import '../services/auth.dart';
+import '../widgets/progress.dart';
+import 'driving_activity/driving_activity_agreement.dart';
+import 'home_page.dart';
+import 'initial_page.dart';
+import 'phy_activity/phy_activity_agreement.dart';
+import 'questionnaire/pretest/signup_questionnaire_page.dart';
+import 'user/login_page.dart';
 
 /// This widget is the root page of the application,
 /// this is the route that is displayed first when the application is started normally.
@@ -40,7 +41,7 @@ class _RootPageState extends State<RootPage> {
 
   /// Create a global key that uniquely identifies the Scaffold widget,
   /// and allows to display snackbars.
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   /// Method called when this widget is inserted into the tree.
   @override
@@ -93,16 +94,17 @@ class _RootPageState extends State<RootPage> {
     print(_status);
     _status = _authService.patietStatus;
 
-    if (_status == PatientStatus.pretest_pending)
+    if (_status == PatientStatus.pretest_pending) {
       return SignUpQuestionnairePage();
-    else if (_status == PatientStatus.pretest_in_progress)
+    } else if (_status == PatientStatus.pretest_in_progress) {
       return SignUpQuestionnairePage(
         inProgress: true,
       );
+    }
 
-    if (showAutoDriveDetectionAgreement == null)
+    if (showAutoDriveDetectionAgreement == null) {
       return DrivingActivityAgreement();
-    else if (showPhyActivityAgreement == null) return PhyActivityAgreement();
+    } else if (showPhyActivityAgreement == null) return PhyActivityAgreement();
 
     if ([
       PatientStatus.identify_categories_pending,

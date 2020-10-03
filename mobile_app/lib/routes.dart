@@ -1,75 +1,70 @@
-import 'package:flutter/cupertino.dart';
-import 'package:tfg_app/models/phy_activity.dart';
-import 'package:tfg_app/pages/chat/chat_page.dart';
-import 'package:tfg_app/pages/driving_activity/driving_activity_settings.dart';
-import 'package:tfg_app/pages/exercises/exercise_questionnaire.dart';
-import 'package:tfg_app/pages/exercises/exercises_help.dart';
-import 'package:tfg_app/pages/home_page.dart';
-import 'package:tfg_app/pages/initial_page.dart';
-import 'package:tfg_app/pages/phy_activity/bluetooth_connection_page.dart';
-import 'package:tfg_app/pages/phy_activity/daily_heart_rate.dart';
-import 'package:tfg_app/pages/phy_activity/phy_activity_agreement.dart';
-import 'package:tfg_app/pages/phy_activity/phy_activity_settings.dart';
-import 'package:tfg_app/pages/home_page.dart';
-import 'package:tfg_app/pages/initial_page.dart';
-import 'package:tfg_app/pages/progress/progress_medals.dart';
-import 'package:tfg_app/pages/questionnaire/pretest/signup_questionnaire_completed_page.dart';
-import 'package:tfg_app/pages/questionnaire/pretest/signup_questionnaire_page.dart';
-import 'package:tfg_app/pages/root_page.dart';
-import 'package:tfg_app/pages/therapist/hierarchy_page.dart';
-import 'package:tfg_app/pages/user/aviso_legal.dart';
-import 'package:tfg_app/pages/user/login_page.dart';
-import 'package:tfg_app/pages/user/privacidad.dart';
-import 'package:tfg_app/pages/user/udpate_password.dart';
-import 'package:tfg_app/pages/user/profile.dart';
-import 'package:tfg_app/pages/user/reset_password.dart';
-import 'package:tfg_app/pages/user/signup_page.dart';
-import 'package:tfg_app/pages/driving_activity/driving_activity_agreement.dart';
+import 'pages/chat/chat_page.dart';
+import 'pages/driving_activity/driving_activity_agreement.dart';
+import 'pages/driving_activity/driving_activity_settings.dart';
+import 'pages/exercises/exercises_help.dart';
+import 'pages/home_page.dart';
+import 'pages/initial_page.dart';
+import 'pages/phy_activity/bluetooth_connection_page.dart';
+import 'pages/phy_activity/daily_heart_rate.dart';
+import 'pages/phy_activity/phy_activity_agreement.dart';
+import 'pages/phy_activity/phy_activity_settings.dart';
+import 'pages/progress/progress_medals.dart';
+import 'pages/questionnaire/pretest/signup_questionnaire_completed_page.dart';
+import 'pages/questionnaire/pretest/signup_questionnaire_page.dart';
+import 'pages/root_page.dart';
+import 'pages/therapist/hierarchy_page.dart';
+import 'pages/user/aviso_legal.dart';
+import 'pages/user/login_page.dart';
+import 'pages/user/profile.dart';
+import 'pages/user/reset_password.dart';
+import 'pages/user/signup_page.dart';
+import 'pages/user/udpate_password.dart';
 
 /// The application's top-level routing table.
 ///
 /// When a named route is pushed with Navigator.pushNamed,
 /// the route name is looked up in this map.
 final appRoutes = {
-  RootPage.route: (BuildContext context) => RootPage(),
+  RootPage.route: (context) => RootPage(),
 
-  HomePage.route: (BuildContext context) => HomePage(),
+  HomePage.route: (context) => HomePage(),
 
   // User
-  LoginPage.route: (BuildContext context) => LoginPage(),
-  SignUpPage.route: (BuildContext context) => SignUpPage(),
-  ResetPasswordPage.route: (BuildContext context) => ResetPasswordPage(),
-  ProfilePage.route: (BuildContext context) => ProfilePage(),
-  UpdatePassword.route: (BuildContext context) => UpdatePassword(),
+  LoginPage.route: (context) => LoginPage(),
+  SignUpPage.route: (context) => SignUpPage(),
+  ResetPasswordPage.route: (context) => ResetPasswordPage(),
+  ProfilePage.route: (context) => ProfilePage(),
+  UpdatePassword.route: (context) => UpdatePassword(),
 
   // Pretest - Questionnaire
-  SignUpQuestionnairePage.route: (BuildContext context) =>
-      SignUpQuestionnairePage(),
-  SignUpQuestionnaireCompleted.route: (BuildContext context) =>
+  SignUpQuestionnairePage.route: (context) => SignUpQuestionnairePage(),
+  SignUpQuestionnaireCompleted.route: (context) =>
       SignUpQuestionnaireCompleted(),
 
   // Initial Page
-  InitialPage.route: (BuildContext context) => InitialPage(),
+  InitialPage.route: (context) => InitialPage(),
 
   // Therapy
-  ChatPage.route: (BuildContext context) => ChatPage(),
-  HierarchyPage.routeEditable: (BuildContext context) => HierarchyPage(true),
-  HierarchyPage.routeNoEditable: (BuildContext context) => HierarchyPage(false),
-  ExerciseHelp.route: (BuildContext context) => ExerciseHelp(),
-  ProgressMedals.route: (BuildContext context) => ProgressMedals(),
+  ChatPage.route: (context) => ChatPage(),
+  HierarchyPage.routeEditable: (context) => HierarchyPage(
+        editable: true,
+      ),
+  HierarchyPage.routeNoEditable: (context) => HierarchyPage(
+        editable: false,
+      ),
+  ExerciseHelp.route: (context) => ExerciseHelp(),
+  ProgressMedals.route: (context) => ProgressMedals(),
 
   // Driving Activity Detection
-  DrivingActivityAgreement.route: (BuildContext context) =>
-      DrivingActivityAgreement(),
-  DrivingActivitySettings.route: (BuildContext context) =>
-      DrivingActivitySettings(),
+  DrivingActivityAgreement.route: (context) => DrivingActivityAgreement(),
+  DrivingActivitySettings.route: (context) => DrivingActivitySettings(),
 
   // eMOVI
-  BluetoothConnectionInterface.route: (BuildContext context) =>
+  BluetoothConnectionInterface.route: (context) =>
       BluetoothConnectionInterface(),
-  PhyActivityAgreement.route: (BuildContext context) => PhyActivityAgreement(),
-  DailyHeartRatePage.route: (BuildContext context) => DailyHeartRatePage(),
-  PhyActivitySettings.route: (BuildContext context) => PhyActivitySettings(),
+  PhyActivityAgreement.route: (context) => PhyActivityAgreement(),
+  DailyHeartRatePage.route: (context) => DailyHeartRatePage(),
+  PhyActivitySettings.route: (context) => PhyActivitySettings(),
 
-  AvisoLegalPage.route: (BuildContext context) => AvisoLegalPage(),
+  AvisoLegalPage.route: (context) => AvisoLegalPage(),
 };

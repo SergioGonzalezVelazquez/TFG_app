@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:tfg_app/models/situation.dart';
-import 'package:tfg_app/models/therapy.dart';
-import 'package:tfg_app/services/auth.dart';
-import 'package:tfg_app/services/firestore.dart';
-import 'package:tfg_app/widgets/progress.dart';
-import 'package:tfg_app/widgets/stress_slider_dialog.dart';
+
+import '../../models/situation.dart';
+import '../../models/therapy.dart';
+import '../../services/auth.dart';
+import '../../services/firestore.dart';
+import '../../widgets/progress.dart';
+import '../../widgets/stress_slider_dialog.dart';
 
 class HierarchyPage extends StatefulWidget {
   static const routeEditable = "/buildHierarchy";
   static const routeNoEditable = "/viewHierarchy";
 
   final bool editable;
-  HierarchyPage(this.editable);
+  HierarchyPage({this.editable});
 
   @override
   _HierarchyPageState createState() => _HierarchyPageState();
@@ -68,9 +69,9 @@ class _HierarchyPageState extends State<HierarchyPage> {
 
   int _newItemIndex(Situation situation) {
     for (int i = 0; i < _situations.length; i++) {
-      if (_situations[i].usas == null)
+      if (_situations[i].usas == null) {
         return i;
-      else if (_situations[i].usas > situation.usas) return i;
+      } else if (_situations[i].usas > situation.usas) return i;
     }
     return _situations.length + 1;
   }
@@ -90,12 +91,11 @@ class _HierarchyPageState extends State<HierarchyPage> {
     // Remove item from list
     _listKey.currentState.removeItem(
       index,
-      (BuildContext context, Animation<double> animation) =>
-          _buildItem(context, index, animation),
+      (context, animation) => _buildItem(context, index, animation),
       duration: const Duration(milliseconds: 250),
     );
 
-    // Insert item at new index
+    // Insert item at index
     int newIndex = _newItemIndex(updated);
     _situations.insert(newIndex, updated);
     _listKey.currentState.insertItem(newIndex);
@@ -114,7 +114,7 @@ class _HierarchyPageState extends State<HierarchyPage> {
     return SizeTransition(
       sizeFactor: animation,
       axis: Axis.vertical,
-      child: new SituationItem(
+      child: SituationItem(
         key: ObjectKey(_situations[index]),
         editable: widget.editable,
         situation: _situations[index],
@@ -126,13 +126,10 @@ class _HierarchyPageState extends State<HierarchyPage> {
   }
 
   Widget _buildPage() {
-    return new AnimatedList(
+    return AnimatedList(
       key: _listKey,
       initialItemCount: _situations.length,
-      itemBuilder:
-          (BuildContext context, int index, Animation<double> animation) {
-        return _buildItem(context, index, animation);
-      },
+      itemBuilder: _buildItem,
     );
   }
 
@@ -249,7 +246,7 @@ class _SituationItemState extends State<SituationItem> {
   Future<void> _onItemTap(BuildContext context) async {
     double usas = await showDialog(
       context: context,
-      builder: (BuildContext context) => StressSliderDialog(
+      builder: (context) => StressSliderDialog(
           max: 100,
           valuesNotAllowed: [0, 100],
           current: _situation.usas == null ? 0.0 : _situation.usas.toDouble(),
@@ -265,7 +262,7 @@ class _SituationItemState extends State<SituationItem> {
   }
 
   BoxDecoration _border(BuildContext context) {
-    return new BoxDecoration(
+    return BoxDecoration(
         border: Border(
           top: widget.isNeutral
               ? Divider.createBorderSide(context)

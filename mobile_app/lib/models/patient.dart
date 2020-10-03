@@ -1,8 +1,11 @@
+// ignore_for_file: constant_identifier_names
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:tfg_app/models/exercise.dart';
-import 'package:tfg_app/models/therapy.dart';
+import 'package:equatable/equatable.dart';
 
-class Patient {
+import 'exercise.dart';
+import 'therapy.dart';
+
+class Patient extends Equatable {
   final String id;
   final String type;
   final PatientStatus status;
@@ -47,22 +50,23 @@ class Patient {
 
   Exercise getExercise(String id) {
     print("get Exercise " + id);
-    return this
-        .exercises
-        .firstWhere((element) => element.id == id, orElse: null);
+    return exercises.firstWhere((element) => element.id == id, orElse: null);
   }
 
   int get completedExercises {
     int completed = 0;
-    this.exercises.forEach((element) {completed+= element.status == ExerciseStatus.completed ? 1 : 0;});
+    for (var exercise in exercises) {
+      completed += exercise.status == ExerciseStatus.completed ? 1 : 0;
+    }
     return completed;
   }
 
+  @override
+  List<Object> get props => [id, type, status];
+
   /// Returns a string representation of this object.
   @override
-  String toString() {
-    return 'id: $id, type: $type, status: ${status.toString().split(".")[1]}';
-  }
+  bool get stringify => true;
 }
 
 /// The criteria by which a question is enabled.

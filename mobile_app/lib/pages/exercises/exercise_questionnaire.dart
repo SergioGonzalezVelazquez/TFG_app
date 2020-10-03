@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:tfg_app/models/exercise.dart';
-import 'package:tfg_app/models/exposure_exercise.dart';
-import 'package:tfg_app/models/questionnaire_item.dart';
-import 'package:tfg_app/pages/exercises/exercise_running.dart';
-import 'package:tfg_app/pages/exercises/exercises_page.dart';
-import 'package:tfg_app/pages/questionnaire/questionnaire_components.dart';
-import 'package:tfg_app/services/auth.dart';
-import 'package:tfg_app/services/firestore.dart';
-import 'package:tfg_app/widgets/custom_dialog.dart';
-import 'package:tfg_app/widgets/exercise_completed_popup.dart';
-import 'package:tfg_app/widgets/progress.dart';
-import 'package:tfg_app/widgets/stress_slider.dart';
+
+import '../../models/exercise.dart';
+import '../../models/exposure_exercise.dart';
+import '../../models/questionnaire_item.dart';
+import '../../services/auth.dart';
+import '../../services/firestore.dart';
+import '../../widgets/custom_dialog.dart';
+import '../../widgets/exercise_completed_popup.dart';
+import '../../widgets/progress.dart';
+import '../../widgets/stress_slider.dart';
+import '../questionnaire/questionnaire_components.dart';
+import 'exercise_running.dart';
 
 class ExerciseQuestionnaire extends StatefulWidget {
   final ExerciseQuestionnaireType type;
@@ -31,11 +31,10 @@ class _ExerciseQuestionnaireState extends State<ExerciseQuestionnaire> {
   String _choiceInputSelected = '';
   List<String> _multipleChoiceInputSelected = [];
   bool _booleanInputSelected;
-  double _sliderCurrent = 0.0;
 
   /// Create a global key that uniquely identifies the Scaffold widget,
   /// and allows to display snackbars.
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -99,8 +98,7 @@ class _ExerciseQuestionnaireState extends State<ExerciseQuestionnaire> {
       if (completed) {
         showDialog(
           context: context,
-          builder: (BuildContext context) =>
-              ExerciseCompletedDialog(widget.exercise),
+          builder: (context) => ExerciseCompletedDialog(widget.exercise),
         );
       }
     }
@@ -144,7 +142,6 @@ class _ExerciseQuestionnaireState extends State<ExerciseQuestionnaire> {
     _booleanInputSelected = null;
     _choiceInputSelected = '';
     _multipleChoiceInputSelected = [];
-    _sliderCurrent = 0.0;
 
     // Not all questions have been completed
     if (index < _items.length) {
@@ -166,7 +163,7 @@ class _ExerciseQuestionnaireState extends State<ExerciseQuestionnaire> {
     bool close = false;
     await showDialog(
       context: context,
-      builder: (BuildContext context) => CustomDialog(
+      builder: (context) => CustomDialog(
         title: "¿Seguro que quieres salir?",
         description: "No se guardará nada sobre la exposición actual",
         buttonText2: "Salir",
@@ -226,17 +223,19 @@ class _ExerciseQuestionnaireState extends State<ExerciseQuestionnaire> {
     List<String> _selectedValues = _multipleChoiceInputSelected;
     int index = _selectedValues.lastIndexOf(value);
 
-    if (index >= 0)
+    if (index >= 0) {
       _selectedValues.removeAt(index);
-    else
+    } else {
       _selectedValues.add(value);
+    }
 
     setState(() {
       _multipleChoiceInputSelected = _selectedValues;
-      if (_selectedValues.length > 0)
+      if (_selectedValues.length > 0) {
         _currentQuestionnaireItem.answerValue = _selectedValues;
-      else
+      } else {
         _currentQuestionnaireItem.answerValue = null;
+      }
     });
   }
 
@@ -282,15 +281,17 @@ class _ExerciseQuestionnaireState extends State<ExerciseQuestionnaire> {
     Widget input;
     switch (_currentQuestionnaireItem.type) {
       case QuestionnaireItemType.choice:
-        if (_currentQuestionnaireItem.answerValue != null)
+        if (_currentQuestionnaireItem.answerValue != null) {
           _choiceInputSelected = _currentQuestionnaireItem.answerValue;
+        }
         input = choiceInput(context, _currentQuestionnaireItem.answerValueSet,
             _choiceInputSelected, _onChoiceInputTap);
         break;
 
       case QuestionnaireItemType.multiple_choice:
-        if (_currentQuestionnaireItem.answerValue != null)
+        if (_currentQuestionnaireItem.answerValue != null) {
           _multipleChoiceInputSelected = _currentQuestionnaireItem.answerValue;
+        }
 
         input = multipleChoiceInput(
             context,
@@ -301,17 +302,14 @@ class _ExerciseQuestionnaireState extends State<ExerciseQuestionnaire> {
 
       case QuestionnaireItemType.boolean:
         _booleanInputSelected = _currentQuestionnaireItem.answerValue;
-        input =
-            booleanInput(context, _booleanInputSelected, _onBooleanInputTap);
+        input = booleanInput(context, _onBooleanInputTap,
+            selectedValue: _booleanInputSelected);
         break;
 
       case QuestionnaireItemType.slider:
-        _sliderCurrent = _currentQuestionnaireItem.answerValue != null
-            ? _currentQuestionnaireItem.answerValue.toDouble()
-            : 0.0;
         input = Padding(
           padding: const EdgeInsets.only(top: 10.0),
-          child: new StressSlider(
+          child: StressSlider(
               max: 100,
               valuesNotAllowed: [0, 100],
               current: 0,
@@ -374,10 +372,10 @@ class _ExerciseQuestionnaireState extends State<ExerciseQuestionnaire> {
   }
 
   @override
-  Widget build(context) {
+  Widget build(BuildContext context) {
     bool continueButtonEnabled = _currentQuestionnaireItem != null
         ? (!_currentQuestionnaireItem.mandatory ||
-                _currentQuestionnaireItem.answerValue != null) 
+            _currentQuestionnaireItem.answerValue != null)
         : false;
     return WillPopScope(
       onWillPop: _willPopCallback,
@@ -385,9 +383,9 @@ class _ExerciseQuestionnaireState extends State<ExerciseQuestionnaire> {
         key: _scaffoldKey,
         body: _isLoading ? circularProgress(context) : _buildPage(context),
         bottomNavigationBar: !_isLoading
-            ? continueButton(context, continueButtonEnabled, () async {
+            ? continueButton(context, () async {
                 _onContinue();
-              })
+              }, enabled: continueButtonEnabled)
             : null,
       ),
     );
@@ -400,13 +398,13 @@ enum ExerciseQuestionnaireType { before, after }
 List<QuestionnaireItem> beforeQuestions = [
   QuestionnaireItem(
       text:
-          'En una escala de 0 a 100 (siendo 0 "nada de ansiedad" y 100 "un gran nivel de ansiedad"), ¿qué ansiedad te provoca la situación a la que te vas a exponer? ',
+          """En una escala de 0 a 100 (siendo 0 "nada de ansiedad" y 100 "un gran nivel de ansiedad"), ¿qué ansiedad te provoca la situación a la que te vas a exponer? """,
       mandatory: true,
       type: QuestionnaireItemType.slider,
       id: "usasBefore"),
   QuestionnaireItem(
       text:
-          "Durante el ejercicio de exposición, ¿crees que ocurrirá alguna de las siguientes situaciones?",
+          """Durante el ejercicio de exposición, ¿crees que ocurrirá alguna de las siguientes situaciones?""",
       mandatory: false,
       type: QuestionnaireItemType.multiple_choice,
       answerValueSet: [
@@ -426,7 +424,7 @@ List<QuestionnaireItem> beforeQuestions = [
       id: "panicBefore"),
   QuestionnaireItem(
       text:
-          'En una escala de 0 a 100, dónde 0 equivale a "no puedo hacerlo” y 100 “me considero totalmente seguro de poder hacerlo”, evalúa cómo de seguro estás de poder completar el ejercicio.',
+          """En una escala de 0 a 100, dónde 0 equivale a "no puedo hacerlo” y 100 “me considero totalmente seguro de poder hacerlo”, evalúa cómo de seguro estás de poder completar el ejercicio.""",
       mandatory: true,
       type: QuestionnaireItemType.slider,
       id: "selfBefore"),
@@ -434,7 +432,7 @@ List<QuestionnaireItem> beforeQuestions = [
 List<QuestionnaireItem> afterQuestions = [
   QuestionnaireItem(
       text:
-          "Indica si durante el ejercicio de exposición has experimentado alguna de las siguientes sensaciones.",
+          """Indica si durante el ejercicio de exposición has experimentado alguna de las siguientes sensaciones.""",
       mandatory: false,
       type: QuestionnaireItemType.multiple_choice,
       answerValueSet: [
@@ -455,7 +453,7 @@ List<QuestionnaireItem> afterQuestions = [
       id: "panicAfter"),
   QuestionnaireItem(
       text:
-          'En una escala de 0 a 100 (siendo 0 "nada de ansiedad" y 100 "un gran nivel de ansiedad") ¿qué nivel de ansiedad consideras que te ha provocado la situación una vez que te has expuesto a ella?',
+          """En una escala de 0 a 100 (siendo 0 "nada de ansiedad" y 100 "un gran nivel de ansiedad") ¿qué nivel de ansiedad consideras que te ha provocado la situación una vez que te has expuesto a ella?""",
       mandatory: true,
       type: QuestionnaireItemType.slider,
       id: "usasAfter"),

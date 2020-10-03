@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tfg_app/themes/custom_icon_icons.dart';
+
+import '../themes/custom_icon_icons.dart';
 
 Widget customTextInput(String hint, IconData icon,
     {TextEditingController controller,

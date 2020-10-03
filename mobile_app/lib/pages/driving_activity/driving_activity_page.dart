@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:tfg_app/models/driving_activity.dart';
-import 'package:tfg_app/pages/driving_activity/driving_activity_item.dart';
-import 'package:tfg_app/pages/driving_activity/driving_activity_settings.dart';
-import 'package:tfg_app/themes/custom_icon_icons.dart';
-import 'package:tfg_app/widgets/progress.dart';
-import 'package:tfg_app/services/firestore.dart';
+
+import '../../models/driving_activity.dart';
+import '../../services/firestore.dart';
+import '../../themes/custom_icon_icons.dart';
+import '../../widgets/progress.dart';
+import 'driving_activity_item.dart';
+import 'driving_activity_settings.dart';
 
 class DrivingActivityPage extends StatefulWidget {
   _DrivingActivityPageState createState() => _DrivingActivityPageState();
@@ -21,7 +22,7 @@ class _DrivingActivityPageState extends State<DrivingActivityPage>
   @override
   void initState() {
     super.initState();
-    _tabController = new TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 3, vsync: this);
     _getDrivingActivities();
   }
 
@@ -33,7 +34,7 @@ class _DrivingActivityPageState extends State<DrivingActivityPage>
 
   _getDrivingActivities() async {
     List activities = await getDrivingActivities();
-    if (this.mounted) {
+    if (mounted) {
       setState(() {
         _activities = activities;
         _isLoading = false;
@@ -51,14 +52,14 @@ class _DrivingActivityPageState extends State<DrivingActivityPage>
     }
     return ListView.builder(
       itemCount: _activities.length,
-      itemBuilder: (BuildContext context, int index) {
+      itemBuilder: (context, index) {
         return DrivingActivityItem(_activities[index]);
       },
     );
   }
 
   @override
-  Widget build(context) {
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Rutas registradas'),
@@ -80,13 +81,13 @@ class _DrivingActivityPageState extends State<DrivingActivityPage>
           unselectedLabelColor: Colors.black38,
           labelColor: Theme.of(context).primaryColor,
           tabs: [
-            new Tab(
-              icon: new Icon(CustomIcon.list),
+            Tab(
+              icon: Icon(CustomIcon.list),
               text: "Todas",
             ),
-            new Tab(icon: new Icon(CustomIcon.month), text: "Semana"),
-            new Tab(
-              icon: new Icon(CustomIcon.week),
+            Tab(icon: Icon(CustomIcon.month), text: "Semana"),
+            Tab(
+              icon: Icon(CustomIcon.week),
               text: "Mes",
             ),
           ],
@@ -99,8 +100,8 @@ class _DrivingActivityPageState extends State<DrivingActivityPage>
       body: TabBarView(
         children: [
           _buildActivities(),
-          new Text("Este mes"),
-          new Text("Todas"),
+          Text("Este mes"),
+          Text("Todas"),
         ],
         controller: _tabController,
       ),
